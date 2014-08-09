@@ -29,10 +29,10 @@ variable  radPerc3  equal       0.1050
 variable  radR4     equal       0.000315
 variable  radPerc4  equal       0.2299
 variable  radR5     equal       0.0001575
-variable  radPerc5  equal       0.0289
+variable  radPerc51  equal       0.0289
 variable  radR6     equal       0.00006205
-variable  radPerc6  equal       0.0157
-variable  radPerc5  equal       ${radPerc5} + ${radPerc6}
+variable  radPerc61  equal       0.0157
+variable  radPerc5  equal       ${radPerc51} + ${radPerc61}
 variable  radPerc6  equal       0.0
 variable    dens    equal       3000            # particle density [kg/m3]
 variable    ym      equal       1e7             # Young's modulus  [Pa]
