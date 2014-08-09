@@ -29,12 +29,12 @@ variable  radPerc3  equal       0.1050
 variable  radR4     equal       0.000315
 variable  radPerc4  equal       0.2299
 variable  radR5     equal       0.0001575
-variable  radPerc51  equal       0.0289
+#variable  radPerc5  equal       0.0289
 variable  radR6     equal       0.00006205
-variable  radPerc61  equal       0.0157
-variable  radPerc5  equal       ${radPerc51} + ${radPerc61}
+#variable  radPerc6  equal       0.0157
+variable  radPerc5  equal       0.0446
 variable  radPerc6  equal       0.0
-variable    dens    equal       3000            # particle density [kg/m3]
+variable    dens    equal       3000         #sinterfine   # particle density [kg/m3]
 variable    ym      equal       1e7             # Young's modulus  [Pa]
 variable    pr      equal       0.4            # Poisson ratio   [-]
 variable    rest    index       0.5 0.9           # coefficient of restitution [-]
@@ -65,7 +65,7 @@ variable    ratio   equal       0.0001
 # v_max = ratio*MIN(rad)/dt
 
 # experimental parameter
-variable    expMass         index  1.7916 8.7452 # [kg] mass used in experiment 
+variable    expMass         index  0.9275 8.7452 # [kg] mass used in experiment 
   # original masses (0.488,0.891 and 1.379 )
   #(0.5kPa ==>0.4342, 1kPa ==>0.8684, 2kPa ==> 1.737, 5kPa ==> 4.342, 10kPa ==> 8.684)
   #(2.029kPa ==>1.762, 5.030kPa ==>4.368, 10.031kPa ==>8.711)
