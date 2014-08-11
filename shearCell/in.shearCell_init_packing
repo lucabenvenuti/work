@@ -52,7 +52,7 @@ variable    dCylDp  equal       20      # ratio cylinder diameter to particle di
 
 variable    accGrev equal       9.81    # acceleration due to gravity
 
-processors  3 2 2
+processors  4 4 2
 
 #########################################################################################
 #   IF YOU CHANGE ANYTHING BELOW THIS LINE, YOU MIGHT ADAPT THE POSTPROCESSING SCRIPT   #
