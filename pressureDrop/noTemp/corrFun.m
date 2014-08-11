@@ -73,7 +73,7 @@ function [corrFunData2] = corrFun( data2, indata3, pDiffPa2, pDiffPaMean2, meano
 
     % Sensor #1 - Misst �ber die Strecke von 1m und hat 0 ... 200 mbar range
 
-    corrFunData2.dP1MInVolt = data2(:,2) - meanoff2(2); 
+    corrFunData2.dP1MInVolt = abs(data2(:,2) - meanoff2(2)); 
     
     % Differential pressure [Pa] 
     corrFunData2.dP1M = corrFunData2.dP1MInVolt*indata3.pMax1M/indata3.vMax1M; 
@@ -85,7 +85,7 @@ function [corrFunData2] = corrFun( data2, indata3, pDiffPa2, pDiffPaMean2, meano
     %%
     % Sensor #2 - Misst �ber die Strecke von 9dm und hat 0 ... 1 bar range
 
-    corrFunData2.dP9DMInVolt = data2(:,3) - meanoff2(3);
+    corrFunData2.dP9DMInVolt = abs(data2(:,3) - meanoff2(3));
     
     % Differential pressure [Pa] 
     corrFunData2.dP9DM = corrFunData2.dP9DMInVolt*indata3.pMax9DM/indata3.vMax9DM;
@@ -96,7 +96,7 @@ function [corrFunData2] = corrFun( data2, indata3, pDiffPa2, pDiffPaMean2, meano
     %%
     % Sensor #3 - Misst �ber die Strecke von 8 dm und hat 0 ... 1 bar range
 
-    corrFunData2.dP8DMInVolt = data2(:,4) - meanoff2(4); 
+    corrFunData2.dP8DMInVolt = abs(data2(:,4) - meanoff2(4)); 
     
     % Differential pressure [Pa] 
     corrFunData2.dP8DM = corrFunData2.dP8DMInVolt*indata3.pMax8DM/indata3.vMax8DM; 
@@ -108,7 +108,7 @@ function [corrFunData2] = corrFun( data2, indata3, pDiffPa2, pDiffPaMean2, meano
     %%
     % Sensor #4 - Misst �ber die Strecke von 5dm und hat 0 ... 200 mbar range
     % (bidirectional!) 
-    corrFunData2.dP5DMInVolt = data2(:,5) - meanoff2(5); 
+    corrFunData2.dP5DMInVolt = abs(data2(:,5) - meanoff2(5)); 
     
     % Differential pressure [Pa] 
     corrFunData2.dP5DM = corrFunData2.dP5DMInVolt*indata3.pMax5DM/indata3.vMax5DM; 

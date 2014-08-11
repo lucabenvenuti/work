@@ -116,24 +116,24 @@ for k = 1:indata5.diamRange.length
 %     end
 %     j=1;
     
-    re = reNoD*d;
-    fExp = fExpNoD*d;
-    fErg = 150./re+1.75; 
-    fKeys = 172./re+4.36./re.^0.12;
-    fCarman = 180./re+2.87./re.^0.1; 
-    fBrauer = 160./re+3.1./re.^0.1; 
-    fKrier = 150./re + 3.89./re.^0.13; 
+    re = abs(reNoD*d);
+    fExp = abs(fExpNoD*d);
+    fErg = abs(150./re+1.75); 
+    fKeys = abs(172./re+4.36./re.^0.12);
+    fCarman = abs(180./re+2.87./re.^0.1); 
+    fBrauer = abs(160./re+3.1./re.^0.1); 
+    fKrier = abs(150./re + 3.89./re.^0.13); 
     %indata.porosity
-    fIdelchik = indata5.porosity^3/(1-indata5.porosity)*0.765/indata5.porosity^4.2*...
-        (30./re + 3./re.^0.7 + 0.3); %fIdelchik = e^3/(1-e)*0.765/e^4.2*(30./re + 3./re.^0.7 + 0.3); 
+    fIdelchik = abs(indata5.porosity^3/(1-indata5.porosity)*0.765/indata5.porosity^4.2*...
+        (30./re + 3./re.^0.7 + 0.3)); %fIdelchik = e^3/(1-e)*0.765/e^4.2*(30./re + 3./re.^0.7 + 0.3); 
 
     SSEVec(k,1) = d; 
-    SSEVec(k,2) = sum((fExp-fErg).^2); 
-    SSEVec(k,3) = sum((fExp-fKeys).^2);
-    SSEVec(k,4) = sum((fExp-fCarman).^2);
-    SSEVec(k,5) = sum((fExp-fBrauer).^2);
-    SSEVec(k,6) = sum((fExp-fKrier).^2);
-    SSEVec(k,7) = sum((fExp-fIdelchik).^2);
+    SSEVec(k,2) = abs(sum((fExp-fErg).^2)); 
+    SSEVec(k,3) = abs(sum((fExp-fKeys).^2));
+    SSEVec(k,4) = abs(sum((fExp-fCarman).^2));
+    SSEVec(k,5) = abs(sum((fExp-fBrauer).^2));
+    SSEVec(k,6) = abs(sum((fExp-fKrier).^2));
+    SSEVec(k,7) = abs(sum((fExp-fIdelchik).^2));
 
  %   runSSE = runSSE + 1; 
        

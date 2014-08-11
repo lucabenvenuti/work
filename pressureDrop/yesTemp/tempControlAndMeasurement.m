@@ -22,19 +22,17 @@ roomTempFlag = 1; %1: Room temperature is measured, 0: Enter room temp manually 
 
 %% ----- Init -----
 
-offsetSampleTime = 5;             % only necessary when offsetFlag = 1 
-sampleTime = 60*10;               % measurement time 
-sampleFrequency = 2.5;            % sample frequency - NI 9211 (Thermo Coupling) 
+            % sample frequency - NI 9211 (Thermo Coupling) 
                                   % tolerates only low frequencies 
 
 
 % Velocity Calculation 
 dTuyMeasure = 0.0284;             % Diameter of tube where velocity is measured in m 
-dTuyKnow = 0.100;                 % Diameter of tube where velocity is wanted to be known in m 
+dTuyKnow = input('Diameter of tube where velocity is wanted to be known in m (e.g. 0.1 or 0.14) \n');    %0.100;                 % Diameter of tube where velocity is wanted to be known in m 
 rho = 1.184;                      % AIR Gas density in kg/m^3 
-dPlexiTube = 0.100;               % Inner diameter Plexi-Tube
-dHTTube = 0.1046;                  % Diameter of the HT tube in m  %input(' (e.g. 0.146) \n'); 
-lengthHTTube = 0.365;             % Length of the HT tube in m
+dPlexiTube = input('Diameter of the Inner Plexi-Tube in m (e.g. 0.1 or 0.14) \n');                       %0.100;               % Inner diameter Plexi-Tube
+dHTTube = input('Diameter of the Inner HT-Tube in m (e.g. 0.1046 or 0.14) \n');                       %0.1046;                  % Diameter of the HT tube in m  %input(' (e.g. 0.1046) \n'); 
+lengthHTTube = input('Length of the HT tube in m (e.g. 0.365 or ??) \n');                       % 0.365;             % Length of the HT tube in m
 
 %% Input
 particleType = input('kind of particle inside the spheres \n','s');
@@ -45,6 +43,25 @@ particleDensity = input('particle density of the material inside the setup in kg
 
 
 tubeTotalLength = input('Total Length of the filled tube in m (e.g. 1.30) \n'); 
+
+offsetSampleTime = 5;             % only necessary when offsetFlag = 1 
+sampleTimeOrig = input('sample time in seconds (from 1 to 600, or multiples of 600) \n'); %60*15;               % measurement time 
+
+if sampleTimeOrig>600
+    numInt = ceil(sampleTimeOrig/600);
+    sampleTimeInt = zeros(numInt);
+    sampleTimeInt(1:(numInt-1))=600;
+    sampleTimeInt(numInt) = sampleTimeOrig - (numInt-1)*600;
+elseif sampleTimeOrig<599
+    numInt = 1;
+    sampleTimeInt(1)=sampleTimeOrig;
+else
+    numInt = 1;
+    sampleTimeInt(1)=600;
+end
+
+sampleFrequency = 2.5;
+
 lengthPlexiTube = tubeTotalLength - lengthHTTube;
 volume = (dHTTube/2)^2*pi*lengthHTTube + ...
                  (dPlexiTube/2)^2*pi*lengthPlexiTube; %total volume of the tube
@@ -59,7 +76,7 @@ temperaturecorr.kelvin = 273.15;
 temperaturecorr.celsius = 100; %+273.15;
 TAmb = tAmb + temperaturecorr.kelvin;
 
-vHigh = input('voltage power to the heating element [1-5] (e.g. 2.1) ==> ~120 degrees celsius \n'); %2.1;                        
+vHigh = input('voltage power to the heating element [1-5] (e.g. 2.1) ==> ~120 degrees celsius (for small setup) \n'); %2.1;                        
 % "Temp Control" box works with input voltages from (1 ... 5) V. 1V means no
 % power drain to the heating element, except a small leak drain due to
 % irregularities of the power controller. 
@@ -99,23 +116,54 @@ end
 fanspeed2perc = input('speed of the fan in % \n'); % 1.0;
 fanspeed = fanspeed2perc/100;
 
+for i=1:numInt
+sampleTime = sampleTimeInt(i);
 disp(['Starting measurement:' blanks(1) strcat(num2str(sampleTime),' seconds remaining ...')]);
 [sOut,sIn] = makeAnalogDAQSession4TempMeas('ni','dev2','cDAQ2Mod1', sampleTime, sampleFrequency);
-
 sOut.outputSingleScan(vHigh); 
 data = sIn.startForeground();
 sOut.outputSingleScan(vLow);
-sampleTime = sIn.DurationInSeconds; 
+sampleTimeNew = sIn.DurationInSeconds; 
+
+%sOutSaved(i) = sOut;
+
+dataSaved(:,:,i)= data; %rand(25,6)*i*1.3;%
+dataSavedLenght(i) = length(dataSaved(:,1,i));
+
+
+sampleTimeSaved(i) = sampleTimeNew;
+
+save([name, '_', num2str(i),'.mat']); %
 
 clear sOut; 
 clear sIn; 
+clear data; 
+
+disp(''); 
+disp('Done one interval.');
+
+end
+
+%merge all the intervals
+j=0;
+count =1;
+for j=1:numInt
+    data(count:(dataSavedLenght(j)+count-1),1) = dataSaved(:,1,j);
+    data(count:(dataSavedLenght(j)+count-1),2) = dataSaved(:,2,j);
+    data(count:(dataSavedLenght(j)+count-1),3) = dataSaved(:,3,j);
+    data(count:(dataSavedLenght(j)+count-1),4) = dataSaved(:,4,j);
+    data(count:(dataSavedLenght(j)+count-1),5) = dataSaved(:,5,j);
+    data(count:(dataSavedLenght(j)+count-1),6) = dataSaved(:,6,j);
+    count = dataSavedLenght(j)+count;
+
+end
+
 
 temp140cm = data(:,1); 
 tempBotMid = data(:,2);
 tempBotWall = data(:,3); 
 temp10cm = data(:,4); 
-disp(''); 
-disp('Done.');
+
 
 %% Calculating Velocity 
 
@@ -160,13 +208,15 @@ vTuyKnowMean = mean(vTuyKnow);
 vflMean = v2m*(dTuyMeasure^2*pi/4);  
 
 %% ----- Plotting -----  
+%%%%%%%%%5sampleTime Orig
+totalTime = length(temp140cm)/sampleFrequency;
 
-t = 0:sampleTime/(length(temp140cm)-1):sampleTime; 
+t = 0:totalTime/(length(temp140cm)-1):totalTime; 
 figure(1); 
 subplot(1,2,1); 
-h = plot(t,temp140cm,t,tempBotWall,t,tempBotMid,t,temp10cm);
+h = plot(t(1:end),temp140cm(1:end),t(1:end),tempBotWall(1:end),t(1:end),tempBotMid(1:end),t(1:end),temp10cm(1:end));
 hold on; 
-plot(t,ones(length(t))*mean(T)-273.15,'LineStyle','--','Color','red'); 
+plot(t(1:end),ones(length(t))*mean(T)-273.15,'LineStyle','--','Color','red'); 
 hold off; 
 set(h,'LineWidth',lineWidth);
 set(gca,'fontsize',axesSize);
@@ -197,7 +247,7 @@ save([name,'_',particleType,'.mat'],'name','offsetSampleTime','sampleTime', 'sam
         'temp10cm', 'pDiffV', 'pVelMax', 'VMax', 'pDiffPa', 'pDiffPaMean', 'v1', 'T', 'Tm', 'v2', ...
         'v2m', 'vfl', 'vTuyKnow', 'vTuyKnowMean', 'vflMean');
 
-
+save([name,'_',particleType,'_all','.mat']);
 
 
 %% ----- Displaying ----- 

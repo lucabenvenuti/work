@@ -33,10 +33,10 @@ indata2.sampleFrequency = 1000;           % Sample Frequency in Hz
 indata2.sampleFrequencyForTemp = 2.5;     % sample frequency - NI 9211 (Thermo Coupling) 
                                           % tolerates only low frequencies 
 indata2.dTuyMeasure = 0.0284;             % Diameter of tube where velocity is measured in m 
-indata2.dTuyKnow = 0.100;                 % Diameter of tube where velocity is wanted to be known in m
-indata2.dPlexiTube = 0.100;               % Inner diameter Plexi-Tube
-indata2.dHTTube = 0.1046;                  % Diameter of the HT tube in m  %input(' (e.g. 0.146) \n'); 
-indata2.lengthHTTube = 0.365;             % Length of the HT tube in m
+indata2.dTuyKnow = input('Diameter of tube where velocity is wanted to be known in m (e.g. 0.1 or 0.14) \n');    %0.100;                 % Diameter of tube where velocity is wanted to be known in m
+indata2.dPlexiTube = input('Diameter of the Inner Plexi-Tube in m (e.g. 0.1 or 0.14) \n');                       %0.100;               % Inner diameter Plexi-Tube
+indata2.dHTTube = input('Diameter of the Inner HT-Tube in m (e.g. 0.1046 or 0.14) \n');                       %0.1046;                  % Diameter of the HT tube in m  %input(' (e.g. 0.1046) \n'); 
+indata2.lengthHTTube = input('Length of the HT tube in m (e.g. 0.365 or ??) \n');                       %0.365;             % Length of the HT tube in m
 
 indata2.particleType = input('kind of particle inside the spheres \n','s');
 indata2.name = input('test + number \n','s');
@@ -82,12 +82,23 @@ indata2.h0 =  8430;
 indata2.h = 265;
 indata2.R = 287.1;
 
+
+indata2.saveFlag = input('Do you want to write an excel file? \n 0 = no \n 1 = yes \n');
+
+    if indata2.saveFlag==1
+        %indata2.fileName='\limestone7.xlsx';
+        indata2.fileName=[input('Name of the excel file without extension where data is written to \n','s'),'.xlsx'];
+    else
+    end
+
+indata2.saveFlag;
+  
+
+
+
 %fan speed
 fanspeed2perc = input('speed for the offset of the fan in % \n'); % 1.0;
 indata2.fanspeed = fanspeed2perc/100;
-
-% Name of file where data is written to  
-indata2.fileName='\mono_pp2_1275_v3.xlsx';
 
 %Offset correction, "V" stands for voltage  
 % sensor: 0 ... 1250 Pa 
@@ -192,7 +203,7 @@ indata2.vMax5DM = 2;    % [V]
     % Stepwidth the hydraulic diameter is stepped through in m 
     indata2.step = 0.00001;  
     % Value range where hydraulic diameter with minimal SSE shall be in in m
-    indata2.diamRange.init = 0.001;
+    indata2.diamRange.init = 0.0001;
     indata2.diamRange.end = 0.010;
     indata2.diamRange.vector = indata2.diamRange.init:indata2.step:indata2.diamRange.end;  
     indata2.diamRange.length = length(indata2.diamRange.vector);

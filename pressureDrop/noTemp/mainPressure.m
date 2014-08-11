@@ -4,8 +4,8 @@
 % 2 amplifiers used
 % interpolation linear and polynomial 2
 % By Nikolaus Doppelhammer & Luca Benvenuti
-% February 2014
-% v3
+% July 2014
+% v12
 %%
 % P.A. run tempControlAndMeasurement.m FIRST!!!!!!!
 %%
@@ -41,6 +41,7 @@ dTuyMeasure = indata.dTuyMeasure;
 dTuyKnow = indata.dTuyKnow;
 rho = indata.rho;
 particletype = indata.particleType;
+particleType = indata.particleType;
 name = indata.name;
 particleweight = indata.particleWeight;
 p0 = indata.p0;
@@ -52,6 +53,9 @@ fanspeed = indata.fanspeed;
 pVelMax = indata.pVelMax; % [Pa]
 VMax = indata.VMax;    % [V] 
 tempcorr = indata.tempcorr;
+saveFlag = indata.saveFlag;
+%saveFlag=1;
+% Save data to excel file 
 
 %offset
     ai = startAI4PressureDrop('nidaq','Dev2',sampleFrequency,offsetSampleTime);
@@ -69,9 +73,14 @@ tempcorr = indata.tempcorr;
     disp('Offset measured. Power-on raceway and press any key to continue measuring.')
     pause;
 
+%create folder
+add = pwd;
+caracter = [name,'_', particleType];
+add2 = [add,'\',caracter,'\'];
+mkdir(caracter);
 
 %save offset
-save([name, '_', num2str(0),'.mat'],'name','off', 'fanspeed', 'indata', 'meanoff', '-mat'); %
+save([add2 [caracter, '_', num2str(0),'.mat']]);%,'name','off', 'fanspeed', 'indata', 'meanoff', '-mat'); %
 
 %%
 %for restart
@@ -99,10 +108,11 @@ while continuetest==1
     trigger(ai)
     wait(ai,sampleTime+3)
     data = getdata(ai);
+    disp('finished.')
     datasaved(:,:,i)= data; %rand(25,6)*i*1.3;%
 
     datasavedlenght(i) = length(datasaved(:,1,i));
-    disp('finished.')
+  
 
     %velocity check & offset calculation
     %Offset correction, "V" stands for voltage 
@@ -115,8 +125,8 @@ while continuetest==1
         warning('Sensor for veloctiy measurement has reached over 95% of its measuring range'); 
     end 
 
-    save([name, '_', num2str(i),'.mat'],'name','datasaved', 'fanspeed', 'indata', 'pDiffV','off',...
-                'meanoff', '-mat'); %
+    save([add2 [caracter, '_', num2str(i),'.mat']]);%,'name','datasaved', 'fanspeed', 'indata', 'pDiffV','off',...
+         %       'meanoff', '-mat'); %
 
     continuetest = input('Do you wish to continue the test? \n 0 = no \n 1 = yes \n');
 
@@ -141,8 +151,8 @@ pDiffVMeanPlot = pDiffVMean/VMax*100;
 v1 = sqrt(2*abs(pDiffPa)/rho); % [m/s] 
 t = zeros(datasavedlenghtmax, imax);
 
-save([name, '_', num2str(imax+1),'.mat'],'name','datasaved', 'fanspeed', 'indata', 'pDiffV','off',...
-                'meanoff', 'pDiffPa','pDiffPaMean','pDiffVMeanPlot','v1','t','-mat'); %
+save([add2 [caracter, '_', num2str(imax+1),'.mat']]);%,'name','datasaved', 'fanspeed', 'indata', 'pDiffV','off',...
+          %      'meanoff', 'pDiffPa','pDiffPaMean','pDiffVMeanPlot','v1','t','-mat'); %
 
 
 j=1;
@@ -156,7 +166,7 @@ for j=1:imax
 %((1:datasavedlenght(i))/sampleFrequency)'
 
     % evaluation of velocity without temperatur compensation 
-    t(:,j) = ((1:datasavedlenght(i))/sampleFrequency)';%((1:length(v1(:,j)))./sampleFrequency)';
+    t(:,j) = ((1:datasavedlenght(i))/sampleFrequency);%((1:length(v1(:,j)))./sampleFrequency)';
     
     data3 = datasaved(:,:,j);
     pDiffPa1 = pDiffPa(:,j);
@@ -164,60 +174,146 @@ for j=1:imax
     
     corrFunData(j) = corrFun( data3, indata, pDiffPa1, pDiffPaMean1, meanoff);
     
-    vTuyKnowMean(j) = corrFunData(j).vTuyKnowMean ; 
-    vflMean(j) = corrFunData(j).vflMean;
+    vTuyKnowMean(j) = abs(corrFunData(j).vTuyKnowMean) ; 
+    vflMean(j) = abs(corrFunData(j).vflMean);
 % 
 % %dP9MMean
-% saveFlag=1;
-% % Save data to excel file 
-% if saveFlag == 1 
-% 
-%     if exist([pwd,fileName],'file')
-%         [num2, txt2,raw2] = xlsread([pwd,'\',fileName],1,'A17:E43');    % read file
-%         if length(num2)==0
-%             messNr=1;
-%         else
-%         assignin('base',char(txt2(1,1)),num2(:,1));    % assign numbers to variables
-%         messNr=length(vSup1DM)+1;
-%         end
-%     else
-%         messNr=1;
-%     end
-%     messNr=messNr+16;
-%     bedPressureDataHead={'vSup1DM','deltaP1 (1m)','deltaP2 (0.9m)','deltaP3 (0.8m)','deltaP4 (0.5m)';'[m/s]','[Pa]','[Pa]','[Pa]','[Pa]'};
-%     bedPressure=[corrFunData(j).vTuyKnowMean,corrFunData(j).dP1MMean,corrFunData(j).dP9MMean,corrFunData(j).dP8MMean,corrFunData(j).dP5MMean];
-%     xlswrite([pwd,fileName],bedPressureDataHead,'A17:E18');
-%     xlswrite([pwd,fileName],bedPressure,['A',int2str(messNr+2),':E',int2str(messNr+2)]);
-%     
-% end 
+%saveFlag=1;
+% Save data to excel file 
+if saveFlag == 1 
 
+    if exist([add,fileName],'file')
+        %copyfile('source','destination')
+        %[num2, txt2,raw2] = xlsread([pwd,'\',fileName],1,'A17:E43');    % read file
+        [num2, txt2,raw2] = xlsread([add,'\',fileName],1,'A17:E43');    % read file
+        if length(num2)==0
+            messNr=1;
+        else
+        assignin('base',char(txt2(1,1)),num2(:,1));    % assign numbers to variables
+        messNr=length(vSup1DM)+1;
+        end
+    else
+        messNr=1;
+    end
+    messNr=messNr+16;
+    bedPressureDataHead={'vSup1DM','deltaP1 (1m)','deltaP2 (0.9m)','deltaP3 (0.8m)','deltaP4 (0.5m)';'[m/s]','[Pa]','[Pa]','[Pa]','[Pa]'};
+    bedPressure=[corrFunData(j).vTuyKnowMean,corrFunData(j).dP1MMean,corrFunData(j).dP9MMean,corrFunData(j).dP8MMean,corrFunData(j).dP5MMean];
+    xlswrite([add,'\',fileName],bedPressureDataHead,'A17:E18');
+    xlswrite([add,'\',fileName],bedPressure,['A',int2str(messNr+2),':E',int2str(messNr+2)]);
+    
+    
+end 
 
 
 
     
    % calcHydDiamData(j) = calcHydDiam( data3, indata, pDiffPa1, pDiffPaMean1, meanoff, corrFunData(j) );
-    ReLinCorrOver1mNoD(j)   = corrFunData(j).ReLinCorrOver1mNoD;
-    ReNLinCorrOver1mNoD(j)  = corrFunData(j).ReNLinCorrOver1mNoD;
-    ReLinCorrOver09mNoD(j)  = corrFunData(j).ReLinCorrOver09mNoD;
-    ReNLinCorrOver09mNoD(j) = corrFunData(j).ReNLinCorrOver09mNoD;
-    ReLinCorrOver08mNoD(j)  = corrFunData(j).ReLinCorrOver08mNoD;
-    ReNLinCorrOver08mNoD(j) = corrFunData(j).ReNLinCorrOver08mNoD;
-    ReLinCorrOver05mNoD(j)  = corrFunData(j).ReLinCorrOver05mNoD;
-    ReNLinCorrOver05mNoD(j) = corrFunData(j).ReNLinCorrOver05mNoD;
+    ReLinCorrOver1mNoD(j)   = abs(corrFunData(j).ReLinCorrOver1mNoD);
+    ReNLinCorrOver1mNoD(j)  = abs(corrFunData(j).ReNLinCorrOver1mNoD);
+    ReLinCorrOver09mNoD(j)  = abs(corrFunData(j).ReLinCorrOver09mNoD);
+    ReNLinCorrOver09mNoD(j) = abs(corrFunData(j).ReNLinCorrOver09mNoD);
+    ReLinCorrOver08mNoD(j)  = abs(corrFunData(j).ReLinCorrOver08mNoD);
+    ReNLinCorrOver08mNoD(j) = abs(corrFunData(j).ReNLinCorrOver08mNoD);
+    ReLinCorrOver05mNoD(j)  = abs(corrFunData(j).ReLinCorrOver05mNoD);
+    ReNLinCorrOver05mNoD(j) = abs(corrFunData(j).ReNLinCorrOver05mNoD);
     
-    fDaExpLinCorrOver1mNoD(j)   = corrFunData(j).fDaExpLinCorrOver1mNoD;
-    fDaExpNLinCorrOver1mNoD(j)  = corrFunData(j).fDaExpNLinCorrOver1mNoD;
-    fDaExpLinCorrOver09mNoD(j)  = corrFunData(j).fDaExpLinCorrOver09mNoD;
-    fDaExpNLinCorrOver09mNoD(j) = corrFunData(j).fDaExpNLinCorrOver09mNoD;
-    fDaExpLinCorrOver08mNoD(j)  = corrFunData(j).fDaExpLinCorrOver08mNoD;
-    fDaExpNLinCorrOver08mNoD(j) = corrFunData(j).fDaExpNLinCorrOver08mNoD;
-    fDaExpLinCorrOver05mNoD(j)  = corrFunData(j).fDaExpLinCorrOver05mNoD;
-    fDaExpNLinCorrOver05mNoD(j) = corrFunData(j).fDaExpNLinCorrOver05mNoD;
+    fDaExpLinCorrOver1mNoD(j)   = abs(corrFunData(j).fDaExpLinCorrOver1mNoD);
+    fDaExpNLinCorrOver1mNoD(j)  = abs(corrFunData(j).fDaExpNLinCorrOver1mNoD);
+    fDaExpLinCorrOver09mNoD(j)  = abs(corrFunData(j).fDaExpLinCorrOver09mNoD);
+    fDaExpNLinCorrOver09mNoD(j) = abs(corrFunData(j).fDaExpNLinCorrOver09mNoD);
+    fDaExpLinCorrOver08mNoD(j)  = abs(corrFunData(j).fDaExpLinCorrOver08mNoD);
+    fDaExpNLinCorrOver08mNoD(j) = abs(corrFunData(j).fDaExpNLinCorrOver08mNoD);
+    fDaExpLinCorrOver05mNoD(j)  = abs(corrFunData(j).fDaExpLinCorrOver05mNoD);
+    fDaExpNLinCorrOver05mNoD(j) = abs(corrFunData(j).fDaExpNLinCorrOver05mNoD);
+    
+    
+    %%    
+    %for plotting
+    %figure1
+    ReLinCorrOver1m(j) = abs(corrFunData(j).ReLinCorrOver1m);
+    fDaExpLinCorrOver1m(j) = abs(corrFunData(j).fDaExpLinCorrOver1m);
+    fDaErgunLinCorrOver1m(j) = abs(corrFunData(j).fDaErgunLinCorrOver1m);
+    fDaKaysLinCorrOver1m(j) = abs(corrFunData(j).fDaKaysLinCorrOver1m);
+    fDaCarmanLinCorrOver1m(j) = abs(corrFunData(j).fDaCarmanLinCorrOver1m);
+    fDaBrauerLinCorrOver1m(j) = abs(corrFunData(j).fDaBrauerLinCorrOver1m);
+    fDaKrierLinCorrOver1m(j) = abs(corrFunData(j).fDaKrierLinCorrOver1m);
+    fDaIdelchikLinCorrOver1m(j) = abs(corrFunData(j).fDaIdelchikLinCorrOver1m);
+    
+     %figure2
+    ReNLinCorrOver1m(j) = abs(corrFunData(j).ReNLinCorrOver1m);
+    fDaExpNLinCorrOver1m(j) = abs(corrFunData(j).fDaExpNLinCorrOver1m);
+    fDaErgunNLinCorrOver1m(j) = abs(corrFunData(j).fDaErgunNLinCorrOver1m);
+    fDaKaysNLinCorrOver1m(j) = abs(corrFunData(j).fDaKaysNLinCorrOver1m);
+    fDaCarmanNLinCorrOver1m(j) = abs(corrFunData(j).fDaCarmanNLinCorrOver1m);
+    fDaBrauerNLinCorrOver1m(j) = abs(corrFunData(j).fDaBrauerNLinCorrOver1m);
+    fDaKrierNLinCorrOver1m(j) = abs(corrFunData(j).fDaKrierNLinCorrOver1m);
+    fDaIdelchikNLinCorrOver1m(j) = abs(corrFunData(j).fDaIdelchikNLinCorrOver1m);
+    
+    %figure3
+    ReLinCorrOver09m(j) = abs(corrFunData(j).ReLinCorrOver09m);
+    fDaExpLinCorrOver09m(j) = abs(corrFunData(j).fDaExpLinCorrOver09m);
+    fDaErgunLinCorrOver09m(j) = abs(corrFunData(j).fDaErgunLinCorrOver09m);
+    fDaKaysLinCorrOver09m(j) = abs(corrFunData(j).fDaKaysLinCorrOver09m);
+    fDaCarmanLinCorrOver09m(j) = abs(corrFunData(j).fDaCarmanLinCorrOver09m);
+    fDaBrauerLinCorrOver09m(j) = abs(corrFunData(j).fDaBrauerLinCorrOver09m);
+    fDaKrierLinCorrOver09m(j) = abs(corrFunData(j).fDaKrierLinCorrOver09m);
+    fDaIdelchikLinCorrOver09m(j) = abs(corrFunData(j).fDaIdelchikLinCorrOver09m);
+
+    %figure4
+    ReNLinCorrOver09m(j) = abs(corrFunData(j).ReNLinCorrOver09m);
+    fDaExpNLinCorrOver09m(j) = abs(corrFunData(j).fDaExpNLinCorrOver09m);
+    fDaErgunNLinCorrOver09m(j) = abs(corrFunData(j).fDaErgunNLinCorrOver09m);
+    fDaKaysNLinCorrOver09m(j) = abs(corrFunData(j).fDaKaysNLinCorrOver09m);
+    fDaCarmanNLinCorrOver09m(j) = abs(corrFunData(j).fDaCarmanNLinCorrOver09m);
+    fDaBrauerNLinCorrOver09m(j) = abs(corrFunData(j).fDaBrauerNLinCorrOver09m);
+    fDaKrierNLinCorrOver09m(j) = abs(corrFunData(j).fDaKrierNLinCorrOver09m);
+    fDaIdelchikNLinCorrOver09m(j) = abs(corrFunData(j).fDaIdelchikNLinCorrOver09m);
+    
+    %figure5
+    ReLinCorrOver08m(j) = abs(corrFunData(j).ReLinCorrOver08m);
+    fDaExpLinCorrOver08m(j) = abs(corrFunData(j).fDaExpLinCorrOver08m);
+    fDaErgunLinCorrOver08m(j) = abs(corrFunData(j).fDaErgunLinCorrOver08m);
+    fDaKaysLinCorrOver08m(j) = abs(corrFunData(j).fDaKaysLinCorrOver08m);
+    fDaCarmanLinCorrOver08m(j) = abs(corrFunData(j).fDaCarmanLinCorrOver08m);
+    fDaBrauerLinCorrOver08m(j) = abs(corrFunData(j).fDaBrauerLinCorrOver08m);
+    fDaKrierLinCorrOver08m(j) = abs(corrFunData(j).fDaKrierLinCorrOver08m);
+    fDaIdelchikLinCorrOver08m(j) = abs(corrFunData(j).fDaIdelchikLinCorrOver08m);
+
+    %figure6
+    ReNLinCorrOver08m(j) = abs(corrFunData(j).ReNLinCorrOver08m);
+    fDaExpNLinCorrOver08m(j) = abs(corrFunData(j).fDaExpNLinCorrOver08m);
+    fDaErgunNLinCorrOver08m(j) = abs(corrFunData(j).fDaErgunNLinCorrOver08m);
+    fDaKaysNLinCorrOver08m(j) = abs(corrFunData(j).fDaKaysNLinCorrOver08m);
+    fDaCarmanNLinCorrOver08m(j) = abs(corrFunData(j).fDaCarmanNLinCorrOver08m);
+    fDaBrauerNLinCorrOver08m(j) = abs(corrFunData(j).fDaBrauerNLinCorrOver08m);
+    fDaKrierNLinCorrOver08m(j) = abs(corrFunData(j).fDaKrierNLinCorrOver08m);
+    fDaIdelchikNLinCorrOver08m(j) = abs(corrFunData(j).fDaIdelchikNLinCorrOver08m);   
+    
+    %figure7
+    ReLinCorrOver05m(j) = abs(corrFunData(j).ReLinCorrOver05m);
+    fDaExpLinCorrOver05m(j) = abs(corrFunData(j).fDaExpLinCorrOver05m);
+    fDaErgunLinCorrOver05m(j) = abs(corrFunData(j).fDaErgunLinCorrOver05m);
+    fDaKaysLinCorrOver05m(j) = abs(corrFunData(j).fDaKaysLinCorrOver05m);
+    fDaCarmanLinCorrOver05m(j) = abs(corrFunData(j).fDaCarmanLinCorrOver05m);
+    fDaBrauerLinCorrOver05m(j) = abs(corrFunData(j).fDaBrauerLinCorrOver05m);
+    fDaKrierLinCorrOver05m(j) = abs(corrFunData(j).fDaKrierLinCorrOver05m);
+    fDaIdelchikLinCorrOver05m(j) = abs(corrFunData(j).fDaIdelchikLinCorrOver05m);
+
+    %figure8
+    ReNLinCorrOver05m(j) = abs(corrFunData(j).ReNLinCorrOver05m);
+    fDaExpNLinCorrOver05m(j) = abs(corrFunData(j).fDaExpNLinCorrOver05m);
+    fDaErgunNLinCorrOver05m(j) = abs(corrFunData(j).fDaErgunNLinCorrOver05m);
+    fDaKaysNLinCorrOver05m(j) = abs(corrFunData(j).fDaKaysNLinCorrOver05m);
+    fDaCarmanNLinCorrOver05m(j) = abs(corrFunData(j).fDaCarmanNLinCorrOver05m);
+    fDaBrauerNLinCorrOver05m(j) = abs(corrFunData(j).fDaBrauerNLinCorrOver05m);
+    fDaKrierNLinCorrOver05m(j) = abs(corrFunData(j).fDaKrierNLinCorrOver05m);
+    fDaIdelchikNLinCorrOver05m(j) = abs(corrFunData(j).fDaIdelchikNLinCorrOver05m);
+    
 end
 
 
-save([name, '_', num2str(imax+2),'.mat'],'name','datasaved', 'fanspeed', 'indata', 'pDiffV','off',...
-                'meanoff', 'pDiffPa','pDiffPaMean','pDiffVMeanPlot','v1','t', 'corrFunData', '-mat'); %
+save([add2 [caracter, '_', num2str(imax+2),'.mat']]);%,'name','datasaved', 'fanspeed', 'indata', 'pDiffV','off',...
+            %    'meanoff', 'pDiffPa','pDiffPaMean','pDiffVMeanPlot','v1','t', 'corrFunData', '-mat'); %
 %%
 %get Hyd Diameter
       
@@ -262,13 +358,20 @@ i=1;
 dHydMeanCol = dHydColSum/7;
 
 %disp([fname,': Average coefficient of friciton pre-shear is ',num2str(avgMuR1(ii,1))]);
-
+save([add2 [caracter, '_', num2str(imax+3),'.mat']]);%,'name','datasaved', 'fanspeed', 'indata', 'pDiffV','off',...
+            %    'meanoff', 'pDiffPa','pDiffPaMean','pDiffVMeanPlot','v1','t', 'corrFunData', '-mat'); %
 
 %%
 %plot
 
 j=1;
 for j=1:imax
+    
+        %get deltaP5 (0.1m) as gaussian exstimation
+    dP01MMean1 = deltaP5Estimation(corrFunData(j).dP1MMean,corrFunData(j).dP9MMean,corrFunData(j).dP8MMean,corrFunData(j).dP5MMean);   
+    corrFunData(j).dP01MMean = dP01MMean1;
+    
+    
    ca{1} = sprintf('%-35s %+10d %-4s', 'Measurement time:', sampleTime, 's');  
    ca{2} = sprintf('%-35s %+10.3d %-4s', 'Mean ambient temperature:', corrFunData(j).Tm, 'K');
    ca{3} = sprintf('%-35s %+10.3d %-4s', 'Measured gas flow rate', corrFunData(j).vflMean, 'm^3/s');
@@ -312,93 +415,109 @@ end
 
 
 figure(1)
-plot(ReLinCorrOver1mNoD,   fDaExpLinCorrOver1mNoD, '-k');,...
-%     corrFunData.ReLinCorrOver1m, corrFunData.fDaErgunLinCorrOver1m, '-k',...
-%     corrFunData.ReLinCorrOver1m, corrFunData.fDaKaysLinCorrOver1m, '-k',...
-%     corrFunData.ReLinCorrOver1m, corrFunData.fDaCarmanLinCorrOver1m, '-k',...
-%     corrFunData.ReLinCorrOver1m, corrFunData.fDaBrauerLinCorrOver1m, '-k',...
-%     corrFunData.ReLinCorrOver1m, corrFunData.fDaKrierLinCorrOver1m, '-k',...
-%     corrFunData.ReLinCorrOver1m, corrFunData.fDaIdelchikLinCorrOver1m, '-k');
- %legend
- %legend position
+plot(ReLinCorrOver1m,      fDaExpLinCorrOver1m,     '-xm',...  );,...
+     ReLinCorrOver1m,      fDaErgunLinCorrOver1m,   '-xc',...
+     ReLinCorrOver1m,      fDaKaysLinCorrOver1m,    '-xr',...
+     ReLinCorrOver1m,      fDaCarmanLinCorrOver1m,  '-xg',...
+     ReLinCorrOver1m,      fDaBrauerLinCorrOver1m,  '-xb',...
+     ReLinCorrOver1m,      fDaKrierLinCorrOver1m,   '-xy',...
+     ReLinCorrOver1m,      fDaIdelchikLinCorrOver1m,'-xk');
+legend('exp','Ergun','Kays','Carman','Brauer','Krier','Idelchick')
+title('LinCorrOver1m')
+xlabel('Re')
+ylabel('f')
+
  
-% figure(2)
-%plot(corrFunData.ReNLinCorrOver1m, corrFunData.fDaExpNLinCorrOver1m, '-k',...
-%     corrFunData.ReNLinCorrOver1m, corrFunData.fDaErgunNLinCorrOver1m, '-k',...
-%     corrFunData.ReNLinCorrOver1m, corrFunData.fDaKaysNLinCorrOver1m, '-k',...
-%     corrFunData.ReNLinCorrOver1m, corrFunData.fDaCarmanNLinCorrOver1m, '-k',...
-%     corrFunData.ReNLinCorrOver1m, corrFunData.fDaBrauerNLinCorrOver1m, '-k',...
- %    corrFunData.ReNLinCorrOver1m, corrFunData.fDaKrierNLinCorrOver1m, '-k',...
-%     corrFunData.ReNLinCorrOver1m, corrFunData.fDaIdelchikNLinCorrOver1m, '-k');
- %legend
- %legend position
+figure(2)
+plot(ReNLinCorrOver1m,      fDaExpNLinCorrOver1m,     '-mx',...  );,...
+     ReNLinCorrOver1m,      fDaErgunNLinCorrOver1m,   '-cx',...
+     ReNLinCorrOver1m,      fDaKaysNLinCorrOver1m,    '-rx',...
+     ReNLinCorrOver1m,      fDaCarmanNLinCorrOver1m,  '-gx',...
+     ReNLinCorrOver1m,      fDaBrauerNLinCorrOver1m,  '-bx',...
+     ReNLinCorrOver1m,      fDaKrierNLinCorrOver1m,   '-yx',...
+     ReNLinCorrOver1m,      fDaIdelchikNLinCorrOver1m,'-kx');
+legend('exp','Ergun','Kays','Carman','Brauer','Krier','Idelchick')
+title('NLinCorrOver1m')
+xlabel('Re')
+ylabel('f')
  
-% figure(3)
-%plot(corrFunData.ReLinCorrOver09m, corrFunData.fDaExpLinCorrOver09m, 'k',...
-%     corrFunData.ReLinCorrOver09m, corrFunData.fDaErgunLinCorrOver09m, 'k',...
- %    corrFunData.ReLinCorrOver09m, corrFunData.fDaKaysLinCorrOver09m, 'k',...
- %    corrFunData.ReLinCorrOver09m, corrFunData.fDaCarmanLinCorrOver09m, 'k',...
-%    corrFunData.ReLinCorrOver09m, corrFunData.fDaBrauerLinCorrOver09m, 'k',...
- %    corrFunData.ReLinCorrOver09m, corrFunData.fDaKrierLinCorrOver09m, 'k',...
- %    corrFunData.ReLinCorrOver09m, corrFunData.fDaIdelchikLinCorrOver09m, 'k');
- %legend
- %legend position
+figure(3)
+plot(ReLinCorrOver09m,      fDaExpLinCorrOver09m,     '-mx',...  );,...
+     ReLinCorrOver09m,      fDaErgunLinCorrOver09m,   '-cx',...
+     ReLinCorrOver09m,      fDaKaysLinCorrOver09m,    '-rx',...
+     ReLinCorrOver09m,      fDaCarmanLinCorrOver09m,  '-gx',...
+     ReLinCorrOver09m,      fDaBrauerLinCorrOver09m,  '-bx',...
+     ReLinCorrOver09m,      fDaKrierLinCorrOver09m,   '-yx',...
+     ReLinCorrOver09m,      fDaIdelchikLinCorrOver09m,'-kx');
+legend('exp','Ergun','Kays','Carman','Brauer','Krier','Idelchick')
+title('LinCorrOver09m')
+xlabel('Re')
+ylabel('f')
+ 
+figure(4)
+plot(ReNLinCorrOver09m,      fDaExpNLinCorrOver09m,     '-mx',...  );,...
+     ReNLinCorrOver09m,      fDaErgunNLinCorrOver09m,   '-cx',...
+     ReNLinCorrOver09m,      fDaKaysNLinCorrOver09m,    '-rx',...
+     ReNLinCorrOver09m,      fDaCarmanNLinCorrOver09m,  '-gx',...
+     ReNLinCorrOver09m,      fDaBrauerNLinCorrOver09m,  '-bx',...
+     ReNLinCorrOver09m,      fDaKrierNLinCorrOver09m,   '-yx',...
+     ReNLinCorrOver09m,      fDaIdelchikNLinCorrOver09m,'-kx');
+legend('exp','Ergun','Kays','Carman','Brauer','Krier','Idelchick')
+title('NLinCorrOver09m')
+xlabel('Re')
+ylabel('f')
+ 
+figure(5)
+plot(ReLinCorrOver08m,      fDaExpLinCorrOver08m,     '-mx',...  );,...
+     ReLinCorrOver08m,      fDaErgunLinCorrOver08m,   '-cx',...
+     ReLinCorrOver08m,      fDaKaysLinCorrOver08m,    '-rx',...
+     ReLinCorrOver08m,      fDaCarmanLinCorrOver08m,  '-gx',...
+     ReLinCorrOver08m,      fDaBrauerLinCorrOver08m,  '-bx',...
+     ReLinCorrOver08m,      fDaKrierLinCorrOver08m,   '-yx',...
+     ReLinCorrOver08m,      fDaIdelchikLinCorrOver08m,'-kx');
+legend('exp','Ergun','Kays','Carman','Brauer','Krier','Idelchick')
+title('LinCorrOver08m')
+xlabel('Re')
+ylabel('f')
+ 
+figure(6)
+plot(ReNLinCorrOver08m,      fDaExpNLinCorrOver08m,     '-mx',...  );,...
+     ReNLinCorrOver08m,      fDaErgunNLinCorrOver08m,   '-cx',...
+     ReNLinCorrOver08m,      fDaKaysNLinCorrOver08m,    '-rx',...
+     ReNLinCorrOver08m,      fDaCarmanNLinCorrOver08m,  '-gx',...
+     ReNLinCorrOver08m,      fDaBrauerNLinCorrOver08m,  '-bx',...
+     ReNLinCorrOver08m,      fDaKrierNLinCorrOver08m,   '-yx',...
+     ReNLinCorrOver08m,      fDaIdelchikNLinCorrOver08m,'-kx');
+legend('exp','Ergun','Kays','Carman','Brauer','Krier','Idelchick')
+title('NLinCorrOver08m')
+xlabel('Re')
+ylabel('f')
+ 
+figure(7)
+plot(ReLinCorrOver05m,      fDaExpLinCorrOver05m,     '-mx',...  );,...
+     ReLinCorrOver05m,      fDaErgunLinCorrOver05m,   '-cx',...
+     ReLinCorrOver05m,      fDaKaysLinCorrOver05m,    '-rx',...
+     ReLinCorrOver05m,      fDaCarmanLinCorrOver05m,  '-gx',...
+     ReLinCorrOver05m,      fDaBrauerLinCorrOver05m,  '-bx',...
+     ReLinCorrOver05m,      fDaKrierLinCorrOver05m,   '-yx',...
+     ReLinCorrOver05m,      fDaIdelchikLinCorrOver05m,'-kx');
+legend('exp','Ergun','Kays','Carman','Brauer','Krier','Idelchick')
+title('LinCorrOver05m')
+xlabel('Re')
+ylabel('f')
 
-% figure(4)
-%plot(corrFunData.ReNLinCorrOver09m, corrFunData.fDaExpNLinCorrOver09m, 'k',...
- %    corrFunData.ReNLinCorrOver09m, corrFunData.fDaErgunNLinCorrOver09m, 'k',...
-%     corrFunData.ReNLinCorrOver09m, corrFunData.fDaKaysNLinCorrOver09m, 'k',...
- %    corrFunData.ReNLinCorrOver09m, corrFunData.fDaCarmanNLinCorrOver09m, 'k',...
-%     corrFunData.ReNLinCorrOver09m, corrFunData.fDaBrauerNLinCorrOver09m, 'k',...
-%     corrFunData.ReNLinCorrOver09m, corrFunData.fDaKrierNLinCorrOver09m, 'k',...
-%     corrFunData.ReNLinCorrOver09m, corrFunData.fDaIdelchikNLinCorrOver09m, 'k');
- %legend
- %legend position
-
-%  figure(5)
-%plot(corrFunData.ReLinCorrOver08m, corrFunData.fDaExpLinCorrOver08m, 'k',...
-%     corrFunData.ReLinCorrOver08m, corrFunData.fDaErgunLinCorrOver08m, 'k',...
-%     corrFunData.ReLinCorrOver08m, corrFunData.fDaKaysLinCorrOver08m, 'k',...
-%%     corrFunData.ReLinCorrOver08m, corrFunData.fDaCarmanLinCorrOver08m, 'k',...
- %    corrFunData.ReLinCorrOver08m, corrFunData.fDaBrauerLinCorrOver08m, 'k',...
-%     corrFunData.ReLinCorrOver08m, corrFunData.fDaKrierLinCorrOver08m, 'k',...
-%     corrFunData.ReLinCorrOver08m, corrFunData.fDaIdelchikLinCorrOver08m, 'k');
- %legend
- %legend position
-
-% figure(6)
-%plot(corrFunData.ReNLinCorrOver08m, corrFunData.fDaExpNLinCorrOver08m, 'k',...
-%     corrFunData.ReNLinCorrOver08m, corrFunData.fDaErgunNLinCorrOver08m, 'k',...
-%     corrFunData.ReNLinCorrOver08m, corrFunData.fDaKaysNLinCorrOver08m, 'k',...
- %   corrFunData.ReNLinCorrOver08m, corrFunData.fDaCarmanNLinCorrOver08m, 'k',...
-%     corrFunData.ReNLinCorrOver08m, corrFunData.fDaBrauerNLinCorrOver08m, 'k',...
- %    corrFunData.ReNLinCorrOver08m, corrFunData.fDaKrierNLinCorrOver08m, 'k',...
-%     corrFunData.ReNLinCorrOver08m, corrFunData.fDaIdelchikNLinCorrOver08m, 'k');
- %legend
- %legend position
-
-    
-%  figure(7)
-%plot(corrFunData.ReLinCorrOver05m, corrFunData.fDaExpLinCorrOver05m, 'k',...
-%     corrFunData.ReLinCorrOver05m, corrFunData.fDaErgunLinCorrOver05m, 'k',...
-%     corrFunData.ReLinCorrOver05m, corrFunData.fDaKaysLinCorrOver05m, 'k',...
- %    corrFunData.ReLinCorrOver05m, corrFunData.fDaCarmanLinCorrOver05m, 'k',...
-%     corrFunData.ReLinCorrOver05m, corrFunData.fDaBrauerLinCorrOver05m, 'k',...
-%     corrFunData.ReLinCorrOver05m, corrFunData.fDaKrierLinCorrOver05m, 'k',...
-%     corrFunData.ReLinCorrOver05m, corrFunData.fDaIdelchikLinCorrOver05m, 'k');
- %legend
- %legend position
-
-% figure(8)
-%plot(corrFunData.ReNLinCorrOver05m, corrFunData.fDaExpNLinCorrOver05m, 'k',...
-%     corrFunData.ReNLinCorrOver05m, corrFunData.fDaErgunNLinCorrOver05m, 'k',...
- %    corrFunData.ReNLinCorrOver05m, corrFunData.fDaKaysNLinCorrOver05m, 'k',...
-%v     corrFunData.ReNLinCorrOver05m, corrFunData.fDaCarmanNLinCorrOver05m, 'k',...
-%     corrFunData.ReNLinCorrOver05m, corrFunData.fDaBrauerNLinCorrOver05m, 'k',...
- %    corrFunData.ReNLinCorrOver05m, corrFunData.fDaKrierNLinCorrOver05m, 'k',...
- %    corrFunData.ReNLinCorrOver05m, corrFunData.fDaIdelchikNLinCorrOver05m, 'k');
- %legend
- %legend position
+figure(8)
+plot(ReNLinCorrOver05m,      fDaExpNLinCorrOver05m,     '-mx',...  );,...
+     ReNLinCorrOver05m,      fDaErgunNLinCorrOver05m,   '-cx',...
+     ReNLinCorrOver05m,      fDaKaysNLinCorrOver05m,    '-rx',...
+     ReNLinCorrOver05m,      fDaCarmanNLinCorrOver05m,  '-gx',...
+     ReNLinCorrOver05m,      fDaBrauerNLinCorrOver05m,  '-bx',...
+     ReNLinCorrOver05m,      fDaKrierNLinCorrOver05m,   '-yx',...
+     ReNLinCorrOver05m,      fDaIdelchikNLinCorrOver05m,'-kx');
+legend('exp','Ergun','Kays','Carman','Brauer','Krier','Idelchick')
+title('NLinCorrOver05m')
+xlabel('Re')
+ylabel('f')
  
 
 
@@ -407,6 +526,49 @@ disp([name,': mean Hydraulic diameters are: ']);
 disp( [ 'dHydSug = ',num2str(dHydSug)]); % [           'dHydSug = ',num2str(dHydMeanCol)]
 disp( [ 'dHydMeanRow = ',num2str(dHydMeanRow)]);
 disp( [ 'dHydMeanCol = ',num2str(dHydMeanCol)]);
- save([name, '_', num2str(imax+3),'.mat'],'name','datasaved', 'fanspeed', 'indata', 'pDiffV','off',...
+ save([add2 [caracter, '_', num2str(imax+4),'.mat']],'name','datasaved', 'fanspeed', 'indata', 'pDiffV','off',...
                 'meanoff', 'pDiffPa','pDiffPaMean','pDiffVMeanPlot','v1','t', ...
                 'corrFunData', 'dHydSug', 'dHydMeanRow', 'dHydMeanCol','-mat'); %
+
+save([add2 [caracter, '_', num2str(imax+5),'.mat']]);
+
+%save the file for simulation comparison
+add3 = [add2,'exp_params'];
+timeSim = [0.01:.01:0.11]';
+A(:,1)=timeSim;
+
+ijk = 1;
+
+for ijk = 1:11
+    A(ijk,2) = corrFunData(ijk).vTuyKnowMean;
+    A(ijk,3) = corrFunData(ijk).dP01MMean;
+end
+
+fileID = fopen(add3,'w');
+fprintf(fileID,'%4s %9s %11s\n','#Time','U','PressureDrop');
+ijk = 1;
+for ijk = 1:11
+fprintf(fileID,'%1.2f %1.9f %1.9f\n',A(ijk,:));
+end
+fclose(fileID);
+
+add4 = [add2,[caracter,'_','exp_params.txt']];
+
+fileID2 = fopen(add4,'w');
+formatSpec = 'BedLength is %4.4f meters \n';
+fprintf(fileID2,formatSpec,indata.tubeTotalLength);
+formatSpec = 'BedDiameter is %4.4f meters \n';
+fprintf(fileID2,formatSpec,indata.dPlexiTube);
+formatSpec = 'ParticleMass is %4.4f kg \n';
+fprintf(fileID2,formatSpec,indata.particleWeight);
+formatSpec = 'Porosity is %4.4f\n';
+fprintf(fileID2,formatSpec,indata.porosity);
+formatSpec = 'dHydSug is %4.4f m\n';
+fprintf(fileID2,formatSpec,dHydSug);
+formatSpec = 'dHydMeanRow is %4.4f m\n';
+fprintf(fileID2,formatSpec,dHydMeanRow);
+formatSpec = 'dHydMeanCol is %4.4f m\n';
+fprintf(fileID2,formatSpec,dHydMeanCol);
+fclose(fileID2);
+
+save([add2 [caracter, '_', num2str(imax+6),'.mat']]);
