@@ -24,7 +24,7 @@ set(0,'DefaultTextFontSize',12);
 unitSysDefault = 'si';  % 'si' or 'cgs'
 
 % select files that should be postprocessed
-sim_dir = '../results/09/sim106'; % directory, where simulation files can be found
+sim_dir = '../results/10/sim118_sinterfine_reducedPolydispersity'; % directory, where simulation files can be found
 filepattern = 'force.cad*_fid*.txt'; % e.g. 'force.*.txt' %Andi
 filepatterncsv = 'sim_par*_fid*.csv'; % e.g. 'force.*.txt' %Andi
 
@@ -32,11 +32,11 @@ filepatterncsv = 'sim_par*_fid*.csv'; % e.g. 'force.*.txt' %Andi
 % example: searchCases = {'fric' 0.6
 %                         'rf'   [0.2 0.4]};
 %   for all cases use empty searchCases = {};
-searchCases = {...'fric' 0.4 %[0.4 0.8]
-               ...'rf'   0.8 %[0.4 0.8]
-               ...'fid'  [14617 14618] 
+searchCases = {'fric' 0.4 %[0.4 0.8]
+               'rf'   0.4 %[0.4 0.8]
+               'fid'  [	20025	20026	20027	20028	20029	20030		20201	20202	20203	20204 20205] %20101	20102	20103	20125	20126 20001	20002
                ...'shearperc' 0.4
-               ... 'ctrlStress' -2063.01141600895
+               ... 'ctrlStress' -1.007001977856750e+04
                ...'dens' 1500
                };
 
@@ -54,7 +54,7 @@ col_numBox = 13;
 % experimental data
 exp_flag = true; % enable the comparision to experimental data
 exp_dir = '.'; % directory, where the files can be found
-legendExpFlag = 'jenike'; % choose between jenike & schulze
+legendExpFlag = 'schulze'; % choose between jenike & schulze
 
 if (exp_flag)
     switch legendExpFlag
@@ -63,9 +63,9 @@ if (exp_flag)
 
             
         case 'schulze'
-            exp_file = ['20131129_1019_limestone0-315_test01' , '.FTD']; % name of the FTD FILE, with the exp values vs time
-            summaryFile = ['20131129_1019_limestone0-315_test01' , '.out']; % name of the out file, with the summary values
-            sumForceFile = ['20131129_1019_limestone0-315_test01' , '.inp']; % name of the inp file, with the forces summary values
+            exp_file = ['20131128_1824_sinterfine0-315_test01' , '.FTD']; % name of the FTD FILE, with the exp values vs time
+            summaryFile = ['20131128_1824_sinterfine0-315_test01' , '.out']; % name of the out file, with the summary values
+            sumForceFile = ['20131128_1824_sinterfine0-315_test01' , '.inp']; % name of the inp file, with the forces summary values
     end
     
 end
@@ -76,7 +76,8 @@ end
 legendFlag = 'std';
 
 %dCylDp confrontation
-dCylDpConfrontationFlag = false;
+dCylDpConfrontationFlag = true;
+dCylDpConfrontationFlag2 = false;
 
 % save images
 saveFlag = false;
@@ -86,9 +87,10 @@ saveDir = './images';
 %   the column height is one cylinder radius for the given stl-geometry!
 %   material density is defined in the cvs-files!
 % ATTENTION: This is hardcoded in the script!
-fracPart = 0.3; % particle fraction for the calculation of the bulk density %0.6 is correct
+fracPart = 0.6; % particle fraction for the calculation of the bulk density %0.6 is correct
 fracColMass = 1.0; %0.12;
 
+manualPlateauFlag = true;
 startPlateauPreShearValue = .25;%.38;
 stopPlateauPreShearValue = .45;%.48;
 startPlateauShearValue = .75;%.80;
@@ -438,7 +440,7 @@ for ii=1:nSimCases
 
         data(ii).volFrac = data(ii).volPartColMass./data(ii).volPartColServo;
         disp(['Mean volume fraction in the particle column is ',num2str(mean(data(ii).volFrac)), '_fileID', num2str(data(ii).fileID)]);
-        disp(['Mean void fraction in the whole box is ',num2str(mean(data(ii).voidFracBox)), '_fileID', num2str(data(ii).fileID)]);
+        %disp(['Mean void fraction in the whole box is ',num2str(mean(data(ii).voidFracBox)), '_fileID', num2str(data(ii).fileID)]);
     end
 
 end
@@ -551,10 +553,7 @@ for ii=1:nSimCases
     muR = data(ii).muR;
     lMuR = length(muR);
     
-    % calc average and maximum coefficient of friction
-    % save average value and shear cell size for plot
-    avgMuR(1,ii) = mean(muR(round(lMuR*2/3):end));
-    avgMuR(2,ii) = data(ii).dCylDp;
+    
     
     data(ii).maxMuR = max(muR(round(lMuR/10):end)); % skip initial peaks
     maxMuR(ii)=data(ii).maxMuR;
@@ -562,127 +561,10 @@ for ii=1:nSimCases
     
     maxMuRall=max(maxMuR);
     
-    %new plot with just the simulations
-    figure(hFig(5));
-    hold on
-    plot(data(ii).timesteps,data(ii).muR,'LineStyle',lineStyles{mod(ii,numel(lineStyles))+1},'Color',cmap(mod(ii,size(cmap,1))+1,:),'LineWidth',2);
-    ylim([0 maxMuRall]);
-    %legend for force plots
-    leg{5,iCnt(5)} = fname;
-    iCnt(5) = iCnt(5)+1;
-    
-    if (dCylDpConfrontationFlag)
-    % TEST: Plot weight of particle column (old and new)
-    figure(11);
-    hold on;
-    plot(data(ii).timesteps,data(ii).fPartColOld,'-b',data(ii).timesteps,data(ii).fPartColNew,'-r');
-    legend('old style','new style');
-    end
-    %%
+   
+   
 end
 
-if (dCylDpConfrontationFlag)    
-% TEST: Calc mean and std; Plot data
-meanAvgMuR = mean(avgMuR(1,:));
-
-figure(12);
-hold on
-plot(avgMuR(2,:),avgMuR(1,:)/meanAvgMuR,'x');
-%xlim([min(avgMuR(2,:))-5 max(avgMuR(2,:))+5]);
-xlabel('dCyl / dP');
-ylabel('muR / mean(muR)');
-title(['Comparision: mean(muR) = ',num2str(meanAvgMuR),'.']);
-%
-%end
-
-% Fit function
-tmpX = 15:150;
-p = polyfit(avgMuR(2,:),meanAvgMuR./avgMuR(1,:),2);
-tmpMuR = polyval(p,tmpX);
-plot(tmpX,1./tmpMuR,'r');
-
-plot(avgMuR(2,:),avgMuR(1,:)/meanAvgMuR.*polyval(p,avgMuR(2,:)),'ro');
-
-% Manual fit: a + c*x^-2 = y
-xData = avgMuR(2,:)';
-yData = avgMuR(1,:)'/meanAvgMuR;
-
-M=[xData.^(-2), ones(size(xData))];
-coeffs = M\yData;
-
-M2 = [tmpX'.^(-2), ones(size(tmpX'))];
-plot(tmpX,M2*coeffs,'g');
-
-plot(avgMuR(2,:),avgMuR(1,:)/meanAvgMuR./(M*coeffs)','go');
-end
-% Coeffs for later comparison:
-% Normalized for a=1 --> c=1.73979e+2
-
-%% load experimental data
-if (exp_flag)
-    switch legendExpFlag
-        case {'jenike','poorMan'}    
-        load(fullfile(exp_dir,exp_file), 'Fr', 't');
-        exp_shear = Fr./exp_area;
-
-        figure(hFig(4)); hold on
-        plot(t,exp_shear,'Color','red','LineWidth',2);
-    %xlim([-1 data(1).timesteps(end)+1]);
-    
-    leg{4,iCnt(4)} = exp_file;
-    iCnt(4) = iCnt(4)+1;
-    
-    %figure(hFig(4))
-    %plot(t,exp_shear);
-    end
-end
-
-%% TEST shift experiment data
-% if (shiftFlag && exp_flag)
-%     
-%     figure(hFig(3));
-%     %[x,y] = ginput(2);
-%     [x,y] = ginput(1);
-%     
-%     
-%     hFig(4) = figure; hold on;
-%     
-%     for ii=1:nFiles
-%         
-%         fname = data(ii).name;
-%         timesteps = data(ii).timesteps;
-%         
-%         
-%         
-%         % plot total x-force
-%         if (strcmp(data(ii).cad,'2'))
-%             tauXZ = data(ii).values(:,col_fX).*scaleForce./data(ii).area;
-%             corrTauXZ = data(ii).values(:,col_fX).*scaleForce./data(ii).corrArea';
-%             
-%             figure(hFig(4)); hold on
-%             plot(timesteps,tauXZ,'Color',cmap(ii,:));
-%             plot(timesteps,corrTauXZ,'Color',cmap(ii,:),'LineWidth',1);
-% 
-%         end
-%         
-%     end
-%     
-%     load(fullfile(exp_dir,exp_file), 'Fr', 't');
-%     exp_shear = Fr./exp_area;
-%     
-%     %nStart = find(t>min(x),1,'first');
-%     %nEnd   = find(t>max(x),1,'first');
-%     
-%     %tmp_shear = zeros(size(exp_shear));
-%     %tmp_shear((nEnd-nStart):end)=exp_shear(1:(end-(nEnd-nStart-1)));
-%     t=t-x;
-%     
-%     figure(hFig(4)); hold on
-%     %plot (t,tmp_shear,'Color',cmap(nFiles+1,:));
-%     plot (t,exp_shear,'Color','red');
-%     xlim([-1 max(data(1).timesteps)+1]);
-%     
-% end
 
 
 %% TEST ratio shear stress / normal stress
@@ -780,15 +662,54 @@ clear timesteps sigmaZ tauXZ corrTauXZ fname
                     %legend for force plots
                     leg{7,iCnt(7)} = fname;
                     iCnt(7) = iCnt(7)+1;
-            end       
+            end
+            
+       if (manualPlateauFlag)
         
-        data(ii).startPlateauPreShear = floor(lMuR*startPlateauPreShearValue); %%             startPlateauPreShearValue = .38;
+            figure(13);
+            plot(data(ii).timesteps,data(ii).muR)
+            title('coefficient of internal friction identification');
+            xlabel('time (s)');
+            ylabel('\mu_{e}');
+            grid on
+
+            %find on figure the start and end point of the plateau
+            [x,y] = ginput(4);
+
+
+            %get the index of the start and end point of the plateau
+            a=size(x);
+            t=data(ii).timesteps;
+            for i=1:a
+            [N,bin]=histc(x(i),t);
+
+                index=bin+1;
+                if abs(x(i)-t(bin))<abs(x(i)-t(bin+1))
+                    fclosest=t(bin);
+                    index=bin;
+                else
+                    fclosest=t(index);
+                end
+             fclose(i)=fclosest;
+             indexer(i)=bin;
+
+            end
+
+            data(ii).startPlateauPreShear = indexer(1);
+            data(ii).stopPlateauPreShear = indexer(2);    
+            data(ii).startPlateauShear = indexer(3);    
+            data(ii).stopPlateauShear  = indexer(4);    
+            
+       else
+           data(ii).startPlateauPreShear = floor(lMuR*startPlateauPreShearValue); %%             startPlateauPreShearValue = .38;
+           data(ii).stopPlateauPreShear = floor(lMuR*stopPlateauPreShearValue); % stopPlateauPreShearValue = .48;
+           data(ii).startPlateauShear = floor(lMuR*startPlateauShearValue); % startPlateauShearValue = .80;
+           data(ii).stopPlateauShear = floor(lMuR*stopPlateauShearValue); % stopPlateauShearValue = .95;
+       end
+          
         startPlateauPreShear = data(ii).startPlateauPreShear;
-        data(ii).stopPlateauPreShear = floor(lMuR*stopPlateauPreShearValue); % stopPlateauPreShearValue = .48;
         stopPlateauPreShear = data(ii).stopPlateauPreShear;
-        data(ii).startPlateauShear = floor(lMuR*startPlateauShearValue); % startPlateauShearValue = .80;
         startPlateauShear = data(ii).startPlateauShear;
-        data(ii).stopPlateauShear = floor(lMuR*stopPlateauShearValue); % stopPlateauShearValue = .95;
         stopPlateauShear = data(ii).stopPlateauShear;
         avgMuR1(ii,1) = mean(muR(startPlateauPreShear:stopPlateauPreShear));
         avgMuR2(ii,1) = mean(muR(startPlateauShear:stopPlateauShear));
@@ -804,8 +725,164 @@ clear timesteps sigmaZ tauXZ corrTauXZ fname
         disp([fname,': Average coefficient of friciton shear is ',num2str(avgMuR2(ii,1))]);
         
         
+         % calc average and maximum coefficient of friction
+    % save average value and shear cell size for plot
+    avgMuR(1,ii) = avgMuR2(ii);%mean(muR(round(lMuR*2/3):end));
+    avgMuR(2,ii) = data(ii).dCylDp;
+    dCylDpList(ii,1) = data(ii).dCylDp;
+    %new plot with just the simulations
+    figure(hFig(5));
+    hold on
+    plot(data(ii).timesteps,data(ii).muR,'LineStyle',lineStyles{mod(ii,numel(lineStyles))+1},'Color',cmap(mod(ii,size(cmap,1))+1,:),'LineWidth',2);
+    ylim([0 maxMuRall]);
+    %legend for force plots
+    leg{5,iCnt(5)} = fname;
+    iCnt(5) = iCnt(5)+1;
+    
+    if (dCylDpConfrontationFlag)
+    % TEST: Plot weight of particle column (old and new)
+    figure(11);
+    hold on;
+    plot(data(ii).timesteps,data(ii).fPartColOld,'-b',data(ii).timesteps,data(ii).fPartColNew,'-r');
+    legend('old style','new style');
+    end
+        
     end
 
+%%    
+    
+if (dCylDpConfrontationFlag)    
+% TEST: Calc mean and std; Plot data
+meanAvgMuR = mean(avgMuR(1,:));
+
+figure(12);
+hold on
+plot(avgMuR(2,:),avgMuR(1,:)/meanAvgMuR,'x');
+%xlim([min(avgMuR(2,:))-5 max(avgMuR(2,:))+5]);
+xlabel('dCyl / dP');
+ylabel('muR / mean(muR)');
+title(['Comparision: mean(muR) = ',num2str(meanAvgMuR),'.']);
+%
+%end
+
+% Fit function
+tmpX = 15:150;
+p = polyfit(avgMuR(2,:),meanAvgMuR./avgMuR(1,:),2);
+tmpMuR = polyval(p,tmpX);
+plot(tmpX,1./tmpMuR,'r');
+
+plot(avgMuR(2,:),avgMuR(1,:)/meanAvgMuR.*polyval(p,avgMuR(2,:)),'ro');
+
+% Manual fit: a + c*x^-2 = y
+xData = avgMuR(2,:)';
+yData = avgMuR(1,:)'/meanAvgMuR;
+
+M=[xData.^(-2), ones(size(xData))];
+coeffs = M\yData;
+cFit=coeffs(1);
+aFit=coeffs(2)*meanAvgMuR;
+
+M2 = [tmpX'.^(-2), ones(size(tmpX'))];
+plot(tmpX,M2*coeffs,'g');
+
+plot(avgMuR(2,:),avgMuR(1,:)/meanAvgMuR./(M*coeffs)','go');
+
+avgMuR3 = aFit+cFit*(1e300)^-2;
+
+% Coeffs for later comparison:
+% Normalized for a=1 --> c=1.73979e+2
+
+%% Fit: 'a+b*x-2fit'.
+if (dCylDpConfrontationFlag2)
+[xData, yData] = prepareCurveData( dCylDpList, avgMuR2 );
+
+% Set up fittype and options.
+ft = fittype( {'1', '((x)^-2)'}, 'independent', 'x', 'dependent', 'y', 'coefficients', {'a', 'b'} );
+
+% Fit model to data.
+[fitresult, gof] = fit( xData, yData, ft );
+
+% Plot fit with data.
+figure(14)
+title( ['Name', 'a+b*x-2fit'] );
+h = plot( fitresult, xData, yData );
+legend( h, 'avgMuR2 vs. dCylDpList', 'a+b*x-2fit', 'Location', 'NorthEast' );
+% Label axes
+xlabel( 'dCylDpList' );
+ylabel( 'avgMuR2' );
+grid on
+
+avgMuR4 = fitresult.a+fitresult.b*(1e300)^-2;
+end
+
+end
+
+%% load experimental data
+if (exp_flag)
+    switch legendExpFlag
+        case {'jenike','poorMan'}    
+        load(fullfile(exp_dir,exp_file), 'Fr', 't');
+        exp_shear = Fr./exp_area;
+
+        figure(hFig(4)); hold on
+        plot(t,exp_shear,'Color','red','LineWidth',2);
+    %xlim([-1 data(1).timesteps(end)+1]);
+    
+    leg{4,iCnt(4)} = exp_file;
+    iCnt(4) = iCnt(4)+1;
+    
+    %figure(hFig(4))
+    %plot(t,exp_shear);
+    end
+end
+
+%% TEST shift experiment data
+% if (shiftFlag && exp_flag)
+%     
+%     figure(hFig(3));
+%     %[x,y] = ginput(2);
+%     [x,y] = ginput(1);
+%     
+%     
+%     hFig(4) = figure; hold on;
+%     
+%     for ii=1:nFiles
+%         
+%         fname = data(ii).name;
+%         timesteps = data(ii).timesteps;
+%         
+%         
+%         
+%         % plot total x-force
+%         if (strcmp(data(ii).cad,'2'))
+%             tauXZ = data(ii).values(:,col_fX).*scaleForce./data(ii).area;
+%             corrTauXZ = data(ii).values(:,col_fX).*scaleForce./data(ii).corrArea';
+%             
+%             figure(hFig(4)); hold on
+%             plot(timesteps,tauXZ,'Color',cmap(ii,:));
+%             plot(timesteps,corrTauXZ,'Color',cmap(ii,:),'LineWidth',1);
+% 
+%         end
+%         
+%     end
+%     
+%     load(fullfile(exp_dir,exp_file), 'Fr', 't');
+%     exp_shear = Fr./exp_area;
+%     
+%     %nStart = find(t>min(x),1,'first');
+%     %nEnd   = find(t>max(x),1,'first');
+%     
+%     %tmp_shear = zeros(size(exp_shear));
+%     %tmp_shear((nEnd-nStart):end)=exp_shear(1:(end-(nEnd-nStart-1)));
+%     t=t-x;
+%     
+%     figure(hFig(4)); hold on
+%     %plot (t,tmp_shear,'Color',cmap(nFiles+1,:));
+%     plot (t,exp_shear,'Color','red');
+%     xlim([-1 max(data(1).timesteps)+1]);
+%     
+% end
+    
     
 if (exp_flag)
       for ii=1:nSimCases
