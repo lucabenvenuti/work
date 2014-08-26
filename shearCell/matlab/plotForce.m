@@ -34,7 +34,7 @@ filepatterncsv = 'sim_par*_fid*.csv'; % e.g. 'force.*.txt' %Andi
 %   for all cases use empty searchCases = {};
 searchCases = {'fric' 0.4 %[0.4 0.8]
                'rf'   0.4 %[0.4 0.8]
-               'fid'  [	20025	20026	20027	20028	20029	20030		20201	20202	20203	20204 20205] %20101	20102	20103	20125	20126 20001	20002
+               ...'fid'  [	20025	20026	20027	20028	20029	20030 20035		20201	20202	20203	20204 20205] %20101	20102	20103	20125	20126 20001	20002
                ...'shearperc' 0.4
                ... 'ctrlStress' -1.007001977856750e+04
                ...'dens' 1500
@@ -52,7 +52,7 @@ col_numCol = 12;
 col_numBox = 13;
 
 % experimental data
-exp_flag = true; % enable the comparision to experimental data
+exp_flag = false; % enable the comparision to experimental data
 exp_dir = '.'; % directory, where the files can be found
 legendExpFlag = 'schulze'; % choose between jenike & schulze
 
@@ -76,8 +76,12 @@ end
 legendFlag = 'std';
 
 %dCylDp confrontation
-dCylDpConfrontationFlag = true;
+dCylDpConfrontationFlag = false;
 dCylDpConfrontationFlag2 = false;
+
+%doNN
+NNFlag = true;
+hiddenLayerSizeVector = 5:14;
 
 % save images
 saveFlag = false;
@@ -90,7 +94,10 @@ saveDir = './images';
 fracPart = 0.6; % particle fraction for the calculation of the bulk density %0.6 is correct
 fracColMass = 1.0; %0.12;
 
-manualPlateauFlag = true;
+manualPlateauFlag = false;
+%doImage
+imageFlag = ~manualPlateauFlag; % "~" gives the opposite of the boolean
+
 startPlateauPreShearValue = .25;%.38;
 stopPlateauPreShearValue = .45;%.48;
 startPlateauShearValue = .75;%.80;
@@ -300,7 +307,7 @@ for ii=1:nSimCases
     
     % generate name for legends
     iName  = ['force.rad',num2str(data(ii).rad),'_dcyldp',num2str(data(ii).dCylDp),...
-        '_density',num2str(density),...
+        '_density',num2str(density),'_rest',num2str(data(ii).rest),...
         '_fric', num2str(data(ii).fric), '_rf', num2str(data(ii).rf), ...
         '_dt', num2str(data(ii).dt), '_ctrlStress', num2str(data(ii).ctrlStress), ...
         '_shearperc', num2str(data(ii).shearperc),'_rolfrtyp', rolfrtyp,    ...
@@ -418,7 +425,9 @@ for ii=1:nSimCases
 
 
         data(ii).densityBulkBox = data(ii).massPartBox./data(ii).volumeTotBox; %da mass  %[kg/m3]
-
+        densityBulkBoxMean(ii,1) = mean(data(ii).densityBulkBox);
+        densityBulkBoxMin(ii,1) = min(data(ii).densityBulkBox);
+        densityBulkBoxMax(ii,1) = max(data(ii).densityBulkBox);
         data(ii).densityParticleFromCountMass = data(ii).densityBulkBox./(1 - data(ii).porosityBox);
 
         %data(ii).density = 1368;
@@ -731,14 +740,15 @@ clear timesteps sigmaZ tauXZ corrTauXZ fname
     avgMuR(2,ii) = data(ii).dCylDp;
     dCylDpList(ii,1) = data(ii).dCylDp;
     %new plot with just the simulations
-    figure(hFig(5));
-    hold on
-    plot(data(ii).timesteps,data(ii).muR,'LineStyle',lineStyles{mod(ii,numel(lineStyles))+1},'Color',cmap(mod(ii,size(cmap,1))+1,:),'LineWidth',2);
-    ylim([0 maxMuRall]);
-    %legend for force plots
-    leg{5,iCnt(5)} = fname;
-    iCnt(5) = iCnt(5)+1;
-    
+    if (imageFlag)
+        figure(hFig(5));
+        hold on
+        plot(data(ii).timesteps,data(ii).muR,'LineStyle',lineStyles{mod(ii,numel(lineStyles))+1},'Color',cmap(mod(ii,size(cmap,1))+1,:),'LineWidth',2);
+        ylim([0 maxMuRall]);
+        %legend for force plots
+        leg{5,iCnt(5)} = fname;
+        iCnt(5) = iCnt(5)+1;
+    end
     if (dCylDpConfrontationFlag)
     % TEST: Plot weight of particle column (old and new)
     figure(11);
@@ -1287,3 +1297,125 @@ end
 % % for i=1:9 mus(i,2)=mus(i,1)-0.8796; end
 % % for i=1:9 mus(i,2)=abs(mus(i,1)-0.8796); end
 % % [a,b]=min(mus(:,2))
+
+%%
+%Neural Network
+if (NNFlag)
+for iijj=1:nSimCases
+    inputNN(iijj,3)=data(iijj).rest;
+    inputNN(iijj,1)=data(iijj).fric;
+    inputNN(iijj,2)=data(iijj).rf;
+    inputNN(iijj,4)=data(iijj).dt;
+    inputNN(iijj,5)=data(iijj).dCylDp;
+    
+    if (exist('densityBulkBoxMean'))
+        targetNN(iikk,3)=densityBulkBoxMean(iikk);
+    end
+    
+    targetNN(iikk,2)=avgMuR1(iikk);
+    targetNN(iikk,1)=avgMuR2(iikk);
+end
+
+x = inputNN';
+t = targetNN';
+
+if length(x)>1000
+    parallel = 'yes';
+else
+    parallel = 'no';
+end
+
+% Choose a Training Function
+%help nntrain
+% For a list of all training functions type: help nntrain
+% 'trainlm' is usually fastest.
+% 'trainbr' takes longer but may be better for challenging problems.
+% 'trainscg' uses less memory. NFTOOL falls back to this in low memory situations.
+trainFcn = 'trainscg';  % Bayesian Regularization backpropagation
+%     trainb    - Batch training with weight & bias learning rules.
+%     trainc    - Cyclical order weight/bias training.
+%     trainr    - Random order weight/bias training.
+%     trains    - Sequential order weight/bias training.
+
+% Create a Fitting Network
+
+% Setup Division of Data for Training, Validation, Testing
+net.divideParam.trainRatio = 70/100;
+net.divideParam.valRatio = 15/100;
+net.divideParam.testRatio = 15/100;
+
+
+hiddenLayerSizeVectorLength = length(hiddenLayerSizeVector);
+
+for kkll = 1:hiddenLayerSizeVectorLength
+
+hiddenLayerSize = hiddenLayerSizeVector(kkll);
+net = fitnet(hiddenLayerSize,trainFcn);
+
+
+% Train the Network
+[net,tr] = train(net,x,t,'useParallel',parallel);
+
+NNSave{kkll}.net = net;
+NNSave{kkll}.tr = tr;
+
+NNSave{kkll}.IWM = net.IW{1};
+NNSave{kkll}.LWM  = net.LW{2,1}';
+NNSave{kkll}.biasInput  = net.b{1};
+NNSave{kkll}.biasOutput  = net.b{2};
+NNSave{kkll}.divideParam = net.divideParam;
+% Radial Basis Function Network
+% eg = 0.02; % sum-squared error goal
+% sc = 1;    % spread constant
+% net = newrb(x,t,eg,sc);
+
+% Test the Network
+y = net(x);
+e = gsubtract(t,y);
+% performance = perform(net,t,y); %
+% meanAbsoluteError = mae(t-y);
+
+%perf = mse(net,t,y);n
+%[r,m,b] = regression(t,y)
+plotregression(t,y,'Regression')
+
+
+errorNN(4*kkll-3).index = 1:length(x); %totale
+errorNN(4*kkll-2).index = tr.trainInd; %Train
+errorNN(4*kkll-1).index = tr.valInd; %val
+errorNN(4*kkll).index = tr.testInd; %test
+errorNN(4*kkll-3).name = 'tot';
+errorNN(4*kkll-2).name = 'train';
+errorNN(4*kkll-1).name = 'val';
+errorNN(4*kkll).name = 'test';
+
+jjkk = 0;
+llkk = 1;
+for llkk = 1:4
+    jjkk = 4*kkll + llkk-4;
+   [errorNN(jjkk).r2 errorNN(jjkk).rmse] = rsquare(t(:,[errorNN(jjkk).index]),y(:,[errorNN(jjkk).index]));
+    errorNN(jjkk).mae = mae(t(:,[errorNN(jjkk).index]),y(:,[errorNN(jjkk).index]));
+    errorNN(jjkk).mse = mse(t(:,[errorNN(jjkk).index]),y(:,[errorNN(jjkk).index]));
+    errorNN(jjkk).neuronNumber = hiddenLayerSize;
+end
+
+% [tot.r2 tot.rmse] = rsquare(t,y)
+% maeTot = mae(t,y)
+% mseTot = mse(t,y);
+% [r2Train rmseTrain] = rsquare(t(:,[tr.trainInd]),y(:,[tr.trainInd]))
+% maeTrain = mae(t(:,[tr.trainInd]),y(:,[tr.trainInd]))
+% mseTrain = mse(t(:,[tr.trainInd]),y(:,[tr.trainInd]))
+% [r2Val rmseVal] = rsquare(t(:,[tr.valInd]),y(:,[tr.valInd]))
+% [r2Test rmseTest] = rsquare(t(:,[tr.testInd]),y(:,[tr.testInd]))
+
+%disp(['MSE = ',num2str(performance), ' ; transferFcn = ', num2str(net.layers{:}.transferFcn), ' ; trainFcn = ', trainFcn, ' ; meanAbsoluteError = ', num2str(meanAbsoluteError)]);
+%  y(:,[tr.trainInd])
+%  y(:,[tr.valInd])
+%  y(:,[tr.testInd])
+
+%help nntrain
+
+
+end
+
+end
