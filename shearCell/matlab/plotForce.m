@@ -32,8 +32,8 @@ filepatterncsv = 'sim_par*_fid*.csv'; % e.g. 'force.*.txt' %Andi
 % example: searchCases = {'fric' 0.6
 %                         'rf'   [0.2 0.4]};
 %   for all cases use empty searchCases = {};
-searchCases = {'fric' 0.4 %[0.4 0.8]
-               'rf'   0.4 %[0.4 0.8]
+searchCases = {...'fric' 0.4 %[0.4 0.8]
+               ...'rf'   0.4 %[0.4 0.8]
                ...'fid'  [	20025	20026	20027	20028	20029	20030 20035		20201	20202	20203	20204 20205] %20101	20102	20103	20125	20126 20001	20002
                ...'shearperc' 0.4
                ... 'ctrlStress' -1.007001977856750e+04
@@ -94,7 +94,7 @@ saveDir = './images';
 fracPart = 0.6; % particle fraction for the calculation of the bulk density %0.6 is correct
 fracColMass = 1.0; %0.12;
 
-manualPlateauFlag = false;
+manualPlateauFlag = true;
 %doImage
 imageFlag = ~manualPlateauFlag; % "~" gives the opposite of the boolean
 
@@ -1306,9 +1306,9 @@ if (NNFlag)
     %help nntrain
     % For a list of all training functions type: help nntrain
     % 'trainlm' is usually fastest.
-    % 'trainbr' takes longer but may be better for challenging problems.
+    % 'trainbr' takes longer but may be better for challenging problems. 
     % 'trainscg' uses less memory. NFTOOL falls back to this in low memory situations.
-    trainFcn = 'trainscg';  % Bayesian Regularization backpropagation
+    trainFcn = 'trainscg'; 
     %     trainb    - Batch training with weight & bias learning rules.
     %     trainc    - Cyclical order weight/bias training.
     %     trainr    - Random order weight/bias training.
@@ -1322,11 +1322,13 @@ if (NNFlag)
     end
     
     %myNeuNetFun(nSimCases,data
-        net=NNSave2{1, errorEstSumMaxIndex2}.net;
+        net=NNSave2{errorEstSumMaxIndex2(1),1}.net;
         yy3=net(x2);
-        yy4(1,:,:)=yy3;
+        yy4(1,1,:)=yy3;
         %yy4-yy2(errorEstSumMaxIndex2,:,:) this should be zero
-
+        net=NNSave2{errorEstSumMaxIndex2(2),2}.net;
+        yy5=net(x2);
+        yy6(1,2,:)=yy5;
 
 end
 
