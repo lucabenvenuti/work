@@ -1,4 +1,4 @@
-function [NNSave, errorNN, x, t, errorEstSum, errorEstIndex, errorEstSumMaxIndex, yy] =   myNeuNetFun(nSimCases2,data2,avgMuR1bis,avgMuR2bis,trainFcn2,hiddenLayerSizeVector2,densityBulkBoxMean2)
+function [NNSave, errorNN, x, z, errorEstSum, errorEstIndex, errorEstSumMaxIndex, yy] =   myNeuNetFun(nSimCases2,data2,avgMuR1bis,avgMuR2bis,trainFcn2,hiddenLayerSizeVector2,densityBulkBoxMean2)
 
 for iijj=1:nSimCases2
     inputNN(iijj,3)=data2(iijj).rest;
@@ -9,14 +9,17 @@ for iijj=1:nSimCases2
     
     if (exist('densityBulkBoxMean2'))
         targetNN(iijj,3)=densityBulkBoxMean2(iijj);
+        inputNN(iijj,6)=data2(iijj).dens;
     end
     
     targetNN(iijj,2)=avgMuR1bis(iijj);
     targetNN(iijj,1)=avgMuR2bis(iijj);
 end
 
+[rowsTargetNN columnTargetNN] = size(targetNN);
+
 x = inputNN';
-t = targetNN';
+z = targetNN';
 
 if length(x)>1000
     parallel = 'yes';
@@ -43,7 +46,7 @@ net = fitnet(hiddenLayerSize,trainFcn2);
 
 
 % Train the Network
-[net,tr] = train(net,x,t,'useParallel',parallel);
+[net,tr] = train(net,x,z,'useParallel',parallel);
 
 NNSave{kkll}.net = net;
 NNSave{kkll}.tr = tr;
@@ -61,7 +64,7 @@ NNSave{kkll}.divideParam = net.divideParam;
 % Test the Network
 y = net(x);
 yy(kkll,:,:) = y;
-e = gsubtract(t,y);
+e = gsubtract(z,y);
 % performance = perform(net,t,y); %
 % meanAbsoluteError = mae(t-y);
 
@@ -81,13 +84,21 @@ errorNN(4*kkll).name = 'test';
 
 jjkk = 0;
 llkk = 1;
+llnn=1;
 for llkk = 1:4
     jjkk = 4*kkll + llkk-4;
-   [errorNN(jjkk).r2 errorNN(jjkk).rmse] = rsquare(t(:,[errorNN(jjkk).index]),y(:,[errorNN(jjkk).index]));
-    errorNN(jjkk).mae = mae(t(:,[errorNN(jjkk).index]),y(:,[errorNN(jjkk).index]));
-    errorNN(jjkk).mse = mse(t(:,[errorNN(jjkk).index]),y(:,[errorNN(jjkk).index]));
+   [errorNN(jjkk).r2(1) errorNN(jjkk).rmse(1)] = rsquare(z(:,[errorNN(jjkk).index]),y(:,[errorNN(jjkk).index]));
+    errorNN(jjkk).mae(1) = mae(z(:,[errorNN(jjkk).index]),y(:,[errorNN(jjkk).index]));
+    errorNN(jjkk).mse(1) = mse(z(:,[errorNN(jjkk).index]),y(:,[errorNN(jjkk).index]));
     errorNN(jjkk).neuronNumber = hiddenLayerSize;
     errorNN(jjkk).errorEst = errorNN(jjkk).r2/(errorNN(jjkk).mae*errorNN(jjkk).mse);
+    
+    for llnn=1:columnTargetNN
+           [errorNN(jjkk).r2(llnn+1) errorNN(jjkk).rmse(llnn+1)] = rsquare(z(llnn,[errorNN(jjkk).index]),y(llnn,[errorNN(jjkk).index]));
+            errorNN(jjkk).mae(llnn+1) = mae(z(llnn,[errorNN(jjkk).index]),y(llnn,[errorNN(jjkk).index]));
+            errorNN(jjkk).mse(llnn+1) = mse(z(llnn,[errorNN(jjkk).index]),y(llnn,[errorNN(jjkk).index]));
+    end
+    
 end
 
 % [tot.r2 tot.rmse] = rsquare(t,y)
@@ -122,6 +133,6 @@ disp(['#Neuron = ',num2str(errorNN(errorEstIndex).neuronNumber), ' ; transferFcn
 ' ; meanAbsoluteErrorTot = ', num2str(errorNN(errorEstIndex).mae)]);
 
 
-plotregression(t,yy(errorEstSumMaxIndex,:),'Regression')
+plotregression(z,yy(errorEstSumMaxIndex,:),'Regression')
 return
 

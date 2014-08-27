@@ -1330,3 +1330,17 @@ if (NNFlag)
 
 end
 
+%%
+%save matlab data
+i=1;
+j=1;
+[a,b]=size(searchCases);
+
+searchName{1} = 'an';
+
+for i=1:a
+       j=i+1;
+       searchName{j}=([searchName{i},searchCases{i,1},num2str(searchCases{i,2})]);
+end
+
+save(searchName{end});
