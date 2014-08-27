@@ -1,4 +1,4 @@
-function [NNSave, errorNN, x, zz, errorEstSum, errorEstIndex, errorEstSumMaxIndex, yyy] =   myNeuNetFun(nSimCases2,data2,avgMuR1bis,avgMuR2bis,trainFcn2,hiddenLayerSizeVector2,densityBulkBoxMean2)
+function [NNSave, errorNN, x, zz, errorEstSum, errorEstIndex, errorEstSumMaxIndex, yyy, corrMat] =   myNeuNetFun(nSimCases2,data2,avgMuR1bis,avgMuR2bis,trainFcn2,hiddenLayerSizeVector2,densityBulkBoxMean2)
 
 for iijj=1:nSimCases2
     inputNN(iijj,3)=data2(iijj).rest;
@@ -19,8 +19,23 @@ for iijj=1:nSimCases2
 end
 
 [rowsTargetNN columnTargetNN] = size(targetNN);
+[rowsInputNN columnInputNN] = size(inputNN);
+
+ITNN(:,1:columnInputNN) = inputNN(:,1:columnInputNN);
+ITNN(:,(columnInputNN+1):(columnInputNN+columnTargetNN)) = targetNN(:,1:columnTargetNN);
+[rowsITNN columnITNN] = size(ITNN);
 
 
+%corrMat(1,1) = corr2(ITNN(:,1),ITNN(:,1));
+
+jjmm = 1;
+kkmm = 1;
+corrMat = zeros(columnITNN,columnITNN);
+for jjmm=1:columnITNN
+    for kkmm=1:columnITNN
+        corrMat(jjmm,kkmm) = corr2(ITNN(:,jjmm),ITNN(:,kkmm));
+    end
+end
 
 % Setup Division of data2 for Training, Validation, Testing
 net.divideParam.trainRatio = 70/100;

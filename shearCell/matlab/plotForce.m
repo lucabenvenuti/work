@@ -1316,9 +1316,9 @@ if (NNFlag)
     
     if (exist('densityBulkBoxMean'))
         %targetNN(iijj,3)=densityBulkBoxMean(iijj);
-        [NNSave2, errorNN2, x2, t2, errorEstSum2, errorEstIndex2, errorEstSumMaxIndex2, yy2] =   myNeuNetFun(nSimCases,data,avgMuR1,avgMuR2,trainFcn,hiddenLayerSizeVector,densityBulkBoxMean);
+        [NNSave2, errorNN2, x2, zz2, errorEstSum2, errorEstIndex2, errorEstSumMaxIndex2, yy2, corrMat2] =   myNeuNetFun(nSimCases,data,avgMuR1,avgMuR2,trainFcn,hiddenLayerSizeVector,densityBulkBoxMean);
     else
-        [NNSave2, errorNN2, x2, t2, errorEstSum2, errorEstIndex2, errorEstSumMaxIndex2, yy2] =   myNeuNetFun(nSimCases,data,avgMuR1,avgMuR2,trainFcn,hiddenLayerSizeVector);
+        [NNSave2, errorNN2, x2, zz2, errorEstSum2, errorEstIndex2, errorEstSumMaxIndex2, yy2, corrMat2] =   myNeuNetFun(nSimCases,data,avgMuR1,avgMuR2,trainFcn,hiddenLayerSizeVector);
     end
     
     %myNeuNetFun(nSimCases,data
