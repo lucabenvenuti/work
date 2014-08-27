@@ -23,25 +23,25 @@ end
 
 ITNN(:,1:columnInputNN) = inputNN(:,1:columnInputNN);
 ITNN(:,(columnInputNN+1):(columnInputNN+columnTargetNN)) = targetNN(:,1:columnTargetNN);
-[rowsITNN columnITNN] = size(ITNN);
+%[rowsITNN columnITNN] = size(ITNN);
 
-
+corrMat = corrcoef(ITNN);
 %corrMat(1,1) = corr2(ITNN(:,1),ITNN(:,1));
 
-jjmm = 1;
-kkmm = 1;
-corrMat = zeros(columnITNN,columnITNN);
-for jjmm=1:columnITNN
-    for kkmm=1:columnITNN
-        corrMat(jjmm,kkmm) = corr2(ITNN(:,jjmm),ITNN(:,kkmm));
-    end
-end
+% jjmm = 1;
+% kkmm = 1;
+% corrMat = zeros(columnITNN,columnITNN);
+% for jjmm=1:columnITNN
+%     for kkmm=1:columnITNN
+%         corrMat(jjmm,kkmm) = corrcoef(ITNN(:,jjmm),ITNN(:,kkmm));
+%     end
+% end
 
 % Setup Division of data2 for Training, Validation, Testing
 net.divideParam.trainRatio = 70/100;
 net.divideParam.valRatio = 15/100;
 net.divideParam.testRatio = 15/100;
-
+%net.trainParam.epochs= 10000;
 
 hiddenLayerSizeVectorLength = length(hiddenLayerSizeVector2);
 
