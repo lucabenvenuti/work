@@ -1,0 +1,210 @@
+atom_style	granular
+atom_modify	map array
+boundary	m m fm
+newton		off
+
+# create directories
+shell		mkdir logs
+shell		mkdir area
+shell		mkdir images
+shell		mkdir post
+shell		mkdir post_param
+shell		mkdir restart
+
+log		logs/log.liggghts_repose_init
+
+communicate	single vel yes
+
+units		si
+
+# will be extended automatically (boundary m m fm)
+region		reg block -0.01 0.01 -0.01 0.01 -0.15 0.01 units box
+create_box	2 reg
+
+# material params and diameter distribution
+#===========================================
+# FIXED MATERIAL PROPERTIES
+#===========================================
+
+variable    youngsModulus equal 5e+06
+variable    poissonsRatio equal 0.45
+variable    coefficientRestitution equal 0.75
+variable    characteristicVelocity equal 0.1
+
+
+
+#===========================================
+# DIAMETER DISTRIBUTION
+#===========================================
+
+# volume fraction
+variable    volFrac equal 0.65
+
+# density
+variable    density equal 2500
+
+# radii for fractions
+variable    r0 equal 0.001
+
+# particle diameter fractions
+fix     fraction0 all particletemplate/sphere 5330 atom_type 1 density constant ${density} radius constant ${r0}
+
+# particle distribution for insertion
+fix     pdd all particledistribution/discrete 1  1 &
+        fraction0 1.0
+
+
+
+#********************************************
+# FIX DEFINITION
+# DO NOT CHANGE!!!!
+#********************************************
+
+fix         m1 all property/global youngsModulus peratomtype ${youngsModulus} ${youngsModulus}
+fix         m2 all property/global poissonsRatio peratomtype ${poissonsRatio} ${poissonsRatio}
+fix         m3 all property/global coefficientRestitution peratomtypepair 2 ${coefficientRestitution} ${coefficientRestitution} ${coefficientRestitution} ${coefficientRestitution}
+fix         m6 all property/global characteristicVelocity scalar ${characteristicVelocity}
+fix         m7 all property/global coefficientRollingViscousDamping peratomtypepair 2 0 0 0 0
+
+# pair style
+variable pairStyle string "gran model hertz tangential history"
+variable pairStyleRollingFriction string epsd2
+variable pairStyleCohesion string off
+variable pairStyleDamping string on
+variable pairStyleViscous string off
+
+
+
+
+include		${CALIB_PARAMS_FILE}
+include		${GUESS_PARAMS_FILE}
+
+variable	skin	equal	1.0*${r0}
+
+neighbor	${skin} bin
+neigh_modify	delay 0
+
+# step size for relaxation of intial packing
+
+# New pair style
+pair_style	gran model hooke
+pair_coeff	* *
+
+# time-step and gravity
+variable	shear_mod  equal ${youngsModulus}/(2.0*(${poissonsRatio}+1.0))
+variable	t_rayleigh equal PI*${r0}*sqrt(${density}/${shear_mod})/(0.1631*${poissonsRatio}+0.8766)
+variable	dt equal 10.0^(floor(log(${t_rayleigh}))-1)
+timestep	${dt}
+print "timestep ${dt}"
+
+fix		gravi all gravity 9.81 vector 0.0 0.0 -1.0
+
+variable	nstep        equal round(20./${dt}) #2000000
+variable	nStepsSettle equal round(0.001/${dt})  #?????
+variable	nStepsRun    equal round(0.01/${dt})   #?????
+variable	dumpfreq     equal round(0.01/${dt})
+variable	thermofreq   equal round(0.001/${dt}) #?????
+variable	deletefreq   equal round(0.1/${dt}) #10000
+
+# calculate maximum diameter in simulation
+fix		maxdiam all diam/max
+variable	maxdiam equal f_maxdiam
+print		"max diameter in sim: ${maxdiam}"
+
+variable	dx_relax equal ${maxdiam}/20.
+
+# scaling factor for mesh
+variable scale equal ${G_D_RATIO}*${maxdiam}/1.5
+variable	dcyl equal ${G_D_RATIO}*${maxdiam}
+
+# upward velocity of cylinder
+variable	vup equal (1.2*${dcyl})/(${dt}*${nstep})
+
+print	"G_D_RATIO ${G_D_RATIO}"
+print	"maxdiam ${maxdiam}"
+print	"Scaling factor ${scale}"
+
+
+
+# meshes
+fix		cad1 all mesh/surface file template/repose/meshes/ground.stl type 1 scale ${scale}
+fix		cad2 all mesh/surface file template/repose/meshes/cylinder.stl type 1 scale ${scale}
+
+# use the imported meshes as granular wall
+fix		granwalls all wall/gran model hooke mesh n_meshes 2 meshes cad1 cad2
+
+
+# region and insertion
+variable rcyl equal ${G_D_RATIO}*${maxdiam}*0.9/2.
+variable hcyl equal 8./13.*${G_D_RATIO}*${maxdiam}
+
+fix		topwall all wall/gran model hooke primitive type 1 zplane ${hcyl}
+#fix		topwall all wall/gran model hooke primitive type 1 zplane 1.0
+
+region		bc cylinder z 0. 0. ${rcyl}  0. ${hcyl} units box
+fix		ins all insert/pack seed 100001 distributiontemplate pdd &
+		insert_every once overlapcheck no all_in yes  volumefraction_region 0.62 region bc ntry_mc 10000 warn_region no
+
+# apply nve integration to all particles that are inserted as single particles
+fix		integr all nve/limit absolute ${dx_relax}
+#fix		integr all nve/sphere
+
+# lower region to delete particles from
+region		lower block INF INF INF INF INF 0. units box
+
+# output settings, include total thermal energy
+fix		ts all check/timestep/gran ${thermofreq} 0.1 0.1
+compute		rke all erotate/sphere
+thermo_style	custom step atoms ke c_rke f_ts[1] f_ts[2] cpu vol
+thermo		${thermofreq}
+thermo_modify	lost ignore norm no
+compute_modify	thermo_temp dynamic yes
+
+# dump stl
+dump		dumpstl all stl ${dumpfreq} post/stldump_pack_*.stl
+
+#insert the first particles so that dump is not empty
+run		1
+dump		dmp all custom ${dumpfreq} post/dump_pack_*.fill id type x y z ix iy iz vx vy vz fx fy fz omegax omegay omegaz radius
+
+# make particles slightly larger (to be able to make them smaller lateron)
+compute		rad all property/atom radius
+variable	d_grown atom 1.01*2.*c_rad
+fix		grow all adapt 1 atom diameter v_d_grown
+run		1
+unfix		grow
+
+# run particle relaxation - check kinetic energy
+#variable ke equal ke
+#print "ke ${ke}"
+
+compute vave all reduce ave vz vy vz
+
+variable vcmx equal vcm(all,x)
+variable vcmy equal vcm(all,y)
+variable vcmz equal vcm(all,z)
+
+variable vave equal sqrt(v_vcmx*v_vcmx+v_vcmy*v_vcmy+v_vcmz*v_vcmz)
+variable vthre equal 0.005
+
+run	${nStepsSettle}
+
+label loop
+  print "-----> Checking Velocity..."
+  if "${vave}<${vthre}" then "jump template/repose/in.repose_param_init_packing endloop"
+  print "-----> v ave ${vave}, v threshold ${vthre}, continuing run"
+  set group all vx 0. vy 0. vz 0.
+  run ${nStepsRun}
+jump template/repose/in.repose_param_init_packing loop
+label endloop
+print "-----> v ave ${vave}, v threshold ${vthre}, end run"
+
+# make particles slightly smaller to remove overlap
+variable	d_shrunk atom 1./1.01*2.*c_rad
+fix		shrink all adapt 1 atom diameter v_d_shrunk
+run		1
+unfix		shrink
+
+# write restart
+write_restart	${MATERIAL}/repose/restart/packing.restart
+

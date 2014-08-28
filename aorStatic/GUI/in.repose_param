@@ -1,0 +1,116 @@
+variable	a uloop ${N_VARIATIONS}
+
+log		${MATERIAL}/repose/logs/log.liggghts_$a
+
+atom_style	granular
+atom_modify	map array
+boundary	m m fm
+newton		off
+
+communicate	single vel yes
+
+units		si
+
+read_restart	${MATERIAL}/repose/restart/packing.restart
+
+# pair style
+variable pairStyle string "gran model hertz tangential history"
+variable pairStyleRollingFriction string epsd2
+variable pairStyleCohesion string off
+variable pairStyleDamping string on
+variable pairStyleViscous string off
+# material params and diameter distribution
+include		${FIXED_PARAMS_FILE}
+include		${CALIB_PARAMS_FILE}
+include		${GUESS_PARAMS_FILE}
+
+variable	skin equal 1.0*${r0}
+neighbor	${skin} bin
+neigh_modify	delay 0
+
+# New pair style
+pair_style	gran model hooke
+pair_coeff	* *
+
+# time-step and gravity
+variable	shear_mod  equal ${youngsModulus}/(2.0*(${poissonsRatio}+1.0))
+variable	t_rayleigh equal PI*${r0}*sqrt(${density}/${shear_mod})/(0.1631*${poissonsRatio}+0.8766)
+variable	dt equal 10.0^(floor(log(${t_rayleigh}))-1)
+timestep	${dt}
+print "timestep ${dt}"
+
+fix		gravi all gravity 9.81 vector 0.0 0.0 -1.0
+
+variable	nstep        equal round(20./${dt}) #2000000
+variable	nStepsSettle equal round(0.5/${dt}) #50000
+variable	dumpfreq     equal round(0.2/${dt}) #20000
+variable	deletefreq   equal round(0.1/${dt}) #10000
+variable	thermofreq   equal round(0.01/${dt}) #1000
+
+# calculate maximum diameter in simulation
+fix		maxdiam all diam/max
+variable	maxdiam equal f_maxdiam
+print		"max diameter in sim: ${maxdiam}"
+
+variable	dx_relax equal ${maxdiam}/20.
+
+# diameter of cylinder base
+variable	dcyl equal ${G_D_RATIO}*${maxdiam}
+
+# scaling factor for mesh
+variable	scale equal ${dcyl}/1.5
+
+# upward velocity of cylinder
+variable	vup equal (1.2*${dcyl})/(${dt}*${nstep})
+
+print	"G_D_RATIO ${G_D_RATIO}"
+print	"maxdiam ${maxdiam}"
+print	"Scaling factor ${scale}"
+
+# meshes
+fix		cad1 all mesh/surface file template/repose/meshes/ground.stl type 1 scale ${scale}
+fix		cad2 all mesh/surface file template/repose/meshes/cylinder.stl type 1 scale ${scale}
+
+# use the imported meshes as granular wall
+fix		granwalls all wall/gran model hooke mesh n_meshes 2 meshes cad1 cad2
+fix		topwall all wall/gran model hooke primitive type 1 zplane 1.0
+
+# apply nve integration to all particles that are inserted as single particles
+fix		integr all nve/sphere
+
+# lower region to delete particles from
+region		lower block INF INF INF INF INF 0. units box
+
+# output settings, include total thermal energy
+fix		ts all check/timestep/gran ${thermofreq} 0.1 0.1
+compute		rke all erotate/sphere
+thermo_style	custom step atoms ke c_rke f_ts[1] f_ts[2] cpu vol
+thermo		${thermofreq}
+thermo_modify	lost ignore norm no
+compute_modify	thermo_temp dynamic yes
+
+# dump
+dump		dumpstl all stl ${dumpfreq} ${MATERIAL}/repose/post_param/stldump_$a_*.stl
+dump		dmp all custom ${dumpfreq} ${MATERIAL}/repose/post_param/dump_$a_*.fill id type x y z ix iy iz vx vy vz fx fy fz omegax omegay omegaz radius
+
+# run 1 step to perform restart with hooke, then change interaction
+run		1
+unfix		granwalls
+unfix		topwall
+pair_style	${pairStyle} rolling_friction ${pairStyleRollingFriction} cohesion ${pairStyleCohesion} tangential_damping ${pairStyleDamping} # viscous ${pairStyleViscous}
+pair_coeff	* *
+fix		granwalls all wall/${pairStyle} rolling_friction ${pairStyleRollingFriction} mesh n_meshes 2 meshes cad1 cad2
+
+# let particles settle
+run		${nStepsSettle}
+
+# lift cylinder
+fix		movecad2 all move/mesh mesh cad2 linear 0. 0. ${vup}
+run		${nstep} upto every ${deletefreq} "delete_atoms region lower"
+
+write_restart	${MATERIAL}/repose/restart/repose_$a.restart
+
+next		a corf
+clear
+jump		template/repose/in.repose_param
+

@@ -1,0 +1,14 @@
+#=========================================================
+# PAIR STYLE
+# gran model hooke|hertz tangential no_history|history
+# rolling_friction   off | cdt | epsd | epsd2
+# cohesion           off | sjkr | sjkr2 | hamaker
+# tangential_damping on | off
+# viscous            on | off
+#=========================================================
+
+variable pairStyle string "gran model hertz tangential history"
+variable pairStyleRollingFriction string epsd2
+variable pairStyleCohesion string off
+variable pairStyleDamping string on
+variable pairStyleViscous string off
