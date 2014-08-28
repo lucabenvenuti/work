@@ -4,15 +4,14 @@ boundary	m m fm
 newton		off
 
 # create directories
-shell		mkdir ${MATERIAL}/repose
-shell		mkdir ${MATERIAL}/repose/logs
-shell		mkdir ${MATERIAL}/repose/area
-shell		mkdir ${MATERIAL}/repose/images
-shell		mkdir ${MATERIAL}/repose/post
-shell		mkdir ${MATERIAL}/repose/post_param
-shell		mkdir ${MATERIAL}/repose/restart
+shell		mkdir logs
+shell		mkdir area
+shell		mkdir images
+shell		mkdir post
+shell		mkdir post_param
+shell		mkdir restart
 
-log		${MATERIAL}/repose/logs/log.liggghts_repose_init
+log		logs/log.liggghts_repose_init
 
 communicate	single vel yes
 
@@ -23,7 +22,60 @@ region		reg block -0.01 0.01 -0.01 0.01 -0.15 0.01 units box
 create_box	2 reg
 
 # material params and diameter distribution
-include		${FIXED_PARAMS_FILE}
+#===========================================
+# FIXED MATERIAL PROPERTIES
+#===========================================
+
+variable    youngsModulus equal 5e+06
+variable    poissonsRatio equal 0.45
+variable    coefficientRestitution equal 0.75
+variable    characteristicVelocity equal 0.1
+
+
+
+#===========================================
+# DIAMETER DISTRIBUTION
+#===========================================
+
+# volume fraction
+variable    volFrac equal 0.65
+
+# density
+variable    density equal 2500
+
+# radii for fractions
+variable    r0 equal 0.001
+
+# particle diameter fractions
+fix     fraction0 all particletemplate/sphere 5330 atom_type 1 density constant ${density} radius constant ${r0}
+
+# particle distribution for insertion
+fix     pdd all particledistribution/discrete 1  1 &
+        fraction0 1.0
+
+
+
+#********************************************
+# FIX DEFINITION
+# DO NOT CHANGE!!!!
+#********************************************
+
+fix         m1 all property/global youngsModulus peratomtype ${youngsModulus} ${youngsModulus}
+fix         m2 all property/global poissonsRatio peratomtype ${poissonsRatio} ${poissonsRatio}
+fix         m3 all property/global coefficientRestitution peratomtypepair 2 ${coefficientRestitution} ${coefficientRestitution} ${coefficientRestitution} ${coefficientRestitution}
+fix         m6 all property/global characteristicVelocity scalar ${characteristicVelocity}
+fix         m7 all property/global coefficientRollingViscousDamping peratomtypepair 2 0 0 0 0
+
+# pair style
+variable pairStyle string "gran model hertz tangential history"
+variable pairStyleRollingFriction string epsd2
+variable pairStyleCohesion string off
+variable pairStyleDamping string on
+variable pairStyleViscous string off
+
+
+
+
 include		${CALIB_PARAMS_FILE}
 include		${GUESS_PARAMS_FILE}
 
@@ -47,10 +99,12 @@ print "timestep ${dt}"
 
 fix		gravi all gravity 9.81 vector 0.0 0.0 -1.0
 
-variable	nStepsSettle equal round(0.001/${dt})
-variable	nStepsRun    equal round(0.01/${dt})
+variable	nstep        equal round(20./${dt}) #2000000
+variable	nStepsSettle equal round(0.001/${dt})  #?????
+variable	nStepsRun    equal round(0.01/${dt})   #?????
 variable	dumpfreq     equal round(0.01/${dt})
-variable	thermofreq   equal round(0.001/${dt})
+variable	thermofreq   equal round(0.001/${dt}) #?????
+variable	deletefreq   equal round(0.1/${dt}) #10000
 
 # calculate maximum diameter in simulation
 fix		maxdiam all diam/max
@@ -61,10 +115,16 @@ variable	dx_relax equal ${maxdiam}/20.
 
 # scaling factor for mesh
 variable scale equal ${G_D_RATIO}*${maxdiam}/1.5
+variable	dcyl equal ${G_D_RATIO}*${maxdiam}
+
+# upward velocity of cylinder
+variable	vup equal (1.2*${dcyl})/(${dt}*${nstep})
 
 print	"G_D_RATIO ${G_D_RATIO}"
 print	"maxdiam ${maxdiam}"
 print	"Scaling factor ${scale}"
+
+
 
 # meshes
 fix		cad1 all mesh/surface file template/repose/meshes/ground.stl type 1 scale ${scale}
@@ -79,6 +139,7 @@ variable rcyl equal ${G_D_RATIO}*${maxdiam}*0.9/2.
 variable hcyl equal 8./13.*${G_D_RATIO}*${maxdiam}
 
 fix		topwall all wall/gran model hooke primitive type 1 zplane ${hcyl}
+#fix		topwall all wall/gran model hooke primitive type 1 zplane 1.0
 
 region		bc cylinder z 0. 0. ${rcyl}  0. ${hcyl} units box
 fix		ins all insert/pack seed 100001 distributiontemplate pdd &
@@ -86,6 +147,7 @@ fix		ins all insert/pack seed 100001 distributiontemplate pdd &
 
 # apply nve integration to all particles that are inserted as single particles
 fix		integr all nve/limit absolute ${dx_relax}
+#fix		integr all nve/sphere
 
 # lower region to delete particles from
 region		lower block INF INF INF INF INF 0. units box
@@ -99,11 +161,11 @@ thermo_modify	lost ignore norm no
 compute_modify	thermo_temp dynamic yes
 
 # dump stl
-dump		dumpstl all stl ${dumpfreq} ${MATERIAL}/repose/post/stldump_pack_*.stl
+dump		dumpstl all stl ${dumpfreq} post/stldump_pack_*.stl
 
 #insert the first particles so that dump is not empty
 run		1
-dump		dmp all custom ${dumpfreq} ${MATERIAL}/repose/post/dump_pack_*.fill id type x y z ix iy iz vx vy vz fx fy fz omegax omegay omegaz radius
+dump		dmp all custom ${dumpfreq} post/dump_pack_*.fill id type x y z ix iy iz vx vy vz fx fy fz omegax omegay omegaz radius
 
 # make particles slightly larger (to be able to make them smaller lateron)
 compute		rad all property/atom radius

@@ -14,7 +14,11 @@ units		si
 read_restart	${MATERIAL}/repose/restart/packing.restart
 
 # pair style
-include		in.general_params
+variable pairStyle string "gran model hertz tangential history"
+variable pairStyleRollingFriction string epsd2
+variable pairStyleCohesion string off
+variable pairStyleDamping string on
+variable pairStyleViscous string off
 # material params and diameter distribution
 include		${FIXED_PARAMS_FILE}
 include		${CALIB_PARAMS_FILE}
