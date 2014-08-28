@@ -45,13 +45,14 @@ variable    radDist equal       3          # radius distribution (1 = (25%rad*0.
                                            # 2=gaussian distribution with radmu & radsigma)
                                            # for 2 you must uncomment radsigma & radmu, the latter must be equal to rad
                                            # 3=discrete distribution with real values
-variable    dt      equal       1e-7            # time step width [s]
+variable    dt      equal       1e-6            # time step width [s]
 
-variable    dCylDp  equal       20      # ratio cylinder diameter to particle diameter (optional loop)
+variable    dCylDp  equal       40      # ratio cylinder diameter to particle diameter (optional loop)
+variable    G_D_RATIO  equal       ${dCylDp}
 
 variable    accGrev equal       9.81    # acceleration due to gravity
 
-processors  4 4 2
+processors  2 1 1
 
 #########################################################################################
 #   IF YOU CHANGE ANYTHING BELOW THIS LINE, YOU MIGHT ADAPT THE POSTPROCESSING SCRIPT   #
@@ -161,8 +162,9 @@ timestep	${dt}
 fix		gravi all gravity ${accGrev} vector 0.0 0.0 -1.0
 
 # calculate maximum diameter in simulation
-fix		maxdiam all diam/max
-variable	maxdiam equal f_maxdiam
+#fix		maxdiam all diam/max
+#variable	maxdiam equal f_maxdiam
+variable	maxdiam equal ${rad}*2
 print		"max diameter in sim: ${maxdiam}"
 
 variable	dx_relax equal ${maxdiam}/20.
@@ -175,8 +177,8 @@ print	"maxdiam ${maxdiam}"
 print	"Scaling factor ${scale}"
 
 # meshes
-fix		cad1 all mesh/surface file template/repose/meshes/ground.stl type 1 scale ${scale}
-fix		cad2 all mesh/surface file template/repose/meshes/cylinder.stl type 1 scale ${scale}
+fix		cad1 all mesh/surface file meshes/ground.stl type 1 scale ${scale}
+fix		cad2 all mesh/surface file meshes/cylinder.stl type 1 scale ${scale}
 
 # use the imported meshes as granular wall
 fix		granwalls all wall/gran model hooke mesh n_meshes 2 meshes cad1 cad2
@@ -218,7 +220,7 @@ else &
 #region and insertion
 
 #region  bc cylinder z 0.0 0.0 ${cylRadius} ${nz} ${pz} units box
-region	bc cylinder z 0. 0. ${rcyl}  0. ${hcyl} units box
+region	bc cylinder z 0.0 0.0 ${rcyl}  ${nz} ${hcyl} units box
 fix     ins all insert/pack seed 5332 distributiontemplate pdd maxattempt 100 insert_every once overlapcheck yes all_in yes &
 		vel constant 0.0 0.0 -0.05 region bc volumefraction_region ${desiredVolumeFraction} ntry_mc 10000 warn_region no
 
@@ -300,8 +302,8 @@ run		    1
 unfix		  shrink
 
 # remove unnecessary particles
-region        regRm block ${nx} ${px} ${ny} ${py} ${rmRegZPos} ${pz} units box
-delete_atoms  region regRm compress yes
+#region        regRm block ${nx} ${px} ${ny} ${py} ${rmRegZPos} ${pz} units box
+#delete_atoms  region regRm compress yes
 
 #write restart
 write_restart	./restart/restart.repose_rad${rad}_dcyldp${dCylDp}
