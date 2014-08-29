@@ -1313,12 +1313,12 @@ if (NNFlag)
     %     trainc    - Cyclical order weight/bias training.
     %     trainr    - Random order weight/bias training.
     %     trains    - Sequential order weight/bias training.
-    
+    addpath('/mnt/DATA/liggghts/work/shearCell/matlab');
     if (exist('densityBulkBoxMean'))
         %targetNN(iijj,3)=densityBulkBoxMean(iijj);
-        [NNSave2, errorNN2, x2, zz2, errorEstSum2, errorEstIndex2, errorEstSumMaxIndex2, yy2, corrMat2] =   myNeuNetFun(nSimCases,data,avgMuR1,avgMuR2,trainFcn,hiddenLayerSizeVector,densityBulkBoxMean);
+        [NNSave2, errorNN2, x2, zz2, errorEstSum2, errorEstIndex2, errorEstSumMaxIndex2, yy2, corrMat2] =   myNeuNetFun(nSimCases,data,trainFcn,hiddenLayerSizeVector, avgMuR2,avgMuR1, densityBulkBoxMean);
     else
-        [NNSave2, errorNN2, x2, zz2, errorEstSum2, errorEstIndex2, errorEstSumMaxIndex2, yy2, corrMat2] =   myNeuNetFun(nSimCases,data,avgMuR1,avgMuR2,trainFcn,hiddenLayerSizeVector);
+        [NNSave2, errorNN2, x2, zz2, errorEstSum2, errorEstIndex2, errorEstSumMaxIndex2, yy2, corrMat2] =   myNeuNetFun(nSimCases,data,trainFcn,hiddenLayerSizeVector,avgMuR2,avgMuR1);
     end
     
     %myNeuNetFun(nSimCases,data
