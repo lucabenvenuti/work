@@ -62,7 +62,7 @@ variable    ratio   equal       0.0001
 # defines the maximum wall velocity in the vicinity of particles (only for the 'auto' mode)
 # v_max = ratio*MIN(rad)/dt
 
-variable    expDiam         equal   0.10415      # diam of shear cell [m]
+#variable    expDiam         equal   0.10415      # diam of shear cell [m]
 
 #########################################################################################
 #   DUMP COMMANDS ARE DISABLED. IF YOU NEED THEM UNCOMMENT THEM. SEARCH FOR 'MARKDUMP'  #
@@ -89,6 +89,9 @@ variable    rad2            equal   1.01*${rad}
 
 variable    skin            equal   0.50*${radR1}
 #variable    velMax          equal   0.49*${skin}/${dt}
+
+# radii for fractions
+variable    r0              equal        ${rad}
 
 #variable    cylDiameter     equal   ${dCylDp}*2*${rad} # 50 particle in cyl diameter
 #variable    cylRadius       equal   0.5*${cylDiameter} 
@@ -125,13 +128,13 @@ variable    nDumpForce      equal   round(1e-3/${dt})
 #variable    nStepsRun2      equal   round(${nStepsRun}/20)
 #variable    nStepsRun3      equal   ${nStepsRun2}*19
 #variable    nStepsRun4      equal   ${nStepsRun}*2
-#variable    totaltime	    equal   ${dt}*${nStepsRun}*2
+variable    totaltime	 equal   20.0
 variable	nStepsSettle equal round(0.001/${dt})
 variable	nStepsRun    equal round(0.01/${dt})
 variable	dumpfreq     equal round(0.01/${dt})
 variable	thermofreq   equal round(0.001/${dt})
 #variable	nstep        equal round(20./${dt}) #2000000
-variable	nstep        equal round(5./${dt}) #2000000
+variable	nstep        equal round(${totaltime}/${dt}) #2000000
 variable	deletefreq   equal round(0.1/${dt}) #10000
 
 
@@ -268,10 +271,30 @@ compute_modify	thermo_temp dynamic yes
 dump		dumpstl all stl ${dumpfreq} post_param/stldump_${rf}_*.stl
 dump		dmp all custom ${dumpfreq} post_param/dump_${rf}_*.fill id type x y z ix iy iz vx vy vz fx fy fz omegax omegay omegaz radius
 
+### print a csv file with all the parameteres #2gauss
+if "${radDist} == 2" then                            &
+  "fix csv all print 1 '${rad}, ${dens}, ${ym}, ${pr}, ${rest}, ${fric}, ${rf}, ${dt}, ${dCylDp}, ${totaltime}, ${fileID}, &
+		${rolfrtypnum}, ${nStepsSettle}, ${uniSys}, ${radDist}, ${radmu}, ${radsigma}' &
+		file ./results/sim_parAOR_fid${fileID}.csv &
+		title 'rad, dens, ym, pr, rest, fric, rf, dt, dCylDp, totaltime, fileID, rolfrtypnum, nStepsSettle, uniSys, radDist, radmu, radsigma'" &
+elif "${radDist} == 3" &
+"fix csv all print 1 '${rad}, ${dens}, ${ym}, ${pr}, ${rest}, ${fric}, ${rf}, ${dt}, ${dCylDp}, ${totaltime}, ${fileID}, &
+		${rolfrtypnum}, ${nStepsSettle}, ${uniSys}, ${radDist}, ${radmu}, ${radsigma}, ${radR1}, ${radPerc1}, ${radR2}, ${radPerc2}, ${radR3}, ${radPerc3}, &
+        ${radR4}, ${radPerc4}, ${radR5}, ${radPerc5}, ${radR6}, ${radPerc6}' &
+		file ./results/sim_parAOR_fid${fileID}.csv &
+		title 'rad, dens, ym, pr, rest, fric, rf, dt, dCylDp, totaltime, fileID, rolfrtypnum, nStepsSettle, uniSys, radDist, radmu, radsigma, &
+        radR1, radPerc1, radR2, radPerc2, radR3, radPerc3, radR4, radPerc4, radR5, radPerc5, radR6, radPerc6'" &
+else &
+  "fix csv all print 1 '${rad}, ${dens}, ${ym}, ${pr}, ${rest}, ${fric}, ${rf}, ${dt}, ${dCylDp}, ${ctrlStress}, ${expDiam}, ${expMass}, ${shearperc}, ${totaltime}, ${fileID}, &
+		${rolfrtypnum}, ${nStepsSettle}, ${uniSys}, ${shearCellType}, ${radDist}' &
+		file ./results/sim_parAOR_fid${fileID}.csv &
+		title 'rad, dens, ym, pr, rest, fric, rf, dt, dCylDp, totaltime, fileID, rolfrtypnum, nStepsSettle, uniSys, radDist'" 
+
 # run 1 step to perform restart with hooke, then change interaction
 run		1
 unfix		granwalls
 unfix		topwall
+unfix csv
 pair_style	gran model hertz rolling_friction ${rolfrtyp} #cohesion ${pairStyleCohesion} tangential_damping ${pairStyleDamping} # viscous ${pairStyleViscous}
 pair_coeff	* *
 #fix		    granwalls all wall/${pairStyle} rolling_friction ${pairStyleRollingFriction} mesh n_meshes 2 meshes cad1 cad2
@@ -289,18 +312,37 @@ write_restart	restart/repose_${rf}.restart
 # evaluate convex hull
 variable	n_cuts equal 2.*${G_D_RATIO}
 variable	cut_thickness equal ${maxdiam}/2.
-compute		chull all crosssection skin ${skin} dim z min ${r0} max ${dcyl}  n_cuts ${n_cuts}  cut_thickness ${cut_thickness} file area/area_${rf}.txt
+compute		chull all crosssection skin ${skin} dim z min ${r0} max ${dcyl}  n_cuts ${n_cuts}  cut_thickness ${cut_thickness} file ./results/area_fid${fileID}.txt
 
 # measure angle
 variable	i equal ${n_cuts}+1
 variable	c equal c_chull[$i]
-fix		pr all print 1 "$c" screen no file area/angle_${rf} title ${corf}
+fix		pr all print 1 "$c" screen no file ./results/angle_fid${fileID}.txt title ${corf}
 run		1
 
 variable fileID equal ${fileID}+1
 
 # loop
 clear
+next     fric
+jump     SELF loopiteration
+variable fric delete
+
 next     rf
 jump     SELF loopiteration
-#variable rf delete
+variable rf delete
+
+next     rest
+jump     SELF loopiteration
+variable rest delete
+
+next     shearperc
+jump     SELF loopiteration
+variable shearperc delete
+
+next     expMass
+jump     SELF loopiteration
+
+variable expMass delete
+next     shearCellType
+jump     SELF loopiteration
