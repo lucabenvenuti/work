@@ -95,7 +95,7 @@ for llmm=1:columnTargetNN
         % meanAbsoluteError = mae(t-y);
 
         %perf = mse(net,t,y);n
-        [NNSave{kkll,llmm}.r, NNSave{kkll,llmm}.m, NNSave{kkll,llmm}.b] = regression(z,y)
+        [NNSave{kkll,llmm}.r, NNSave{kkll,llmm}.m, NNSave{kkll,llmm}.b] = regression(z,y);
 
 
 
