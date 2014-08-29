@@ -51,7 +51,7 @@ variable    radDist equal       3         # radius distribution (1 = (25%rad*0.9
 
 variable    dt      equal       1e-6            # time step width [s]
 
-variable    dCylDp  equal       40      # ratio cylinder diameter to particle diameter (optional loop)
+variable    dCylDp  equal       20      # ratio cylinder diameter to particle diameter (optional loop)
 variable    G_D_RATIO  equal       ${dCylDp}
 
 variable    accGrev equal       9.81            # acceleration due to gravity [m/s2]
@@ -80,15 +80,19 @@ variable    expDiam         equal   0.10415      # diam of shear cell [m]
 units		si
 #########################################################################################
 # geometry scaling, mass, number of timesteps, ...
-variable    sVelWall        equal   3 # scale that defines the wall velocity (default = 3)
-variable    velWall         equal   ${rad}*${sVelWall}
+#variable    sVelWall        equal   3 # scale that defines the wall velocity (default = 3)
+#variable    velWall         equal   ${rad}*${sVelWall}
 
-variable    skin            equal   1.0*${rad}
-variable    velMax          equal   0.49*${skin}/${dt}
+# geometry scaling, mass, number of timesteps, ...
+variable    rad1            equal   0.99*${rad}
+variable    rad2            equal   1.01*${rad}
 
-variable    cylDiameter     equal   ${dCylDp}*2*${rad} # 50 particle in cyl diameter
-variable    cylRadius       equal   0.5*${cylDiameter} 
-variable    cylArea         equal   0.25*${cylDiameter}*${cylDiameter}*PI
+variable    skin            equal   0.50*${radR1}
+#variable    velMax          equal   0.49*${skin}/${dt}
+
+#variable    cylDiameter     equal   ${dCylDp}*2*${rad} # 50 particle in cyl diameter
+#variable    cylRadius       equal   0.5*${cylDiameter} 
+#variable    cylArea         equal   0.25*${cylDiameter}*${cylDiameter}*PI
 
 #variable    desiredMass     equal   ${cylArea}*0.75*${cylDiameter}*0.65*${dens}
 variable    desiredVolumeFraction     equal   0.62
@@ -97,18 +101,18 @@ variable    desiredVolumeFraction     equal   0.62
 #variable    ctrlForcemain   equal   ${ctrlForce}*${shearperc}
 #variable    ctrlForceZero   equal   ${ctrlForce}*0.001
 
-variable    bottomPos       equal   0.5*${cylRadius}
+#variable    bottomPos       equal   0.5*${cylRadius}
 variable    characteristicVelocity equal 0.1
 
-variable    rmRegZPos       equal   1.5*${cylRadius}
+#variable    rmRegZPos       equal   1.5*${cylRadius}
 
 # dimensions of simulation domain
-variable    nx  equal   -2.01*${cylRadius}    # neg. x-value .. bigger for motion
-variable    px  equal    1.5*${cylRadius}     # pos. x-value
-variable    ny  equal   -1.05*${cylRadius}    # neg. y-value
-variable    py  equal    1.05*${cylRadius}    # pos. y-value
-variable    nz  equal   -${rad}               # neg. z-value (just not 0.0)
-variable    pz  equal    1.75*${cylRadius}
+#variable    nx  equal   -2.01*${cylRadius}    # neg. x-value .. bigger for motion
+#variable    px  equal    1.5*${cylRadius}     # pos. x-value
+#variable    ny  equal   -1.05*${cylRadius}    # neg. y-value
+#variable    py  equal    1.05*${cylRadius}    # pos. y-value
+#variable    nz  equal   -${rad}               # neg. z-value (just not 0.0)
+#variable    pz  equal    1.75*${cylRadius}
 
 
 # run & dump times
@@ -129,15 +133,6 @@ variable	thermofreq   equal round(0.001/${dt})
 variable	nstep        equal round(20./${dt}) #2000000
 variable	deletefreq   equal round(0.1/${dt}) #10000
 
-variable	maxdiam equal ${rad}*2
-variable	dx_relax equal ${maxdiam}/20.
-# scaling factor for mesh
-variable    scale equal ${G_D_RATIO}*${maxdiam}/1.5
-
-variable	dcyl equal ${G_D_RATIO}*${maxdiam}
-
-# upward velocity of cylinder
-variable	vup equal (1.2*${dcyl})/(${dt}*${nstep})
 
 #########################################################################################
 #rolling friction options
@@ -167,7 +162,7 @@ log     logs/log.repose_rad${rad}_dcyldp${dCylDp}_mu${fric}_rf${rf}_dt${dt}.txt
 
 atom_style	granular
 atom_modify	map array
-boundary    f f f
+boundary    m m fm
 newton      off
 
 communicate	single vel yes
@@ -187,8 +182,44 @@ fix     m5 all property/global coefficientRollingFriction peratomtypepair 2 ${rf
 fix     m6 all property/global characteristicVelocity scalar ${characteristicVelocity}
 #fix    m7 all property/global coefficientRollingViscousDamping peratomtypepair 2 ${rvd} 0.0 0.0 0.0
 
+# define the material in use  ## pts1 0.25 pts2 0.25  volume_limit ${volMin}"   
+if "${radDist} == 2" then                            &
+  "fix    pts3 all particletemplate/sphere 5328 atom_type 1 density constant ${dens} radius gaussian number ${radmu} ${radsigma}"  &
+  "fix	pdd  all particledistribution/discrete 5332  1 pts3 1.0 "   & 
+  "print 'particle radius distribution gaussian'"                         &
+elif "${radDist} == 3" &
+  "fix		ptsd1  all particletemplate/sphere 5333 atom_type 1 density constant ${dens} radius constant ${radR1}"                                & 
+  "fix		ptsd2  all particletemplate/sphere 5334 atom_type 1 density constant ${dens} radius constant ${radR1}"                                & 
+  "fix		ptsd3  all particletemplate/sphere 5335 atom_type 1 density constant ${dens} radius constant ${radR3}"                                & 
+  "fix		ptsd4  all particletemplate/sphere 5336 atom_type 1 density constant ${dens} radius constant ${radR4}"                                & 
+  "fix		ptsd5  all particletemplate/sphere 5337 atom_type 1 density constant ${dens} radius constant ${radR5}"                                & 
+  "fix		ptsd6  all particletemplate/sphere 5338 atom_type 1 density constant ${dens} radius constant ${radR6}" & 
+  "fix		pdd  all particledistribution/discrete 5339  6 ptsd1 ${radPerc1} ptsd2 ${radPerc2} ptsd3 ${radPerc3} ptsd4 ${radPerc4} ptsd5 ${radPerc5} ptsd6 ${radPerc6}"  &       
+  "print 'particle radius distribution discrete REAL'"    &
+else &
+  "fix		pts  all particletemplate/sphere 5330 atom_type 1 density constant ${dens} radius constant ${rad}"                                & 
+  "fix		pts1 all particletemplate/sphere 5329 atom_type 1 density constant ${dens} radius constant ${rad1}"                                & 
+  "fix		pts2 all particletemplate/sphere 5331 atom_type 1 density constant ${dens} radius constant ${rad2}" & 
+  "fix		pdd  all particledistribution/discrete 5332  3 pts 0.5 pts1 0.25 pts2 0.25"                         &       
+  "print 'particle radius distribution discrete zero99 one oneoone'" 
+
+#variable	maxdiam equal ${radR1}*2
+# calculate maximum diameter in simulation
+fix		maxdiam all diam/max
+variable	maxdiam equal f_maxdiam
+print		"max diameter in sim: ${maxdiam}"
+variable	dx_relax equal ${maxdiam}/20.
+# scaling factor for mesh
+variable    scale equal ${G_D_RATIO}*${maxdiam}/1.5
+
+variable	dcyl equal ${G_D_RATIO}*${maxdiam}
+
+# upward velocity of cylinder
+variable	vup equal (1.2*${dcyl})/(${dt}*${nstep})
+
 # pair style
-pair_style 	gran model hertz tangential history rolling_friction ${rolfrtyp}
+#pair_style 	gran model hertz tangential history rolling_friction ${rolfrtyp}
+pair_style 	gran model hooke
 pair_coeff	* *
 #pair_style	${pairStyle} rolling_friction ${pairStyleRollingFriction} cohesion ${pairStyleCohesion} tangential_damping ${pairStyleDamping} # viscous ${pairStyleViscous}
 #pair_coeff	* *
@@ -202,8 +233,8 @@ fix		gravi all gravity ${accGrev} vector 0.0 0.0 -1.0
 
 
 # region and insertion
-variable rcyl equal ${G_D_RATIO}*${maxdiam}*0.9/2.
-variable hcyl equal 8./13.*${G_D_RATIO}*${maxdiam}
+#variable rcyl equal ${G_D_RATIO}*${maxdiam}*0.9/2.
+#variable hcyl equal 8./13.*${G_D_RATIO}*${maxdiam}
 
 # meshes
 fix		cad1 all mesh/surface file meshes/ground.stl type 1 scale ${scale}
@@ -240,6 +271,8 @@ dump		dmp all custom ${dumpfreq} post_param/dump_${rf}_*.fill id type x y z ix i
 run		1
 unfix		granwalls
 unfix		topwall
+pair_style	gran model hertz rolling_friction ${rolfrtyp} #cohesion ${pairStyleCohesion} tangential_damping ${pairStyleDamping} # viscous ${pairStyleViscous}
+pair_coeff	* *
 #fix		    granwalls all wall/${pairStyle} rolling_friction ${pairStyleRollingFriction} mesh n_meshes 2 meshes cad1 cad2
 fix		    granwalls all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} mesh n_meshes 2 meshes cad1 cad2
 

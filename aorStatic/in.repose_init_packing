@@ -47,7 +47,7 @@ variable    radDist equal       3          # radius distribution (1 = (25%rad*0.
                                            # 3=discrete distribution with real values
 variable    dt      equal       1e-6            # time step width [s]
 
-variable    dCylDp  equal       40      # ratio cylinder diameter to particle diameter (optional loop)
+variable    dCylDp  equal      20      # ratio cylinder diameter to particle diameter (optional loop)
 variable    G_D_RATIO  equal       ${dCylDp}
 
 variable    accGrev equal       9.81            # acceleration due to gravity [m/s2]
@@ -69,26 +69,26 @@ units		si
 variable    rad1            equal   0.99*${rad}
 variable    rad2            equal   1.01*${rad}
 
-variable    skin            equal   1.0*${rad}
+variable    skin            equal   0.50*${radR1}
 
-variable    cylDiameter     equal   ${dCylDp}*2*${rad} # 50 particle in cyl diameter
-variable    cylRadius       equal   0.5*${cylDiameter} # cylinder radius; scale for geometry
-variable    cylArea         equal   0.25*${cylDiameter}*${cylDiameter}*PI
+#variable    cylDiameter     equal   ${dCylDp}*2*${rad} # 50 particle in cyl diameter
+#variable    cylRadius       equal   0.5*${cylDiameter} # cylinder radius; scale for geometry
+#variable    cylArea         equal   0.25*${cylDiameter}*${cylDiameter}*PI
 
 #variable    desiredMass     equal   ${cylArea}*0.75*${cylDiameter}*0.65*${dens}
 variable    desiredVolumeFraction     equal   0.62
 
 variable    characteristicVelocity equal 0.1
 
-variable    rmRegZPos       equal   1.5*${cylRadius}
+#variable    rmRegZPos       equal   1.5*${cylRadius}
 
 # dimensions of simulation domain
-variable    nx  equal   -${cylRadius}         # neg. x-value
-variable    px  equal    ${cylRadius}         # pos. x-value
-variable    ny  equal   -${cylRadius}         # neg. y-value
-variable    py  equal    ${cylRadius}         # pos. y-value
-variable    nz  equal    0.0                  # neg. z-value
-variable    pz  equal    4*${cylRadius}       # pos. z-value
+#variable    nx  equal   -${cylRadius}         # neg. x-value
+#variable    px  equal    ${cylRadius}         # pos. x-value
+#variable    ny  equal   -${cylRadius}         # neg. y-value
+#variable    py  equal    ${cylRadius}         # pos. y-value
+#variable    nz  equal    0.0                  # neg. z-value
+#variable    pz  equal    4*${cylRadius}       # pos. z-value
 
 # run & dump times
 variable    nDump           equal   round(1e-2/${dt})
@@ -130,14 +130,14 @@ log     logs/log_init.repose_rad${rad}_dcyldp${dCylDp}.txt
 
 atom_style	granular
 atom_modify	map array
-boundary    f f f
+boundary	m m fm
 newton      off
 
 communicate	single vel yes
 
-# definition of the simulation region
-region      reg block ${nx} ${px} ${ny} ${py} ${nz} ${pz} units box
-create_box  2 reg
+# will be extended automatically (boundary m m fm)
+region		reg block -0.01 0.01 -0.01 0.01 -0.15 0.01 units box
+create_box	2 reg
 
 neighbor	    ${skin} bin
 neigh_modify	delay 0
@@ -152,7 +152,7 @@ fix     m6 all property/global characteristicVelocity scalar ${characteristicVel
 #fix    m7 all property/global coefficientRollingViscousDamping peratomtypepair 2 ${rvd} 0.0 0.0 0.0
 
 # pair style
-pair_style 	gran model hertz tangential history rolling_friction ${rolfrtyp}
+pair_style 	gran model hooke #hertz tangential history rolling_friction ${rolfrtyp}
 pair_coeff	* *
 
 #Timestep
@@ -161,11 +161,32 @@ timestep	${dt}
 #Gravity
 fix		gravi all gravity ${accGrev} vector 0.0 0.0 -1.0
 
+# define the material in use  ## pts1 0.25 pts2 0.25  volume_limit ${volMin}"   
+if "${radDist} == 2" then                            &
+  "fix    pts3 all particletemplate/sphere 5328 atom_type 1 density constant ${dens} radius gaussian number ${radmu} ${radsigma}"  &
+  "fix	pdd  all particledistribution/discrete 5332  1 pts3 1.0 "   & 
+  "print 'particle radius distribution gaussian'"                         &
+elif "${radDist} == 3" &
+  "fix		ptsd1  all particletemplate/sphere 5333 atom_type 1 density constant ${dens} radius constant ${radR1}"                                & 
+  "fix		ptsd2  all particletemplate/sphere 5334 atom_type 1 density constant ${dens} radius constant ${radR1}"                                & 
+  "fix		ptsd3  all particletemplate/sphere 5335 atom_type 1 density constant ${dens} radius constant ${radR3}"                                & 
+  "fix		ptsd4  all particletemplate/sphere 5336 atom_type 1 density constant ${dens} radius constant ${radR4}"                                & 
+  "fix		ptsd5  all particletemplate/sphere 5337 atom_type 1 density constant ${dens} radius constant ${radR5}"                                & 
+  "fix		ptsd6  all particletemplate/sphere 5338 atom_type 1 density constant ${dens} radius constant ${radR6}" & 
+  "fix		pdd  all particledistribution/discrete 5339  6 ptsd1 ${radPerc1} ptsd2 ${radPerc2} ptsd3 ${radPerc3} ptsd4 ${radPerc4} ptsd5 ${radPerc5} ptsd6 ${radPerc6}"  &       
+  "print 'particle radius distribution discrete REAL'"    &
+else &
+  "fix		pts  all particletemplate/sphere 5330 atom_type 1 density constant ${dens} radius constant ${rad}"                                & 
+  "fix		pts1 all particletemplate/sphere 5329 atom_type 1 density constant ${dens} radius constant ${rad1}"                                & 
+  "fix		pts2 all particletemplate/sphere 5331 atom_type 1 density constant ${dens} radius constant ${rad2}" & 
+  "fix		pdd  all particledistribution/discrete 5332  3 pts 0.5 pts1 0.25 pts2 0.25"                         &       
+  "print 'particle radius distribution discrete zero99 one oneoone'" 
+
 # calculate maximum diameter in simulation
-#fix		maxdiam all diam/max
-#variable	maxdiam equal f_maxdiam
-variable	maxdiam equal ${rad}*2
-print		"max diameter in sim: ${maxdiam}"
+fix		maxdiam all diam/max
+variable	maxdiam equal f_maxdiam
+#variable	maxdiam equal ${rad}*2
+#print		"max diameter in sim: ${maxdiam}"
 
 variable	dx_relax equal ${maxdiam}/20.
 
@@ -196,33 +217,13 @@ fix		topwall all wall/gran model hooke primitive type 1 zplane ${hcyl}
 #fix     zplane1   all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} primitive type 1 zplane ${nz}
 #fix     zplane2   all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} primitive type 1 zplane ${pz}
 
-# define the material in use  ## pts1 0.25 pts2 0.25  volume_limit ${volMin}"   
-if "${radDist} == 2" then                            &
-  "fix    pts3 all particletemplate/sphere 5328 atom_type 1 density constant ${dens} radius gaussian number ${radmu} ${radsigma}"  &
-  "fix	pdd  all particledistribution/discrete 5332  1 pts3 1.0 "   & 
-  "print 'particle radius distribution gaussian'"                         &
-elif "${radDist} == 3" &
-  "fix		ptsd1  all particletemplate/sphere 5333 atom_type 1 density constant ${dens} radius constant ${radR1}"                                & 
-  "fix		ptsd2  all particletemplate/sphere 5334 atom_type 1 density constant ${dens} radius constant ${radR1}"                                & 
-  "fix		ptsd3  all particletemplate/sphere 5335 atom_type 1 density constant ${dens} radius constant ${radR3}"                                & 
-  "fix		ptsd4  all particletemplate/sphere 5336 atom_type 1 density constant ${dens} radius constant ${radR4}"                                & 
-  "fix		ptsd5  all particletemplate/sphere 5337 atom_type 1 density constant ${dens} radius constant ${radR5}"                                & 
-  "fix		ptsd6  all particletemplate/sphere 5338 atom_type 1 density constant ${dens} radius constant ${radR6}" & 
-  "fix		pdd  all particledistribution/discrete 5339  6 ptsd1 ${radPerc1} ptsd2 ${radPerc2} ptsd3 ${radPerc3} ptsd4 ${radPerc4} ptsd5 ${radPerc5} ptsd6 ${radPerc6}"  &       
-  "print 'particle radius distribution discrete REAL'"    &
-else &
-  "fix		pts  all particletemplate/sphere 5330 atom_type 1 density constant ${dens} radius constant ${rad}"                                & 
-  "fix		pts1 all particletemplate/sphere 5329 atom_type 1 density constant ${dens} radius constant ${rad1}"                                & 
-  "fix		pts2 all particletemplate/sphere 5331 atom_type 1 density constant ${dens} radius constant ${rad2}" & 
-  "fix		pdd  all particledistribution/discrete 5332  3 pts 0.5 pts1 0.25 pts2 0.25"                         &       
-  "print 'particle radius distribution discrete zero99 one oneoone'" 
 
 #region and insertion
 
 #region  bc cylinder z 0.0 0.0 ${cylRadius} ${nz} ${pz} units box
-region	bc cylinder z 0.0 0.0 ${rcyl}  ${nz} ${hcyl} units box
+region	bc cylinder z 0.0 0.0 ${rcyl}  0.0 ${hcyl} units box
 fix     ins all insert/pack seed 5332 distributiontemplate pdd maxattempt 100 insert_every once overlapcheck yes all_in yes &
-		vel constant 0.0 0.0 -0.05 region bc volumefraction_region ${desiredVolumeFraction} ntry_mc 10000 warn_region no
+		region bc volumefraction_region ${desiredVolumeFraction} ntry_mc 10000 warn_region no
 
 #apply nve integration to all particles that are inserted as single particles
 #fix		integr all nve/sphere
