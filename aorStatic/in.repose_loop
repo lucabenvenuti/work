@@ -289,12 +289,12 @@ write_restart	restart/repose_${rf}.restart
 # evaluate convex hull
 variable	n_cuts equal 2.*${G_D_RATIO}
 variable	cut_thickness equal ${maxdiam}/2.
-compute		chull all crosssection skin ${skin} dim z min ${r0} max ${dcyl}  n_cuts ${n_cuts}  cut_thickness ${cut_thickness} file area/area_$a.txt
+compute		chull all crosssection skin ${skin} dim z min ${r0} max ${dcyl}  n_cuts ${n_cuts}  cut_thickness ${cut_thickness} file area/area_${rf}.txt
 
 # measure angle
 variable	i equal ${n_cuts}+1
 variable	c equal c_chull[$i]
-fix		pr all print 1 "$c" screen no file area/angle_$a title ${corf}
+fix		pr all print 1 "$c" screen no file area/angle_${rf} title ${corf}
 run		1
 
 variable fileID equal ${fileID}+1
