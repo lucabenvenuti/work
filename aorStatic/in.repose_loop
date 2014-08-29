@@ -130,7 +130,8 @@ variable	nStepsSettle equal round(0.001/${dt})
 variable	nStepsRun    equal round(0.01/${dt})
 variable	dumpfreq     equal round(0.01/${dt})
 variable	thermofreq   equal round(0.001/${dt})
-variable	nstep        equal round(20./${dt}) #2000000
+#variable	nstep        equal round(20./${dt}) #2000000
+variable	nstep        equal round(5./${dt}) #2000000
 variable	deletefreq   equal round(0.1/${dt}) #10000
 
 
@@ -293,8 +294,13 @@ compute		chull all crosssection skin ${skin} dim z min ${r0} max ${dcyl}  n_cuts
 # measure angle
 variable	i equal ${n_cuts}+1
 variable	c equal c_chull[$i]
-fix		pr all print 1 "$c" screen no file ${MATERIAL}/repose/area/angle_$a title ${corf}
+fix		pr all print 1 "$c" screen no file area/angle_$a title ${corf}
 run		1
 
-next		rf
-jump		SELF loopiteration
+variable fileID equal ${fileID}+1
+
+# loop
+clear
+next     rf
+jump     SELF loopiteration
+#variable rf delete
