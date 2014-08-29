@@ -29,7 +29,7 @@ col_Z = 3;
 
            
 %doNN
-NNFlag = true;
+NNFlag = false;
 hiddenLayerSizeVector = 5:14;           
            
 % save images
@@ -194,7 +194,7 @@ for ii=1:nFiles
     end
     
     % generate name for legends
-    iName  = ['force.rad',num2str(data(ii).rad),'_dcyldp',num2str(data(ii).dCylDp),...
+    iName  = ['aor.rad',num2str(data(ii).rad),'_dcyldp',num2str(data(ii).dCylDp),...
         '_density',num2str(data(ii).dens),'_rest',num2str(data(ii).rest),...
         '_fric', num2str(data(ii).fric), '_rf', num2str(data(ii).rf), ...
         '_dt', num2str(data(ii).dt),  ...
@@ -307,6 +307,25 @@ end
 warning ('off','all');
 print(hFig, fullfile(saveDir, 'figure.png'), '-dpng');
 
+dataAOR = data;
+
+clear data
+
+%% save matlab data
+i=1;
+j=1;
+[a,b]=size(searchCases);
+
+searchName{1} = 'an';
+
+for i=1:a
+       j=i+1;
+       searchName{j}=([searchName{i},searchCases{i,1},num2str(searchCases{i,2})]);
+end
+
+save(['AOR',searchName{end}, '.mat'], 'dataAOR');
+%save(['AOR', ], dataAOR);%,'name','off', 'fanspeed', 'indata', 'meanoff', '-mat'); %
+
 %% Neural Network
 if (NNFlag)
     
@@ -324,9 +343,9 @@ if (NNFlag)
     addpath('/mnt/DATA/liggghts/work/shearCell/matlab');
     if (exist('densityBulkBoxMean'))
         %targetNN(iijj,3)=densityBulkBoxMean(iijj);
-        [NNSave2, errorNN2, x2, zz2, errorEstSum2, errorEstIndex2, errorEstSumMaxIndex2, yy2, corrMat2] =   myNeuNetFun(nSimCases,data,trainFcn,hiddenLayerSizeVector, avgMuR2,avgMuR1, densityBulkBoxMean);
+        [NNSave2, errorNN2, x2, zz2, errorEstSum2, errorEstIndex2, errorEstSumMaxIndex2, yy2, corrMat2] =   myNeuNetFun(nSimCases,dataAOR,trainFcn,hiddenLayerSizeVector, avgMuR2,avgMuR1, densityBulkBoxMean);
     else
-        [NNSave2, errorNN2, x2, zz2, errorEstSum2, errorEstIndex2, errorEstSumMaxIndex2, yy2, corrMat2] =   myNeuNetFun(nSimCases,data,trainFcn,hiddenLayerSizeVector, data(:).angleLi, data(:).angleMa);
+        [NNSave2, errorNN2, x2, zz2, errorEstSum2, errorEstIndex2, errorEstSumMaxIndex2, yy2, corrMat2] =   myNeuNetFun(nSimCases,dataAOR,trainFcn,hiddenLayerSizeVector, dataAOR(:).angleLi, dataAOR(:).angleMa);
     end
     
     %myNeuNetFun(nSimCases,data
