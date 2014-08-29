@@ -1298,8 +1298,7 @@ end
 % % for i=1:9 mus(i,2)=abs(mus(i,1)-0.8796); end
 % % [a,b]=min(mus(:,2))
 
-%%
-%Neural Network
+%% Neural Network
 if (NNFlag)
     
     % Choose a Training Function
