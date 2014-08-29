@@ -1,4 +1,4 @@
-function [NNSave, errorNN, x, zz, errorEstSum, errorEstIndex, errorEstSumMaxIndex, yyy, corrMat] =   myNeuNetFun(nSimCases2,data2,avgMuR1bis,avgMuR2bis,trainFcn2,hiddenLayerSizeVector2,densityBulkBoxMean2)
+function [NNSave, errorNN, x, zz, errorEstSum, errorEstIndex, errorEstSumMaxIndex, yyy, corrMat] =   myNeuNetFun(nSimCases2,data2,trainFcn2,hiddenLayerSizeVector2, target1, target2, target3)
 
 for iijj=1:nSimCases2
     inputNN(iijj,3)=data2(iijj).rest;
@@ -6,17 +6,33 @@ for iijj=1:nSimCases2
     inputNN(iijj,2)=data2(iijj).rf;
     inputNN(iijj,4)=data2(iijj).dt;
     inputNN(iijj,5)=data2(iijj).dCylDp;
-    inputNN(iijj,6)=data2(iijj).ctrlStress;
-    inputNN(iijj,7)=data2(iijj).shearperc;
     
-    if (exist('densityBulkBoxMean2'))
-        targetNN(iijj,3)=densityBulkBoxMean2(iijj);
-        inputNN(iijj,8)=data2(iijj).dens;
+    if isfield (data2(iijj), 'ctrlStress')
+        inputNN(iijj,6)=data2(iijj).ctrlStress;
+    end
+
+    if isfield (data2(iijj), 'shearperc')
+        inputNN(iijj,7)=data2(iijj).shearperc;
     end
     
-    targetNN(iijj,2)=avgMuR1bis(iijj);
-    targetNN(iijj,1)=avgMuR2bis(iijj);
+    if (exist('target1'))
+        targetNN(iijj,1) = target1(iijj);
+    end
+    
+    if (exist('target2'))
+       targetNN(iijj,2) = target2(iijj);
+    end
+    
+    
+    if (exist('target3'))
+        aa=length(inputNN(iijj,:));
+        inputNN(iijj,aa)=data2(iijj).dens;
+        targetNN(iijj,3) = target3(iijj);
+    end
+    
 end
+
+
 
 [rowsTargetNN columnTargetNN] = size(targetNN);
 [rowsInputNN columnInputNN] = size(inputNN);
@@ -160,8 +176,15 @@ errorEstSum(:,llmm)= errorEstSumIn(:);
 errorEstIndex(llmm) = errorEstSumMaxIndex(llmm)*4-3;
 disp(['#Neuron = ',num2str(errorNN(errorEstIndex(llmm)).neuronNumber(llmm)), ' ; transferFcn = ', num2str(net.layers{:}.transferFcn), ' ; trainFcn2 = ', trainFcn2,...
     ' ; R2tot = ', num2str(errorNN(errorEstIndex(llmm)).r2(llmm)), ' ; meanSquareErrorTot = ', num2str(errorNN(errorEstIndex(llmm)).mse(llmm)),...
-' ; meanAbsoluteErrorTot = ', num2str(errorNN(errorEstIndex(llmm)).mae(llmm))]);
+' ; meanAbsoluteErrorTot = ', num2str(errorNN(errorEstIndex(llmm)).mae(llmm)),...
+' ; R2Regression = ', num2str(NNSave{errorEstSumMaxIndex(llmm),llmm}.r),  ' ; mRegression = ', num2str(NNSave{errorEstSumMaxIndex(llmm),llmm}.m), ...
+' ; bRegression = ', num2str(NNSave{errorEstSumMaxIndex(llmm),llmm}.b)]);
 
+%NNSave{errorEstSumMaxIndex(llmm),llmm}.r, NNSave{errorEstSumMaxIndex(llmm),llmm}.m, NNSave{errorEstSumMaxIndex(llmm),llmm}.b
+%errorEstSumMaxIndex2 =
+
+     %8     3
+%NNSave2{3,l}.r, NNSave2{3,2}.m, NNSave2{3,2}.b
 
 plotregression(z,yy(errorEstSumMaxIndex(llmm),:),'Regression');
 
