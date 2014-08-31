@@ -707,7 +707,11 @@ clear timesteps sigmaZ tauXZ corrTauXZ fname
             data(ii).startPlateauPreShear = indexer(1);
             data(ii).stopPlateauPreShear = indexer(2);    
             data(ii).startPlateauShear = indexer(3);    
-            data(ii).stopPlateauShear  = indexer(4);    
+            data(ii).stopPlateauShear  = indexer(4);
+            data(ii).startPlateauPreShearValueMan = data(ii).startPlateauPreShear/length(data(ii).muR);
+            data(ii).stopPlateauPreShearValueMan = data(ii).stopPlateauPreShear/length(data(ii).muR);
+            data(ii).startPlateauShearValueMan = data(ii).startPlateauShear/length(data(ii).muR);
+            data(ii).stopPlateauShearValueMan = data(ii).stopPlateauShear/length(data(ii).muR);
             
        else
            data(ii).startPlateauPreShear = floor(lMuR*startPlateauPreShearValue); %%             startPlateauPreShearValue = .38;
@@ -759,8 +763,25 @@ clear timesteps sigmaZ tauXZ corrTauXZ fname
         
     end
 
+%%   Average Plateaux
+ if (manualPlateauFlag)  
+     ii=1;
+     sappsvmm = (mean([data(:).startPlateauPreShearValueMan])); %  startPlateauPreShearValueManMean
+     soppsvmm = (mean([data(:).stopPlateauPreShearValueMan])); 
+     sapsvmm = (mean([data(:).startPlateauShearValueMan])); 
+     sopsvmm = (mean([data(:).stopPlateauShearValueMan])); 
+%      startPlateauPreShearMeanMan = floor(length(data(ii).muR)*startPlateauPreShearValueManMean);
+%      stopPlateauPreShear = (mean([data(:).stopPlateauPreShear]));
+%      startPlateauShear = (mean([data(:).startPlateauShear]));
+%      stopPlateauShear = (mean([data(:).stopPlateauShear]));
+     
+    for ii=1:nSimCases    
+        
+        avgMuR5(ii,1) = mean(data(ii).muR(floor(length(data(ii).muR)*sappsvmm):floor(length(data(ii).muR)*soppsvmm)));
+        avgMuR6(ii,1) = mean(data(ii).muR(floor(length(data(ii).muR)*sapsvmm):floor(length(data(ii).muR)*sopsvmm)));
+    end     
+ end        
 %%    
-    
 if (dCylDpConfrontationFlag)    
 % TEST: Calc mean and std; Plot data
 meanAvgMuR = mean(avgMuR(1,:));
@@ -1331,8 +1352,7 @@ if (NNFlag)
 
 end
 
-%%
-%save matlab data
+%% save matlab data
 i=1;
 j=1;
 [a,b]=size(searchCases);
