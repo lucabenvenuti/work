@@ -1,4 +1,4 @@
-function [NNSave, errorNN, x, zz, errorEstSum, errorEstIndex, errorEstSumMaxIndex, yyy, corrMat] =   myNeuNetFun(nSimCases2,data2,trainFcn2,hiddenLayerSizeVector2, target1, target2, target3)
+function [NNSave, errorNN, x, zz, errorEstSum, errorEstIndex, errorEstSumMaxIndex, yyy, corrMatPca] =   myNeuNetFun(nSimCases2,data2,trainFcn2,hiddenLayerSizeVector2, target1, target2, target3)
 
 for iijj=1:nSimCases2
     inputNN(iijj,3)=data2(iijj).rest;
@@ -41,7 +41,8 @@ ITNN(:,1:columnInputNN) = inputNN(:,1:columnInputNN);
 ITNN(:,(columnInputNN+1):(columnInputNN+columnTargetNN)) = targetNN(:,1:columnTargetNN);
 %[rowsITNN columnITNN] = size(ITNN);
 
-corrMat = corrcoef(ITNN);
+corrMatPca.corrMat = corrcoef(ITNN);
+[corrMatPca.coeff,corrMatPca.score,corrMatPca.latent,corrMatPca.tsquare] = princomp(ITNN); %Principal Components Analysis
 %corrMat(1,1) = corr2(ITNN(:,1),ITNN(:,1));
 
 % jjmm = 1;
