@@ -1,4 +1,4 @@
-function [NNSave, errorNN, x, zz, errorEstSum, errorEstIndex, errorEstSumMaxIndex, yyy, corrMatPca] =   myNeuNetFun(nSimCases2,data2,trainFcn2,hiddenLayerSizeVector2, target1, target2, target3)
+function [NNSave, errorNN, x, zz, errorEstSum, errorEstIndex, errorEstSumMaxIndex, yyy, corrMatPca, newInput] =   myNeuNetFun(nSimCases2,data2,trainFcn2,hiddenLayerSizeVector2,  dataNN, target1, target2, target3)
 
 for iijj=1:nSimCases2
     inputNN(iijj,3)=data2(iijj).rest;
@@ -17,6 +17,9 @@ for iijj=1:nSimCases2
     
     if (exist('target1'))
         targetNN(iijj,1) = target1(iijj);
+    %else
+     %   warning('no target inserted'); 
+      %  break
     end
     
     if (exist('target2'))
@@ -190,5 +193,202 @@ disp(['#Neuron = ',num2str(errorNN(errorEstIndex(llmm)).neuronNumber(llmm)), ' ;
 plotregression(z,yy(errorEstSumMaxIndex(llmm),:),'Regression');
 
 end
+
+
+%% NN new input
+
+    rest = dataNN.rest;
+    sf = dataNN.sf;
+    rf = dataNN.rf;
+    dt = dataNN.dt;
+    dCylDp = dataNN.dCylDp;
+    ctrlStress = dataNN.ctrlStress;
+    shearperc = dataNN.shearperc;
+    
+    if isfield (dataNN, 'dens')
+        dens = dataNN.dens;
+        totalLength = length(rest)*length(sf)*length(rf)*length(dt)*length(dCylDp)*length(ctrlStress)*length(shearperc)*length(dens);
+        newInput=ones(totalLength,8);
+    else
+         totalLength = length(rest)*length(sf)*length(rf)*length(dt)*length(dCylDp)*length(ctrlStress)*length(shearperc);
+         newInput=ones(totalLength,7);
+        
+    end
+
+
+length1 = totalLength/length(rest);
+count1=0;
+count12=1;
+count13=1;
+for i=1:length1
+    newInput(1+count1:count1+length(rest),1)=rest;
+    
+    
+    newInput(1+count1:count1+length(rest),2)=sf(count12);
+    count12=count12+1;
+    if count12==(length(sf)+1)
+        count12=1;
+    end
+    
+
+    
+    count1 = count1 + length(rest);
+end
+count1=0;
+count12=1;
+count13=0;
+count14=1;
+
+for i=1:(length1/length(sf))
+    newInput(1+count13:count13+length(rest)*length(sf),3)=rf(count14);
+    count14=count14+1;
+    if count14==(length(rf)+1)
+        count14=1;
+    end
+    
+    count13 = count13 + length(rest)*length(sf);
+    
+
+end
+
+count15=0;
+count16=1;
+
+for i=1:(length1/length(sf)/length(rf))
+    newInput(1+count15:count15+length(rest)*length(sf)*length(rf),4)=dt(count16);
+    count16=count16+1;
+    if count16==(length(dt)+1)
+        count16=1;
+    end
+    
+    count15 = count15 + length(rest)*length(sf)*length(rf);
+    
+
+end
+
+count17=0;
+count18=1;
+
+for i=1:(length1/length(sf)/length(rf)/length(dt))
+    newInput(1+count17:count17+length(rest)*length(sf)*length(rf)*length(dt),5)=dCylDp(count18);
+    count18=count18+1;
+    if count18==(length(dCylDp)+1)
+        count18=1;
+    end
+    
+    count17 = count17 + length(rest)*length(sf)*length(rf)*length(dt);
+    
+
+end
+
+
+count19=0;
+count20=1;
+
+for i=1:(length1/length(sf)/length(rf)/length(dt)/length(dCylDp))
+    newInput(1+count19:count19+length(rest)*length(sf)*length(rf)*length(dt)*length(dCylDp),6)=ctrlStress(count20);
+    count20=count20+1;
+    if count20==(length(ctrlStress)+1)
+        count20=1;
+    end
+    
+    count19 = count19 + length(rest)*length(sf)*length(rf)*length(dt)*length(dCylDp);
+    
+
+end
+
+%shearperc
+count21=0;
+count22=1;
+
+for i=1:(length1/length(sf)/length(rf)/length(dt)/length(dCylDp)/length(ctrlStress))
+    newInput(1+count21:count21+length(rest)*length(sf)*length(rf)*length(dt)*length(dCylDp)*length(ctrlStress),7)=shearperc(count22);
+    count22=count22+1;
+    if count22==(length(shearperc)+1)
+        count22=1;
+    end
+    
+    count21 = count21 + length(rest)*length(sf)*length(rf)*length(dt)*length(dCylDp)*length(ctrlStress);
+    
+
+end
+
+if isfield (dataNN, 'dens')
+    count23=0;
+    count24=1;
+
+    for i=1:(length1/length(sf)/length(rf)/length(dt)/length(dCylDp)/length(ctrlStress)/length(shearperc))
+        newInput(1+count23:count23+length(rest)*length(sf)*length(rf)*length(dt)*length(dCylDp)*length(ctrlStress)*length(shearperc),8)=dens(count24);
+        count24=count24+1;
+        if count24==(length(dens)+1)
+            count24=1;
+        end
+
+        count23 = count23 + length(rest)*length(sf)*length(rf)*length(dt)*length(dCylDp)*length(ctrlStress)*length(shearperc);
+
+
+    end
+end
+
+newInput=newInput';
+
+[nIrows nIcolumn] = size(newInput);
+
+net1=NNSave{errorEstSumMaxIndex(1),1}.net;
+net2=NNSave{errorEstSumMaxIndex(2),2}.net;
+
+newInput(nIrows+1,:)=net1(newInput);
+newInput(nIrows+2,:)=net2(newInput);
+
+if isfield (dataNN, 'dens')
+    net3=NNSave{errorEstSumMaxIndex(3),3}.net;
+    newInput(nIrows+3,:)=net3(newInput);
+end
+
+
+
+
 return
 
+%% 
+% length2 = totalLength/length(sf);
+% count2=0;
+% for i=1:length2
+%     newInput(1+count2:count2+length(sf),2)=sf;
+%     count2 = count2 + length(sf);
+% end
+% 
+% length3 = totalLength/length(rf);
+% count3=0;
+% for i=1:length3
+%     newInput(1+count3:count3+length(rf),3)=rf;
+%     count3 = count3 + length(rf);
+% end
+% 
+% length4 = totalLength/length(dt);
+% count4=0;
+% for i=1:length4
+%     newInput(1+count4:count4+length(dt),4)=dt;
+%     count4 = count4 + length(dt);
+% end
+% 
+% length5 = totalLength/length(dCylDp);
+% count5=0;
+% for i=1:length5
+%     newInput(1+count5:count5+length(dCylDp),5)=dCylDp;
+%     count5 = count5 + length(dCylDp);
+% end
+% 
+% length6 = totalLength/length(ctrlStress);
+% count6=0;
+% for i=1:length6
+%     newInput(1+count6:count6+length(ctrlStress),6)=ctrlStress;
+%     count6 = count6 + length(ctrlStress);
+% end
+% 
+% length7 = totalLength/length(shearperc);
+% count7=0;
+% for i=1:length7
+%     newInput(1+count7:count7+length(shearperc),7)=shearperc;
+%     count7 = count7 + length(shearperc);
+% end
