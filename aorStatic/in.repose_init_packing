@@ -47,7 +47,7 @@ variable    radDist equal       3          # radius distribution (1 = (25%rad*0.
                                            # 3=discrete distribution with real values
 variable    dt      equal       1e-6            # time step width [s]
 
-variable    dCylDp  equal      20      # ratio cylinder diameter to particle diameter (optional loop)
+variable    dCylDp  equal      50      # ratio cylinder diameter to particle diameter (optional loop)
 variable    G_D_RATIO  equal       ${dCylDp}
 
 variable    accGrev equal       9.81            # acceleration due to gravity [m/s2]

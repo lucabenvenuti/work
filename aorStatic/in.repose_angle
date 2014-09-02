@@ -56,32 +56,12 @@ variable    G_D_RATIO  equal       ${dCylDp}
 
 variable    accGrev equal       9.81            # acceleration due to gravity [m/s2]
 
-processors  2 1 1
+processors  1 1 1
 
-variable    ratio   equal       0.0001    
-# defines the maximum wall velocity in the vicinity of particles (only for the 'auto' mode)
-# v_max = ratio*MIN(rad)/dt
-
-#variable    expDiam         equal   0.10415      # diam of shear cell [m]
-
-#########################################################################################
-#   DUMP COMMANDS ARE DISABLED. IF YOU NEED THEM UNCOMMENT THEM. SEARCH FOR 'MARKDUMP'  #
-#########################################################################################
-
-#########################################################################################
-#   IF YOU CHANGE ANYTHING BELOW THIS LINE, YOU MIGHT ADAPT THE POSTPROCESSING SCRIPT   #
-#########################################################################################
-
-#########################################################################################
-#                               internal settings - do not touch                        #
-#########################################################################################
-
+variable    ratio   equal       0.0001  
 #########################################################################################
 units		si
 #########################################################################################
-# geometry scaling, mass, number of timesteps, ...
-#variable    sVelWall        equal   3 # scale that defines the wall velocity (default = 3)
-#variable    velWall         equal   ${rad}*${sVelWall}
 
 # geometry scaling, mass, number of timesteps, ...
 variable    rad1            equal   0.99*${rad}
@@ -93,35 +73,12 @@ variable    skin            equal   0.50*${radR1}
 # radii for fractions
 variable    r0              equal        ${rad}
 
-#variable    cylDiameter     equal   ${dCylDp}*2*${rad} # 50 particle in cyl diameter
-#variable    cylRadius       equal   0.5*${cylDiameter} 
-#variable    cylArea         equal   0.25*${cylDiameter}*${cylDiameter}*PI
-
-#variable    desiredMass     equal   ${cylArea}*0.75*${cylDiameter}*0.65*${dens}
-variable    desiredVolumeFraction     equal   0.62
-#variable    ctrlStress      equal   -${accGrev}*${expMass}/(${expDiam}*${expDiam}*PI*0.25) 
-#variable    ctrlForce       equal   ${ctrlStress}*${cylArea}
-#variable    ctrlForcemain   equal   ${ctrlForce}*${shearperc}
-#variable    ctrlForceZero   equal   ${ctrlForce}*0.001
-
-#variable    bottomPos       equal   0.5*${cylRadius}
-variable    characteristicVelocity equal 0.1
-
-#variable    rmRegZPos       equal   1.5*${cylRadius}
-
-# dimensions of simulation domain
-#variable    nx  equal   -2.01*${cylRadius}    # neg. x-value .. bigger for motion
-#variable    px  equal    1.5*${cylRadius}     # pos. x-value
-#variable    ny  equal   -1.05*${cylRadius}    # neg. y-value
-#variable    py  equal    1.05*${cylRadius}    # pos. y-value
-#variable    nz  equal   -${rad}               # neg. z-value (just not 0.0)
-#variable    pz  equal    1.75*${cylRadius}
-
-
 # run & dump times
 variable    nDump           equal   round(1e-2/${dt})
 variable    nScreen         equal   round(1e-3/${dt})
 variable    nDumpForce      equal   round(1e-3/${dt})
+
+variable    characteristicVelocity equal 0.1
 
 #variable    nStepsSettle    equal   round(${pz}/(0.5*${velMax}*${dt}))
 #variable    nStepsRun       equal   round(0.5*0.375*${cylRadius}/(${velWall}*${dt}))
@@ -137,7 +94,6 @@ variable	thermofreq   equal round(0.001/${dt})
 variable	nstep        equal round(${totaltime}/${dt}) #2000000
 variable	deletefreq   equal round(0.1/${dt}) #10000
 
-
 #########################################################################################
 #rolling friction options
 
@@ -151,6 +107,7 @@ else &
   "variable    rolfrtyp string	epsd2" 
 #########################################################################################
 
+
 # create directories
 shell   mkdir logs
 shell   mkdir restart
@@ -162,7 +119,7 @@ shell	mkdir post_param
 
 
 # writing log file to post folder
-log     logs/log.repose_rad${rad}_dcyldp${dCylDp}_mu${fric}_rf${rf}_dt${dt}.txt
+log     logs/log.reposeAngle_rad${rad}_dcyldp${dCylDp}_mu${fric}_rf${rf}_dt${dt}.txt
 
 atom_style	granular
 atom_modify	map array
@@ -171,11 +128,9 @@ newton      off
 
 communicate	single vel yes
 
-# load simulation domain, particles, ...
-read_restart	./restart/restart.repose_rad${rad}_dcyldp${dCylDp}
+read_restart	restart/repose_loop_${fileID}.restart
 
-neighbor	    ${skin} bin
-neigh_modify	delay 0
+
 
 #Material properties required for new pair styles
 fix     m1 all property/global youngsModulus peratomtype ${ym} ${ym}
@@ -211,42 +166,29 @@ else &
 # calculate maximum diameter in simulation
 fix		maxdiam all diam/max
 variable	maxdiam equal f_maxdiam
-print		"max diameter in sim: ${maxdiam}"
+
 variable	dx_relax equal ${maxdiam}/20.
 # scaling factor for mesh
 variable    scale equal ${G_D_RATIO}*${maxdiam}/1.5
 
 variable	dcyl equal ${G_D_RATIO}*${maxdiam}
 
-# upward velocity of cylinder
-variable	vup equal (1.2*${dcyl})/(${dt}*${nstep})
-
-# pair style
-#pair_style 	gran model hertz tangential history rolling_friction ${rolfrtyp}
-pair_style 	gran model hooke
+pair_style 	gran model hertz tangential history rolling_friction ${rolfrtyp}
 pair_coeff	* *
-#pair_style	${pairStyle} rolling_friction ${pairStyleRollingFriction} cohesion ${pairStyleCohesion} tangential_damping ${pairStyleDamping} # viscous ${pairStyleViscous}
-#pair_coeff	* *
 
-#Timestep
+# time-step and gravity
+
 timestep	${dt}
-
 #Gravity
 fix		gravi all gravity ${accGrev} vector 0.0 0.0 -1.0
-
-
-
-# region and insertion
-#variable rcyl equal ${G_D_RATIO}*${maxdiam}*0.9/2.
-#variable hcyl equal 8./13.*${G_D_RATIO}*${maxdiam}
 
 # meshes
 fix		cad1 all mesh/surface file meshes/ground.stl type 1 scale ${scale}
 fix		cad2 all mesh/surface file meshes/cylinder.stl type 1 scale ${scale}
 
 # use the imported meshes as granular wall
-fix		granwalls all wall/gran model hooke mesh n_meshes 2 meshes cad1 cad2
-fix		topwall all wall/gran model hooke primitive type 1 zplane 1.0
+#fix		granwalls all wall/gran model hooke mesh n_meshes 2 meshes cad1 cad2
+#fix		topwall all wall/gran model hooke primitive type 1 zplane 1.0
 
 #apply nve integration to all particles that are inserted as single particles
 fix		integr all nve/sphere
@@ -268,69 +210,26 @@ thermo_modify	lost ignore norm no
 compute_modify	thermo_temp dynamic yes
 
 # dump
-dump		dumpstl all stl ${dumpfreq} post_param/stldump_${rf}_*.stl
-dump		dmp all custom ${dumpfreq} post_param/dump_${rf}_*.fill id type x y z ix iy iz vx vy vz fx fy fz omegax omegay omegaz radius
+#dump		dumpstl all stl ${dumpfreq} post_param/stldump_${rf}_*.stl
+#dump		dmp all custom ${dumpfreq} post_param/dump_${rf}_*.fill id type x y z ix iy iz vx vy vz fx fy fz omegax omegay omegaz radius
 
-### print a csv file with all the parameteres #2gauss
-if "${radDist} == 2" then                            &
-  "fix csv all print 1 '${rad}, ${dens}, ${ym}, ${pr}, ${rest}, ${fric}, ${rf}, ${dt}, ${dCylDp}, ${totaltime}, ${fileID}, &
-		${rolfrtypnum}, ${nStepsSettle}, ${uniSys}, ${radDist}, ${radmu}, ${radsigma}' &
-		file ./results/sim_parAOR_fid${fileID}.csv &
-		title 'rad, dens, ym, pr, rest, fric, rf, dt, dCylDp, totaltime, fileID, rolfrtypnum, nStepsSettle, uniSys, radDist, radmu, radsigma'" &
-elif "${radDist} == 3" &
-"fix csv all print 1 '${rad}, ${dens}, ${ym}, ${pr}, ${rest}, ${fric}, ${rf}, ${dt}, ${dCylDp}, ${totaltime}, ${fileID}, &
-		${rolfrtypnum}, ${nStepsSettle}, ${uniSys}, ${radDist}, ${radmu}, ${radsigma}, ${radR1}, ${radPerc1}, ${radR2}, ${radPerc2}, ${radR3}, ${radPerc3}, &
-        ${radR4}, ${radPerc4}, ${radR5}, ${radPerc5}, ${radR6}, ${radPerc6}' &
-		file ./results/sim_parAOR_fid${fileID}.csv &
-		title 'rad, dens, ym, pr, rest, fric, rf, dt, dCylDp, totaltime, fileID, rolfrtypnum, nStepsSettle, uniSys, radDist, radmu, radsigma, &
-        radR1, radPerc1, radR2, radPerc2, radR3, radPerc3, radR4, radPerc4, radR5, radPerc5, radR6, radPerc6'" &
-else &
-  "fix csv all print 1 '${rad}, ${dens}, ${ym}, ${pr}, ${rest}, ${fric}, ${rf}, ${dt}, ${dCylDp}, ${ctrlStress}, ${expDiam}, ${expMass}, ${shearperc}, ${totaltime}, ${fileID}, &
-		${rolfrtypnum}, ${nStepsSettle}, ${uniSys}, ${shearCellType}, ${radDist}' &
-		file ./results/sim_parAOR_fid${fileID}.csv &
-		title 'rad, dens, ym, pr, rest, fric, rf, dt, dCylDp, totaltime, fileID, rolfrtypnum, nStepsSettle, uniSys, radDist'" 
-
-# run 1 step to perform restart with hooke, then change interaction
-run		1
-unfix		granwalls
-unfix		topwall
-unfix csv
 pair_style	gran model hertz rolling_friction ${rolfrtyp} #cohesion ${pairStyleCohesion} tangential_damping ${pairStyleDamping} # viscous ${pairStyleViscous}
 pair_coeff	* *
-#fix		    granwalls all wall/${pairStyle} rolling_friction ${pairStyleRollingFriction} mesh n_meshes 2 meshes cad1 cad2
-fix		    granwalls all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} mesh n_meshes 2 meshes cad1 cad2
 
-# let particles settle
-run		${nStepsSettle}
 
-# lift cylinder
-fix		movecad2 all move/mesh mesh cad2 linear 0. 0. ${vup}
-run		${nstep} upto every ${deletefreq} "delete_atoms region lower"
-
-write_restart	restart/repose_loop_${fileID}.restart
 
 # evaluate convex hull
-#variable	n_cuts equal 2.*${G_D_RATIO}
-#variable	cut_thickness equal ${maxdiam}/2.
-#compute		chull all crosssection skin ${skin} dim z min ${r0} max ${dcyl}  n_cuts ${n_cuts}  cut_thickness ${cut_thickness} file ./results/area_fid${fileID}.txt
+variable	n_cuts equal 2.*${G_D_RATIO}
+variable	cut_thickness equal ${maxdiam}/2.
+compute		chull all crosssection skin ${skin} dim z min ${r0} max ${dcyl}  n_cuts ${n_cuts}  cut_thickness ${cut_thickness} file results/area_${fileID}.txt
 
 # measure angle
-#variable	i equal ${n_cuts}+1
-#variable	c equal c_chull[$i]
-#fix		pr all print 1 "$c" screen no file ./results/angle_fid${fileID}.txt title ${rf}
-#run		1
+variable	i equal ${n_cuts}+1
+variable	c equal c_chull[$i]
+fix		pr all print 1 "$c" screen no file results/angle_${fileID} title ${fileID}
+run		1
 
-variable fileID equal ${fileID}+1
+#next		a corf
+#clear
+#jump		template/repose/in.repose_param_angle
 
-# loop
-clear
-next     fric
-jump     SELF loopiteration
-variable fric delete
-
-next     rf
-jump     SELF loopiteration
-variable rf delete
-
-next     rest
-jump     SELF loopiteration
