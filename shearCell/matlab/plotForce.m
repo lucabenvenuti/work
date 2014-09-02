@@ -52,7 +52,7 @@ col_numCol = 12;
 col_numBox = 13;
 
 % experimental data
-exp_flag = false; % enable the comparision to experimental data
+exp_flag = true; % enable the comparision to experimental data
 exp_dir = '.'; % directory, where the files can be found
 legendExpFlag = 'schulze'; % choose between jenike & schulze
 
@@ -94,14 +94,14 @@ saveDir = './images';
 fracPart = 0.6; % particle fraction for the calculation of the bulk density %0.6 is correct
 fracColMass = 1.0; %0.12;
 
-manualPlateauFlag = true;
+manualPlateauFlag = false;
 %doImage
 imageFlag = ~manualPlateauFlag; % "~" gives the opposite of the boolean
 
 startPlateauPreShearValue = .25;%.38;
-stopPlateauPreShearValue = .45;%.48;
+stopPlateauPreShearValue = .35;%.48;
 startPlateauShearValue = .75;%.80;
-stopPlateauShearValue = .95;%.98;
+stopPlateauShearValue = .85;%.98;
 
 
 % TEST: shift experimental data
@@ -994,7 +994,7 @@ if (exp_flag)
                     jjj=1;
                     ii=1;
                     for ii=1:nSimCases
-                        if (data(ii).ctrlStress*-1*.95 < expOut.sigmaAnM <data(1).ctrlStress*-1*1.05)
+                        if (data(ii).ctrlStress*-1*.95 < expOut.sigmaAnM <data(ii).ctrlStress*-1*1.05)
                             
                             switch data(ii).shearperc
                                 case 0.4
@@ -1334,23 +1334,227 @@ if (NNFlag)
     %     trainr    - Random order weight/bias training.
     %     trains    - Sequential order weight/bias training.
     addpath('/mnt/DATA/liggghts/work/shearCell/matlab');
+    
+    
+    dataNN2.rest=[0.5:0.05:0.9];
+    dataNN2.sf=[0.05:0.05:1];
+    dataNN2.rf=[0.05:0.05:1];
+    dataNN2.dt= 1e-7; %[1e-7:1e-7:1e-6];
+    dataNN2.dCylDp= 50;%[20:1:50];
+    dataNN2.ctrlStress = 1068;% [1068,2069,10070];
+    dataNN2.shearperc = [0.4:0.2:1.0];
+    
     if (exist('densityBulkBoxMean'))
         %targetNN(iijj,3)=densityBulkBoxMean(iijj);
-        [NNSave2, errorNN2, x2, zz2, errorEstSum2, errorEstIndex2, errorEstSumMaxIndex2, yy2, corrMat2] =   myNeuNetFun(nSimCases,data,trainFcn,hiddenLayerSizeVector, avgMuR2,avgMuR1, densityBulkBoxMean);
+        
+        dataNN2.dens = [2500:100:3500];
+        
+        [NNSave2, errorNN2, x2, zz2, errorEstSum2, errorEstIndex2, errorEstSumMaxIndex2, yy2, corrMat2, newY2] =   myNeuNetFun(nSimCases,data,trainFcn,hiddenLayerSizeVector, dataNN2, avgMuR2,avgMuR1, densityBulkBoxMean);
+        avgMuR2Pos = 9;
+        avgMuR1Pos = 10;
+        densityBulkBoxMeanPos = 11;
     else
-        [NNSave2, errorNN2, x2, zz2, errorEstSum2, errorEstIndex2, errorEstSumMaxIndex2, yy2, corrMat2] =   myNeuNetFun(nSimCases,data,trainFcn,hiddenLayerSizeVector,avgMuR2,avgMuR1);
+        [NNSave2, errorNN2, x2, zz2, errorEstSum2, errorEstIndex2, errorEstSumMaxIndex2, yy2, corrMat2, newY2] =   myNeuNetFun(nSimCases,data,trainFcn,hiddenLayerSizeVector, dataNN2, avgMuR2,avgMuR1);
+        avgMuR2Pos = 8;
+        avgMuR1Pos = 9;
     end
     
     %myNeuNetFun(nSimCases,data
         net=NNSave2{errorEstSumMaxIndex2(1),1}.net;
-        yy3=net(x2);
-        yy4(1,1,:)=yy3;
+        %yy3=net(x2);
+        %yy4(1,1,:)=yy3;
         %yy4-yy2(errorEstSumMaxIndex2,:,:) this should be zero
-        net=NNSave2{errorEstSumMaxIndex2(2),2}.net;
-        yy5=net(x2);
-        yy6(1,2,:)=yy5;
+        net2=NNSave2{errorEstSumMaxIndex2(2),2}.net;
+        %yy5=net(x2);
+        %yy6(1,2,:)=yy5;
+        
+[nY2rows,nY2column] = size(newY2);
+
+%% experimental confrontation 2
+if (exp_flag)
+    switch legendExpFlag
+         case 'schulze' 
+            jjj=1;
+            ii=1;
+             for ii=1:nY2column
+                        if (dataNN2.ctrlStress*1*.95 < expOut.sigmaAnM <dataNN2.ctrlStress*1*1.05)
+                            
+                            switch newY2(7,ii) %.shearperc %data(ii).shearperc
+                                case 0.4
+                                    newY2(nY2rows+1,ii) = newY2(avgMuR2Pos,ii)/coeffShear40; %   %data(ii).ratioShear = avgMuR2(ii)/...
+                                    newY2(nY2rows+2,ii) =  newY2(avgMuR1Pos,ii)/expOut.coeffPreShear40 ;   %  data(ii).ratioPreShear  = avgMuR1(ii)/expOut.coeffPreShear40;
+                                    newY2(nY2rows+3,ii) = expInp.tauAb40; %data(ii).tauAb = expInp.tauAb40;
+                                    newY2(nY2rows+4,ii) = expOut.sigmaAb40; %data(ii).sigmaAb
+                                    newY2(nY2rows+5,ii) = coeffShear40; %data(ii).coeffShear
+                                    newY2(nY2rows+6,ii) = expOut.tauAbPr40; %data(ii).tauAbPr
+                                    newY2(nY2rows+7,ii) = expOut.coeffPreShear40; %data(ii).coeffPreShear 
+                                                                        
+                                case 0.6
+%                                     data(ii).ratioShear = avgMuR2(ii)/coeffShear60;
+%                                     data(ii).ratioPreShear = avgMuR1(ii)/expOut.coeffPreShear60;
+%                                     data(ii).tauAb = expInp.tauAb60;
+%                                     data(ii).sigmaAb = expOut.sigmaAb60;
+%                                     data(ii).coeffShear = coeffShear60;
+%                                     data(ii).tauAbPr = expOut.tauAbPr60;
+%                                     data(ii).coeffPreShear = expOut.coeffPreShear60;
+                                    newY2(nY2rows+1,ii) = newY2(avgMuR2Pos,ii)/coeffShear60; 
+                                    newY2(nY2rows+2,ii) =  newY2(avgMuR1Pos,ii)/expOut.coeffPreShear60 ;  
+                                    newY2(nY2rows+3,ii) = expInp.tauAb60; 
+                                    newY2(nY2rows+4,ii) = expOut.sigmaAb60; 
+                                    newY2(nY2rows+5,ii) = coeffShear60;
+                                    newY2(nY2rows+6,ii) = expOut.tauAbPr60; 
+                                    newY2(nY2rows+7,ii) = expOut.coeffPreShear60; 
+                                    
+                                case 0.8
+%                                     data(ii).ratioShear = avgMuR2(ii)/coeffShear80;
+%                                     data(ii).ratioPreShear = avgMuR1(ii)/expOut.coeffPreShear80;
+%                                     data(ii).tauAb = expInp.tauAb80;
+%                                     data(ii).sigmaAb = expOut.sigmaAb80;
+%                                     data(ii).coeffShear = coeffShear80;
+%                                     data(ii).tauAbPr = expOut.tauAbPr80;
+%                                     data(ii).coeffPreShear = expOut.coeffPreShear80;
+                                    newY2(nY2rows+1,ii) = newY2(avgMuR2Pos,ii)/coeffShear80; 
+                                    newY2(nY2rows+2,ii) =  newY2(avgMuR1Pos,ii)/expOut.coeffPreShear80 ;  
+                                    newY2(nY2rows+3,ii) = expInp.tauAb80; 
+                                    newY2(nY2rows+4,ii) = expOut.sigmaAb80; 
+                                    newY2(nY2rows+5,ii) = coeffShear80;
+                                    newY2(nY2rows+6,ii) = expOut.tauAbPr80; 
+                                    newY2(nY2rows+7,ii) = expOut.coeffPreShear80; 
+                                    
+                                    
+                                case 1.0
+%                                     data(ii).ratioShear = avgMuR2(ii)/coeffShear100;
+%                                     data(ii).ratioPreShear = avgMuR1(ii)/expOut.coeffPreShear100;
+%                                     data(ii).tauAb = expInp.tauAb100;
+%                                     data(ii).sigmaAb = expOut.sigmaAb100;
+%                                     data(ii).coeffShear = coeffShear100;
+%                                     data(ii).tauAbPr = expOut.tauAbPr100;
+%                                     data(ii).coeffPreShear = expOut.coeffPreShear100;
+                                    newY2(nY2rows+1,ii) = newY2(avgMuR2Pos,ii)/coeffShear100; 
+                                    newY2(nY2rows+2,ii) =  newY2(avgMuR1Pos,ii)/expOut.coeffPreShear100 ;  
+                                    newY2(nY2rows+3,ii) = expOut.tauAbPr100; %expInp.tauAb100; 
+                                    newY2(nY2rows+4,ii) = expOut.sigmaAnM;% expOut.sigmaAb100; 
+                                    newY2(nY2rows+5,ii) = coeffShear100;
+                                    newY2(nY2rows+6,ii) = expOut.tauAbPr100; 
+                                    newY2(nY2rows+7,ii) = expOut.coeffPreShear100; 
+                                    
+                            end
+                            
+                            %data(ii).deltaRatioShear = abs(1-data(ii).ratioShear);
+                            newY2(nY2rows+8,ii) =  abs(1- newY2(nY2rows+1,ii));
+                            %data(ii).deltaRatioPreShear = abs(1-data(ii).ratioPreShear);
+                            newY2(nY2rows+9,ii) =  abs(1- newY2(nY2rows+2,ii));
+                            
+                           if ((newY2(nY2rows+8,ii)<0.1) & (newY2(nY2rows+9,ii)<0.1)) %((data(ii).deltaRatioShear<0.05) & (data(ii).deltaRatioPreShear<0.05))
+                                gloriaAugustaSchulzeNN(1,jjj) = ii;
+                                gloriaAugustaSchulzeNN(2:(nY2rows+10), jjj) = newY2(1:end,ii) ;%avgMuR1(ii);
+%                                 gloriaAugustaSchulze{jjj,3} = avgMuR2(ii);
+%                                 gloriaAugustaSchulze{jjj,4} = data(ii).tauAb;
+%                                 gloriaAugustaSchulze{jjj,5} = data(ii).sigmaAb;
+%                                 gloriaAugustaSchulze{jjj,6} = data(ii).coeffShear;
+%                                 gloriaAugustaSchulze{jjj,7} = data(ii).ratioShear;
+%                                 gloriaAugustaSchulze{jjj,8} = data(ii).deltaRatioShear;
+%                                 gloriaAugustaSchulze{jjj,9} = data(ii).tauAbPr;
+%                                 gloriaAugustaSchulze{jjj,10} = data(ii).coeffPreShear;
+%                                 gloriaAugustaSchulze{jjj,11} = data(ii).ratioPreShear;
+%                                 gloriaAugustaSchulze{jjj,12} = data(ii).deltaRatioPreShear;
+                                jjj=jjj+1;
+                           end
+                        end
+                    end
+                [gASSNNrows,gASSNNcolumns] = size(gloriaAugustaSchulzeNN);
+                best = find(gloriaAugustaSchulzeNN(8,:)==0.4);
+                %jjkk=1; %z
+                win = zeros(length(best),1);
+                for jjj=1:length(best)
+%                     best2 = find(gloriaAugustaSchulzeNN(2,:)==gloriaAugustaSchulzeNN(2,best(jjj)));
+%                     best3 = find(gloriaAugustaSchulzeNN(3,:)==gloriaAugustaSchulzeNN(3,best(jjj)));
+%                     best4 = find(gloriaAugustaSchulzeNN(4,:)==gloriaAugustaSchulzeNN(4,best(jjj)));
+%                     [Lia,Lib] = ismember(best2,best3);
+%                     mmnn=1;
+%                     for i=1:length(Lib)
+%                         if Lib(i) ~= 0
+%                             best5(mmnn)=Lib(i);
+%                             mmnn=mmnn+1;
+%                         end
+%                     end
+%                     
+%                     best6=(best2(best5));
+%                     [Lic,Lid] = ismember(best6,best4);
+%                     
+%                     mmnn=1;
+%                     for i=1:length(Lid)
+%                         if Lid(i) ~= 0
+%                             best7(jjj,mmnn)=Lid(i);
+%                             mmnn=mmnn+1;
+%                         end
+%                     end
+                    for jjll=1:gASSNNcolumns 
+                        
+                        if ...%gloriaAugustaSchulzeNN(2,jjll)==gloriaAugustaSchulzeNN(2,best(jjj)) ...&
+                                 gloriaAugustaSchulzeNN(3,jjll)==gloriaAugustaSchulzeNN(3,best(jjj)) ...
+                            & gloriaAugustaSchulzeNN(4,jjll)==gloriaAugustaSchulzeNN(4,best(jjj))
+                            switch gloriaAugustaSchulzeNN(8,jjll)
+                                    case 0.6
+                                        win(jjj)=1;
+                                    case 0.8
+                                        if win(jjj)==1
+                                        win(jjj)=win(jjj)+1;
+                                        else
+                                             win(jjj)=1;
+                                        end
+                                    case 1.0   
+                                        if win(jjj)==2
+                                        win(jjj)=win(jjj)+1;
+                                        elseif win(jjj)==1
+                                             win(jjj)=2;
+                                        else
+                                            win(jjj)=1;
+                                        end
+                            end  
+                           % gloria2(jjj,jjkk)=jjll;
+                           % jjkk=jjkk+1;
+                        end
+%                        gloriaAugustaSchulzeNN(3,best(jjj))
+%                        gloriaAugustaSchulzeNN(4,best(jjj))
+                    end
+                end
+                
+                gloriaWin(1,:) = gloriaAugustaSchulzeNN(2,[best(find(win==3))]);
+                gloriaWin(2,:) = gloriaAugustaSchulzeNN(3,[best(find(win==3))]);
+                gloriaWin(3,:) = gloriaAugustaSchulzeNN(4,[best(find(win==3))]);
+             
+    end
+     
+    
+
+     
+end
+ 
 
 end
+% 
+% find(gloriaAugustaSchulzeNN(2,:)==0.9);
+% find(gloriaAugustaSchulzeNN(2,:)==0.9)
+% aa=find(gloriaAugustaSchulzeNN(2,:)==0.9);
+% bb=find(gloriaAugustaSchulzeNN(3,:)==1);
+% cc=find(gloriaAugustaSchulzeNN(4,:)==.1);
+% Lia = ismember(aa,bb)
+% Lia = ismember(aa,bb,cc)
+% [Lia,Lib] = ismember(aa,bb,cc)
+% [Lia,Lib] = ismember(aa,bb)
+% for i=1:length(Lib)
+% if Lib(i) ~= 0
+% mmnn=1;
+% for i=1:length(Lib)
+% if Lib(i) ~= 0
+% dd(mmnn)=Lib(i)
+% mmnn=mmnn+1;
+% end
+% end
+% ee=(aa(dd))
+% [Lic,Lid] = ismember(ee,cc)
+% cc
 
 %% save matlab data
 i=1;
