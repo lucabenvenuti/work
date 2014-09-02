@@ -28,8 +28,9 @@ for iijj=1:nSimCases2
     
     
     if (exist('target3'))
-        aa=length(inputNN(iijj,:));
-        inputNN(iijj,aa)=data2(iijj).dens;
+        aa=7;
+        %length(inputNN(iijj,:))
+        inputNN(iijj,aa+1)=data2(iijj).dens;
         targetNN(iijj,3) = target3(iijj);
     end
     
@@ -67,6 +68,8 @@ hiddenLayerSizeVectorLength = length(hiddenLayerSizeVector2);
 
 x = inputNN';
 zz = targetNN';
+% size(x)
+% size(zz)
 
 if length(x)>1000
     parallel = 'yes';
@@ -167,8 +170,14 @@ for llmm=1:columnTargetNN
 end
 kkkk=1;
 kkjj=1;
-for kkkk=1:4:(hiddenLayerSizeVectorLength*4)
-    errorEstSumIn(kkjj) = sum([errorNN(kkkk:(kkkk+3)).errorEstIn]);
+% for kkkk=1:4:(hiddenLayerSizeVectorLength*4)
+%     errorEstSumIn(kkjj) = sum([errorNN(kkkk:(kkkk+3)).errorEstIn]);
+%     %errorEstSum(kkjj)=sum(errorEst(i:i+3));
+%     kkjj=kkjj+1;
+% end
+
+for kkkk=4:4:(hiddenLayerSizeVectorLength*4)
+    errorEstSumIn(kkjj) = errorNN(kkkk).r2(llmm);
     %errorEstSum(kkjj)=sum(errorEst(i:i+3));
     kkjj=kkjj+1;
 end
@@ -180,6 +189,7 @@ errorEstSum(:,llmm)= errorEstSumIn(:);
 errorEstIndex(llmm) = errorEstSumMaxIndex(llmm)*4-3;
 disp(['#Neuron = ',num2str(errorNN(errorEstIndex(llmm)).neuronNumber(llmm)), ' ; transferFcn = ', num2str(net.layers{:}.transferFcn), ' ; trainFcn2 = ', trainFcn2,...
     ' ; R2tot = ', num2str(errorNN(errorEstIndex(llmm)).r2(llmm)), ' ; meanSquareErrorTot = ', num2str(errorNN(errorEstIndex(llmm)).mse(llmm)),...
+     ' ; R2test = ', num2str(errorNN(errorEstIndex(llmm)+3).r2(llmm)), ...
 ' ; meanAbsoluteErrorTot = ', num2str(errorNN(errorEstIndex(llmm)).mae(llmm)),...
 ' ; R2Regression = ', num2str(NNSave{errorEstSumMaxIndex(llmm),llmm}.r),  ' ; mRegression = ', num2str(NNSave{errorEstSumMaxIndex(llmm),llmm}.m), ...
 ' ; bRegression = ', num2str(NNSave{errorEstSumMaxIndex(llmm),llmm}.b)]);
@@ -190,6 +200,7 @@ disp(['#Neuron = ',num2str(errorNN(errorEstIndex(llmm)).neuronNumber(llmm)), ' ;
      %8     3
 %NNSave2{3,l}.r, NNSave2{3,2}.m, NNSave2{3,2}.b
 
+figure(llmm)
 plotregression(z,yy(errorEstSumMaxIndex(llmm),:),'Regression');
 
 end
@@ -336,13 +347,13 @@ newInput=newInput';
 
 net1=NNSave{errorEstSumMaxIndex(1),1}.net;
 net2=NNSave{errorEstSumMaxIndex(2),2}.net;
-
+% 
 newInput(nIrows+1,:)=net1(newInput);
-newInput(nIrows+2,:)=net2(newInput);
-
+newInput(nIrows+2,:)=net2(newInput(1:nIrows,:));
+% 
 if isfield (dataNN, 'dens')
     net3=NNSave{errorEstSumMaxIndex(3),3}.net;
-    newInput(nIrows+3,:)=net3(newInput);
+    newInput(nIrows+3,:)=net3(newInput(1:nIrows,:));
 end
 
 

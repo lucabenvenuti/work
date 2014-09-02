@@ -24,7 +24,7 @@ set(0,'DefaultTextFontSize',12);
 unitSysDefault = 'si';  % 'si' or 'cgs'
 
 % select files that should be postprocessed
-sim_dir = '../results/10/sim118_sinterfine_reducedPolydispersity'; % directory, where simulation files can be found
+sim_dir = '../results/10/sim119_sinterfine_reducedPolydispersity_mach'; % directory, where simulation files can be found
 filepattern = 'force.cad*_fid*.txt'; % e.g. 'force.*.txt' %Andi
 filepatterncsv = 'sim_par*_fid*.csv'; % e.g. 'force.*.txt' %Andi
 
@@ -81,7 +81,7 @@ dCylDpConfrontationFlag2 = false;
 
 %doNN
 NNFlag = true;
-hiddenLayerSizeVector = 5:14;
+hiddenLayerSizeVector = [5:34];
 
 % save images
 saveFlag = false;
@@ -1028,7 +1028,7 @@ if (exp_flag)
                                 case 1.0
                                     data(ii).ratioShear = avgMuR2(ii)/coeffShear100;
                                     data(ii).ratioPreShear = avgMuR1(ii)/expOut.coeffPreShear100;
-                                    data(ii).tauAb = expInp.tauAb100;
+                                    data(ii).tauAb = expOut.tauAbPr100;
                                     data(ii).sigmaAb = expOut.sigmaAb100;
                                     data(ii).coeffShear = coeffShear100;
                                     data(ii).tauAbPr = expOut.tauAbPr100;
@@ -1337,8 +1337,8 @@ if (NNFlag)
     
     
     dataNN2.rest=[0.5:0.1:0.9];
-    dataNN2.sf=[0.1:0.1:1];
-    dataNN2.rf=[0.1:0.1:1];
+    dataNN2.sf=[0.05:0.05:1];
+    dataNN2.rf=[0.05:0.05:1];
     dataNN2.dt= 1e-7; %[1e-7:1e-7:1e-6];
     dataNN2.dCylDp= 50;%[20:1:50];
     dataNN2.ctrlStress = 1068;% [1068,2069,10070];
@@ -1347,7 +1347,7 @@ if (NNFlag)
     if (exist('densityBulkBoxMean'))
         %targetNN(iijj,3)=densityBulkBoxMean(iijj);
         
-        dataNN2.dens = [2000:250:3500];
+        dataNN2.dens = [2000:100:3500];
         densTolerance =1.2;
         [NNSave2, errorNN2, x2, zz2, errorEstSum2, errorEstIndex2, errorEstSumMaxIndex2, yy2, corrMat2, newY2] =   myNeuNetFun(nSimCases,data,trainFcn,hiddenLayerSizeVector, dataNN2, avgMuR2,avgMuR1, densityBulkBoxMean);
         avgMuR2Pos = 9;
@@ -1464,7 +1464,7 @@ if (exp_flag)
                             %nY2rowsTris = length(newY2(:,ii));
                             
                             
-                            if (exist('densityBulkBoxMean') &  (newY2(nY2rowsBis+1,ii)<0.1) & (newY2(nY2rowsBis+2,ii)<0.1) &   (newY2(densityBulkBoxMeanPos,ii)<newY2(nY2rowsBis+4,ii)*densTolerance)  &  (newY2(densityBulkBoxMeanPos,ii)>newY2(nY2rowsBis+5,ii)) )
+                            if (exist('densityBulkBoxMean') &  (newY2(nY2rowsBis+1,ii)<0.05) & (newY2(nY2rowsBis+2,ii)<0.05) &   (newY2(densityBulkBoxMeanPos,ii)<newY2(nY2rowsBis+4,ii)*densTolerance)  &  (newY2(densityBulkBoxMeanPos,ii)>newY2(nY2rowsBis+5,ii)) )
                                 gloriaAugustaSchulzeNN(1,jjj) = ii;
                                 gloriaAugustaSchulzeNN(2:(nY2rowsTris+1), jjj) = newY2(1:end,ii) ;%avgMuR1(ii);  
                                 gloriaAugustaSchulzeNN(nY2rowsTris+2, jjj) = 1;
