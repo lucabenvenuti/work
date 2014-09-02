@@ -1336,9 +1336,9 @@ if (NNFlag)
     addpath('/mnt/DATA/liggghts/work/shearCell/matlab');
     
     
-    dataNN2.rest=[0.5:0.05:0.9];
-    dataNN2.sf=[0.05:0.05:1];
-    dataNN2.rf=[0.05:0.05:1];
+    dataNN2.rest=[0.5:0.1:0.9];
+    dataNN2.sf=[0.1:0.1:1];
+    dataNN2.rf=[0.1:0.1:1];
     dataNN2.dt= 1e-7; %[1e-7:1e-7:1e-6];
     dataNN2.dCylDp= 50;%[20:1:50];
     dataNN2.ctrlStress = 1068;% [1068,2069,10070];
@@ -1347,8 +1347,8 @@ if (NNFlag)
     if (exist('densityBulkBoxMean'))
         %targetNN(iijj,3)=densityBulkBoxMean(iijj);
         
-        dataNN2.dens = [2500:100:3500];
-        
+        dataNN2.dens = [2000:250:3500];
+        densTolerance =1.2;
         [NNSave2, errorNN2, x2, zz2, errorEstSum2, errorEstIndex2, errorEstSumMaxIndex2, yy2, corrMat2, newY2] =   myNeuNetFun(nSimCases,data,trainFcn,hiddenLayerSizeVector, dataNN2, avgMuR2,avgMuR1, densityBulkBoxMean);
         avgMuR2Pos = 9;
         avgMuR1Pos = 10;
@@ -1388,7 +1388,8 @@ if (exp_flag)
                                     newY2(nY2rows+5,ii) = coeffShear40; %data(ii).coeffShear
                                     newY2(nY2rows+6,ii) = expOut.tauAbPr40; %data(ii).tauAbPr
                                     newY2(nY2rows+7,ii) = expOut.coeffPreShear40; %data(ii).coeffPreShear 
-                                                                        
+                                    newY2(nY2rows+8,ii) = expOut.rhoB40;
+                                    
                                 case 0.6
 %                                     data(ii).ratioShear = avgMuR2(ii)/coeffShear60;
 %                                     data(ii).ratioPreShear = avgMuR1(ii)/expOut.coeffPreShear60;
@@ -1404,6 +1405,7 @@ if (exp_flag)
                                     newY2(nY2rows+5,ii) = coeffShear60;
                                     newY2(nY2rows+6,ii) = expOut.tauAbPr60; 
                                     newY2(nY2rows+7,ii) = expOut.coeffPreShear60; 
+                                    newY2(nY2rows+8,ii) = expOut.rhoB60;
                                     
                                 case 0.8
 %                                     data(ii).ratioShear = avgMuR2(ii)/coeffShear80;
@@ -1420,7 +1422,7 @@ if (exp_flag)
                                     newY2(nY2rows+5,ii) = coeffShear80;
                                     newY2(nY2rows+6,ii) = expOut.tauAbPr80; 
                                     newY2(nY2rows+7,ii) = expOut.coeffPreShear80; 
-                                    
+                                    newY2(nY2rows+8,ii) = expOut.rhoB80;
                                     
                                 case 1.0
 %                                     data(ii).ratioShear = avgMuR2(ii)/coeffShear100;
@@ -1437,17 +1439,39 @@ if (exp_flag)
                                     newY2(nY2rows+5,ii) = coeffShear100;
                                     newY2(nY2rows+6,ii) = expOut.tauAbPr100; 
                                     newY2(nY2rows+7,ii) = expOut.coeffPreShear100; 
-                                    
+                                    newY2(nY2rows+8,ii) = expOut.rhoBAnM;
                             end
                             
+                            if (exist('densityBulkBoxMean'))
+                                nY2rowsBis = nY2rows+8;
+                            else
+                                nY2rowsBis = nY2rows+7;
+                            end
+                            %nY2rowsBis = length(newY2(:,ii));
                             %data(ii).deltaRatioShear = abs(1-data(ii).ratioShear);
-                            newY2(nY2rows+8,ii) =  abs(1- newY2(nY2rows+1,ii));
+                            newY2(nY2rowsBis+1,ii) =  abs(1- newY2(nY2rows+1,ii));
                             %data(ii).deltaRatioPreShear = abs(1-data(ii).ratioPreShear);
-                            newY2(nY2rows+9,ii) =  abs(1- newY2(nY2rows+2,ii));
+                            newY2(nY2rowsBis+2,ii) =  abs(1- newY2(nY2rows+2,ii));
                             
-                           if ((newY2(nY2rows+8,ii)<0.1) & (newY2(nY2rows+9,ii)<0.1)) %((data(ii).deltaRatioShear<0.05) & (data(ii).deltaRatioPreShear<0.05))
+                            newY2(nY2rowsBis+3,ii) =  mean(expFtd.rhoB);
+                            newY2(nY2rowsBis+4,ii) =  max(expFtd.rhoB);
+                            newY2(nY2rowsBis+5,ii) =  min(expFtd.rhoB);
+                            if (exist('densityBulkBoxMean'))
+                                nY2rowsTris = nY2rowsBis+5;
+                            else
+                                nY2rowsTris = nY2rowsBis+2;
+                            end                            
+                            %nY2rowsTris = length(newY2(:,ii));
+                            
+                            
+                            if (exist('densityBulkBoxMean') &  (newY2(nY2rowsBis+1,ii)<0.1) & (newY2(nY2rowsBis+2,ii)<0.1) &   (newY2(densityBulkBoxMeanPos,ii)<newY2(nY2rowsBis+4,ii)*densTolerance)  &  (newY2(densityBulkBoxMeanPos,ii)>newY2(nY2rowsBis+5,ii)) )
                                 gloriaAugustaSchulzeNN(1,jjj) = ii;
-                                gloriaAugustaSchulzeNN(2:(nY2rows+10), jjj) = newY2(1:end,ii) ;%avgMuR1(ii);
+                                gloriaAugustaSchulzeNN(2:(nY2rowsTris+1), jjj) = newY2(1:end,ii) ;%avgMuR1(ii);  
+                                gloriaAugustaSchulzeNN(nY2rowsTris+2, jjj) = 1;
+                            elseif ((newY2(nY2rowsBis+1,ii)<0.05) & (newY2(nY2rowsBis+2,ii)<0.05)) %((data(ii).deltaRatioShear<0.05) & (data(ii).deltaRatioPreShear<0.05))
+                                gloriaAugustaSchulzeNN(1,jjj) = ii;
+                                gloriaAugustaSchulzeNN(2:(nY2rowsTris+1), jjj) = newY2(1:end,ii) ;%avgMuR1(ii);
+                                gloriaAugustaSchulzeNN(nY2rowsTris+2, jjj) = 0;
 %                                 gloriaAugustaSchulze{jjj,3} = avgMuR2(ii);
 %                                 gloriaAugustaSchulze{jjj,4} = data(ii).tauAb;
 %                                 gloriaAugustaSchulze{jjj,5} = data(ii).sigmaAb;
@@ -1490,10 +1514,11 @@ if (exp_flag)
 %                         end
 %                     end
                     for jjll=1:gASSNNcolumns 
-                        
-                        if ...%gloriaAugustaSchulzeNN(2,jjll)==gloriaAugustaSchulzeNN(2,best(jjj)) ...&
+                      if  (exist('densityBulkBoxMean'))
+                        if gloriaAugustaSchulzeNN(2,jjll)==gloriaAugustaSchulzeNN(2,best(jjj)) & ...
                                  gloriaAugustaSchulzeNN(3,jjll)==gloriaAugustaSchulzeNN(3,best(jjj)) ...
-                            & gloriaAugustaSchulzeNN(4,jjll)==gloriaAugustaSchulzeNN(4,best(jjj))
+                            & gloriaAugustaSchulzeNN(4,jjll)==gloriaAugustaSchulzeNN(4,best(jjj)) ...
+                            & gloriaAugustaSchulzeNN(nY2rowsTris+2, jjll)==1
                             switch gloriaAugustaSchulzeNN(8,jjll)
                                     case 0.6
                                         win(jjj)=1;
@@ -1517,6 +1542,33 @@ if (exp_flag)
                         end
 %                        gloriaAugustaSchulzeNN(3,best(jjj))
 %                        gloriaAugustaSchulzeNN(4,best(jjj))
+                    else
+                        if gloriaAugustaSchulzeNN(2,jjll)==gloriaAugustaSchulzeNN(2,best(jjj)) & ...
+                                 gloriaAugustaSchulzeNN(3,jjll)==gloriaAugustaSchulzeNN(3,best(jjj)) ...
+                            & gloriaAugustaSchulzeNN(4,jjll)==gloriaAugustaSchulzeNN(4,best(jjj))
+                            switch gloriaAugustaSchulzeNN(8,jjll)
+                                    case 0.6
+                                        win(jjj)=1;
+                                    case 0.8
+                                        if win(jjj)==1
+                                        win(jjj)=win(jjj)+1;
+                                        else
+                                             win(jjj)=1;
+                                        end
+                                    case 1.0   
+                                        if win(jjj)==2
+                                        win(jjj)=win(jjj)+1;
+                                        elseif win(jjj)==1
+                                             win(jjj)=2;
+                                        else
+                                            win(jjj)=1;
+                                        end
+                            end  
+                           % gloria2(jjj,jjkk)=jjll;
+                           % jjkk=jjkk+1;
+                        end
+
+                      end
                     end
                 end
                 
