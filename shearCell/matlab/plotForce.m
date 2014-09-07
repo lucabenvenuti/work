@@ -24,7 +24,7 @@ set(0,'DefaultTextFontSize',12);
 unitSysDefault = 'si';  % 'si' or 'cgs'
 
 % select files that should be postprocessed
-sim_dir = '../results/10/sim119_sinterfine_reducedPolydispersity_mach'; % directory, where simulation files can be found
+sim_dir = '../results/10/mach_64'; % directory, where simulation files can be found
 filepattern = 'force.cad*_fid*.txt'; % e.g. 'force.*.txt' %Andi
 filepatterncsv = 'sim_par*_fid*.csv'; % e.g. 'force.*.txt' %Andi
 
@@ -32,12 +32,13 @@ filepatterncsv = 'sim_par*_fid*.csv'; % e.g. 'force.*.txt' %Andi
 % example: searchCases = {'fric' 0.6
 %                         'rf'   [0.2 0.4]};
 %   for all cases use empty searchCases = {};
-searchCases = {...'fric' 0.4 %[0.4 0.8]
+searchCases = {...'fric' 0.6 %[0.4 0.8]
                ...'rf'   0.4 %[0.4 0.8]
+               ...'rest'   0.9 %[0.4 0.8]
                ...'fid'  [	20025	20026	20027	20028	20029	20030 20035		20201	20202	20203	20204 20205] %20101	20102	20103	20125	20126 20001	20002
                ...'shearperc' 0.4
                ... 'ctrlStress' -1.007001977856750e+04
-               ...'dens' 1500
+               ...'dens' 3000
                };
 
 % define column of forces/position in the data file
@@ -167,7 +168,8 @@ for ii=1:nFilescsv
         csv = importdata(fullfile(sim_dir,iName));
         
         % export csv data as structure fields
-        for jj=1:length(csv.data)
+        lengthCsvData=length(csv.data);
+        for jj=1:lengthCsvData
             data(idxCsv).(strtrim(csv.colheaders{jj})) = csv.data(jj);
         end
         idxCsv = idxCsv+1;
@@ -180,12 +182,14 @@ clear iFid idxCsv idxFid iName csv flags ii nFilescsv listfilecsv
 if ~isempty(searchCases)
     nData = length(data);
     idxSearch = ones(1,nData);
-    for ii=1:size(searchCases,1)
+    sizeSearchCases=size(searchCases,1);
+    for ii=1:sizeSearchCases
         searchProp = searchCases{ii,1};
         searchValues = searchCases{ii,2};
         nSearchValues = length(searchValues);
         tmpSearch = zeros(1,nData);
-        for jj=1:length(searchValues)
+        %length(searchValues)
+        for jj=1:nSearchValues
             tmpSearch = tmpSearch|([data(:).(searchProp)]==searchValues(jj)); % logic-or for different numbers of same property
         end
         idxSearch = idxSearch&tmpSearch; % logic-and for different properties
@@ -708,10 +712,10 @@ clear timesteps sigmaZ tauXZ corrTauXZ fname
             data(ii).stopPlateauPreShear = indexer(2);    
             data(ii).startPlateauShear = indexer(3);    
             data(ii).stopPlateauShear  = indexer(4);
-            data(ii).startPlateauPreShearValueMan = data(ii).startPlateauPreShear/length(data(ii).muR);
-            data(ii).stopPlateauPreShearValueMan = data(ii).stopPlateauPreShear/length(data(ii).muR);
-            data(ii).startPlateauShearValueMan = data(ii).startPlateauShear/length(data(ii).muR);
-            data(ii).stopPlateauShearValueMan = data(ii).stopPlateauShear/length(data(ii).muR);
+            data(ii).startPlateauPreShearValueMan = data(ii).startPlateauPreShear/lMuR; %length(data(ii).muR);
+            data(ii).stopPlateauPreShearValueMan = data(ii).stopPlateauPreShear/lMuR; %length(data(ii).muR);
+            data(ii).startPlateauShearValueMan = data(ii).startPlateauShear/lMuR; %length(data(ii).muR);
+            data(ii).stopPlateauShearValueMan = data(ii).stopPlateauShear/lMuR; %length(data(ii).muR);
             
        else
            data(ii).startPlateauPreShear = floor(lMuR*startPlateauPreShearValue); %%             startPlateauPreShearValue = .38;
@@ -776,9 +780,9 @@ clear timesteps sigmaZ tauXZ corrTauXZ fname
 %      stopPlateauShear = (mean([data(:).stopPlateauShear]));
      
     for ii=1:nSimCases    
-        
-        avgMuR5(ii,1) = mean(data(ii).muR(floor(length(data(ii).muR)*sappsvmm):floor(length(data(ii).muR)*soppsvmm)));
-        avgMuR6(ii,1) = mean(data(ii).muR(floor(length(data(ii).muR)*sapsvmm):floor(length(data(ii).muR)*sopsvmm)));
+        lMuR = length(data(ii).muR);
+        avgMuR5(ii,1) = mean(data(ii).muR(floor(lMuR*sappsvmm):floor(lMuR*soppsvmm)));
+        avgMuR6(ii,1) = mean(data(ii).muR(floor(lMuR*sapsvmm):floor(lMuR*sopsvmm)));
     end     
  end        
 %%    
@@ -1490,7 +1494,8 @@ if (exp_flag)
                 best = find(gloriaAugustaSchulzeNN(8,:)==0.4);
                 %jjkk=1; %z
                 win = zeros(length(best),1);
-                for jjj=1:length(best)
+                lBest = length(best);
+                for jjj=1:lBest
 %                     best2 = find(gloriaAugustaSchulzeNN(2,:)==gloriaAugustaSchulzeNN(2,best(jjj)));
 %                     best3 = find(gloriaAugustaSchulzeNN(3,:)==gloriaAugustaSchulzeNN(3,best(jjj)));
 %                     best4 = find(gloriaAugustaSchulzeNN(4,:)==gloriaAugustaSchulzeNN(4,best(jjj)));

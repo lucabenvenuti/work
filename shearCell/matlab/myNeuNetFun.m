@@ -216,48 +216,59 @@ end
     ctrlStress = dataNN.ctrlStress;
     shearperc = dataNN.shearperc;
     
+    lengthRest = length(rest);
+    lengthSf = length(sf);
+    lengthRf = length(rf);
+    lengthDt = length(dt);
+    lengthDCylDp = length(dCylDp);
+    lengthCtrlStress = length(ctrlStress);
+    lengthShearperc = length(shearperc);
+
+    
     if isfield (dataNN, 'dens')
         dens = dataNN.dens;
-        totalLength = length(rest)*length(sf)*length(rf)*length(dt)*length(dCylDp)*length(ctrlStress)*length(shearperc)*length(dens);
+        lengthDens = length(dens);
+        totalLength = lengthRest*lengthSf*lengthRf*lengthDt*lengthDCylDp*lengthCtrlStress*lengthShearperc*lengthDens;
         newInput=ones(totalLength,8);
     else
-         totalLength = length(rest)*length(sf)*length(rf)*length(dt)*length(dCylDp)*length(ctrlStress)*length(shearperc);
+         totalLength = lengthRest*lengthSf*lengthRf*lengthDt*lengthDCylDp*lengthCtrlStress*lengthShearperc;
          newInput=ones(totalLength,7);
         
     end
 
 
-length1 = totalLength/length(rest);
+
+length1 = totalLength/lengthRest;
 count1=0;
 count12=1;
 count13=1;
 for i=1:length1
-    newInput(1+count1:count1+length(rest),1)=rest;
+    newInput(1+count1:count1+lengthRest,1)=rest;
     
     
-    newInput(1+count1:count1+length(rest),2)=sf(count12);
+    newInput(1+count1:count1+lengthRest,2)=sf(count12);
     count12=count12+1;
-    if count12==(length(sf)+1)
+    if count12==(lengthSf+1)
         count12=1;
     end
     
 
     
-    count1 = count1 + length(rest);
+    count1 = count1 + lengthRest;
 end
 count1=0;
 count12=1;
 count13=0;
 count14=1;
 
-for i=1:(length1/length(sf))
-    newInput(1+count13:count13+length(rest)*length(sf),3)=rf(count14);
+for i=1:(length1/lengthSf)
+    newInput(1+count13:count13+lengthRest*lengthSf,3)=rf(count14);
     count14=count14+1;
-    if count14==(length(rf)+1)
+    if count14==(lengthRf+1)
         count14=1;
     end
     
-    count13 = count13 + length(rest)*length(sf);
+    count13 = count13 + lengthRest*lengthSf;
     
 
 end
@@ -265,14 +276,14 @@ end
 count15=0;
 count16=1;
 
-for i=1:(length1/length(sf)/length(rf))
-    newInput(1+count15:count15+length(rest)*length(sf)*length(rf),4)=dt(count16);
+for i=1:(length1/lengthSf/lengthRf)
+    newInput(1+count15:count15+lengthRest*lengthSf*lengthRf,4)=dt(count16);
     count16=count16+1;
-    if count16==(length(dt)+1)
+    if count16==(lengthDt+1)
         count16=1;
     end
     
-    count15 = count15 + length(rest)*length(sf)*length(rf);
+    count15 = count15 + lengthRest*lengthSf*lengthRf;
     
 
 end
@@ -280,14 +291,14 @@ end
 count17=0;
 count18=1;
 
-for i=1:(length1/length(sf)/length(rf)/length(dt))
-    newInput(1+count17:count17+length(rest)*length(sf)*length(rf)*length(dt),5)=dCylDp(count18);
+for i=1:(length1/lengthSf/lengthRf/lengthDt)
+    newInput(1+count17:count17+lengthRest*lengthSf*lengthRf*lengthDt,5)=dCylDp(count18);
     count18=count18+1;
-    if count18==(length(dCylDp)+1)
+    if count18==(lengthDCylDp+1)
         count18=1;
     end
     
-    count17 = count17 + length(rest)*length(sf)*length(rf)*length(dt);
+    count17 = count17 + lengthRest*lengthSf*lengthRf*lengthDt;
     
 
 end
@@ -296,14 +307,14 @@ end
 count19=0;
 count20=1;
 
-for i=1:(length1/length(sf)/length(rf)/length(dt)/length(dCylDp))
-    newInput(1+count19:count19+length(rest)*length(sf)*length(rf)*length(dt)*length(dCylDp),6)=ctrlStress(count20);
+for i=1:(length1/lengthSf/lengthRf/lengthDt/lengthDCylDp)
+    newInput(1+count19:count19+lengthRest*lengthSf*lengthRf*lengthDt*lengthDCylDp,6)=ctrlStress(count20);
     count20=count20+1;
-    if count20==(length(ctrlStress)+1)
+    if count20==(lengthCtrlStress+1)
         count20=1;
     end
     
-    count19 = count19 + length(rest)*length(sf)*length(rf)*length(dt)*length(dCylDp);
+    count19 = count19 + lengthRest*lengthSf*lengthRf*lengthDt*lengthDCylDp;
     
 
 end
@@ -312,14 +323,14 @@ end
 count21=0;
 count22=1;
 
-for i=1:(length1/length(sf)/length(rf)/length(dt)/length(dCylDp)/length(ctrlStress))
-    newInput(1+count21:count21+length(rest)*length(sf)*length(rf)*length(dt)*length(dCylDp)*length(ctrlStress),7)=shearperc(count22);
+for i=1:(length1/lengthSf/lengthRf/lengthDt/lengthDCylDp/lengthCtrlStress)
+    newInput(1+count21:count21+lengthRest*lengthSf*lengthRf*lengthDt*lengthDCylDp*lengthCtrlStress,7)=shearperc(count22);
     count22=count22+1;
-    if count22==(length(shearperc)+1)
+    if count22==(lengthShearperc+1)
         count22=1;
     end
     
-    count21 = count21 + length(rest)*length(sf)*length(rf)*length(dt)*length(dCylDp)*length(ctrlStress);
+    count21 = count21 + lengthRest*lengthSf*lengthRf*lengthDt*lengthDCylDp*lengthCtrlStress;
     
 
 end
@@ -328,14 +339,14 @@ if isfield (dataNN, 'dens')
     count23=0;
     count24=1;
 
-    for i=1:(length1/length(sf)/length(rf)/length(dt)/length(dCylDp)/length(ctrlStress)/length(shearperc))
-        newInput(1+count23:count23+length(rest)*length(sf)*length(rf)*length(dt)*length(dCylDp)*length(ctrlStress)*length(shearperc),8)=dens(count24);
+    for i=1:(length1/lengthSf/lengthRf/lengthDt/lengthDCylDp/lengthCtrlStress/lengthShearperc)
+        newInput(1+count23:count23+lengthRest*lengthSf*lengthRf*lengthDt*lengthDCylDp*lengthCtrlStress*lengthShearperc,8)=dens(count24);
         count24=count24+1;
-        if count24==(length(dens)+1)
+        if count24==(lengthDens+1)
             count24=1;
         end
 
-        count23 = count23 + length(rest)*length(sf)*length(rf)*length(dt)*length(dCylDp)*length(ctrlStress)*length(shearperc);
+        count23 = count23 + lengthRest*lengthSf*lengthRf*lengthDt*lengthDCylDp*lengthCtrlStress*lengthShearperc;
 
 
     end
