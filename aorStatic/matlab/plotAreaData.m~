@@ -301,16 +301,15 @@ ylabel('zPos [m]');
 disp(angles);
 hold on
 
-if (saveFlag)
-    text(rad(end,1),zPos(end,1)+zPos(end,1)*0.3,'1');
-     for i = 2:nOfCuts
-         if rad(end,i) == 0, break, end
-         text(rad(end,i)*1.05,zPos(end,i)+zPos(end,1)*0.3,num2str(i));
-     end
 
-    warning ('off','all');
-    print(hFig, fullfile(saveDir, 'figure.png'), '-dpng');
-end
+%text(rad(end,1),zPos(end,1)+zPos(end,1)*0.3,'1');
+% for i = 2:nOfCuts
+%     if rad(end,i) == 0, break, end
+%     text(rad(end,i)*1.05,zPos(end,i)+zPos(end,1)*0.3,num2str(i));
+% end
+
+warning ('off','all');
+%print(hFig, fullfile(saveDir, 'figure.png'), '-dpng');
 
 dataAOR = data;
 
@@ -350,7 +349,7 @@ if (NNFlag)
     dataNN2.rest=[0.5:0.1:0.9];
     dataNN2.sf=[0.05:0.05:1];
     dataNN2.rf=[0.05:0.05:1];
-    dataNN2.dt= 1e-6; %[1e-7:1e-7:1e-6];
+    dataNN2.dt= 1e-7; %[1e-7:1e-7:1e-6];
     dataNN2.dCylDp= 50;%[20:1:50];
 %     dataNN2.ctrlStress = 1068;% [1068,2069,10070];
 %     dataNN2.shearperc = [0.4:0.2:1.0];
