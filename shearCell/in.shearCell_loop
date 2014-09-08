@@ -48,7 +48,7 @@ variable    radDist equal       3         # radius distribution (1 = (25%rad*0.9
                                            # for 2 you must uncomment radsigma & radmu, the latter must be equal to rad
                                             # 3=discrete distribution with real values
 
-variable    dt      equal       1e-7            # time step width [s]
+variable    dt      equal       1e-6            # time step width [s]
 
 variable    dCylDp  index       20 #38 50 75     # ratio cylinder diameter to particle diameter (opional loop)
 
@@ -58,7 +58,7 @@ variable    shearperc index 	0.4 0.6 1.0 #percentage of normal load during shear
 
 variable    shearCellType   index 3     #1 2     #(1=PoorMan; 2=Jenike; 3=Schulze)
 
-processors  4 4 2
+processors  2 1 1
 
 variable    ratio   equal       0.0001    
 # defines the maximum wall velocity in the vicinity of particles (only for the 'auto' mode)

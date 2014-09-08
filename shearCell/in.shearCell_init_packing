@@ -46,13 +46,13 @@ variable    radDist equal       3          # radius distribution (1 = (25%rad*0.
                                            # 2=gaussian distribution with radmu & radsigma)
                                            # for 2 you must uncomment radsigma & radmu, the latter must be equal to rad
                                            # 3=discrete distribution with real values
-variable    dt      equal       1e-7            # time step width [s]
+variable    dt      equal       1e-6           # time step width [s]
 
 variable    dCylDp  equal       20      # ratio cylinder diameter to particle diameter (optional loop)
 
 variable    accGrev equal       9.81    # acceleration due to gravity
 
-processors  4 4 2
+processors  2 1 1
 
 #########################################################################################
 #   IF YOU CHANGE ANYTHING BELOW THIS LINE, YOU MIGHT ADAPT THE POSTPROCESSING SCRIPT   #
