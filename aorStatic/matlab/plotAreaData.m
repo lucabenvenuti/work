@@ -345,8 +345,8 @@ if (NNFlag)
     %     trainc    - Cyclical order weight/bias training.
     %     trainr    - Random order weight/bias training.
     %     trains    - Sequential order weight/bias training.
-    addpath('/mnt/DATA/liggghts/work/shearCell/matlab');
-    
+    %addpath('/mnt/DATA/liggghts/work/shearCell/matlab');
+    addpath('../../shearCell/matlab');
     dataNN2.rest=[0.5:0.1:0.9];
     dataNN2.sf=[0.05:0.05:1];
     dataNN2.rf=[0.05:0.05:1];
