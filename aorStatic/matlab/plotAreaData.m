@@ -27,6 +27,14 @@ col_X = 1;
 col_Y = 2;
 col_Z = 3;
 
+% experimental data
+exp_flag = true; % enable the comparision to experimental data
+%exp_dir = '.'; % directory, where the files can be found
+%legendExpFlag = 'schulze'; % choose between jenike & schulze
+
+if (exp_flag)
+    angleExp = 38.8500;
+end
            
 %doNN
 NNFlag = true;
@@ -298,10 +306,11 @@ legend(leg{1,1:nFiles}, 'location', 'southwest');
 title('Convex Hull Cuts of the AOR at different z-Positions');
 xlabel('radius [m]');
 ylabel('zPos [m]');
-disp(angles);
+
 hold on
 
 if (saveFlag)
+    disp(angles);
     text(rad(end,1),zPos(end,1)+zPos(end,1)*0.3,'1');
      for i = 2:nOfCuts
          if rad(end,i) == 0, break, end
@@ -316,20 +325,6 @@ dataAOR = data;
 
 clear data
 
-%% save matlab data
-i=1;
-j=1;
-[a,b]=size(searchCases);
-
-searchName{1} = 'an';
-
-for i=1:a
-       j=i+1;
-       searchName{j}=([searchName{i},searchCases{i,1},num2str(searchCases{i,2})]);
-end
-
-save(['AOR',searchName{end}, '.mat'], 'dataAOR');
-%save(['AOR', ], dataAOR);%,'name','off', 'fanspeed', 'indata', 'meanoff', '-mat'); %
 
 %% Neural Network
 if (NNFlag)
@@ -363,12 +358,86 @@ if (NNFlag)
     end
     
     %myNeuNetFun(nSimCases,data
-        net=NNSave2{errorEstSumMaxIndex2(1),1}.net;
-        yy3=net(x2);
-        yy4(1,1,:)=yy3;
-        %yy4-yy2(errorEstSumMaxIndex2,:,:) this should be zero
-        net=NNSave2{errorEstSumMaxIndex2(2),2}.net;
-        yy5=net(x2);
-        yy6(1,2,:)=yy5;
+%         net=NNSave2{errorEstSumMaxIndex2(1),1}.net;
+%         yy3=net(x2);
+%         yy4(1,1,:)=yy3;
+%         %yy4-yy2(errorEstSumMaxIndex2,:,:) this should be zero
+%         net=NNSave2{errorEstSumMaxIndex2(2),2}.net;
+%         yy5=net(x2);
+%         yy6(1,2,:)=yy5;
 
 end
+
+
+%% Experimental comparison
+
+if (exp_flag)
+    
+    jjj=1;
+    ii=1;
+    for ii=1:nSimCases
+        dataAOR(ii).ratioAORLi = dataAOR(ii).angleLi/angleExp;
+        dataAOR(ii).deltaRatioAORLi = abs(1-dataAOR(ii).ratioAORLi);
+        dataAOR(ii).ratioAORMa = dataAOR(ii).angleMa/angleExp;
+        dataAOR(ii).deltaRatioAORMa = abs(1-dataAOR(ii).ratioAORMa);        
+        if (dataAOR(ii).deltaRatioAORLi<0.05)
+            gloriaAugustaAor{jjj,1} = dataAOR(ii).name;
+            gloriaAugustaAor{jjj,2} = dataAOR(ii).angleLi;
+            gloriaAugustaAor{jjj,3} = dataAOR(ii).angleMa;
+            gloriaAugustaAor{jjj,4} = 'Li';
+            jjj=jjj+1;
+        elseif (dataAOR(ii).deltaRatioAORMa<0.05)    
+            gloriaAugustaAor{jjj,1} = dataAOR(ii).name;
+            gloriaAugustaAor{jjj,2} = dataAOR(ii).angleLi;
+            gloriaAugustaAor{jjj,3} = dataAOR(ii).angleMa;    
+            gloriaAugustaAor{jjj,4} = 'Ma';
+           jjj=jjj+1;
+        end
+        
+    end
+    
+    if (NNFlag)
+      [newY2rows newY2columns] = size(newY2);
+      jjj=1;
+      i=1;
+      for i = 1:newY2columns
+           newY2(newY2rows+1,i) = newY2(newY2rows-1,i)/angleExp; %ratioAORLi
+           newY2(newY2rows+2,i) = newY2(newY2rows,i)/angleExp;   %ratioAORMa
+           newY2(newY2rows+3,i) = abs(1- newY2(newY2rows+1,i));  %deltaRatioAORLi
+           newY2(newY2rows+4,i) = abs(1- newY2(newY2rows+2,i));  %deltaRatioAORMa
+          
+          if (newY2(newY2rows+3,i)<0.05)
+                gloriaAugustaAorNN(jjj,1) = i;
+                gloriaAugustaAorNN(jjj,2) = newY2(newY2rows-1,i);
+                gloriaAugustaAorNN(jjj,3) = newY2(newY2rows,i);
+                gloriaAugustaAorNN(jjj,4) = 0;
+                jjj=jjj+1;
+          elseif (newY2(newY2rows+4,i)<0.05)
+                gloriaAugustaAorNN(jjj,1) = i;
+                gloriaAugustaAorNN(jjj,2) = newY2(newY2rows-1,i);
+                gloriaAugustaAorNN(jjj,3) = newY2(newY2rows,i);
+                gloriaAugustaAorNN(jjj,4) = 1;
+                jjj=jjj+1;
+          end
+
+      end
+
+    end
+end
+
+
+
+%% save matlab data
+i=1;
+j=1;
+[a,b]=size(searchCases);
+
+searchName{1} = 'an';
+
+for i=1:a
+       j=i+1;
+       searchName{j}=([searchName{i},searchCases{i,1},num2str(searchCases{i,2})]);
+end
+
+save(['AOR',searchName{end}, '.mat'], 'dataAOR');
+%save(['AOR', ], dataAOR);%,'name','off', 'fanspeed', 'indata', 'meanoff', '-mat'); %
