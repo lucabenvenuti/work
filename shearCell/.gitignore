@@ -9,3 +9,4 @@ matlab/*.mat
 matlab/*.tikz
 matlab/*.FTD
 matlab/*.out
+matlab/*.inp
