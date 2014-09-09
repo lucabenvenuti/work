@@ -2,8 +2,8 @@
 #mpirun -np .... [OPTIONS] -in in.shearCell_init_packing
 #mpirun -np .... [OPTIONS] -in in.shearCell_loop
 
-mpirun -np 2 liggghts -in in.repose_init_packing
-mpirun -np 2 liggghts -in in.repose_loop -var iden 0015
+mpirun -np 32 liggghts -in in.repose_init_packing
+mpirun -np 22 liggghts -in in.repose_loop -var iden 301
 #liggghts -in in.repose_angle -var iden 0011
 #liggghts -in in.repose_angle -var iden 0012
 # gollum 		: 32 /home/k3b02/k3b1672/LIGGGHTS-3-beta-PFM/src/lmp_fedora
