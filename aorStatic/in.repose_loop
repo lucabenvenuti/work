@@ -49,14 +49,14 @@ variable    radDist equal       3         # radius distribution (1 = (25%rad*0.9
 
 variable    dt      equal       1e-6            # time step width [s]
 
-variable    dCylDp  equal       10      # ratio cylinder diameter to particle diameter (optional loop)
+variable    dCylDp  equal       20      # ratio cylinder diameter to particle diameter (optional loop)
 variable    G_D_RATIO  equal       ${dCylDp}
 
 variable    accGrev equal       9.81            # acceleration due to gravity [m/s2]
 
-processors  2 1 1
+processors   4 4 2
 
-variable    numProc equal       2
+variable    numProc equal       32
 
 variable    ratio   equal       0.0001    
 # defines the maximum wall velocity in the vicinity of particles (only for the 'auto' mode)
