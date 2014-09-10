@@ -35,9 +35,9 @@ variable  radPerc6  equal       0.197
 variable    dens    equal       3000         #sinterfine   # particle density [kg/m3]
 variable    ym      equal       1e7             # Young's modulus  [Pa]
 variable    pr      equal       0.4            # Poisson ratio   [-]
-variable    rest    index       0.5 0.7 0.9           # coefficient of restitution [-]
-variable    fric    index       0.4 0.6 0.8        # coefficient of friction (loop variable) [-]
-variable    rf      index       0.4 0.6 0.8        # coefficient of rolling friction (optional loop) [-]
+variable    rest    universe       0.5 0.7 0.9           # coefficient of restitution [-]
+variable    fric    universe       0.4 0.6 0.8        # coefficient of friction (loop variable) [-]
+variable    rf      universe       0.4 0.6 0.8        # coefficient of rolling friction (optional loop) [-]
 #variable    rvd    equal        1.0		#coefficientRollingViscousDamping (only for epsd rolling model)
 variable    rolfrtypnum equal	4		# rolling friction option ( 1 = off, 2 = cdt, 3 = epsd, 4 = epsd2)
 variable    uniSys  equal       1		 # unit System ( 1=SI, 2=cgs)
@@ -48,13 +48,13 @@ variable    radDist equal       3         # radius distribution (1 = (25%rad*0.9
 
 variable    dt      equal       1e-7            # time step width [s]
 
-variable    dCylDp  index       40 #38 50 75     # ratio cylinder diameter to particle diameter (opional loop)
+variable    dCylDp  equal       40 #38 50 75     # ratio cylinder diameter to particle diameter (opional loop)
 
 variable    accGrev equal       9.81            # acceleration due to gravity [m/s2]
 
-variable    shearperc index 	0.4 0.6 1.0 #percentage of normal load during shear compared to the one during preshear
+variable    shearperc universe 	0.4 0.6 1.0 #percentage of normal load during shear compared to the one during preshear
 
-variable    shearCellType   index 3     #1 2     #(1=PoorMan; 2=Jenike; 3=Schulze)
+variable    shearCellType   equal 3     #1 2     #(1=PoorMan; 2=Jenike; 3=Schulze)
 
 processors  4 4 2
 
@@ -65,7 +65,7 @@ variable    ratio   equal       0.0001
 # v_max = ratio*MIN(rad)/dt
 
 # experimental parameter
-variable    expMass         index  0.9232 4.397 8.739  #  1.792[kg] mass used in experiment 
+variable    expMass         universe  0.9232 4.397 8.739  #  1.792[kg] mass used in experiment 
 
 variable    expDiam         equal   0.10415      # diam of shear cell [m]
 
