@@ -237,8 +237,9 @@ fix		gravi all gravity ${accGrev} vector 0.0 0.0 -1.0
 
 
 # region and insertion
-#variable rcyl equal ${G_D_RATIO}*${maxdiam}*0.9/2.
-#variable hcyl equal 8./13.*${G_D_RATIO}*${maxdiam}
+variable rcyl equal ${G_D_RATIO}*${maxdiam}*0.9/2.
+variable hcyl equal 8./13.*${G_D_RATIO}*${maxdiam}
+region	bc cylinder z 0.0 0.0 ${rcyl}  0.0 ${hcyl} units box
 
 # meshes
 fix		cad1 all mesh/surface file meshes/ground.stl type 1 scale ${scale}
@@ -299,6 +300,13 @@ pair_style	gran model hertz rolling_friction ${rolfrtyp} #cohesion ${pairStyleCo
 pair_coeff	* *
 #fix		    granwalls all wall/${pairStyle} rolling_friction ${pairStyleRollingFriction} mesh n_meshes 2 meshes cad1 cad2
 fix		    granwalls all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} mesh n_meshes 2 meshes cad1 cad2
+
+# get mass of particle column
+variable mPartBox   equal mass(all,bc)
+variable numPartBox   equal count(all,bc)
+fix DumpTextMass all print ${nDumpForce} "${mPartBox}  ${numPartBox}" &
+			screen no title "massPartBox numPartBox" file ./results/mass_fid${fileID}.txt
+
 
 # let particles settle
 run		${nStepsSettle}
