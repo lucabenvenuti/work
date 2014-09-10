@@ -11,6 +11,9 @@ variable	massIns		equal 10.0	#Total mass to be inserted in the drum
 variable	runTime		equal 2.5	#Total time simulation should run
 variable	fillPerc	equal 0.5	#Proportion of cylinder you want filled with particles
 	
+processors   1 1 2
+
+variable    numProc equal       2
 
 #########################
 ###Internal variables###
