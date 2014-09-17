@@ -296,7 +296,7 @@ run		1
 unfix		granwalls
 unfix		topwall
 unfix csv
-pair_style	gran model hertz rolling_friction ${rolfrtyp} #cohesion ${pairStyleCohesion} tangential_damping ${pairStyleDamping} # viscous ${pairStyleViscous}
+pair_style 	gran model hertz tangential history rolling_friction ${rolfrtyp}
 pair_coeff	* *
 #fix		    granwalls all wall/${pairStyle} rolling_friction ${pairStyleRollingFriction} mesh n_meshes 2 meshes cad1 cad2
 fix		    granwalls all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} mesh n_meshes 2 meshes cad1 cad2
