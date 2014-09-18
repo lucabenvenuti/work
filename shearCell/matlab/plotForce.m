@@ -1343,8 +1343,8 @@ if (NNFlag)
     dataNN2.rest=[0.5:0.1:0.9];
     dataNN2.sf=[0.05:0.05:1];
     dataNN2.rf=[0.05:0.05:1];
-    dataNN2.dt= 1e-7; %[1e-7:1e-7:1e-6];
-    dataNN2.dCylDp= 50;%[20:1:50];
+    dataNN2.dt= 1e-6; %[1e-7:1e-7:1e-6];
+    dataNN2.dCylDp= 20;%[20:1:50];
     dataNN2.ctrlStress = 1068;% [1068,2069,10070];
     dataNN2.shearperc = [0.4:0.2:1.0];
     
@@ -1352,7 +1352,7 @@ if (NNFlag)
         %targetNN(iijj,3)=densityBulkBoxMean(iijj);
         
         dataNN2.dens = [2000:100:3500];
-        densTolerance =1.2;
+        densTolerance =1.4;
         [NNSave2, errorNN2, x2, zz2, errorEstSum2, errorEstIndex2, errorEstSumMaxIndex2, yy2, corrMat2, newY2] =   myNeuNetFun(nSimCases,data,trainFcn,hiddenLayerSizeVector, dataNN2, avgMuR2,avgMuR1, densityBulkBoxMean);
         avgMuR2Pos = 9;
         avgMuR1Pos = 10;
@@ -1589,7 +1589,16 @@ if (exp_flag)
 end
  
 
+X=gloriaAugustaSchulzeNN(3,:);
+Y=gloriaAugustaSchulzeNN(4,:);
+Z=gloriaAugustaSchulzeNN(9,:);
+S=gloriaAugustaSchulzeNN(2,:);
+C=gloriaAugustaSchulzeNN(10,:);
+figure(20)
+scatter3(S,X,Y,Z,C)
+
 end
+
 % 
 % find(gloriaAugustaSchulzeNN(2,:)==0.9);
 % find(gloriaAugustaSchulzeNN(2,:)==0.9)
