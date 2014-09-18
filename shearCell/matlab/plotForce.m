@@ -24,7 +24,7 @@ set(0,'DefaultTextFontSize',12);
 unitSysDefault = 'si';  % 'si' or 'cgs'
 
 % select files that should be postprocessed
-sim_dir = '../results/10/mach_64'; % directory, where simulation files can be found
+sim_dir = '../results/10/sim123_sinterfine_reducedPolydispersity_test32'; % directory, where simulation files can be found
 filepattern = 'force.cad*_fid*.txt'; % e.g. 'force.*.txt' %Andi
 filepatterncsv = 'sim_par*_fid*.csv'; % e.g. 'force.*.txt' %Andi
 
@@ -83,6 +83,7 @@ dCylDpConfrontationFlag2 = false;
 %doNN
 NNFlag = true;
 hiddenLayerSizeVector = [5:34];
+newInputFlag = true;
 
 % save images
 saveFlag = false;
@@ -1339,30 +1340,22 @@ if (NNFlag)
     %     trains    - Sequential order weight/bias training.
     addpath('/mnt/DATA/liggghts/work/shearCell/matlab');
     
-    
-    dataNN2.rest=[0.5:0.1:0.9];
-    dataNN2.sf=[0.05:0.05:1];
-    dataNN2.rf=[0.05:0.05:1];
-    dataNN2.dt= 1e-6; %[1e-7:1e-7:1e-6];
-    dataNN2.dCylDp= 20;%[20:1:50];
-    dataNN2.ctrlStress = 1068;% [1068,2069,10070];
-    dataNN2.shearperc = [0.4:0.2:1.0];
-    
+       
     if (exist('densityBulkBoxMean'))
         %targetNN(iijj,3)=densityBulkBoxMean(iijj);
-        
-        dataNN2.dens = [2000:100:3500];
-        densTolerance =1.4;
-        [NNSave2, errorNN2, x2, zz2, errorEstSum2, errorEstIndex2, errorEstSumMaxIndex2, yy2, corrMat2, newY2] =   myNeuNetFun(nSimCases,data,trainFcn,hiddenLayerSizeVector, dataNN2, avgMuR2,avgMuR1, densityBulkBoxMean);
+        %[NNSave2, errorNN2, x2, zz2, errorEstSum2, errorEstIndex2, errorEstSumMaxIndex2, yy2, corrMat2, newY2] =   myNeuNetFun(nSimCases,data,trainFcn,hiddenLayerSizeVector, dataNN2, avgMuR2,avgMuR1, densityBulkBoxMean);
+        [NNSave2, errorNN2, x2, zz2, errorEstSum2, errorEstIndex2, errorEstSumMaxIndex2, yy2, corrMat2] =   myNeuNetFun(nSimCases,data,trainFcn,hiddenLayerSizeVector, avgMuR2,avgMuR1, densityBulkBoxMean);
         avgMuR2Pos = 9;
         avgMuR1Pos = 10;
         densityBulkBoxMeanPos = 11;
     else
-        [NNSave2, errorNN2, x2, zz2, errorEstSum2, errorEstIndex2, errorEstSumMaxIndex2, yy2, corrMat2, newY2] =   myNeuNetFun(nSimCases,data,trainFcn,hiddenLayerSizeVector, dataNN2, avgMuR2,avgMuR1);
+        %[NNSave2, errorNN2, x2, zz2, errorEstSum2, errorEstIndex2, errorEstSumMaxIndex2, yy2, corrMat2, newY2] =   myNeuNetFun(nSimCases,data,trainFcn,hiddenLayerSizeVector, dataNN2, avgMuR2,avgMuR1);
+        [NNSave2, errorNN2, x2, zz2, errorEstSum2, errorEstIndex2, errorEstSumMaxIndex2, yy2, corrMat2] =   myNeuNetFun(nSimCases,data,trainFcn,hiddenLayerSizeVector, avgMuR2,avgMuR1);
         avgMuR2Pos = 8;
         avgMuR1Pos = 9;
     end
     
+     
     %myNeuNetFun(nSimCases,data
         net=NNSave2{errorEstSumMaxIndex2(1),1}.net;
         %yy3=net(x2);
@@ -1371,8 +1364,21 @@ if (NNFlag)
         net2=NNSave2{errorEstSumMaxIndex2(2),2}.net;
         %yy5=net(x2);
         %yy6(1,2,:)=yy5;
-        
-[nY2rows,nY2column] = size(newY2);
+
+if (newInputFlag)
+    dataNN2.rest=[0.5:0.1:0.9];
+    dataNN2.sf=[0.1:0.1:1];
+    dataNN2.rf=[0.1:0.1:1];
+    dataNN2.dt= 1e-6; %[1e-7:1e-7:1e-6];
+    dataNN2.dCylDp= 20;%[20:1:50];
+    dataNN2.ctrlStress = 1068;% [1068,2069,10070];
+    dataNN2.shearperc = [0.4:0.2:1.0];   
+    if (exist('densityBulkBoxMean'))
+       dataNN2.dens = [2000:100:3500];
+       densTolerance =1.4; 
+    end
+    newY2 = myNewInput(NNSave2, errorEstSumMaxIndex2, dataNN2);        
+    [nY2rows,nY2column] = size(newY2);
 
 %% experimental confrontation 2
 if (exp_flag)
@@ -1583,19 +1589,37 @@ if (exp_flag)
              
     end
      
-    
+    X=gloriaAugustaSchulzeNN(3,:);
+    Y=gloriaAugustaSchulzeNN(4,:);
+    Z=gloriaAugustaSchulzeNN(9,:);
+    S=gloriaAugustaSchulzeNN(2,:);
+    C=gloriaAugustaSchulzeNN(10,:);
+    figure(20)
+    scatter3(S,X,Y,Z,C)
 
-     
+    [mode2.M,mode2.F,mode2.C] = mode(gloriaAugustaSchulzeNN,2);
+    restMat = zeros(gASSNNrows,mode2.F(2,1));
+    for i=1:gASSNNrows
+        restMat(i,:)=gloriaAugustaSchulzeNN(i,(find(gloriaAugustaSchulzeNN(2,:)==mode2.M(2,1))));
+    end
+    
+    [mode3.M,mode3.F,mode3.C] = mode(restMat,2);
+    [restMatrows,restMatcolumns] = size(restMat);
+    fricMat = zeros(restMatrows,mode3.F(3,1));
+    for i=1:restMatrows
+        fricMat(i,:)=restMat(i,(find(restMat(3,:)==mode3.M(3,1))));
+    end
+    
+    [mode4.M,mode4.F,mode4.C] = mode(fricMat,2);
+    [fricMatrows,fricMatcolumns] = size(fricMat);
+    for i=1:fricMatrows
+        rfMat(i,:)=fricMat(i,(find(fricMat(4,:)==mode4.M(4,1))));
+    end
+    
 end
  
 
-X=gloriaAugustaSchulzeNN(3,:);
-Y=gloriaAugustaSchulzeNN(4,:);
-Z=gloriaAugustaSchulzeNN(9,:);
-S=gloriaAugustaSchulzeNN(2,:);
-C=gloriaAugustaSchulzeNN(10,:);
-figure(20)
-scatter3(S,X,Y,Z,C)
+end
 
 end
 
