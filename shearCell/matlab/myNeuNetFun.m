@@ -53,6 +53,9 @@ ITNN(:,(columnInputNN+1):(columnInputNN+columnTargetNN)) = targetNN(:,1:columnTa
 
 corrMatPca.corrMat = corrcoef(ITNN);
 [corrMatPca.coeff,corrMatPca.score,corrMatPca.latent,corrMatPca.tsquare] = princomp(ITNN); %Principal Components Analysis
+%[r,p] = corr(x,y,'type', 'Spearman');
+%[r,p] = corr(x,y,'type', 'Pearson');
+
 %corrMat(1,1) = corr2(ITNN(:,1),ITNN(:,1));
 
 % jjmm = 1;

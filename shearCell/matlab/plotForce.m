@@ -32,13 +32,15 @@ filepatterncsv = 'sim_par*_fid*.csv'; % e.g. 'force.*.txt' %Andi
 % example: searchCases = {'fric' 0.6
 %                         'rf'   [0.2 0.4]};
 %   for all cases use empty searchCases = {};
-searchCases = {...'fric' 0.6 %[0.4 0.8]
-               ...'rf'   0.4 %[0.4 0.8]
-               ...'rest'   0.9 %[0.4 0.8]
+searchCases = {'fric' 0.4 %[0.4 0.8]
+               'rf'   0.6 %[0.4 0.8]
+               'rest'   0.5 %[0.4 0.8]
                ...'fid'  [	20025	20026	20027	20028	20029	20030 20035		20201	20202	20203	20204 20205] %20101	20102	20103	20125	20126 20001	20002
-               ...'shearperc' 0.4
+               'shearperc' 0.4
                ... 'ctrlStress' -1.007001977856750e+04
-               ...'dens' 3000
+               'expMass' 0.9275
+               'dens' 3000
+               'dt' 1.0e-6
                };
 
 % define column of forces/position in the data file
@@ -53,7 +55,7 @@ col_numCol = 12;
 col_numBox = 13;
 
 % experimental data
-exp_flag = true; % enable the comparision to experimental data
+exp_flag = false; % enable the comparision to experimental data
 exp_dir = '.'; % directory, where the files can be found
 legendExpFlag = 'schulze'; % choose between jenike & schulze
 
@@ -77,11 +79,11 @@ end
 legendFlag = 'std';
 
 %dCylDp confrontation
-dCylDpConfrontationFlag = false;
+dCylDpConfrontationFlag = true;
 dCylDpConfrontationFlag2 = false;
 
 %doNN
-NNFlag = true;
+NNFlag = false;
 hiddenLayerSizeVector = [5:34];
 newInputFlag = true;
 
@@ -1589,14 +1591,27 @@ if (exp_flag)
              
     end
      
-    X=gloriaAugustaSchulzeNN(3,:);
-    Y=gloriaAugustaSchulzeNN(4,:);
-    Z=gloriaAugustaSchulzeNN(9,:);
-    S=gloriaAugustaSchulzeNN(2,:);
-    C=gloriaAugustaSchulzeNN(10,:);
+    X=gloriaAugustaSchulzeNN(3,:); %sf
+    Y=gloriaAugustaSchulzeNN(4,:); %rf
+    Z=gloriaAugustaSchulzeNN(9,:); %density
+    S=gloriaAugustaSchulzeNN(2,:); %cor
+    C=gloriaAugustaSchulzeNN(10,:);%avgMuR2
     figure(20)
     scatter3(S,X,Y,Z,C)
-
+    
+    %% radar plot
+    P(1,:)=S;
+    P(2,:)=X;
+    P(3,:)=Y;
+    P(4,:)=Z;
+    P(5,:)=C;
+    for i=1:20
+    a(i)=randi([1, length(X)]);
+    end
+    b=sort(a)
+    a1 = radarPlot( P(:,b))
+    
+    %%
     [mode2.M,mode2.F,mode2.C] = mode(gloriaAugustaSchulzeNN,2);
     restMat = zeros(gASSNNrows,mode2.F(2,1));
     for i=1:gASSNNrows
