@@ -86,6 +86,7 @@ dCylDpConfrontationFlag2 = false;
 NNFlag = false;
 hiddenLayerSizeVector = [5:34];
 newInputFlag = true;
+gloriaWinFlag = false;
 
 % save images
 saveFlag = false;
@@ -1499,6 +1500,7 @@ if (exp_flag)
                         end
                     end
                 [gASSNNrows,gASSNNcolumns] = size(gloriaAugustaSchulzeNN);
+            if (gloriaWinFlag)    
                 best = find(gloriaAugustaSchulzeNN(8,:)==0.4);
                 %jjkk=1; %z
                 win = zeros(length(best),1);
@@ -1588,7 +1590,7 @@ if (exp_flag)
                 gloriaWin(1,:) = gloriaAugustaSchulzeNN(2,[best(find(win==3))]);
                 gloriaWin(2,:) = gloriaAugustaSchulzeNN(3,[best(find(win==3))]);
                 gloriaWin(3,:) = gloriaAugustaSchulzeNN(4,[best(find(win==3))]);
-             
+            end
     end
      
     X=gloriaAugustaSchulzeNN(3,:); %sf
