@@ -1389,7 +1389,10 @@ if (exp_flag)
          case 'schulze' 
             jjj=1;
             ii=1;
-             for ii=1:nY2column
+            meanExpFtdRhoB = mean(expFtd.rhoB);
+            maxExpFtdRhoB  = max(expFtd.rhoB);
+            minExpFtdRhoB  = min(expFtd.rhoB);
+            for ii=1:nY2column
                         if (dataNN2.ctrlStress*1*.95 < expOut.sigmaAnM <dataNN2.ctrlStress*1*1.05)
                             
                             switch newY2(7,ii) %.shearperc %data(ii).shearperc
@@ -1466,9 +1469,9 @@ if (exp_flag)
                             %data(ii).deltaRatioPreShear = abs(1-data(ii).ratioPreShear);
                             newY2(nY2rowsBis+2,ii) =  abs(1- newY2(nY2rows+2,ii));
                             
-                            newY2(nY2rowsBis+3,ii) =  mean(expFtd.rhoB);
-                            newY2(nY2rowsBis+4,ii) =  max(expFtd.rhoB);
-                            newY2(nY2rowsBis+5,ii) =  min(expFtd.rhoB);
+                            newY2(nY2rowsBis+3,ii) =  meanExpFtdRhoB;%mean(expFtd.rhoB);
+                            newY2(nY2rowsBis+4,ii) =  maxExpFtdRhoB;%max(expFtd.rhoB);
+                            newY2(nY2rowsBis+5,ii) =  minExpFtdRhoB;%min(expFtd.rhoB);
                             if (exist('densityBulkBoxMean'))
                                 nY2rowsTris = nY2rowsBis+5;
                             else
