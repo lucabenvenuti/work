@@ -179,7 +179,7 @@ newton      off
 communicate	single vel yes
 
 # load simulation domain, particles, ...
-read_restart	./restart/restart.shearCell_rad${rad}_dcyldp${dCylDp}
+read_restart	./restart/restart.shearOmp_rad${rad}_dcyldp${dCylDp}
 
 neighbor	    ${skin} bin
 neigh_modify	delay 0

@@ -245,11 +245,11 @@ run     ${nDump}
 
 label loop
   print "-----> Checking Velocity..."
-  if "${vave}<${vthre}" then "jump ./in.shearCell_init_packing endloop"
+  if "${vave}<${vthre}" then "jump SELF endloop"
   print "-----> v ave ${vave}, v threshold ${vthre}, continuing run"  
   #set group all vx 0. vy 0. vz 0.
   run ${nDump}
-jump ./in.shearCell_init_packing loop
+jump SELF loop
 label endloop
 
 
