@@ -283,7 +283,7 @@ region        regRm block ${nx} ${px} ${ny} ${py} ${rmRegZPos} ${pz} units box
 delete_atoms  region regRm compress yes
 
 #write restart
-write_restart	./restart/restart.shearCell_rad${rad}_dcyldp${dCylDp}
+write_restart	./restart/restart.shearCell_rad${rad}_dcyldp${dCylDp}_${OMPON}
 
 #clear
 #next     dCylDp
