@@ -263,23 +263,23 @@ else &
 ### print a csv file with all the parameteres #2gauss
 if "${radDist} == 2" then                            &
   "fix csv all print 1 '${rad}, ${dens}, ${ym}, ${pr}, ${rest}, ${fric}, ${rf}, ${dt}, ${dCylDp}, ${ctrlStress}, ${expDiam}, ${expMass}, ${shearperc}, ${totaltime}, ${fileID}, &
-		${rolfrtypnum}, ${nStepsSettle}, ${uniSys}, ${shearCellType}, ${radDist}, ${radmu}, ${radsigma}, ${numProc}, ${XPROCS}, ${YPROCS}, ${ZPROCS}, ${NTHREADS}' &
+		${rolfrtypnum}, ${nStepsSettle}, ${uniSys}, ${shearCellType}, ${radDist}, ${radmu}, ${radsigma}, ${numProc}, ${XPROCS}, ${YPROCS}, ${ZPROCS}, ${NTHREADS}, ${OMPON}, ${nStepsRun}' &
 		file ./results/sim_par_fid${fileID}.csv &
 		title 'rad, dens, ym, pr, rest, fric, rf, dt, dCylDp, ctrlStress, expDiam, expMass, shearperc, totaltime, fileID, rolfrtypnum, nStepsSettle, uniSys, shearCellType, radDist, radmu, &
-        radsigma, numProc, xProcs, yProcs, zProcs, nThreads'" &
+        radsigma, numProc, xProcs, yProcs, zProcs, nThreads, OMPON, nStepsRun'" &
 elif "${radDist} == 3" &
 "fix csv all print 1 '${rad}, ${dens}, ${ym}, ${pr}, ${rest}, ${fric}, ${rf}, ${dt}, ${dCylDp}, ${ctrlStress}, ${expDiam}, ${expMass}, ${shearperc}, ${totaltime}, ${fileID}, &
 		${rolfrtypnum}, ${nStepsSettle}, ${uniSys}, ${shearCellType}, ${radDist}, ${radmu}, ${radsigma}, ${radR1}, ${radPerc1}, ${radR2}, ${radPerc2}, ${radR3}, ${radPerc3}, &
-        ${radR4}, ${radPerc4}, ${radR5}, ${radPerc5}, ${radR6}, ${radPerc6}, ${numProc}, ${XPROCS}, ${YPROCS}, ${ZPROCS}, ${NTHREADS}' &
+        ${radR4}, ${radPerc4}, ${radR5}, ${radPerc5}, ${radR6}, ${radPerc6}, ${numProc}, ${XPROCS}, ${YPROCS}, ${ZPROCS}, ${NTHREADS}, ${OMPON}, ${nStepsRun}' &
 		file ./results/sim_par_fid${fileID}.csv &
 		title 'rad, dens, ym, pr, rest, fric, rf, dt, dCylDp, ctrlStress, expDiam, expMass, shearperc, totaltime, fileID, rolfrtypnum, nStepsSettle, uniSys, shearCellType, radDist, radmu, radsigma, &
-        radR1, radPerc1, radR2, radPerc2, radR3, radPerc3, radR4, radPerc4, radR5, radPerc5, radR6, radPerc6, numProc, xProcs, yProcs, zProcs, nThreads'" &
+        radR1, radPerc1, radR2, radPerc2, radR3, radPerc3, radR4, radPerc4, radR5, radPerc5, radR6, radPerc6, numProc, xProcs, yProcs, zProcs, nThreads, OMPON, nStepsRun'" &
 else &
   "fix csv all print 1 '${rad}, ${dens}, ${ym}, ${pr}, ${rest}, ${fric}, ${rf}, ${dt}, ${dCylDp}, ${ctrlStress}, ${expDiam}, ${expMass}, ${shearperc}, ${totaltime}, ${fileID}, &
-		${rolfrtypnum}, ${nStepsSettle}, ${uniSys}, ${shearCellType}, ${radDist}, ${numProc}, ${XPROCS}, ${YPROCS}, ${ZPROCS}, ${NTHREADS}' &
+		${rolfrtypnum}, ${nStepsSettle}, ${uniSys}, ${shearCellType}, ${radDist}, ${numProc}, ${XPROCS}, ${YPROCS}, ${ZPROCS}, ${NTHREADS}, ${OMPON}, ${nStepsRun}' &
 		file ./results/sim_par_fid${fileID}.csv &
 		title 'rad, dens, ym, pr, rest, fric, rf, dt, dCylDp, ctrlStress, expDiam, expMass, shearperc, totaltime, fileID, rolfrtypnum, nStepsSettle, uniSys, shearCellType, radDist, numProc, &
-        xProcs, yProcs, zProcs, nThreads'" 
+        xProcs, yProcs, zProcs, nThreads, OMPON, nStepsRun'" 
 
 #insert the first particles so that dump is not empty
 run		  1
