@@ -76,7 +76,9 @@ Th = (2*pi/M) * ((M:-1:0)'*ones(1,N));
 % polar(Th, R)
 [X, Y] = pol2cart(Th, R);
 
-h = plot(X, Y, varargin{:});
+%whitebg('w')
+set(gcf,'color','w');
+h = plot(X, Y, varargin{:},'Linewidth',3);
 axis([-1,1,-1,1])
 axis square
 axis off

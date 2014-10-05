@@ -24,7 +24,7 @@ set(0,'DefaultTextFontSize',12);
 unitSysDefault = 'si';  % 'si' or 'cgs'
 
 % select files that should be postprocessed
-sim_dir = '../results/10/sim123_sinterfine_reducedPolydispersity_test32'; % directory, where simulation files can be found
+sim_dir = '../results/10/sim125_ompComparison'; % directory, where simulation files can be found
 filepattern = 'force.cad*_fid*.txt'; % e.g. 'force.*.txt' %Andi
 filepatterncsv = 'sim_par*_fid*.csv'; % e.g. 'force.*.txt' %Andi
 
@@ -32,15 +32,16 @@ filepatterncsv = 'sim_par*_fid*.csv'; % e.g. 'force.*.txt' %Andi
 % example: searchCases = {'fric' 0.6
 %                         'rf'   [0.2 0.4]};
 %   for all cases use empty searchCases = {};
-searchCases = {'fric' 0.4 %[0.4 0.8]
-               'rf'   0.6 %[0.4 0.8]
-               'rest'   0.5 %[0.4 0.8]
+searchCases = {...'fric' 0.4 %[0.4 0.8]
+               ...'rf'   0.6 %[0.4 0.8]
+               ...'rest'   0.5 %[0.4 0.8]
                ...'fid'  [	20025	20026	20027	20028	20029	20030 20035		20201	20202	20203	20204 20205] %20101	20102	20103	20125	20126 20001	20002
-               'shearperc' 0.4
+               ...'shearperc' 0.4
                ... 'ctrlStress' -1.007001977856750e+04
-               'expMass' 0.9275
-               'dens' 3000
-               'dt' 1.0e-6
+               ...'expMass' 0.9275
+               ...'dens' 3000
+               ...'dt' 1.0e-6
+                  'dCylDp' 20
                };
 
 % define column of forces/position in the data file
@@ -79,13 +80,13 @@ end
 legendFlag = 'std';
 
 %dCylDp confrontation
-dCylDpConfrontationFlag = true;
+dCylDpConfrontationFlag = false;
 dCylDpConfrontationFlag2 = false;
 
 %doNN
 NNFlag = false;
 hiddenLayerSizeVector = [5:34];
-newInputFlag = true;
+newInputFlag = false;
 gloriaWinFlag = false;
 
 % save images
@@ -1380,11 +1381,13 @@ if (newInputFlag)
        dataNN2.dens = [2000:100:3500];
        densTolerance =1.4; 
     end
+    
+if (exp_flag)
     newY2 = myNewInput(NNSave2, errorEstSumMaxIndex2, dataNN2);        
     [nY2rows,nY2column] = size(newY2);
 
 %% experimental confrontation 2
-if (exp_flag)
+
     switch legendExpFlag
          case 'schulze' 
             jjj=1;
