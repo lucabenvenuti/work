@@ -5,7 +5,7 @@
 #                   folder matlab,                                                      #
 #                   postprocessing-script plotForce_v3_16.m                             #
 # date: Apr. 2014                                                                       #
-# authors: Benvenuti, L., Queteschiner, D., Aigner, A.                                                                 #
+# authors: Benvenuti, L., Queteschiner, D., Aigner, A., Berger R.                       #
 # e-mail: luca.benvenuti@jku.at                                                         #
 # short description: liggghts-input file for computing the shear force of a simple      #
 # shear tester while varying the coefficient of friction.                               #
@@ -46,9 +46,9 @@ variable    radDist equal       3         # radius distribution (1 = (25%rad*0.9
                                            # for 2 you must uncomment radsigma & radmu, the latter must be equal to rad
                                             # 3=discrete distribution with real values
 
-variable    dt      equal       1e-7            # time step width [s]
+variable    dt      equal       1e-6            # time step width [s]
 
-variable    dCylDp  index       40 #38 50 75     # ratio cylinder diameter to particle diameter (opional loop)
+variable    dCylDp  index       10 #38 50 75     # ratio cylinder diameter to particle diameter (opional loop)
 
 variable    accGrev equal       9.81            # acceleration due to gravity [m/s2]
 
@@ -56,9 +56,18 @@ variable    shearperc index 	0.4 0.6 1.0 #percentage of normal load during shear
 
 variable    shearCellType   index 3     #1 2     #(1=PoorMan; 2=Jenike; 3=Schulze)
 
-processors  4 4 2
+variable    XPROCS equal 4
+variable    YPROCS equal 4
+variable    ZPROCS equal 2
+variable    NTHREADS equal 1
 
-variable    numProc equal       32
+#processors  4 4 2
+
+#variable    numProc equal       32
+
+processors  ${XPROCS} ${YPROCS} ${ZPROCS}
+
+variable    numProc equal       ${XPROCS}*${YPROCS}*${ZPROCS}*${NTHREADS}
 
 variable    ratio   equal       0.0001    
 # defines the maximum wall velocity in the vicinity of particles (only for the 'auto' mode)
@@ -144,6 +153,7 @@ variable    nStepsRun2      equal   round(${nStepsRun}/20)
 variable    nStepsRun3      equal   ${nStepsRun2}*19
 variable    nStepsRun4      equal   ${nStepsRun}*2
 variable    totaltime	    equal   ${dt}*${nStepsRun}*2
+variable    zoltanSteps	    equal   round(${nStepsRun}/10.0)
 
 #########################################################################################
 #rolling friction options
@@ -242,21 +252,23 @@ fix   meshWall all wall/gran model hertz tangential history rolling_friction ${r
 ### print a csv file with all the parameteres #2gauss
 if "${radDist} == 2" then                            &
   "fix csv all print 1 '${rad}, ${dens}, ${ym}, ${pr}, ${rest}, ${fric}, ${rf}, ${dt}, ${dCylDp}, ${ctrlStress}, ${expDiam}, ${expMass}, ${shearperc}, ${totaltime}, ${fileID}, &
-		${rolfrtypnum}, ${nStepsSettle}, ${uniSys}, ${shearCellType}, ${radDist}, ${radmu}, ${radsigma}, ${numProc}' &
+		${rolfrtypnum}, ${nStepsSettle}, ${uniSys}, ${shearCellType}, ${radDist}, ${radmu}, ${radsigma}, ${numProc}, ${XPROCS}, ${YPROCS}, ${ZPROCS}, ${NTHREADS}' &
 		file ./results/sim_par_fid${fileID}.csv &
-		title 'rad, dens, ym, pr, rest, fric, rf, dt, dCylDp, ctrlStress, expDiam, expMass, shearperc, totaltime, fileID, rolfrtypnum, nStepsSettle, uniSys, shearCellType, radDist, radmu, radsigma, numProc'" &
+		title 'rad, dens, ym, pr, rest, fric, rf, dt, dCylDp, ctrlStress, expDiam, expMass, shearperc, totaltime, fileID, rolfrtypnum, nStepsSettle, uniSys, shearCellType, radDist, radmu, &
+        radsigma, numProc, xProcs, yProcs, zProcs, nThreads'" &
 elif "${radDist} == 3" &
 "fix csv all print 1 '${rad}, ${dens}, ${ym}, ${pr}, ${rest}, ${fric}, ${rf}, ${dt}, ${dCylDp}, ${ctrlStress}, ${expDiam}, ${expMass}, ${shearperc}, ${totaltime}, ${fileID}, &
 		${rolfrtypnum}, ${nStepsSettle}, ${uniSys}, ${shearCellType}, ${radDist}, ${radmu}, ${radsigma}, ${radR1}, ${radPerc1}, ${radR2}, ${radPerc2}, ${radR3}, ${radPerc3}, &
-        ${radR4}, ${radPerc4}, ${radR5}, ${radPerc5}, ${radR6}, ${radPerc6}, ${numProc}' &
+        ${radR4}, ${radPerc4}, ${radR5}, ${radPerc5}, ${radR6}, ${radPerc6}, ${numProc}, ${XPROCS}, ${YPROCS}, ${ZPROCS}, ${NTHREADS}' &
 		file ./results/sim_par_fid${fileID}.csv &
 		title 'rad, dens, ym, pr, rest, fric, rf, dt, dCylDp, ctrlStress, expDiam, expMass, shearperc, totaltime, fileID, rolfrtypnum, nStepsSettle, uniSys, shearCellType, radDist, radmu, radsigma, &
-        radR1, radPerc1, radR2, radPerc2, radR3, radPerc3, radR4, radPerc4, radR5, radPerc5, radR6, radPerc6, numProc'" &
+        radR1, radPerc1, radR2, radPerc2, radR3, radPerc3, radR4, radPerc4, radR5, radPerc5, radR6, radPerc6, numProc, xProcs, yProcs, zProcs, nThreads'" &
 else &
   "fix csv all print 1 '${rad}, ${dens}, ${ym}, ${pr}, ${rest}, ${fric}, ${rf}, ${dt}, ${dCylDp}, ${ctrlStress}, ${expDiam}, ${expMass}, ${shearperc}, ${totaltime}, ${fileID}, &
-		${rolfrtypnum}, ${nStepsSettle}, ${uniSys}, ${shearCellType}, ${radDist}, ${numProc}' &
+		${rolfrtypnum}, ${nStepsSettle}, ${uniSys}, ${shearCellType}, ${radDist}, ${numProc}, ${XPROCS}, ${YPROCS}, ${ZPROCS}, ${NTHREADS}' &
 		file ./results/sim_par_fid${fileID}.csv &
-		title 'rad, dens, ym, pr, rest, fric, rf, dt, dCylDp, ctrlStress, expDiam, expMass, shearperc, totaltime, fileID, rolfrtypnum, nStepsSettle, uniSys, shearCellType, radDist, numProc'" 
+		title 'rad, dens, ym, pr, rest, fric, rf, dt, dCylDp, ctrlStress, expDiam, expMass, shearperc, totaltime, fileID, rolfrtypnum, nStepsSettle, uniSys, shearCellType, radDist, numProc, &
+        xProcs, yProcs, zProcs, nThreads'" 
 
 #insert the first particles so that dump is not empty
 run		  1

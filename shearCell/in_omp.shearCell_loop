@@ -148,6 +148,7 @@ variable    nStepsRun2      equal   round(${nStepsRun}/20)
 variable    nStepsRun3      equal   ${nStepsRun2}*19
 variable    nStepsRun4      equal   ${nStepsRun}*2
 variable    totaltime	    equal   ${dt}*${nStepsRun}*2
+variable    zoltanSteps	    equal   round(${nStepsRun}/10.0)
 
 #########################################################################################
 #rolling friction options
@@ -219,7 +220,7 @@ thermo		    ${nScreen}
 thermo_modify	lost ignore norm no
 compute_modify  thermo_temp dynamic yes
 
-partitioner_style zoltan EVERY 50000 RCB_REUSE 1
+partitioner_style zoltan EVERY ${zoltanSteps} RCB_REUSE 1
 
 # --- runs ---
 # run 0 ... assign actual data to atoms
@@ -248,21 +249,23 @@ fix   meshWall all wall/gran/omp model hertz tangential history rolling_friction
 ### print a csv file with all the parameteres #2gauss
 if "${radDist} == 2" then                            &
   "fix csv all print 1 '${rad}, ${dens}, ${ym}, ${pr}, ${rest}, ${fric}, ${rf}, ${dt}, ${dCylDp}, ${ctrlStress}, ${expDiam}, ${expMass}, ${shearperc}, ${totaltime}, ${fileID}, &
-		${rolfrtypnum}, ${nStepsSettle}, ${uniSys}, ${shearCellType}, ${radDist}, ${radmu}, ${radsigma}, ${numProc}' &
+		${rolfrtypnum}, ${nStepsSettle}, ${uniSys}, ${shearCellType}, ${radDist}, ${radmu}, ${radsigma}, ${numProc}, ${XPROCS}, ${YPROCS}, ${ZPROCS}, ${NTHREADS}' &
 		file ./results/sim_par_fid${fileID}.csv &
-		title 'rad, dens, ym, pr, rest, fric, rf, dt, dCylDp, ctrlStress, expDiam, expMass, shearperc, totaltime, fileID, rolfrtypnum, nStepsSettle, uniSys, shearCellType, radDist, radmu, radsigma, numProc'" &
+		title 'rad, dens, ym, pr, rest, fric, rf, dt, dCylDp, ctrlStress, expDiam, expMass, shearperc, totaltime, fileID, rolfrtypnum, nStepsSettle, uniSys, shearCellType, radDist, radmu, &
+        radsigma, numProc, xProcs, yProcs, zProcs, nThreads'" &
 elif "${radDist} == 3" &
 "fix csv all print 1 '${rad}, ${dens}, ${ym}, ${pr}, ${rest}, ${fric}, ${rf}, ${dt}, ${dCylDp}, ${ctrlStress}, ${expDiam}, ${expMass}, ${shearperc}, ${totaltime}, ${fileID}, &
 		${rolfrtypnum}, ${nStepsSettle}, ${uniSys}, ${shearCellType}, ${radDist}, ${radmu}, ${radsigma}, ${radR1}, ${radPerc1}, ${radR2}, ${radPerc2}, ${radR3}, ${radPerc3}, &
-        ${radR4}, ${radPerc4}, ${radR5}, ${radPerc5}, ${radR6}, ${radPerc6}, ${numProc}' &
+        ${radR4}, ${radPerc4}, ${radR5}, ${radPerc5}, ${radR6}, ${radPerc6}, ${numProc}, ${XPROCS}, ${YPROCS}, ${ZPROCS}, ${NTHREADS}' &
 		file ./results/sim_par_fid${fileID}.csv &
 		title 'rad, dens, ym, pr, rest, fric, rf, dt, dCylDp, ctrlStress, expDiam, expMass, shearperc, totaltime, fileID, rolfrtypnum, nStepsSettle, uniSys, shearCellType, radDist, radmu, radsigma, &
-        radR1, radPerc1, radR2, radPerc2, radR3, radPerc3, radR4, radPerc4, radR5, radPerc5, radR6, radPerc6, numProc'" &
+        radR1, radPerc1, radR2, radPerc2, radR3, radPerc3, radR4, radPerc4, radR5, radPerc5, radR6, radPerc6, numProc, xProcs, yProcs, zProcs, nThreads'" &
 else &
   "fix csv all print 1 '${rad}, ${dens}, ${ym}, ${pr}, ${rest}, ${fric}, ${rf}, ${dt}, ${dCylDp}, ${ctrlStress}, ${expDiam}, ${expMass}, ${shearperc}, ${totaltime}, ${fileID}, &
-		${rolfrtypnum}, ${nStepsSettle}, ${uniSys}, ${shearCellType}, ${radDist}, ${numProc}' &
+		${rolfrtypnum}, ${nStepsSettle}, ${uniSys}, ${shearCellType}, ${radDist}, ${numProc}, ${XPROCS}, ${YPROCS}, ${ZPROCS}, ${NTHREADS}' &
 		file ./results/sim_par_fid${fileID}.csv &
-		title 'rad, dens, ym, pr, rest, fric, rf, dt, dCylDp, ctrlStress, expDiam, expMass, shearperc, totaltime, fileID, rolfrtypnum, nStepsSettle, uniSys, shearCellType, radDist, numProc'" 
+		title 'rad, dens, ym, pr, rest, fric, rf, dt, dCylDp, ctrlStress, expDiam, expMass, shearperc, totaltime, fileID, rolfrtypnum, nStepsSettle, uniSys, shearCellType, radDist, numProc, &
+        xProcs, yProcs, zProcs, nThreads'" 
 
 #insert the first particles so that dump is not empty
 run		  1
