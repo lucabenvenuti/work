@@ -44,13 +44,13 @@ variable    radDist equal       3          # radius distribution (1 = (25%rad*0.
                                            # 2=gaussian distribution with radmu & radsigma)
                                            # for 2 you must uncomment radsigma & radmu, the latter must be equal to rad
                                            # 3=discrete distribution with real values
-variable    dt      equal       1e-7           # time step width [s]
+variable    dt      equal       1e-6           # time step width [s]
 
-variable    dCylDp  equal       40      # ratio cylinder diameter to particle diameter (optional loop)
+variable    dCylDp  equal       10      # ratio cylinder diameter to particle diameter (optional loop)
 
 variable    accGrev equal       9.81    # acceleration due to gravity
 
-processors  4 4 2
+processors  ${XPROCS} ${YPROCS} ${ZPROCS}
 
 variable    numProc equal       32
 
@@ -126,6 +126,14 @@ shell   mkdir restart
 shell   mkdir post
 shell   mkdir results
 
+# ompOn check
+if "${OMPON} == 1" then                            &
+  "package omp ${NTHREADS} force/neigh thread-binding verbose"  &
+  "modify_timing on"      & 
+  "print 'OMP is ON'"                         &
+else &
+  "print 'OMP is OFF - old version'" 
+
 
 # writing log file to post folder
 log     logs/log_init.shearCell_rad${rad}_dcyldp${dCylDp}.txt
@@ -152,21 +160,28 @@ fix     m4 all property/global coefficientFriction peratomtypepair 2 ${fric} 0.0
 fix     m5 all property/global coefficientRollingFriction peratomtypepair 2 ${rf} 0.0 0.0 0.0
 #fix    m6 all property/global coefficientRollingViscousDamping peratomtypepair 2 ${rvd} 0.0 0.0 0.0
 
-# pair style
-pair_style 	gran model hertz tangential history rolling_friction ${rolfrtyp}
+# pair style # ompOn check
+if "${OMPON} == 1" then                            &
+  "pair_style 	gran/omp model hertz tangential history rolling_friction ${rolfrtyp}"  &
+else &
+  "pair_style 	gran model hertz tangential history rolling_friction ${rolfrtyp}" 
+
 pair_coeff	* *
 
 #Timestep
 timestep	${dt}
 
-#Gravity
-fix		gravi all gravity ${accGrev} vector 0.0 0.0 -1.0
-
-#additional walls for particle insertion
-
-fix     wCylinder all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} primitive type 1 zcylinder ${cylRadius} 0. 0.
-fix     zplane1   all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} primitive type 1 zplane ${nz}
-fix     zplane2   all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} primitive type 1 zplane ${pz}
+#Gravity & #additional walls for particle insertion
+if "${OMPON} == 1" then                            &
+  "fix		gravi all gravity/omp ${accGrev} vector 0.0 0.0 -1.0"  &
+  "fix     wCylinder all wall/gran/omp model hertz tangential history rolling_friction ${rolfrtyp} primitive type 1 zcylinder ${cylRadius} 0. 0."  &
+  "fix     zplane1   all wall/gran/omp model hertz tangential history rolling_friction ${rolfrtyp} primitive type 1 zplane ${nz}"  &
+  "fix     zplane2   all wall/gran/omp model hertz tangential history rolling_friction ${rolfrtyp} primitive type 1 zplane ${pz}"  &
+else &
+  "fix		gravi all gravity ${accGrev} vector 0.0 0.0 -1.0" &
+  "fix     wCylinder all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} primitive type 1 zcylinder ${cylRadius} 0. 0."  &
+  "fix     zplane1   all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} primitive type 1 zplane ${nz}"  &
+  "fix     zplane2   all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} primitive type 1 zplane ${pz}"
 
 # define the material in use  ## pts1 0.25 pts2 0.25  volume_limit ${volMin}"   
 if "${radDist} == 2" then                            &
@@ -195,7 +210,11 @@ fix     ins all insert/pack seed 5332 distributiontemplate pdd maxattempt 100 in
 		vel constant 0.0 0.0 -0.05 region bc mass_in_region ${desiredMass} ntry_mc 10000
 
 #apply nve integration to all particles that are inserted as single particles
-fix		integr all nve/sphere
+if "${OMPON} == 1" then                            &
+  "fix		integr all nve/sphere/omp"  &
+else &
+  "fix		integr all nve/sphere" 
+
 
 # load balancing
 fix     lb all balance 0 xyz 10 1.05

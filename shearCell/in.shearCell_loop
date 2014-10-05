@@ -17,6 +17,15 @@
 #########################################################################################
 variable fileID equal ${iden}
 label loopiteration
+
+# ompOn check
+if "${OMPON} == 1" then                            &
+  "package omp ${NTHREADS} force/neigh thread-binding verbose"  &
+  "modify_timing on"      & 
+  "print 'OMP is ON'"                         &
+else &
+  "print 'OMP is OFF - old version'" 
+
 variable    rad     equal       518e-6          # particle radius [m]
 variable    radmu   equal       518e-6             # particle radius mean [m]
 variable  radsigma  equal       0.000287             # particle radius sigma[m]
@@ -55,15 +64,6 @@ variable    accGrev equal       9.81            # acceleration due to gravity [m
 variable    shearperc index 	0.4 0.6 1.0 #percentage of normal load during shear compared to the one during preshear
 
 variable    shearCellType   index 3     #1 2     #(1=PoorMan; 2=Jenike; 3=Schulze)
-
-variable    XPROCS equal 4
-variable    YPROCS equal 4
-variable    ZPROCS equal 2
-variable    NTHREADS equal 1
-
-#processors  4 4 2
-
-#variable    numProc equal       32
 
 processors  ${XPROCS} ${YPROCS} ${ZPROCS}
 
@@ -198,8 +198,11 @@ fix     m4 all property/global coefficientFriction peratomtypepair 2 ${fric} 0.0
 fix     m5 all property/global coefficientRollingFriction peratomtypepair 2 ${rf} 0.0 0.0 0.0
 #fix    m6 all property/global coefficientRollingViscousDamping peratomtypepair 2 ${rvd} 0.0 0.0 0.0
 
-# pair style
-pair_style 	gran model hertz tangential history rolling_friction ${rolfrtyp}
+# pair style # ompOn check
+if "${OMPON} == 1" then                            &
+  "pair_style 	gran/omp model hertz tangential history rolling_friction ${rolfrtyp}"  &
+else &
+  "pair_style 	gran model hertz tangential history rolling_friction ${rolfrtyp}"  
 pair_coeff	* *
 
 
@@ -207,13 +210,17 @@ pair_coeff	* *
 timestep	${dt}
 
 #Gravity
-fix		gravi all gravity ${accGrev} vector 0.0 0.0 -1.0
-
 #apply nve integration to all particles that are inserted as single particles
-fix		integr all nve/sphere
-
 # load balancing
-fix     lb all balance 0 xyz 10 1.05
+if "${OMPON} == 1" then                            &
+  "fix		gravi all gravity/omp ${accGrev} vector 0.0 0.0 -1.0"  &
+  "fix		integr all nve/sphere/omp"  &
+else &
+  "fix		gravi all gravity ${accGrev} vector 0.0 0.0 -1.0" &
+  "fix		integr all nve/sphere"  &
+  "fix     lb all balance 0 xyz 10 1.05"
+
+
 
 #check timestep
 fix     ts all check/timestep/gran 1 0.1 0.1 #use small values to produce output
@@ -225,6 +232,11 @@ thermo		    ${nScreen}
 thermo_modify	lost ignore norm no
 compute_modify  thermo_temp dynamic yes
 
+if "${OMPON} == 1" then                            &
+  "partitioner_style zoltan EVERY ${zoltanSteps} RCB_REUSE 1"  &
+else &
+  "print 'OMP is OFF - old version - bis'"  
+
 # --- runs ---
 # run 0 ... assign actual data to atoms
 # then we may shrink the box
@@ -232,22 +244,21 @@ run     0
 change_box    all x final ${nx} ${px} y final ${ny} ${py} z final ${nz} ${pz} units box
 
 #import triangular mesh from cad
-fix   cad1 all mesh/surface/stress file mesh/upperCyl.stl verbose no type 2 scale ${cylRadius} move 0.0 0.0 ${bottomPos}
-fix   cad2 all mesh/surface/stress file mesh/bottom.stl verbose no type 2 scale ${cylRadius}
-#fix   cad3 all mesh/surface/stress/servo file mesh/plate.stl verbose no type 2 scale ${cylRadius} move 0. 0. ${pz} com 0. 0. &
-#		#${pz} target_val ${ctrlForce} vel_max ${velMax} dim z kp ${ctrlKp} ki ${ctrlKi} kd ${ctrlKd} ctrlPV force
-fix   cad3 all mesh/surface/stress/servo file mesh/plate.stl verbose no type 2 scale ${cylRadius} & 
-	  move 0. 0. ${pz} com 0. 0. ${pz} target_val ${ctrlForce} vel_max ${velMax} &
-	  axis 0 0 1 ctrlPV force ratio ${ratio} mode auto 
-
+if "${OMPON} == 1" then                            &
+  "fix     cad1 all mesh/surface/stress/omp file mesh/upperCyl.stl verbose no type 2 scale ${cylRadius} move 0.0 0.0 ${bottomPos}" &
+  "fix     cad2 all mesh/surface/stress/omp file mesh/bottom.stl verbose no type 2 scale ${cylRadius}"  &
+  "fix     fix   cad3 all mesh/surface/stress/servo/omp file mesh/plate.stl verbose no type 2 scale ${cylRadius} & 
+	             move 0. 0. ${pz} com 0. 0. ${pz} target_val ${ctrlForce} vel_max ${velMax} &
+	             axis 0 0 1 ctrlPV force ratio ${ratio} mode auto "  &
+  "fix   meshWall all wall/gran/omp model hertz tangential history rolling_friction ${rolfrtyp} mesh n_meshes 3 meshes cad1 cad2 cad3" &
+else &
+  "fix     cad1 all mesh/surface/stress file mesh/upperCyl.stl verbose no type 2 scale ${cylRadius} move 0.0 0.0 ${bottomPos}" &
+  "fix     cad2 all mesh/surface/stress file mesh/bottom.stl verbose no type 2 scale ${cylRadius}"  &
+  "fix     fix   cad3 all mesh/surface/stress/servo file mesh/plate.stl verbose no type 2 scale ${cylRadius} & 
+	             move 0. 0. ${pz} com 0. 0. ${pz} target_val ${ctrlForce} vel_max ${velMax} &
+	             axis 0 0 1 ctrlPV force ratio ${ratio} mode auto "  &
+  "fix   meshWall all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} mesh n_meshes 3 meshes cad1 cad2 cad3"
 #use the imported meshes as granular wall
-fix   meshWall all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} mesh n_meshes 3 meshes cad1 cad2 cad3
-
-# dump geometry 
-# MARKDUMP
-#dump    dumpstl1 all mesh/stl 1 post/dump_*.cad1_rad${rad}_dcyldp${dCylDp}_mu${fric}_rf${rf}_dt${dt}.stl cad1
-#dump    dumpstl2 all mesh/stl ${nDump} post/dump_*.cad2_rad${rad}_dcyldp${dCylDp}_mu${fric}_rf${rf}_dt${dt}.stl cad2
-#dump    dumpstl3 all mesh/stl ${nDump} post/dump_*.cad3_rad${rad}_dcyldp${dCylDp}_mu${fric}_rf${rf}_dt${dt}.stl cad3
 
 ### print a csv file with all the parameteres #2gauss
 if "${radDist} == 2" then                            &
@@ -272,15 +283,11 @@ else &
 
 #insert the first particles so that dump is not empty
 run		  1
-#dump    dmp all custom ${nDump} post/dump_*.shearCell_rad${rad}_dcyldp${dCylDp}_mu${fric}_rf${rf}_dt${dt} id type type x y z ix iy iz vx vy vz fx fy fz omegax omegay omegaz radius # MARKDUMP
 
 unfix csv
-#unfix csvb
-#unfix csvc
 
 # check only once the timestep
 unfix ts
-#undump  dumpstl1 # MARKDUMP
 
 # get mass of particle column
 region   upCyl  block  ${nx} ${px} ${ny} ${py} ${bottomPos} ${pz} units box
@@ -340,17 +347,6 @@ else &
   "run     ${nStepsRun2}" &
   "fix_modify cad3 target_val ${ctrlForcemain}" &
   "run     ${nStepsRun3}" &
-
-#run
-#run     ${nStepsRun}
-#change the normal load during the simulation
-#fix_modify cad3 target_val ${ctrlForceZero}
-#run
-#run     ${nStepsRun2}
-#change the normal load during the simulation
-#fix_modify cad3 target_val ${ctrlForcemain}
-#run
-#run     ${nStepsRun3}
 
 variable fileID equal ${fileID}+1
 
