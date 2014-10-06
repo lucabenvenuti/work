@@ -5,7 +5,7 @@
 #                   folder matlab,                                                      #
 #                   loop input script in.shearCell_loop                                 #
 # date: Apr. 2014                                                                       #
-# authors: Benvenuti, L., Queteschiner, D., Aigner, A.                                  #
+# authors: Benvenuti, L., Queteschiner, D., Aigner, A., Berger R.                       #
 # e-mail: luca.benvenuti@jku.at                                                         #
 # short description: liggghts-input file for computing the shear force of a simple      #
 #   shear tester while varying the coefficient of friction.                             #
@@ -52,7 +52,7 @@ variable    accGrev equal       9.81    # acceleration due to gravity
 
 processors  ${XPROCS} ${YPROCS} ${ZPROCS}
 
-variable    numProc equal       32
+variable    numProc equal       ${XPROCS}*${YPROCS}*${ZPROCS}
 
 #########################################################################################
 #   IF YOU CHANGE ANYTHING BELOW THIS LINE, YOU MIGHT ADAPT THE POSTPROCESSING SCRIPT   #

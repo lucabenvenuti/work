@@ -1,11 +1,11 @@
 #########################################################################################
 # title: in.repose_loop                                                              #
-# version: 4.01                                                                         #
+# version: 5.01                                                                         #
 # additional files: folder mesh,                                                        #
 #                   folder matlab,                                                      #
 #                   postprocessing-script plotForce_v3_16.m                             #
 # date: Aug. 2014                                                                       #
-# authors: Benvenuti, L., Queteschiner, D., Aigner, A.                                                                 #
+# authors: Benvenuti, L., Queteschiner, D., Aigner, A. , Berger R.                      #
 # e-mail: luca.benvenuti@jku.at                                                         #
 # short description: liggghts-input file for computing the shear force of a simple      #
 # shear tester while varying the coefficient of friction.                               #
@@ -17,6 +17,15 @@
 #########################################################################################
 variable fileID equal ${iden}
 label loopiteration
+
+# ompOn check
+if "${OMPON} == 1" then                            &
+  "package omp ${NTHREADS} force/neigh thread-binding verbose"  &
+  "modify_timing on"      & 
+  "print 'OMP is ON'"                         &
+else &
+  "print 'OMP is OFF - old version'" 
+
 variable    rad     equal       518e-6          # particle radius [m]
 variable    radmu   equal       518e-6             # particle radius mean [m]
 variable  radsigma  equal       0.000287             # particle radius sigma[m]
@@ -49,14 +58,14 @@ variable    radDist equal       3         # radius distribution (1 = (25%rad*0.9
 
 variable    dt      equal       1e-6            # time step width [s]
 
-variable    dCylDp  equal       20      # ratio cylinder diameter to particle diameter (optional loop)
-variable    G_D_RATIO  equal       ${dCylDp}
+variable    dCylDp  equal       ${DCYLDP}      # ratio cylinder diameter to particle diameter (optional loop)
+variable    G_D_RATIO  equal    ${dCylDp}
 
 variable    accGrev equal       9.81            # acceleration due to gravity [m/s2]
 
-processors   4 4 2
+processors   ${XPROCS} ${YPROCS} ${ZPROCS}
 
-variable    numProc equal       32
+variable    numProc equal       ${XPROCS}*${YPROCS}*${ZPROCS}*${NTHREADS}
 
 variable    ratio   equal       0.0001    
 # defines the maximum wall velocity in the vicinity of particles (only for the 'auto' mode)
@@ -136,6 +145,7 @@ variable	thermofreq   equal round(0.001/${dt})
 #variable	nstep        equal round(20./${dt}) #2000000
 variable	nstep        equal round(${totaltime}/${dt}) #2000000
 variable	deletefreq   equal round(0.1/${dt}) #10000
+variable    zoltanSteps	    equal   round(${nStepsRun}/20.0)
 
 
 #########################################################################################
@@ -172,7 +182,7 @@ newton      off
 communicate	single vel yes
 
 # load simulation domain, particles, ...
-read_restart	./restart/restart.repose_rad${rad}_dcyldp${dCylDp}
+read_restart	./restart/restart.repose_rad${rad}_dcyldp${dCylDp}_${OMPON}
 
 neighbor	    ${skin} bin
 neigh_modify	delay 0
@@ -223,7 +233,12 @@ variable	vup equal (1.2*${dcyl})/(${dt}*${nstep})
 
 # pair style
 #pair_style 	gran model hertz tangential history rolling_friction ${rolfrtyp}
-pair_style 	gran model hooke
+#pair_style 	gran model hooke
+# pair style # ompOn check
+if "${OMPON} == 1" then                            &
+  "pair_style 	gran/omp model hertz tangential history rolling_friction ${rolfrtyp}"  &
+else &
+  "pair_style 	gran model hertz tangential history rolling_friction ${rolfrtyp}"  
 pair_coeff	* *
 #pair_style	${pairStyle} rolling_friction ${pairStyleRollingFriction} cohesion ${pairStyleCohesion} tangential_damping ${pairStyleDamping} # viscous ${pairStyleViscous}
 #pair_coeff	* *
@@ -232,31 +247,38 @@ pair_coeff	* *
 timestep	${dt}
 
 #Gravity
-fix		gravi all gravity ${accGrev} vector 0.0 0.0 -1.0
-
-
+#fix		gravi all gravity ${accGrev} vector 0.0 0.0 -1.0
+# load balancing
+#fix     lb all balance 0 xyz 10 1.05
+#apply nve integration to all particles that are inserted as single particles
+#fix		integr all nve/sphere
+if "${OMPON} == 1" then                            &
+  "fix		gravi all gravity/omp ${accGrev} vector 0.0 0.0 -1.0"  &
+  "fix		integr all nve/sphere/omp"  &
+else &
+  "fix		gravi all gravity ${accGrev} vector 0.0 0.0 -1.0" &
+  "fix		integr all nve/sphere"  &
+  "fix     lb all balance 0 xyz 10 1.05"
 
 # region and insertion
 variable rcyl equal ${G_D_RATIO}*${maxdiam}*0.9/2.
 variable hcyl equal 8./13.*${G_D_RATIO}*${maxdiam}
 region	bc cylinder z 0.0 0.0 ${rcyl}  0.0 ${hcyl} units box
 
-# meshes
-fix		cad1 all mesh/surface file meshes/ground.stl type 1 scale ${scale}
-fix		cad2 all mesh/surface file meshes/cylinder.stl type 1 scale ${scale}
-
-# use the imported meshes as granular wall
-fix		granwalls all wall/gran model hooke mesh n_meshes 2 meshes cad1 cad2
-fix		topwall all wall/gran model hooke primitive type 1 zplane 1.0
-
-#apply nve integration to all particles that are inserted as single particles
-fix		integr all nve/sphere
+# meshes # use the imported meshes as granular wall
+if "${OMPON} == 1" then                            &
+  "fix		cad1 all mesh/surface/omp file meshes/ground.stl type 1 scale ${scale}"    &
+  "fix		cad2 all mesh/surface/omp file meshes/cylinder.stl type 1 scale ${scale}"  &
+  "fix		granwalls all wall/gran/omp model hooke mesh n_meshes 2 meshes cad1 cad2"  &
+  "fix		topwall all wall/gran/omp model hooke primitive type 1 zplane 1.0"     &
+else &
+  "fix		cad1 all mesh/surface file meshes/ground.stl type 1 scale ${scale}"    &
+  "fix		cad2 all mesh/surface file meshes/cylinder.stl type 1 scale ${scale}"  &
+  "fix		granwalls all wall/gran model hooke mesh n_meshes 2 meshes cad1 cad2"  &
+  "fix		topwall all wall/gran model hooke primitive type 1 zplane 1.0"
 
 # lower region to delete particles from
 region		lower block INF INF INF INF INF 0. units box
-
-# load balancing
-fix     lb all balance 0 xyz 10 1.05
 
 #check timestep
 fix     ts all check/timestep/gran 1 0.1 0.1 #use small values to produce output
@@ -268,6 +290,11 @@ thermo		${thermofreq}
 thermo_modify	lost ignore norm no
 compute_modify	thermo_temp dynamic yes
 
+if "${OMPON} == 1" then                            &
+  "partitioner_style zoltan EVERY ${zoltanSteps} RCB_REUSE 1"  &
+else &
+  "print 'OMP is OFF - old version - bis'"  
+
 # dump
 dump		dumpstl all stl ${dumpfreq} post_param/stldump_${rf}_*.stl
 dump		dmp all custom ${dumpfreq} post_param/dump_${rf}_*.fill id type x y z ix iy iz vx vy vz fx fy fz omegax omegay omegaz radius
@@ -275,28 +302,32 @@ dump		dmp all custom ${dumpfreq} post_param/dump_${rf}_*.fill id type x y z ix i
 ### print a csv file with all the parameteres #2gauss
 if "${radDist} == 2" then                            &
   "fix csv all print 1 '${rad}, ${dens}, ${ym}, ${pr}, ${rest}, ${fric}, ${rf}, ${dt}, ${dCylDp}, ${totaltime}, ${fileID}, &
-		${rolfrtypnum}, ${nStepsSettle}, ${uniSys}, ${radDist}, ${radmu}, ${radsigma}, ${numProc}' &
+		${rolfrtypnum}, ${nStepsSettle}, ${uniSys}, ${radDist}, ${radmu}, ${radsigma}, ${numProc}, ${XPROCS}, ${YPROCS}, ${ZPROCS}, ${NTHREADS}, ${OMPON}, ${nStepsRun}' &
 		file ./results/sim_parAOR_fid${fileID}.csv &
-		title 'rad, dens, ym, pr, rest, fric, rf, dt, dCylDp, totaltime, fileID, rolfrtypnum, nStepsSettle, uniSys, radDist, radmu, radsigma, numProc'" &
+		title 'rad, dens, ym, pr, rest, fric, rf, dt, dCylDp, totaltime, fileID, rolfrtypnum, nStepsSettle, uniSys, radDist, radmu, radsigma, numProc, xProcs, yProcs, zProcs, nThreads, OMPON, nStepsRun'" &
 elif "${radDist} == 3" &
 "fix csv all print 1 '${rad}, ${dens}, ${ym}, ${pr}, ${rest}, ${fric}, ${rf}, ${dt}, ${dCylDp}, ${totaltime}, ${fileID}, &
 		${rolfrtypnum}, ${nStepsSettle}, ${uniSys}, ${radDist}, ${radmu}, ${radsigma}, ${radR1}, ${radPerc1}, ${radR2}, ${radPerc2}, ${radR3}, ${radPerc3}, &
-        ${radR4}, ${radPerc4}, ${radR5}, ${radPerc5}, ${radR6}, ${radPerc6}, ${numProc}' &
+        ${radR4}, ${radPerc4}, ${radR5}, ${radPerc5}, ${radR6}, ${radPerc6}, ${numProc}, ${XPROCS}, ${YPROCS}, ${ZPROCS}, ${NTHREADS}, ${OMPON}, ${nStepsRun}' &
 		file ./results/sim_parAOR_fid${fileID}.csv &
 		title 'rad, dens, ym, pr, rest, fric, rf, dt, dCylDp, totaltime, fileID, rolfrtypnum, nStepsSettle, uniSys, radDist, radmu, radsigma, &
-        radR1, radPerc1, radR2, radPerc2, radR3, radPerc3, radR4, radPerc4, radR5, radPerc5, radR6, radPerc6, numProc'" &
+        radR1, radPerc1, radR2, radPerc2, radR3, radPerc3, radR4, radPerc4, radR5, radPerc5, radR6, radPerc6, numProc, xProcs, yProcs, zProcs, nThreads, OMPON, nStepsRun'" &
 else &
   "fix csv all print 1 '${rad}, ${dens}, ${ym}, ${pr}, ${rest}, ${fric}, ${rf}, ${dt}, ${dCylDp}, ${ctrlStress}, ${expDiam}, ${expMass}, ${shearperc}, ${totaltime}, ${fileID}, &
-		${rolfrtypnum}, ${nStepsSettle}, ${uniSys}, ${shearCellType}, ${radDist}, ${numProc}' &
+		${rolfrtypnum}, ${nStepsSettle}, ${uniSys}, ${shearCellType}, ${radDist}, ${numProc}, ${XPROCS}, ${YPROCS}, ${ZPROCS}, ${NTHREADS}, ${OMPON}, ${nStepsRun}' &
 		file ./results/sim_parAOR_fid${fileID}.csv &
-		title 'rad, dens, ym, pr, rest, fric, rf, dt, dCylDp, totaltime, fileID, rolfrtypnum, nStepsSettle, uniSys, radDist, numProc'" 
+		title 'rad, dens, ym, pr, rest, fric, rf, dt, dCylDp, totaltime, fileID, rolfrtypnum, nStepsSettle, uniSys, radDist, numProc, xProcs, yProcs, zProcs, nThreads, OMPON, nStepsRun'" 
 
 # run 1 step to perform restart with hooke, then change interaction
 run		1
 unfix		granwalls
 unfix		topwall
 unfix csv
-pair_style 	gran model hertz tangential history rolling_friction ${rolfrtyp}
+# pair style # ompOn check
+if "${OMPON} == 1" then                            &
+  "pair_style 	gran/omp model hertz tangential history rolling_friction ${rolfrtyp}"  &
+else &
+  "pair_style 	gran model hertz tangential history rolling_friction ${rolfrtyp}"  
 pair_coeff	* *
 #fix		    granwalls all wall/${pairStyle} rolling_friction ${pairStyleRollingFriction} mesh n_meshes 2 meshes cad1 cad2
 fix		    granwalls all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} mesh n_meshes 2 meshes cad1 cad2

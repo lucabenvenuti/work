@@ -1,11 +1,11 @@
 #########################################################################################
 # title: in.repose_init_packing                                                      #
-# version: 4.01                                                                         #
+# version: 5.01                                                                         #
 # additional files: folder mesh,                                                        #
 #                   folder matlab,                                                      #
 #                   loop input script in.shearCell_loop                                 #
 # date: Aug. 2014                                                                       #
-# authors: Benvenuti, L., Queteschiner, D., Aigner, A. ,Hager, A., Goniva, C., Kloss, C.                                       #
+# authors: Benvenuti, L., Queteschiner, D., Aigner, A. ,Hager, A., Goniva, C., Kloss, C., Berger R.   #
 # e-mail: luca.benvenuti@jku.at                                                         #
 # short description: liggghts-input file for computing the angle of repose while        #
 #   varying the coefficient of rolling friction. Part of the material characterization  #
@@ -44,14 +44,14 @@ variable    radDist equal       3          # radius distribution (1 = (25%rad*0.
                                            # 3=discrete distribution with real values
 variable    dt      equal       1e-6            # time step width [s]
 
-variable    dCylDp  equal      20      # ratio cylinder diameter to particle diameter (optional loop)
-variable    G_D_RATIO  equal       ${dCylDp}
+variable    dCylDp  equal      ${DCYLDP}      # ratio cylinder diameter to particle diameter (optional loop)
+variable    G_D_RATIO  equal   ${dCylDp}
 
 variable    accGrev equal       9.81            # acceleration due to gravity [m/s2]
 
-processors  4 4 2
+processors  ${XPROCS} ${YPROCS} ${ZPROCS}
 
-variable    numProc equal       32
+variable    numProc equal       ${XPROCS}*${YPROCS}*${ZPROCS}
 
 #########################################################################################
 #   IF YOU CHANGE ANYTHING BELOW THIS LINE, YOU MIGHT ADAPT THE POSTPROCESSING SCRIPT   #
@@ -123,6 +123,13 @@ shell	mkdir area
 shell	mkdir images
 shell	mkdir post_param
 
+# ompOn check
+if "${OMPON} == 1" then                            &
+  "package omp ${NTHREADS} force/neigh thread-binding verbose"  &
+  "modify_timing on"      & 
+  "print 'OMP is ON'"                         &
+else &
+  "print 'OMP is OFF - old version'" 
 
 # writing log file to post folder
 log     logs/log_init.repose_rad${rad}_dcyldp${dCylDp}.txt
@@ -151,14 +158,21 @@ fix     m6 all property/global characteristicVelocity scalar ${characteristicVel
 #fix    m7 all property/global coefficientRollingViscousDamping peratomtypepair 2 ${rvd} 0.0 0.0 0.0
 
 # pair style
-pair_style 	gran model hooke #hertz tangential history rolling_friction ${rolfrtyp}
+# pair style # ompOn check #Gravity
+if "${OMPON} == 1" then                            &
+  "pair_style 	gran/omp model hertz tangential history rolling_friction ${rolfrtyp}"  &
+else &
+  "pair_style 	gran model hertz tangential history rolling_friction ${rolfrtyp}" 
 pair_coeff	* *
 
 #Timestep
 timestep	${dt}
 
-#Gravity
-fix		gravi all gravity ${accGrev} vector 0.0 0.0 -1.0
+
+if "${OMPON} == 1" then                            &
+  "fix		gravi all gravity/omp ${accGrev} vector 0.0 0.0 -1.0"  &
+else &
+  "fix		gravi all gravity ${accGrev} vector 0.0 0.0 -1.0" 
 
 # define the material in use  ## pts1 0.25 pts2 0.25  volume_limit ${volMin}"   
 if "${radDist} == 2" then                            &
@@ -196,29 +210,24 @@ print	"G_D_RATIO ${G_D_RATIO}"
 print	"maxdiam ${maxdiam}"
 print	"Scaling factor ${scale}"
 
-# meshes
-fix		cad1 all mesh/surface file meshes/ground.stl type 1 scale ${scale}
-fix		cad2 all mesh/surface file meshes/cylinder.stl type 1 scale ${scale}
-
-# use the imported meshes as granular wall
-fix		granwalls all wall/gran model hooke mesh n_meshes 2 meshes cad1 cad2
-
-
 # region and insertion
 variable rcyl equal ${G_D_RATIO}*${maxdiam}*0.9/2.
 variable hcyl equal 8./13.*${G_D_RATIO}*${maxdiam}
 
-fix		topwall all wall/gran model hooke primitive type 1 zplane ${hcyl}
-
-#additional walls for particle insertion
-
-#fix     wCylinder all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} primitive type 1 zcylinder ${cylRadius} 0. 0.
-#fix     zplane1   all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} primitive type 1 zplane ${nz}
-#fix     zplane2   all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} primitive type 1 zplane ${pz}
+# meshes # use the imported meshes as granular wall
+if "${OMPON} == 1" then                            &
+  "fix		cad1 all mesh/surface/omp file meshes/ground.stl type 1 scale ${scale}"    &
+  "fix		cad2 all mesh/surface/omp file meshes/cylinder.stl type 1 scale ${scale}"  &
+  "fix		granwalls all wall/gran/omp model hooke mesh n_meshes 2 meshes cad1 cad2"  &
+  "fix      topwall all wall/gran/omp model hooke primitive type 1 zplane ${hcyl}"     &
+else &
+  "fix		cad1 all mesh/surface file meshes/ground.stl type 1 scale ${scale}"    &
+  "fix		cad2 all mesh/surface file meshes/cylinder.stl type 1 scale ${scale}"  &
+  "fix		granwalls all wall/gran model hooke mesh n_meshes 2 meshes cad1 cad2"  &
+  "fix      topwall all wall/gran model hooke primitive type 1 zplane ${hcyl}"
 
 
 #region and insertion
-
 #region  bc cylinder z 0.0 0.0 ${cylRadius} ${nz} ${pz} units box
 region	bc cylinder z 0.0 0.0 ${rcyl}  0.0 ${hcyl} units box
 fix     ins all insert/pack seed 5332 distributiontemplate pdd maxattempt 100 insert_every once overlapcheck yes all_in yes &
@@ -226,7 +235,11 @@ fix     ins all insert/pack seed 5332 distributiontemplate pdd maxattempt 100 in
 
 #apply nve integration to all particles that are inserted as single particles
 #fix		integr all nve/sphere
-fix		integr all nve/limit absolute ${dx_relax}
+#fix		integr all nve/limit absolute ${dx_relax}
+if "${OMPON} == 1" then                            &
+  "fix		integr all nve/limit/omp absolute ${dx_relax}"  &
+else &
+  "fix		integr all nve/limit absolute ${dx_relax}" 
 
 # lower region to delete particles from
 region		lower block INF INF INF INF INF 0. units box
@@ -306,7 +319,7 @@ unfix		  shrink
 #delete_atoms  region regRm compress yes
 
 #write restart
-write_restart	./restart/restart.repose_rad${rad}_dcyldp${dCylDp}
+write_restart	./restart/restart.repose_rad${rad}_dcyldp${dCylDp}_${OMPON}
 
 #clear
 #next     dCylDp
