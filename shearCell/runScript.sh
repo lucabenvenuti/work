@@ -1,7 +1,8 @@
 #! /bin/bash
 
-OMPON=1
-fileID="26001"
+OMPON=0
+fileID="27201"
+DCYLDP=20
 
 if [ "$OMPON" = 1 ]; then
     echo OMP mode on
@@ -29,7 +30,7 @@ YPROCS=4
 ZPROCS=2
 PROCS=$(($XPROCS*$YPROCS*$ZPROCS))
 MPI_OPTIONS="-np $PROCS -report-bindings"
-VARS="-var NTHREADS $NTHREADS -var XPROCS $XPROCS -var YPROCS $YPROCS -var ZPROCS $ZPROCS -var OMPON $OMPON"
+VARS="-var NTHREADS $NTHREADS -var XPROCS $XPROCS -var YPROCS $YPROCS -var ZPROCS $ZPROCS -var OMPON $OMPON -var DCYLDP $DCYLDP"
 
 perf stat mpirun $MPI_OPTIONS $LI -in in.shearCell_init_packing $VARS
 
@@ -44,7 +45,7 @@ else
     echo old mode on
 fi    
 
-VARS="-var iden $fileID -var NTHREADS $NTHREADS -var XPROCS $XPROCS -var YPROCS $YPROCS -var ZPROCS $ZPROCS -var OMPON $OMPON"
+VARS="-var iden $fileID -var NTHREADS $NTHREADS -var XPROCS $XPROCS -var YPROCS $YPROCS -var ZPROCS $ZPROCS -var OMPON $OMPON -var DCYLDP $DCYLDP"
 
 perf stat mpirun $MPI_OPTIONS $LI -in in.shearCell_loop $VARS
 
