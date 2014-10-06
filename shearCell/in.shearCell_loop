@@ -247,14 +247,14 @@ change_box    all x final ${nx} ${px} y final ${ny} ${py} z final ${nz} ${pz} un
 if "${OMPON} == 1" then                            &
   "fix     cad1 all mesh/surface/stress/omp file mesh/upperCyl.stl verbose no type 2 scale ${cylRadius} move 0.0 0.0 ${bottomPos}" &
   "fix     cad2 all mesh/surface/stress/omp file mesh/bottom.stl verbose no type 2 scale ${cylRadius}"  &
-  "fix     fix   cad3 all mesh/surface/stress/servo/omp file mesh/plate.stl verbose no type 2 scale ${cylRadius} & 
+  "fix     cad3 all mesh/surface/stress/servo/omp file mesh/plate.stl verbose no type 2 scale ${cylRadius} & 
 	             move 0. 0. ${pz} com 0. 0. ${pz} target_val ${ctrlForce} vel_max ${velMax} &
 	             axis 0 0 1 ctrlPV force ratio ${ratio} mode auto "  &
   "fix   meshWall all wall/gran/omp model hertz tangential history rolling_friction ${rolfrtyp} mesh n_meshes 3 meshes cad1 cad2 cad3" &
 else &
   "fix     cad1 all mesh/surface/stress file mesh/upperCyl.stl verbose no type 2 scale ${cylRadius} move 0.0 0.0 ${bottomPos}" &
   "fix     cad2 all mesh/surface/stress file mesh/bottom.stl verbose no type 2 scale ${cylRadius}"  &
-  "fix     fix   cad3 all mesh/surface/stress/servo file mesh/plate.stl verbose no type 2 scale ${cylRadius} & 
+  "fix     cad3 all mesh/surface/stress/servo file mesh/plate.stl verbose no type 2 scale ${cylRadius} & 
 	             move 0. 0. ${pz} com 0. 0. ${pz} target_val ${ctrlForce} vel_max ${velMax} &
 	             axis 0 0 1 ctrlPV force ratio ${ratio} mode auto "  &
   "fix   meshWall all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} mesh n_meshes 3 meshes cad1 cad2 cad3"
