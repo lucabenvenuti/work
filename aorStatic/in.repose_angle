@@ -30,7 +30,7 @@ variable  radPerc2  equal       0.139
 variable  radR3     equal       0.000625
 variable  radPerc3  equal       0.098
 variable  radR4     equal       0.0005
-variable  radPerc4  equal       0.0091
+variable  radPerc4  equal       0.091
 variable  radR5     equal       0.000315
 variable  radPerc5  equal       0.3
 variable  radR6     equal       0.0001575
