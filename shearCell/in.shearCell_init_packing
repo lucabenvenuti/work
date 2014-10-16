@@ -190,7 +190,7 @@ if "${radDist} == 2" then                            &
   "print 'particle radius distribution gaussian'"                         &
 elif "${radDist} == 3" &
   "fix		ptsd1  all particletemplate/sphere 5333 atom_type 1 density constant ${dens} radius constant ${radR1}"                                & 
-  "fix		ptsd2  all particletemplate/sphere 5334 atom_type 1 density constant ${dens} radius constant ${radR1}"                                & 
+  "fix		ptsd2  all particletemplate/sphere 5334 atom_type 1 density constant ${dens} radius constant ${radR2}"                                & 
   "fix		ptsd3  all particletemplate/sphere 5335 atom_type 1 density constant ${dens} radius constant ${radR3}"                                & 
   "fix		ptsd4  all particletemplate/sphere 5336 atom_type 1 density constant ${dens} radius constant ${radR4}"                                & 
   "fix		ptsd5  all particletemplate/sphere 5337 atom_type 1 density constant ${dens} radius constant ${radR5}"                                & 
