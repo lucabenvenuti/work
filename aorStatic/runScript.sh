@@ -1,8 +1,32 @@
 #! /bin/bash
 
-OMPON=0
-fileID="601"
-DCYLDP=20
+date
+#OMPON=0
+#fileID="27201"
+#DCYLDP=20
+
+index[0]="601"
+index[1]="602"
+index[2]="603"
+index[3]="604"
+
+
+OM[0]=0
+OM[1]=1
+OM[2]=0
+OM[3]=1
+
+DCYL[0]=20
+DCYL[1]=20
+DCYL[2]=30
+DCYL[3]=30
+
+for i in 0 1 2 3
+do
+
+fileID=${index[$i]}
+OMPON=${OM[$i]}
+DCYLDP=${DCYL[$i]}
 
 if [ "$OMPON" = 1 ]; then
     echo OMP mode on
@@ -32,7 +56,8 @@ PROCS=$(($XPROCS*$YPROCS*$ZPROCS))
 MPI_OPTIONS="-np $PROCS -report-bindings"
 VARS="-var NTHREADS $NTHREADS -var XPROCS $XPROCS -var YPROCS $YPROCS -var ZPROCS $ZPROCS -var OMPON $OMPON -var DCYLDP $DCYLDP"
 
-perf stat mpirun $MPI_OPTIONS $LI -in in.repose_init_packing $VARS
+date
+perf stat -o resultsInit$fileID.txt mpirun $MPI_OPTIONS $LI -in in.repose_init_packing $VARS
 
 if [ "$OMPON" = 1 ]; then
     NTHREADS=8
@@ -47,7 +72,10 @@ fi
 
 VARS="-var iden $fileID -var NTHREADS $NTHREADS -var XPROCS $XPROCS -var YPROCS $YPROCS -var ZPROCS $ZPROCS -var OMPON $OMPON -var DCYLDP $DCYLDP"
 
-perf stat mpirun $MPI_OPTIONS $LI -in in.repose_loop $VARS
+date
+perf stat -o resultsLoop$fileID.txt mpirun $MPI_OPTIONS $LI -in in.repose_loop $VARS
+
+done
 
 #mpirun -np .... [OPTIONS] -in in.shearCell_init_packing
 #mpirun -np .... [OPTIONS] -in in.shearCell_loop
