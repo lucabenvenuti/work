@@ -5,10 +5,10 @@ date
 #fileID="27201"
 #DCYLDP=20
 
-index[0]="601"
-index[1]="602"
-index[2]="603"
-index[3]="604"
+index[0]="701"
+index[1]="702"
+index[2]="703"
+index[3]="704"
 
 
 OM[0]=0
@@ -16,10 +16,10 @@ OM[1]=1
 OM[2]=0
 OM[3]=1
 
-DCYL[0]=20
-DCYL[1]=20
-DCYL[2]=30
-DCYL[3]=30
+DCYL[0]=40
+DCYL[1]=40
+DCYL[2]=60
+DCYL[3]=60
 
 for i in 0 1 2 3
 do

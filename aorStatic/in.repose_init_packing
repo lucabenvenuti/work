@@ -75,7 +75,7 @@ variable    skin            equal   0.50*${radR1}
 #variable    cylArea         equal   0.25*${cylDiameter}*${cylDiameter}*PI
 
 #variable    desiredMass     equal   ${cylArea}*0.75*${cylDiameter}*0.65*${dens}
-variable    desiredVolumeFraction     equal   0.62
+variable    desiredVolumeFraction     equal   0.4
 
 variable    characteristicVelocity equal 0.1
 
