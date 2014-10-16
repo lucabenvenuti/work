@@ -14,21 +14,21 @@
 #########################################################################################
 #                               user defined settings: settings                         #
 #########################################################################################
-variable    rad     equal       518e-6          # particle radius [m]
-variable    radmu   equal       518e-6             # particle radius mean [m]
-variable  radsigma  equal       0.000287             # particle radius sigma[m]
+variable    rad     equal       771e-6          # particle radius [m]
+variable    radmu   equal       771e-6             # particle radius mean [m]
+variable  radsigma  equal       0.00021             # particle radius sigma[m]
 variable  radR1     equal       0.001
-variable  radPerc1  equal       0.175
+variable  radPerc1  equal       0.666
 variable  radR2     equal       0.0008
-variable  radPerc2  equal       0.139
+variable  radPerc2  equal       0.0
 variable  radR3     equal       0.000625
-variable  radPerc3  equal       0.098
-variable  radR4     equal       0.0005
-variable  radPerc4  equal       0.091
-variable  radR5     equal       0.000315
-variable  radPerc5  equal       0.3
-variable  radR6     equal       0.0001575
-variable  radPerc6  equal       0.197
+variable  radPerc3  equal       0.0
+variable  radR4     equal       0.000315
+variable  radPerc4  equal       0.334
+variable  radR5     equal       0.0001575
+variable  radPerc5  equal       0.0
+variable  radR6     equal       0.00006205
+variable  radPerc6  equal       0.0
 variable    dens    equal       3000         #sinterfine   # particle density [kg/m3]
 variable    ym      equal       1e7             # Young's modulus  [Pa]
 variable    pr      equal       0.4            # Poisson ratio   [-]
