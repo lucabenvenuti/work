@@ -1,0 +1,453 @@
+Don Okt 16 18:17:03 CEST 2014
+old mode on
+liggghts
+Don Okt 16 18:17:03 CEST 2014
+LIGGGHTS (Version LIGGGHTS-PFM 3.0.3, compiled 2014-09-02-19:51:59 by liggghts based on LAMMPS 23 Nov 2013)
+SI unit system
+OMP is OFF - old version
+Created orthogonal box = (-0.01542 -0.01542 0) to (0.01542 0.01542 0.06168)
+  4 by 4 by 2 MPI processor grid
+SURFACE/DEFAULT loaded
+HERTZ loaded
+TANGENTIAL/HISTORY loaded
+EPSD2 loaded
+SURFACE/DEFAULT loaded
+HERTZ loaded
+TANGENTIAL/HISTORY loaded
+EPSD2 loaded
+SURFACE/DEFAULT loaded
+HERTZ loaded
+TANGENTIAL/HISTORY loaded
+EPSD2 loaded
+SURFACE/DEFAULT loaded
+HERTZ loaded
+TANGENTIAL/HISTORY loaded
+EPSD2 loaded
+Fix particledistribution/discrete (id pdd): distribution based on mass%:
+    ptsd1: d=2.000000e-03 (max. bounding sphere) mass%=66.600000%
+    ptsd2: d=1.600000e-03 (max. bounding sphere) mass%=0.000000%
+    ptsd3: d=1.250000e-03 (max. bounding sphere) mass%=0.000000%
+    ptsd4: d=6.300000e-04 (max. bounding sphere) mass%=33.400000%
+    ptsd5: d=3.150000e-04 (max. bounding sphere) mass%=0.000000%
+    ptsd6: d=1.241000e-04 (max. bounding sphere) mass%=0.000000%
+Fix particledistribution/discrete (id pdd): distribution based on number%:
+    ptsd1: d=2.000000e-03 (max. bounding sphere) number%=5.866812%
+    ptsd2: d=1.600000e-03 (max. bounding sphere) number%=0.000000%
+    ptsd3: d=1.250000e-03 (max. bounding sphere) number%=0.000000%
+    ptsd4: d=6.300000e-04 (max. bounding sphere) number%=94.133188%
+    ptsd5: d=3.150000e-04 (max. bounding sphere) number%=0.000000%
+    ptsd6: d=1.241000e-04 (max. bounding sphere) number%=0.000000%
+particle radius distribution discrete REAL
+Setting up run ...
+INFO: Resetting random generator for region bc
+INFO: Particle insertion ins: inserting every 0 steps
+Memory usage per processor = 6.5678 Mbytes
+Step Atoms KinEng rke Volume CPU 
+       0        0           -0            0 5.8664193e-05            0 
+insertion: proc 26 at 0 %
+insertion: proc 26 at 10 %
+insertion: proc 26 at 20 %
+insertion: proc 26 at 30 %
+insertion: proc 26 at 40 %
+insertion: proc 27 at 0 %
+insertion: proc 27 at 10 %
+insertion: proc 27 at 20 %
+insertion: proc 27 at 30 %
+insertion: proc 29 at 0 %
+insertion: proc 29 at 10 %
+insertion: proc 29 at 20 %
+insertion: proc 29 at 30 %
+insertion: proc 29 at 40 %
+insertion: proc 30 at 0 %
+insertion: proc 30 at 10 %
+insertion: proc 30 at 20 %
+insertion: proc 30 at 30 %
+insertion: proc 30 at 40 %
+insertion: proc 30 at 50 %
+insertion: proc 30 at 60 %
+insertion: proc 30 at 70 %
+insertion: proc 30 at 80 %
+insertion: proc 30 at 90 %
+insertion: proc 31 at 0 %
+insertion: proc 31 at 10 %
+insertion: proc 31 at 20 %
+insertion: proc 31 at 30 %
+insertion: proc 31 at 40 %
+insertion: proc 31 at 50 %
+insertion: proc 31 at 60 %
+insertion: proc 31 at 70 %
+insertion: proc 31 at 80 %
+insertion: proc 31 at 90 %
+insertion: proc 1 at 0 %
+insertion: proc 1 at 10 %
+insertion: proc 1 at 20 %
+insertion: proc 1 at 30 %
+insertion: proc 1 at 40 %
+insertion: proc 1 at 50 %
+insertion: proc 1 at 60 %
+insertion: proc 1 at 70 %
+insertion: proc 2 at 0 %
+insertion: proc 2 at 10 %
+insertion: proc 2 at 20 %
+insertion: proc 2 at 30 %
+insertion: proc 5 at 0 %
+insertion: proc 5 at 10 %
+insertion: proc 5 at 20 %
+insertion: proc 5 at 30 %
+insertion: proc 5 at 40 %
+insertion: proc 6 at 0 %
+insertion: proc 6 at 10 %
+insertion: proc 6 at 20 %
+insertion: proc 6 at 30 %
+insertion: proc 6 at 40 %
+insertion: proc 6 at 50 %
+insertion: proc 6 at 60 %
+insertion: proc 6 at 70 %
+insertion: proc 6 at 80 %
+insertion: proc 6 at 90 %
+insertion: proc 6 at 100 %
+insertion: proc 7 at 0 %
+insertion: proc 7 at 10 %
+insertion: proc 7 at 20 %
+insertion: proc 7 at 30 %
+insertion: proc 7 at 40 %
+insertion: proc 7 at 50 %
+insertion: proc 7 at 60 %
+insertion: proc 7 at 70 %
+insertion: proc 7 at 80 %
+insertion: proc 7 at 90 %
+insertion: proc 7 at 100 %
+insertion: proc 9 at 0 %
+insertion: proc 9 at 10 %
+insertion: proc 9 at 20 %
+insertion: proc 9 at 30 %
+insertion: proc 9 at 40 %
+insertion: proc 10 at 0 %
+insertion: proc 10 at 10 %
+insertion: proc 10 at 20 %
+insertion: proc 11 at 0 %
+insertion: proc 11 at 10 %
+insertion: proc 11 at 20 %
+insertion: proc 13 at 0 %
+insertion: proc 13 at 10 %
+insertion: proc 13 at 20 %
+insertion: proc 13 at 30 %
+insertion: proc 14 at 0 %
+insertion: proc 14 at 10 %
+insertion: proc 14 at 20 %
+insertion: proc 14 at 30 %
+insertion: proc 14 at 40 %
+insertion: proc 15 at 0 %
+insertion: proc 15 at 10 %
+insertion: proc 15 at 20 %
+insertion: proc 15 at 30 %
+insertion: proc 15 at 40 %
+insertion: proc 17 at 0 %
+insertion: proc 17 at 10 %
+insertion: proc 17 at 20 %
+insertion: proc 17 at 30 %
+insertion: proc 17 at 40 %
+insertion: proc 18 at 0 %
+insertion: proc 18 at 10 %
+insertion: proc 18 at 20 %
+insertion: proc 19 at 0 %
+insertion: proc 19 at 10 %
+insertion: proc 19 at 20 %
+insertion: proc 21 at 0 %
+insertion: proc 21 at 10 %
+insertion: proc 21 at 20 %
+insertion: proc 22 at 0 %
+insertion: proc 22 at 10 %
+insertion: proc 22 at 20 %
+insertion: proc 22 at 30 %
+insertion: proc 23 at 0 %
+insertion: proc 23 at 10 %
+insertion: proc 23 at 20 %
+insertion: proc 23 at 30 %
+insertion: proc 23 at 40 %
+insertion: proc 25 at 0 %
+insertion: proc 25 at 10 %
+insertion: proc 25 at 20 %
+insertion: proc 25 at 30 %
+insertion: proc 25 at 40 %
+insertion: proc 25 at 50 %
+insertion: proc 25 at 60 %
+insertion: proc 25 at 70 %
+insertion: proc 25 at 80 %
+insertion: proc 25 at 90 %
+insertion: proc 25 at 100 %
+insertion: proc 31 at 100 %
+insertion: proc 1 at 80 %
+insertion: proc 1 at 90 %
+insertion: proc 1 at 100 %
+insertion: proc 2 at 40 %
+insertion: proc 2 at 50 %
+insertion: proc 5 at 50 %
+insertion: proc 11 at 30 %
+insertion: proc 14 at 50 %
+insertion: proc 18 at 30 %
+insertion: proc 19 at 30 %
+insertion: proc 21 at 30 %
+insertion: proc 22 at 40 %
+insertion: proc 26 at 50 %
+insertion: proc 26 at 60 %
+insertion: proc 27 at 40 %
+insertion: proc 29 at 50 %
+insertion: proc 29 at 60 %
+insertion: proc 30 at 100 %
+insertion: proc 27 at 50 %
+insertion: proc 9 at 50 %
+insertion: proc 10 at 30 %
+insertion: proc 5 at 60 %
+insertion: proc 13 at 40 %
+insertion: proc 17 at 50 %
+insertion: proc 15 at 50 %
+insertion: proc 14 at 60 %
+insertion: proc 19 at 40 %
+insertion: proc 23 at 50 %
+insertion: proc 26 at 70 %
+insertion: proc 11 at 40 %
+insertion: proc 29 at 70 %
+insertion: proc 21 at 40 %
+insertion: proc 22 at 50 %
+insertion: proc 2 at 60 %
+insertion: proc 13 at 50 %
+insertion: proc 18 at 40 %
+insertion: proc 5 at 70 %
+insertion: proc 27 at 60 %
+insertion: proc 9 at 60 %
+insertion: proc 10 at 40 %
+insertion: proc 18 at 50 %
+insertion: proc 26 at 80 %
+insertion: proc 17 at 60 %
+insertion: proc 2 at 70 %
+insertion: proc 15 at 60 %
+insertion: proc 13 at 60 %
+insertion: proc 14 at 70 %
+insertion: proc 29 at 80 %
+insertion: proc 29 at 90 %
+insertion: proc 19 at 50 %
+insertion: proc 21 at 50 %
+insertion: proc 23 at 60 %
+insertion: proc 11 at 50 %
+insertion: proc 9 at 70 %
+insertion: proc 22 at 60 %
+insertion: proc 5 at 80 %
+insertion: proc 27 at 70 %
+insertion: proc 26 at 90 %
+insertion: proc 17 at 70 %
+insertion: proc 14 at 80 %
+insertion: proc 19 at 60 %
+insertion: proc 23 at 70 %
+insertion: proc 5 at 90 %
+insertion: proc 2 at 80 %
+insertion: proc 15 at 70 %
+insertion: proc 13 at 70 %
+insertion: proc 22 at 70 %
+insertion: proc 29 at 100 %
+insertion: proc 21 at 60 %
+insertion: proc 11 at 60 %
+insertion: proc 10 at 50 %
+insertion: proc 18 at 60 %
+insertion: proc 27 at 80 %
+insertion: proc 26 at 100 %
+insertion: proc 17 at 80 %
+insertion: proc 14 at 90 %
+insertion: proc 19 at 70 %
+insertion: proc 9 at 80 %
+insertion: proc 2 at 90 %
+insertion: proc 5 at 100 %
+insertion: proc 15 at 80 %
+insertion: proc 13 at 80 %
+insertion: proc 23 at 80 %
+insertion: proc 19 at 80 %
+insertion: proc 15 at 90 %
+insertion: proc 21 at 70 %
+insertion: proc 11 at 70 %
+insertion: proc 10 at 60 %
+insertion: proc 18 at 70 %
+insertion: proc 27 at 90 %
+insertion: proc 2 at 100 %
+insertion: proc 9 at 90 %
+insertion: proc 9 at 100 %
+insertion: proc 22 at 80 %
+insertion: proc 17 at 90 %
+insertion: proc 14 at 100 %
+insertion: proc 23 at 90 %
+insertion: proc 13 at 90 %
+insertion: proc 27 at 100 %
+insertion: proc 22 at 90 %
+insertion: proc 17 at 100 %
+insertion: proc 19 at 90 %
+insertion: proc 15 at 100 %
+insertion: proc 21 at 80 %
+insertion: proc 11 at 80 %
+insertion: proc 10 at 70 %
+insertion: proc 3 at 0 %
+insertion: proc 3 at 10 %
+insertion: proc 23 at 100 %
+insertion: proc 18 at 80 %
+insertion: proc 13 at 100 %
+insertion: proc 3 at 20 %
+insertion: proc 3 at 30 %
+insertion: proc 3 at 40 %
+insertion: proc 3 at 50 %
+insertion: proc 3 at 60 %
+insertion: proc 11 at 90 %
+insertion: proc 22 at 100 %
+insertion: proc 10 at 80 %
+insertion: proc 19 at 100 %
+insertion: proc 21 at 90 %
+insertion: proc 0 at 0 %
+insertion: proc 0 at 10 %
+insertion: proc 0 at 20 %
+insertion: proc 0 at 30 %
+insertion: proc 0 at 40 %
+insertion: proc 0 at 50 %
+insertion: proc 0 at 60 %
+insertion: proc 0 at 70 %
+insertion: proc 0 at 80 %
+insertion: proc 0 at 90 %
+insertion: proc 0 at 100 %
+insertion: proc 28 at 0 %
+insertion: proc 28 at 10 %
+insertion: proc 28 at 20 %
+insertion: proc 28 at 30 %
+insertion: proc 11 at 100 %
+insertion: proc 8 at 0 %
+insertion: proc 8 at 10 %
+insertion: proc 8 at 20 %
+insertion: proc 12 at 0 %
+insertion: proc 12 at 10 %
+insertion: proc 12 at 20 %
+insertion: proc 16 at 0 %
+insertion: proc 16 at 10 %
+insertion: proc 16 at 20 %
+insertion: proc 16 at 30 %
+insertion: proc 18 at 90 %
+insertion: proc 20 at 0 %
+insertion: proc 20 at 10 %
+insertion: proc 20 at 20 %
+insertion: proc 24 at 0 %
+insertion: proc 24 at 10 %
+insertion: proc 24 at 20 %
+insertion: proc 24 at 30 %
+insertion: proc 24 at 40 %
+insertion: proc 24 at 50 %
+insertion: proc 24 at 60 %
+insertion: proc 24 at 70 %
+insertion: proc 24 at 80 %
+insertion: proc 24 at 90 %
+insertion: proc 24 at 100 %
+insertion: proc 28 at 40 %
+insertion: proc 20 at 30 %
+insertion: proc 12 at 30 %
+insertion: proc 16 at 40 %
+insertion: proc 28 at 50 %
+insertion: proc 16 at 50 %
+insertion: proc 16 at 60 %
+insertion: proc 21 at 100 %
+insertion: proc 28 at 60 %
+insertion: proc 8 at 30 %
+insertion: proc 8 at 40 %
+insertion: proc 10 at 90 %
+insertion: proc 20 at 40 %
+insertion: proc 20 at 50 %
+insertion: proc 12 at 40 %
+insertion: proc 12 at 50 %
+insertion: proc 28 at 70 %
+insertion: proc 8 at 50 %
+insertion: proc 8 at 60 %
+insertion: proc 18 at 100 %
+insertion: proc 16 at 70 %
+insertion: proc 12 at 60 %
+insertion: proc 20 at 60 %
+insertion: proc 8 at 70 %
+insertion: proc 16 at 80 %
+insertion: proc 28 at 80 %
+insertion: proc 12 at 70 %
+insertion: proc 28 at 90 %
+insertion: proc 20 at 70 %
+insertion: proc 16 at 90 %
+insertion: proc 8 at 80 %
+insertion: proc 12 at 80 %
+insertion: proc 16 at 100 %
+insertion: proc 20 at 80 %
+insertion: proc 10 at 100 %
+insertion: proc 12 at 90 %
+insertion: proc 3 at 70 %
+insertion: proc 3 at 80 %
+insertion: proc 8 at 90 %
+insertion: proc 20 at 90 %
+insertion: proc 12 at 100 %
+insertion: proc 3 at 90 %
+insertion: proc 3 at 100 %
+insertion: proc 8 at 100 %
+insertion: proc 20 at 100 %
+insertion: proc 4 at 0 %
+insertion: proc 4 at 10 %
+insertion: proc 4 at 20 %
+insertion: proc 4 at 30 %
+insertion: proc 4 at 40 %
+insertion: proc 4 at 50 %
+insertion: proc 4 at 60 %
+insertion: proc 4 at 70 %
+insertion: proc 4 at 80 %
+insertion: proc 4 at 90 %
+insertion: proc 4 at 100 %
+INFO: Particle insertion ins: inserted 30436 particle templates (mass 0.033842) at step 1
+ - a total of 30436 particle templates (mass 0.033842) inserted so far.
+       1    30436 4.2310647e-05            0 5.8664193e-05   0.54071116 
+Loop time of 0.557732 on 32 procs for 1 steps with 30436 atoms
+
+Pair  time (%) = 0.000118062 (0.0211682)
+Neigh time (%) = 0.0228694 (4.10043)
+Comm  time (%) = 0.0422541 (7.57605)
+Outpt time (%) = 0.0842956 (15.114)
+Other time (%) = 0.408195 (73.1884)
+
+Nlocal:    951.125 ave 1558 max 213 min
+Histogram: 8 0 0 0 0 6 8 2 6 2
+Nghost:    1015.75 ave 1644 max 479 min
+Histogram: 8 0 0 4 12 0 0 0 0 8
+Neighs:    1983.94 ave 4293 max 249 min
+Histogram: 8 0 0 7 4 4 2 5 1 1
+
+Total # of neighbors = 63486
+Ave neighs/atom = 2.08589
+Neighbor list builds = 1
+Dangerous builds = 0
+Setting up run ...
+Memory usage per processor = 11.3348 Mbytes
+Step Atoms KinEng rke Volume CPU 
+       1    30436 4.3592702e-05            0 5.8664193e-05            0 
+       2    30436 4.4977329e-05 4.9711706e-12 5.8664193e-05  0.087961912 
+Loop time of 0.104275 on 32 procs for 1 steps with 30436 atoms
+
+Pair  time (%) = 0.000163473 (0.156771)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.0176721 (16.9476)
+Outpt time (%) = 0.0593766 (56.9424)
+Other time (%) = 0.0270628 (25.9533)
+
+Nlocal:    951.125 ave 1203 max 741 min
+Histogram: 7 5 4 0 0 1 3 5 4 3
+Nghost:    1125.97 ave 1601 max 735 min
+Histogram: 8 0 0 4 7 4 3 2 1 3
+Neighs:    2176.59 ave 2934 max 1290 min
+Histogram: 2 4 2 0 3 7 4 4 4 2
+
+Total # of neighbors = 69651
+Ave neighs/atom = 2.28844
+Neighbor list builds = 0
+Dangerous builds = 0
+Setting up run ...
+Memory usage per processor = 11.2586 Mbytes
+Step Atoms KinEng rke Volume CPU 
+       2    30436 4.4977329e-05 4.9711706e-12 5.8664193e-05            0 
+    1000    30436 0.00010354229 1.0026112e-06 5.8664193e-05     33.77309 
+    2000    30436 0.00011944667 1.3084511e-06 5.8664193e-05    63.627058 
+    3000    30436 0.00014072572 1.4529653e-06 5.8664193e-05    92.792126 
+    4000    30436 0.0001666978 1.5042843e-06 5.8664193e-05    122.24006 
+    5000    30436 0.00019617797 1.5797363e-06 5.8664193e-05    154.71215 
+    6000    30436 0.0002292262 1.5789345e-06 5.8664193e-05     188.4451 
