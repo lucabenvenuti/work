@@ -260,6 +260,8 @@ else &
   "fix		integr all nve/sphere"  &
   "fix     lb all balance 0 xyz 10 1.05"
 
+
+
 # region and insertion
 variable rcyl equal ${G_D_RATIO}*${maxdiam}*0.9/2.
 variable hcyl equal 8./13.*${G_D_RATIO}*${maxdiam}
@@ -276,6 +278,8 @@ else &
   "fix		cad2 all mesh/surface file meshes/cylinder.stl type 1 scale ${scale}"  &
   "fix		granwalls all wall/gran model hooke mesh n_meshes 2 meshes cad1 cad2"  &
   "fix		topwall all wall/gran model hooke primitive type 1 zplane 1.0"
+
+
 
 # lower region to delete particles from
 region		lower block INF INF INF INF INF 0. units box
@@ -294,6 +298,8 @@ if "${OMPON} == 1" then                            &
   "partitioner_style zoltan EVERY ${zoltanSteps} RCB_REUSE 1"  &
 else &
   "print 'OMP is OFF - old version - bis'"  
+
+
 
 # dump
 dump		dumpstl all stl ${dumpfreq} post_param/stldump_${rf}_*.stl
@@ -330,7 +336,15 @@ else &
   "pair_style 	gran model hertz tangential history rolling_friction ${rolfrtyp}"  
 pair_coeff	* *
 #fix		    granwalls all wall/${pairStyle} rolling_friction ${pairStyleRollingFriction} mesh n_meshes 2 meshes cad1 cad2
-fix		    granwalls all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} mesh n_meshes 2 meshes cad1 cad2
+
+if "${OMPON} == 1" then                            &
+  "fix		    granwalls all wall/gran/omp model hertz tangential history rolling_friction ${rolfrtyp} mesh n_meshes 2 meshes cad1 cad2"  &
+else &
+  "fix		    granwalls all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} mesh n_meshes 2 meshes cad1 cad2" 
+
+
+
+pippo
 
 # get mass of particle column
 variable mPartBox   equal mass(all,bc)

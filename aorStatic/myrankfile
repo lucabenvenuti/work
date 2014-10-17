@@ -1,0 +1,4 @@
+rank 0=node40.service slot=0:0-7
+rank 1=node40.service slot=0:8-15
+rank 2=node40.service slot=1:0-7
+rank 3=node40.service slot=1:8-15

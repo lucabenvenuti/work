@@ -16,13 +16,14 @@ OM[1]=1
 OM[2]=0
 OM[3]=1
 
-DCYL[0]=40
-DCYL[1]=40
-DCYL[2]=60
-DCYL[3]=60
+DCYL[0]=20
+DCYL[1]=20
+DCYL[2]=30
+DCYL[3]=30
 
-for i in 0 1 2 3
-do
+i=1
+#for i in 0 1 2 3
+#do
 
 fileID=${index[$i]}
 OMPON=${OM[$i]}
@@ -57,7 +58,7 @@ MPI_OPTIONS="-np $PROCS -report-bindings"
 VARS="-var NTHREADS $NTHREADS -var XPROCS $XPROCS -var YPROCS $YPROCS -var ZPROCS $ZPROCS -var OMPON $OMPON -var DCYLDP $DCYLDP"
 
 date
-perf stat -o resultsInit$fileID.txt mpirun $MPI_OPTIONS $LI -in in.repose_init_packing $VARS
+#perf stat -o resultsInit$fileID.txt mpirun $MPI_OPTIONS $LI -in in.repose_init_packing $VARS
 
 if [ "$OMPON" = 1 ]; then
     NTHREADS=8
@@ -75,7 +76,7 @@ VARS="-var iden $fileID -var NTHREADS $NTHREADS -var XPROCS $XPROCS -var YPROCS 
 date
 perf stat -o resultsLoop$fileID.txt mpirun $MPI_OPTIONS $LI -in in.repose_loop $VARS
 
-done
+#done
 
 #mpirun -np .... [OPTIONS] -in in.shearCell_init_packing
 #mpirun -np .... [OPTIONS] -in in.shearCell_loop
