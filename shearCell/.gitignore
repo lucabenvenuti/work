@@ -12,3 +12,4 @@ matlab/*.out
 matlab/*.inp
 matlab/BS/
 *.txt
+stats/
