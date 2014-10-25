@@ -9,7 +9,7 @@ variable	rpm		equal 1.5	#Drum rotational speed
 variable	radius		equal 0.0025	#Particle radius
 variable	massIns		equal 10.0	#Total mass to be inserted in the drum
 variable	runTime		equal 2.5	#Total time simulation should run
-variable	fillPerc	equal 0.5	#Proportion of cylinder you want filled with particles
+variable	fillPerc	equal 0.2	#Proportion of cylinder you want filled with particles
 	
 processors   1 1 2
 
@@ -111,8 +111,8 @@ compute_modify	thermo_temp dynamic yes
 #insert the first particles so that dump is not empty
 run		1
 unfix		ins
-dump		dmp all custom ${saveStep} post/dump*.drum id type type x y z ix iy iz vx vy vz fx fy fz omegax omegay omegaz radius 
-dump 		dumpstress all mesh/gran/VTK ${saveStep} post/dump*.vtk stress pt1 pt2 pt3
+dump		dmp all custom ${saveStep} post/dump_${fillPerc}*.drum id type type x y z ix iy iz vx vy vz fx fy fz omegax omegay omegaz radius 
+dump 		dumpstress all mesh/gran/VTK ${saveStep} post/dump_${fillPerc}*.vtk stress pt1 pt2 pt3
 
 ##Create particles and let them accomodate
 variable	accomTime	equal	1.0/${dt}
@@ -122,5 +122,5 @@ fix		rotate all move/mesh mesh pt1 rotate origin 0. 0. 0. axis 0. 0. 1. period $
 
 run		${runTimeStep}
 
-write_restart	./restart/restart.drum
+write_restart	./restart/restart_${fillPerc}.drum
  

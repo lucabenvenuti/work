@@ -14,3 +14,4 @@ images/
 GUI/
 post_param/
 matlab/*.m~
+*.txt

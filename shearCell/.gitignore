@@ -11,3 +11,4 @@ matlab/*.FTD
 matlab/*.out
 matlab/*.inp
 matlab/BS/
+*.txt

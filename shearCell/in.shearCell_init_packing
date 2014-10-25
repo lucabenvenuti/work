@@ -5,7 +5,7 @@
 #                   folder matlab,                                                      #
 #                   loop input script in.shearCell_loop                                 #
 # date: Apr. 2014                                                                       #
-# authors: Benvenuti, L., Queteschiner, D., Aigner, A.                                  #
+# authors: Benvenuti, L., Queteschiner, D., Aigner, A., Berger R.                       #
 # e-mail: luca.benvenuti@jku.at                                                         #
 # short description: liggghts-input file for computing the shear force of a simple      #
 #   shear tester while varying the coefficient of friction.                             #
@@ -15,21 +15,21 @@
 #########################################################################################
 #                               user defined settings: settings                         #
 #########################################################################################
-variable    rad     equal       518e-6          # particle radius [m]
-variable    radmu   equal       518e-6             # particle radius mean [m]
-variable  radsigma  equal       0.000287             # particle radius sigma[m]
+variable    rad     equal       771e-6          # particle radius [m]
+variable    radmu   equal       771e-6             # particle radius mean [m]
+variable  radsigma  equal       0.00021             # particle radius sigma[m]
 variable  radR1     equal       0.001
-variable  radPerc1  equal       0.175
+variable  radPerc1  equal       0.666
 variable  radR2     equal       0.0008
-variable  radPerc2  equal       0.139
+variable  radPerc2  equal       0.0
 variable  radR3     equal       0.000625
-variable  radPerc3  equal       0.098
-variable  radR4     equal       0.0005
-variable  radPerc4  equal       0.0091
-variable  radR5     equal       0.000315
-variable  radPerc5  equal       0.3
-variable  radR6     equal       0.0001575
-variable  radPerc6  equal       0.197
+variable  radPerc3  equal       0.0
+variable  radR4     equal       0.000315
+variable  radPerc4  equal       0.334
+variable  radR5     equal       0.0001575
+variable  radPerc5  equal       0.0
+variable  radR6     equal       0.00006205
+variable  radPerc6  equal       0.0
 #variable  volMin    equal       4/3*${radR6}*${radR6}*${radR6}*PI*0.99
 variable    dens    equal       3000      #sinterfine      # particle density [kg/m3]
 variable    ym      equal       1e7             # Young's modulus  [Pa]
@@ -46,13 +46,13 @@ variable    radDist equal       3          # radius distribution (1 = (25%rad*0.
                                            # 3=discrete distribution with real values
 variable    dt      equal       1e-6           # time step width [s]
 
-variable    dCylDp  equal       10      # ratio cylinder diameter to particle diameter (optional loop)
+variable    dCylDp  equal       ${DCYLDP}      # ratio cylinder diameter to particle diameter (optional loop)
 
 variable    accGrev equal       9.81    # acceleration due to gravity
 
 processors  ${XPROCS} ${YPROCS} ${ZPROCS}
 
-variable    numProc equal       32
+variable    numProc equal       ${XPROCS}*${YPROCS}*${ZPROCS}
 
 #########################################################################################
 #   IF YOU CHANGE ANYTHING BELOW THIS LINE, YOU MIGHT ADAPT THE POSTPROCESSING SCRIPT   #
@@ -190,7 +190,7 @@ if "${radDist} == 2" then                            &
   "print 'particle radius distribution gaussian'"                         &
 elif "${radDist} == 3" &
   "fix		ptsd1  all particletemplate/sphere 5333 atom_type 1 density constant ${dens} radius constant ${radR1}"                                & 
-  "fix		ptsd2  all particletemplate/sphere 5334 atom_type 1 density constant ${dens} radius constant ${radR1}"                                & 
+  "fix		ptsd2  all particletemplate/sphere 5334 atom_type 1 density constant ${dens} radius constant ${radR2}"                                & 
   "fix		ptsd3  all particletemplate/sphere 5335 atom_type 1 density constant ${dens} radius constant ${radR3}"                                & 
   "fix		ptsd4  all particletemplate/sphere 5336 atom_type 1 density constant ${dens} radius constant ${radR4}"                                & 
   "fix		ptsd5  all particletemplate/sphere 5337 atom_type 1 density constant ${dens} radius constant ${radR5}"                                & 
