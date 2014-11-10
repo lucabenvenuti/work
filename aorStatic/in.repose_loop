@@ -344,7 +344,7 @@ else &
 
 
 
-pippo
+#pippo
 
 # get mass of particle column
 variable mPartBox   equal mass(all,bc)
