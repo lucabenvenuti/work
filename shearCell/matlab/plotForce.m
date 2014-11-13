@@ -34,7 +34,7 @@ filepatterncsv = 'sim_par*_fid*.csv'; % e.g. 'force.*.txt' %Andi
 %   for all cases use empty searchCases = {};
 searchCases = {...'fric' 0.4 %[0.4 0.8]
                ...'rf'   0.6 %[0.4 0.8]
-               'rest'   [0.5 0.9]
+               ...'rest'   [0.5 0.9]
                ...'fid'  [	20025	20026	20027	20028	20029	20030 20035		20201	20202	20203	20204 20205] %20101	20102	20103	20125	20126 20001	20002
                ...'shearperc' 0.4
                ... 'ctrlStress' -1.007001977856750e+04
@@ -1682,15 +1682,15 @@ end
 % cc
 
 %% save matlab data
-i=1;
-j=1;
-[a,b]=size(searchCases);
-
-searchName{1} = 'an';
-
-for i=1:a
-       j=i+1;
-       searchName{j}=([searchName{i},searchCases{i,1},num2str(searchCases{i,2})]);
-end
-
-save(searchName{end});
+% i=1;
+% j=1;
+% [a,b]=size(searchCases);
+% 
+% searchName{1} = 'an';
+% 
+% for i=1:a
+%        j=i+1;
+%        searchName{j}=([searchName{i},searchCases{i,1},num2str(searchCases{i,2})]);
+% end
+% 
+% save(searchName{end});
