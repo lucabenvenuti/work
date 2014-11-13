@@ -16,13 +16,14 @@ close all
     load inputDataNN.mat
     dataNN2.ctrlStress = 1.007001977856750e+04; %1068; %1068;% [1068,2069,10070];
     coeffPirker = 1.0;
-    densTolerance = 0.1; 
+    densTolerance = 0.05; 
     
      c2 = datestr(clock)   
      newY2 = myNewInput(NNSave2, errorEstSumMaxIndex2, dataNN2);        
     [nY2rows,nY2column] = size(newY2);
     
             jjj=1;
+            kkk=1;
             ii=1;
             meanExpFtdRhoB = mean(expFtd.rhoB);
             maxExpFtdRhoB  = max(expFtd.rhoB);
@@ -137,10 +138,10 @@ close all
                                                        
       %                      if (exist('densityBulkBoxMean') &  (newY2(nY2rowsBis+1,ii)<0.05) & (newY2(nY2rowsBis+2,ii)<0.05) &   ...
       %                              (newY2(densityBulkBoxMeanPos,ii)<newY2(nY2rowsBis+4,ii)*densTolerance)  &  (newY2(densityBulkBoxMeanPos,ii)>newY2(nY2rowsBis+5,ii)) )
-                                gloriaAugustaSchulzeNN(1,jjj) = ii;
-                                gloriaAugustaSchulzeNN(2:(nY2rowsTris+1), jjj) = newY2(1:end,ii) ;%avgMuR1(ii);  
-                                gloriaAugustaSchulzeNN(nY2rowsTris+2, jjj) = 1;
-                                jjj=jjj+1;
+                                gloriaAugustaSchulzeNNDens(1,kkk) = ii;
+                                gloriaAugustaSchulzeNNDens(2:(nY2rowsTris+1), kkk) = newY2(1:end,ii) ;%avgMuR1(ii);  
+                                gloriaAugustaSchulzeNNDens(nY2rowsTris+2, kkk) = 1;
+                                kkk=kkk+1;
                             elseif ((newY2(nY2rowsBis+1,ii)<0.05) & (newY2(nY2rowsBis+2,ii)<0.05)) %((data(ii).deltaRatioShear<0.05) & (data(ii).deltaRatioPreShear<0.05))
                                 gloriaAugustaSchulzeNN(1,jjj) = ii;
                                 gloriaAugustaSchulzeNN(2:(nY2rowsTris+1), jjj) = newY2(1:end,ii) ;%avgMuR1(ii);
@@ -161,7 +162,8 @@ close all
             end
 c4 = datestr(clock)           
     
-    
+    gloriaAugustaSchulzeNN = gloriaAugustaSchulzeNNDens;
+
     X=gloriaAugustaSchulzeNN(3,:); %sf
     Y=gloriaAugustaSchulzeNN(4,:); %rf
     Z=gloriaAugustaSchulzeNN(9,:); %density

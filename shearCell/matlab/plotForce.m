@@ -1401,6 +1401,7 @@ if (exp_flag)
     switch legendExpFlag
          case 'schulze' 
             jjj=1;
+            kkk=1;
             ii=1;
             meanExpFtdRhoB = mean(expFtd.rhoB);
             maxExpFtdRhoB  = max(expFtd.rhoB);
@@ -1495,14 +1496,14 @@ if (exp_flag)
                             
                             if (exist('densityBulkBoxMean') &  (newY2(nY2rowsBis+1,ii)<0.05) & (newY2(nY2rowsBis+2,ii)<0.05) &   (newY2(densityBulkBoxMeanPos,ii)<newY2(nY2rowsBis+4,ii)*(1.0+densTolerance))  ...
                                     &  (newY2(densityBulkBoxMeanPos,ii)>newY2(nY2rowsBis+5,ii)*(1.0-densTolerance)) )
-                                gloriaAugustaSchulzeNN(1,jjj) = ii;
-                                gloriaAugustaSchulzeNN(2:(nY2rowsTris+1), jjj) = newY2(1:end,ii) ;%avgMuR1(ii);  
-                                gloriaAugustaSchulzeNN(nY2rowsTris+2, jjj) = 1;
-                                jjj=jjj+1;
+                                gloriaAugustaSchulzeNNDens(1,kkk) = ii;
+                                gloriaAugustaSchulzeNNDens(2:(nY2rowsTris+1), kkk) = newY2(1:end,ii) ;%avgMuR1(ii);  
+                                gloriaAugustaSchulzeNNDens(nY2rowsTris+2, kkk) = 1;
+                                kkk=kkk+1;
                             elseif ((newY2(nY2rowsBis+1,ii)<0.05) & (newY2(nY2rowsBis+2,ii)<0.05)) %((data(ii).deltaRatioShear<0.05) & (data(ii).deltaRatioPreShear<0.05))
-                                gloriaAugustaSchulzeNN(1,jjj) = ii;
-                                gloriaAugustaSchulzeNN(2:(nY2rowsTris+1), jjj) = newY2(1:end,ii) ;%avgMuR1(ii);
-                                gloriaAugustaSchulzeNN(nY2rowsTris+2, jjj) = 0;
+                                gloriaAugustaSchulzeNNnoDens(1,jjj) = ii;
+                                gloriaAugustaSchulzeNNnoDens(2:(nY2rowsTris+1), jjj) = newY2(1:end,ii) ;%avgMuR1(ii);
+                                gloriaAugustaSchulzeNNnoDens(nY2rowsTris+2, jjj) = 0;
 %                                 gloriaAugustaSchulze{jjj,3} = avgMuR2(ii);
 %                                 gloriaAugustaSchulze{jjj,4} = data(ii).tauAb;
 %                                 gloriaAugustaSchulze{jjj,5} = data(ii).sigmaAb;
@@ -1516,7 +1517,10 @@ if (exp_flag)
                                 jjj=jjj+1;
                            end
                         end
-                    end
+            end
+            
+            gloriaAugustaSchulzeNN = gloriaAugustaSchulzeNNDens;
+            
                 [gASSNNrows,gASSNNcolumns] = size(gloriaAugustaSchulzeNN);
             if (gloriaWinFlag)    
                 best = find(gloriaAugustaSchulzeNN(8,:)==0.4);
