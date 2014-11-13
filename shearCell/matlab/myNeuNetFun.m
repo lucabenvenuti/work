@@ -14,7 +14,7 @@ for iijj=1:nSimCases2
     end
     
     if isfield (data2(iijj), 'ctrlStress')
-        inputNN(iijj,6)=data2(iijj).ctrlStress;
+        inputNN(iijj,6)=abs(data2(iijj).ctrlStress);
     end
 
     if isfield (data2(iijj), 'shearperc')

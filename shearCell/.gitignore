@@ -13,3 +13,6 @@ matlab/*.inp
 matlab/BS/
 *.txt
 stats/
+*.*~
+*/*.*~
+matlab/*.*~

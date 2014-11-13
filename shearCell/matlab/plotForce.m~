@@ -675,20 +675,19 @@ clear timesteps sigmaZ tauXZ corrTauXZ fname
                     data(ii).timestepsShort = data(ii).timesteps(1:10:end);
                     muRshort = muR(1:10:end);
                     
-                    if (imageFlag)
-                        figure(hFig(7)); 
-                        hold on
-                        %plot(data(ii).timestepsShort,muRshort,'LineStyle',lineStyles{mod(ii,numel(lineStyles))+1},'Color',cmap(mod(ii,size(cmap,1))+1,:),'LineWidth',2);
-                        plot(data(ii).timeStepSh,data(ii).muRShMean,'LineStyle',lineStyles{mod(ii,numel(lineStyles))+1},'Color',cmap(mod(ii,size(cmap,1))+1,:),'LineWidth',2);
-                        ylim([0 maxMuRall]);
-                    end
+                    if (imageFlag
+                    figure(hFig(7)); 
+                    hold on
+                    %plot(data(ii).timestepsShort,muRshort,'LineStyle',lineStyles{mod(ii,numel(lineStyles))+1},'Color',cmap(mod(ii,size(cmap,1))+1,:),'LineWidth',2);
+                    plot(data(ii).timeStepSh,data(ii).muRShMean,'LineStyle',lineStyles{mod(ii,numel(lineStyles))+1},'Color',cmap(mod(ii,size(cmap,1))+1,:),'LineWidth',2);
+                    ylim([0 maxMuRall]);
                     %legend for force plots
                     leg{7,iCnt(7)} = fname;
                     iCnt(7) = iCnt(7)+1;
             end
             
        if (manualPlateauFlag)
-        %    if (imageFlag)
+        
             figure(13);
             plot(data(ii).timesteps,data(ii).muR)
             title('coefficient of internal friction identification');
@@ -732,8 +731,7 @@ clear timesteps sigmaZ tauXZ corrTauXZ fname
            data(ii).stopPlateauPreShear = floor(lMuR*stopPlateauPreShearValue); % stopPlateauPreShearValue = .48;
            data(ii).startPlateauShear = floor(lMuR*startPlateauShearValue); % startPlateauShearValue = .80;
            data(ii).stopPlateauShear = floor(lMuR*stopPlateauShearValue); % stopPlateauShearValue = .95;
-            end
-     %   end
+       end
           
         startPlateauPreShear = data(ii).startPlateauPreShear;
         stopPlateauPreShear = data(ii).stopPlateauPreShear;
@@ -932,12 +930,10 @@ end
     
 if (exp_flag)
       for ii=1:nSimCases
-          
-          if (imageFlag)
             figure(hFig(6));
             subplot(2,1,1); 
             hold on
-          end
+
 
                  %legend for force plots
                 leg{6,iCnt(6)} = fname;
@@ -947,7 +943,6 @@ if (exp_flag)
                 muR = data(ii).muR;
 
                 % plot coefficient of friction
-            if (imageFlag)
                 figure(hFig(6));
                 subplot(2,1,1);
                 hold on
@@ -956,7 +951,7 @@ if (exp_flag)
                 plot(data(ii).timesteps,data(ii).corrTauXZ,'LineStyle',lineStyles{mod(ii,numel(lineStyles))+1},'Color',cmap(mod(ii,size(cmap,1))+1,:),'LineWidth',2);
                 %line([data(ii).timesteps(1) data(ii).timesteps(end)],[avgMuR2(ii,1) avgMuR2(ii,1)],'Color',cmap(mod(ii,size(cmap,1))+1,:));
                 %ylim([0 1.5]);      
-            end
+        
 %         if avgMuR2(ii,1) > avgMuR1(ii,1)
 %             disp(fname)
 %            
@@ -997,18 +992,18 @@ if (exp_flag)
                     coeffShear60 = expInp.tauAb60/expOut.sigmaAb60;
                     coeffShear80 = expInp.tauAb80/expOut.sigmaAb80;
                     coeffShear100 = expOut.coeffShear100;
-                    if (imageFlag)
-                        figure(hFig(4)); hold on
-                        plot(time,tau,'Color','red','LineWidth',2);
-                        %xlim([-1 data(1).timesteps(end)+1]);
+                    
+                    figure(hFig(4)); hold on
+                    plot(time,tau,'Color','red','LineWidth',2);
+                    %xlim([-1 data(1).timesteps(end)+1]);
 
-                        leg{4,iCnt(4)} = exp_file;
-                        iCnt(4) = iCnt(4)+1;  
+                    leg{4,iCnt(4)} = exp_file;
+                    iCnt(4) = iCnt(4)+1;  
 
-                        figure(hFig(6));
-                        subplot(2,1,2);
-                        plot(time,tau,'LineWidth',2);   
-                    end
+                    figure(hFig(6));
+                    subplot(2,1,2);
+                    plot(time,tau,'LineWidth',2);   
+                    
                     jjj=1;
                     ii=1;
                     for ii=1:nSimCases
@@ -1080,11 +1075,10 @@ if (exp_flag)
 
             case {'jenike','poorMan'}     
             %plot(t,exp_shear./exp_sigma,'LineWidth',2)
-            if (imageFlag)
-                figure(hFig(6));
-                subplot(2,1,2);
-                plot(t,exp_shear,'LineWidth',2);
-            end
+            
+            figure(hFig(6));
+            subplot(2,1,2);
+            plot(t,exp_shear,'LineWidth',2);
             %ylim([0 1.5]);
             %xlim([0.0 60.0]); %%%%%%%%%%%experrimental time plotted
             
@@ -1389,7 +1383,7 @@ if (newInputFlag)
     dataNN2.shearperc = [0.4:0.2:1.0];   
     if (exist('densityBulkBoxMean'))
        dataNN2.dens = [2000:100:3500];
-       densTolerance = 0.05; 
+       densTolerance =1.4; 
     end
     
 if (exp_flag)
@@ -1493,12 +1487,10 @@ if (exp_flag)
                             %nY2rowsTris = length(newY2(:,ii));
                             
                             
-                            if (exist('densityBulkBoxMean') &  (newY2(nY2rowsBis+1,ii)<0.05) & (newY2(nY2rowsBis+2,ii)<0.05) &   (newY2(densityBulkBoxMeanPos,ii)<newY2(nY2rowsBis+4,ii)*(1.0+densTolerance))  ...
-                                    &  (newY2(densityBulkBoxMeanPos,ii)>newY2(nY2rowsBis+5,ii)*(1.0-densTolerance)) )
+                            if (exist('densityBulkBoxMean') &  (newY2(nY2rowsBis+1,ii)<0.05) & (newY2(nY2rowsBis+2,ii)<0.05) &   (newY2(densityBulkBoxMeanPos,ii)<newY2(nY2rowsBis+4,ii)*densTolerance)  &  (newY2(densityBulkBoxMeanPos,ii)>newY2(nY2rowsBis+5,ii)) )
                                 gloriaAugustaSchulzeNN(1,jjj) = ii;
                                 gloriaAugustaSchulzeNN(2:(nY2rowsTris+1), jjj) = newY2(1:end,ii) ;%avgMuR1(ii);  
                                 gloriaAugustaSchulzeNN(nY2rowsTris+2, jjj) = 1;
-                                jjj=jjj+1;
                             elseif ((newY2(nY2rowsBis+1,ii)<0.05) & (newY2(nY2rowsBis+2,ii)<0.05)) %((data(ii).deltaRatioShear<0.05) & (data(ii).deltaRatioPreShear<0.05))
                                 gloriaAugustaSchulzeNN(1,jjj) = ii;
                                 gloriaAugustaSchulzeNN(2:(nY2rowsTris+1), jjj) = newY2(1:end,ii) ;%avgMuR1(ii);
