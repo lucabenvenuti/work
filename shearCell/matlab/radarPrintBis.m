@@ -143,9 +143,9 @@ close all
                                 gloriaAugustaSchulzeNNDens(nY2rowsTris+2, kkk) = 1;
                                 kkk=kkk+1;
                             elseif ((newY2(nY2rowsBis+1,ii)<0.05) & (newY2(nY2rowsBis+2,ii)<0.05)) %((data(ii).deltaRatioShear<0.05) & (data(ii).deltaRatioPreShear<0.05))
-                                gloriaAugustaSchulzeNN(1,jjj) = ii;
-                                gloriaAugustaSchulzeNN(2:(nY2rowsTris+1), jjj) = newY2(1:end,ii) ;%avgMuR1(ii);
-                                gloriaAugustaSchulzeNN(nY2rowsTris+2, jjj) = 0;
+                                gloriaAugustaSchulzeNNnoDens(1,jjj) = ii;
+                                gloriaAugustaSchulzeNNnoDens(2:(nY2rowsTris+1), jjj) = newY2(1:end,ii) ;%avgMuR1(ii);
+                                gloriaAugustaSchulzeNNnoDens(nY2rowsTris+2, jjj) = 0;
 %                                 gloriaAugustaSchulze{jjj,3} = avgMuR2(ii);
 %                                 gloriaAugustaSchulze{jjj,4} = data(ii).tauAb;
 %                                 gloriaAugustaSchulze{jjj,5} = data(ii).sigmaAb;
@@ -223,11 +223,9 @@ c4 = datestr(clock)
      a2 = radarPlot( G)
      legend('minInput','min', '\mu - \sigma', '\mu', '\mu + \sigma', 'max', 'maxInput', 'FontSize',24)
      title (['normal stress = ', num2str(dataNN2.ctrlStress), ' [Pa], coeff. P. = ', num2str(coeffPirker)] ,'FontSize',24);
-<<<<<<< HEAD:shearCell/matlab/radarPrint.m
-     save -v7.3 radarPlot10070sinterfine0_1rangePirker1dot0SFRangeReduced
-=======
+
      save -v7.3 radarPlot10070sinterfine0_1rangePirker1dot0DensityRangeReduced
->>>>>>> origin/master:shearCell/matlab/radarPrintBis.m
+
      %dfittool
      %save(['PDF10070sinterfine', '.mat'], 'PDF10070');
 %      PDF10070{1} = COR10070;
