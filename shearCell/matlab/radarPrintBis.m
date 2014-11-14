@@ -1,4 +1,4 @@
-clearvars newY2 newY22 gloriaAugustaSchulzeNN dataNN2 densTolerance
+clearvars newY2 newY22 gloriaAugustaSchulzeNN dataNN2 densTolerance gloriaAugustaSchulzeNNDens gloriaAugustaSchulzeNNnoDens
 close all
 
 %     dataNN2.rest = sort(0.5 + (0.9-0.5).*rand(25,1)); %a + (b-a).*rand(10,1);%[0.5:0.1:0.9];
@@ -224,7 +224,7 @@ c4 = datestr(clock)
      legend('minInput','min', '\mu - \sigma', '\mu', '\mu + \sigma', 'max', 'maxInput', 'FontSize',24)
      title (['normal stress = ', num2str(dataNN2.ctrlStress), ' [Pa], coeff. P. = ', num2str(coeffPirker)] ,'FontSize',24);
 
-     save -v7.3 radarPlot10070sinterfine0_1rangePirker1dot0DensityRangeReduced
+     save -v7.3 radarPlot10070sinterfine0_1rangePirker1dot0EntireRangeBis
 
      %dfittool
      %save(['PDF10070sinterfine', '.mat'], 'PDF10070');
