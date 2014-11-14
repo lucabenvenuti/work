@@ -33,13 +33,13 @@ filepatterncsv = 'sim_par*_fid*.csv'; % e.g. 'force.*.txt' %Andi
 %                         'rf'   [0.2 0.4]};
 %   for all cases use empty searchCases = {};
 searchCases = {...'fric' 0.4 %[0.4 0.8]
-               ...'rf'   0.6 %[0.4 0.8]
+               ...'rf'  [0.4 0.8]
                ...'rest'   [0.5 0.9]
                ...'fid'  [	20025	20026	20027	20028	20029	20030 20035		20201	20202	20203	20204 20205] %20101	20102	20103	20125	20126 20001	20002
                ...'shearperc' 0.4
                ... 'ctrlStress' -1.007001977856750e+04
                'expMass' 8.7452
-               ...'dens' 3000
+               'dens' [2500 3500]
                ...'dt' 1.0e-6
                ...'dCylDp' 20
                };

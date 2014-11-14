@@ -223,7 +223,7 @@ c4 = datestr(clock)
      a2 = radarPlot( G)
      legend('minInput','min', '\mu - \sigma', '\mu', '\mu + \sigma', 'max', 'maxInput', 'FontSize',24)
      title (['normal stress = ', num2str(dataNN2.ctrlStress), ' [Pa], coeff. P. = ', num2str(coeffPirker)] ,'FontSize',24);
-     save -v7.3 radarPlot10070sinterfine0_1rangePirker1dot0CorRangeReduced
+     save -v7.3 radarPlot10070sinterfine0_1rangePirker1dot0DensityRangeReduced
      %dfittool
      %save(['PDF10070sinterfine', '.mat'], 'PDF10070');
 %      PDF10070{1} = COR10070;
