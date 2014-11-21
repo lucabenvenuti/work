@@ -6,7 +6,7 @@ clc;
 unitSysDefault = 'si';  % 'si' or 'cgs'
 
 % select files that should be postprocessed
-sim_dir = '../results'; % directory, where simulation files can be found
+sim_dir = '../results/01/sim001_sinterfine_reducedPolydispersity'; % directory, where simulation files can be found
 filepattern = 'area_*.txt'; % e.g. 'force.*.txt' %Andi
 filepatterncsv = 'sim_parAOR_fid*.csv'; % e.g. 'force.*.txt' %Andi
 filepatternangle = 'angle_*'; % e.g. 'force.*.txt' %Andi
@@ -352,9 +352,10 @@ if (NNFlag)
     
     if (exist('densityBulkBoxMean'))
         %targetNN(iijj,3)=densityBulkBoxMean(iijj);
-        [NNSave2, errorNN2, x2, zz2, errorEstSum2, errorEstIndex2, errorEstSumMaxIndex2, yy2, corrMat2] =   myNeuNetFun(nSimCases,dataAOR,trainFcn,hiddenLayerSizeVector, dataNN2, avgMuR2,avgMuR1, densityBulkBoxMean);
+        [NNSave2, errorNN2, x2, zz2, errorEstSum2, errorEstIndex2, errorEstSumMaxIndex2, yy2, corrMat2] =   myNeuNetFun(nSimCases,dataAOR,trainFcn,hiddenLayerSizeVector, avgMuR2,avgMuR1, densityBulkBoxMean);
     else
-        [NNSave2, errorNN2, x2, zz2, errorEstSum2, errorEstIndex2, errorEstSumMaxIndex2, yy2, corrMat2, newY2] =   myNeuNetFun(nSimCases,dataAOR,trainFcn,hiddenLayerSizeVector, dataNN2, angleLi, angleMa);
+        [NNSave2, errorNN2, x2, zz2, errorEstSum2, errorEstIndex2, errorEstSumMaxIndex2, yy2, corrMat2] =   myNeuNetFun(nSimCases,dataAOR,trainFcn,hiddenLayerSizeVector, angleLi, angleMa);
+        %                                                                                                   myNeuNetFun(nSimCases2,data2,trainFcn2,hiddenLayerSizeVector2, target1, target2, target3)
     end
     
     %myNeuNetFun(nSimCases,data
@@ -364,7 +365,7 @@ if (NNFlag)
 %         %yy4-yy2(errorEstSumMaxIndex2,:,:) this should be zero
 %         net=NNSave2{errorEstSumMaxIndex2(2),2}.net;
 %         yy5=net(x2);
-%         yy6(1,2,:)=yy5;
+%         yy6(1,2,:)=yy5; , newY2
 
 end
 
@@ -396,9 +397,14 @@ if (exp_flag)
         
     end
     
+    newY2 = myNewInput(NNSave2, errorEstSumMaxIndex2, dataNN2);        
+    [nY2rows,nY2column] = size(newY2);
+    
     if (NNFlag)
       [newY2rows newY2columns] = size(newY2);
       jjj=1;
+      kkk=1;
+      lll=1;
       i=1;
       for i = 1:newY2columns
            newY2(newY2rows+1,i) = newY2(newY2rows-1,i)/angleExp; %ratioAORLi
@@ -406,18 +412,29 @@ if (exp_flag)
            newY2(newY2rows+3,i) = abs(1- newY2(newY2rows+1,i));  %deltaRatioAORLi
            newY2(newY2rows+4,i) = abs(1- newY2(newY2rows+2,i));  %deltaRatioAORMa
           
-          if (newY2(newY2rows+3,i)<0.05)
-                gloriaAugustaAorNN(jjj,1) = i;
-                gloriaAugustaAorNN(jjj,2) = newY2(newY2rows-1,i);
-                gloriaAugustaAorNN(jjj,3) = newY2(newY2rows,i);
-                gloriaAugustaAorNN(jjj,4) = 0;
+          if (newY2(newY2rows+3,i)<0.05 && newY2(newY2rows+4,i)<0.05)
+                gloriaAugustaAorNNBoth(jjj,1) = i;
+                gloriaAugustaAorNNBoth(jjj,2:newY2rows+5) = newY2(:,i);
+                %gloriaAugustaAorNNBoth(jjj,2) = newY2(newY2rows-1,i);
+                %gloriaAugustaAorNNBoth(jjj,3) = newY2(newY2rows,i);
+                gloriaAugustaAorNNBoth(jjj,newY2rows+6) = 2;
                 jjj=jjj+1;
+          elseif (newY2(newY2rows+3,i)<0.05)
+                gloriaAugustaAorNNLi(kkk,1) = i;
+                gloriaAugustaAorNNLi(kkk,2:newY2rows+5) = newY2(:,i);
+                gloriaAugustaAorNNLi(kkk,newY2rows+6) = 1;
+%                 gloriaAugustaAorNNLi(kkk,2) = newY2(newY2rows-1,i);
+%                 gloriaAugustaAorNNLi(kkk,3) = newY2(newY2rows,i);
+%                 gloriaAugustaAorNNLi(kkk,4) = 0;
+                kkk=kkk+1;
           elseif (newY2(newY2rows+4,i)<0.05)
-                gloriaAugustaAorNN(jjj,1) = i;
-                gloriaAugustaAorNN(jjj,2) = newY2(newY2rows-1,i);
-                gloriaAugustaAorNN(jjj,3) = newY2(newY2rows,i);
-                gloriaAugustaAorNN(jjj,4) = 1;
-                jjj=jjj+1;
+                gloriaAugustaAorNNMa(lll,1) = i;
+                gloriaAugustaAorNNMa(lll,2:newY2rows+5) = newY2(:,i);
+                gloriaAugustaAorNNMa(lll,newY2rows+6) = 0;
+%                 gloriaAugustaAorNNMa(lll,2) = newY2(newY2rows-1,i);
+%                 gloriaAugustaAorNNMa(lll,3) = newY2(newY2rows,i);
+                %gloriaAugustaAorNNMa(lll,4) = 1;
+                lll=lll+1;
           end
 
       end
@@ -425,7 +442,7 @@ if (exp_flag)
     end
 end
 
-
+gloriaAugustaSchulzeNN = gloriaAugustaAorNNBoth';
 
 %% save matlab data
 i=1;

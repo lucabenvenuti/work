@@ -3,7 +3,7 @@ function newInput = myNewInput(NNSave, errorEstSumMaxIndex, dataNN)
 %   Detailed explanation goes here
 %[, errorNN, x, zz, errorEstSum, errorEstIndex, errorEstSumMaxIndex, yyy, corrMatPca, newInput] =   myNeuNetFun(nSimCases2,data2,trainFcn2,hiddenLayerSizeVector2,  dataNN, target1, target2, target3)
 
-rest = dataNN.rest;
+    rest = dataNN.rest;
     sf = dataNN.sf;
     rf = dataNN.rf;
     dt = dataNN.dt;

@@ -1,8 +1,8 @@
 
 mu(1,1) = PDF10070EntireRange{1,1}.mu;
 sigma(1,1) = PDF10070EntireRange{1,1}.sigma;
-mu(1,2) = PDF10070CorRangeReduced{1,1}.mu;
-sigma(1,2) = PDF10070CorRangeReduced{1,1}.sigma;
+mu(1,2) = PDF10070CORRangeReduced{1,1}.mu;
+sigma(1,2) = PDF10070CORRangeReduced{1,1}.sigma;
 
 mu(2,1) = PDF10070EntireRange{1,2}.mu;
 sigma(2,1) = PDF10070EntireRange{1,2}.sigma;

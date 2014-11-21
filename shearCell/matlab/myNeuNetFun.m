@@ -33,7 +33,7 @@ for iijj=1:nSimCases2
     end
     
     
-    if (exist('target3'))
+    if (exist('target3') | isfield (data2(iijj), 'deltaRatioAORLi'))
         aa=7;
         %length(inputNN(iijj,:))
         inputNN(iijj,aa+1)=data2(iijj).dens;
@@ -48,7 +48,7 @@ end
 [rowsInputNN columnInputNN] = size(inputNN);
 
 ITNN(:,1:columnInputNN) = inputNN(:,1:columnInputNN);
-ITNN(:,(columnInputNN+1):(columnInputNN+columnTargetNN)) = targetNN(:,1:columnTargetNN);
+ITNN(:,(columnInputNN+1):(columnInputNN+columnTargetNN)) = targetNN(:,1:columnTargetNN)
 %[rowsITNN columnITNN] = size(ITNN);
 
 corrMatPca.corrMat = corrcoef(ITNN);
