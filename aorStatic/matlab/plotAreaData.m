@@ -412,7 +412,7 @@ if (exp_flag)
            newY2(newY2rows+3,i) = abs(1- newY2(newY2rows+1,i));  %deltaRatioAORLi
            newY2(newY2rows+4,i) = abs(1- newY2(newY2rows+2,i));  %deltaRatioAORMa
           
-          if (newY2(newY2rows+3,i)<0.05 && newY2(newY2rows+4,i)<0.05)
+          if (newY2(newY2rows+3,i)<0.05 & newY2(newY2rows+4,i)<0.05)
                 gloriaAugustaAorNNBoth(jjj,1) = i;
                 gloriaAugustaAorNNBoth(jjj,2:newY2rows+5) = newY2(:,i);
                 %gloriaAugustaAorNNBoth(jjj,2) = newY2(newY2rows-1,i);

@@ -40,8 +40,8 @@ searchCases = {...'fric' 0.4 %[0.4 0.8]
                ...'fid'  [	20025	20026	20027	20028	20029	20030 20035		20201	20202	20203	20204 20205] %20101	20102	20103	20125	20126 20001	20002
                ...'shearperc' 0.4
                ... 'ctrlStress' -1.007001977856750e+04
-               'expMass' 8.7452
-               'dens' [2500 3500]
+               'expMass' 0.9275 %8.7452
+               ...'dens' [2500 3500]
                ...'dt' 1.0e-6
                ...'dCylDp' 20
                };
@@ -69,9 +69,9 @@ if (exp_flag)
 
             
         case 'schulze'
-            exp_file = ['20131129_0841_sinterfine0-315_test04' , '.FTD']; % name of the FTD FILE, with the exp values vs time
-            summaryFile = ['20131129_0841_sinterfine0-315_test04' , '.out']; % name of the out file, with the summary values
-            sumForceFile = ['20131129_0841_sinterfine0-315_test04' , '.inp']; % name of the inp file, with the forces summary values
+            exp_file = ['20131128_1824_sinterfine0-315_test01' , '.FTD']; % name of the FTD FILE, with the exp values vs time
+            summaryFile = ['20131128_1824_sinterfine0-315_test01' , '.out']; % name of the out file, with the summary values
+            sumForceFile = ['20131128_1824_sinterfine0-315_test01' , '.inp']; % name of the inp file, with the forces summary values
     end
     
 end
@@ -1360,7 +1360,7 @@ if (NNFlag)
     if (exist('densityBulkBoxMean'))
         %targetNN(iijj,3)=densityBulkBoxMean(iijj);
         %[NNSave2, errorNN2, x2, zz2, errorEstSum2, errorEstIndex2, errorEstSumMaxIndex2, yy2, corrMat2, newY2] =   myNeuNetFun(nSimCases,data,trainFcn,hiddenLayerSizeVector, dataNN2, avgMuR2,avgMuR1, densityBulkBoxMean);
-        [NNSave2, errorNN2, x2, zz2, errorEstSum2, errorEstIndex2, errorEstSumMaxIndex2, yy2, corrMat2] =   myNeuNetFun(nSimCases,data,trainFcn,hiddenLayerSizeVector, avgMuR2,avgMuR1, densityBulkBoxMean);
+        [NNSave2, errorNN2, x2, zz2, errorEstSum2, errorEstIndex2, errorEstSumMaxIndex2, yy2, corrMat2] =   myNeuNetFun(nSimCases,data,trainFcn,hiddenLayerSizeVector, avgMuR2,avgMuR1, densityBulkBoxMin);
         avgMuR2Pos = 9;
         avgMuR1Pos = 10;
         densityBulkBoxMeanPos = 11;

@@ -1,4 +1,4 @@
-clearvars newY2 newY22 gloriaAugustaSchulzeNN dataNN2 densTolerance gloriaAugustaSchulzeNNDens gloriaAugustaSchulzeNNnoDens X Y Z S
+clearvars newY2 newY22 gloriaAugustaSchulzeNN dataNN2 densTolerance gloriaAugustaSchulzeNNDens gloriaAugustaSchulzeNNnoDens gloriaAugustaAorNNMa gloriaAugustaAorNNLi gloriaAugustaAorNNBoth X Y Z S 
 close all
 
 %     dataNN2.rest = sort(0.5 + (0.9-0.5).*rand(25,1)); %a + (b-a).*rand(10,1);%[0.5:0.1:0.9];
@@ -13,10 +13,10 @@ close all
 %        densTolerance =1.4; 
 %     end   
 %     
-    load inputDataNN.mat
-    dataNN2.ctrlStress = 1.007001977856750e+04; %1068; %1068;% [1068,2069,10070];
-    coeffPirker = 1.0;
-    densTolerance = 0.05; 
+    load inputDataNN4.mat
+     dataNN2.ctrlStress = 1068;% 1.007001977856750e+04; %1068; %1068;% [1068,2069,10070];
+     coeffPirker = 1.0;
+     densTolerance = 0.05; 
     
      c2 = datestr(clock)   
      newY2 = myNewInput(NNSave2, errorEstSumMaxIndex2, dataNN2);        
@@ -169,8 +169,10 @@ c4 = datestr(clock)
     Z=gloriaAugustaSchulzeNN(9,:); %density
     S=gloriaAugustaSchulzeNN(2,:); %cor
     C=gloriaAugustaSchulzeNN(10,:);%avgMuR2
+    %C=gloriaAugustaSchulzeNN(8,:);%aorLi
+    %Z=gloriaAugustaSchulzeNN(7,:); %density
     
-        meanS = mean(S);
+    meanS = mean(S);
     meanX = mean(X);
     meanY = mean(Y);
     meanZ = mean(Z); 
@@ -220,11 +222,12 @@ c4 = datestr(clock)
      G(4,7)= 3499; %max(dataNN2.dens); %Z
      
      figure(8)
-     a2 = radarPlot( G)
-     legend('minInput','min', '\mu - \sigma', '\mu', '\mu + \sigma', 'max', 'maxInput', 'FontSize',24)
+     a2 = radarPlot(G)
+     legend('minInput','min', '\mu - \sigma', '\mu', '\mu + \sigma', 'max', 'maxInput'); %, 'FontSize',24)
      title (['normal stress = ', num2str(dataNN2.ctrlStress), ' [Pa], coeff. P. = ', num2str(coeffPirker)] ,'FontSize',24);
-
-     save -v7.3 radarPlot10070sinterfine0_1rangePirker1dot0SFRangeReducedBis
+     %title (['AOR, coeff. P. = ', num2str(coeffPirker)] ,'FontSize',24);
+     set(gca,'fontname','times new roman')  % Set it to times
+     %save -v7.3 radarPlot10070sinterfine0_1rangePirker1dot0SFRangeReducedBis
 
      %dfittool
      %save(['PDF10070sinterfine', '.mat'], 'PDF10070');
@@ -257,3 +260,5 @@ c4 = datestr(clock)
 % PDF2069{3} = RF2069;
 % PDF2069{4} = particledensity2069;
 % save(['PDF2069sinterfine', '.mat'], 'PDF2069');
+
+
