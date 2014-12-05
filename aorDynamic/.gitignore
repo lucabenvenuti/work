@@ -1,3 +1,11 @@
 post/
 post_*/
 log.*
+area/
+images/
+logs/
+tmp*
+post_*
+restart/
+results/
+
