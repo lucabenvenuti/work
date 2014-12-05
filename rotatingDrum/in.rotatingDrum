@@ -9,7 +9,7 @@ variable	rpm			equal 6.0	#Drum rotational speed
 variable	radius		equal 0.0025	#Particle radius
 variable	massIns		equal 0.1	#Total mass to be inserted in the drum
 variable	runTime		equal 0.05	#Total time simulation should run
-variable	fillPerc	equal 0.4	#Proportion of cylinder you want filled with particles
+variable	fillPerc	equal 0.5	#Proportion of cylinder you want filled with particles
 	
 processors   4 4 2
 
@@ -34,7 +34,7 @@ shell		mkdir	restart
 #variable	cylVolume	equal PI*${cylRadius}*${cylRadius}*${cylLenght}
 #variable	partVolume	equal PI*(4/3)*${radius}*${radius}*${radius}
 #variable	usedVolume	equal ${fillPerc}*${cylVolume}  #Volume of the cylinder that will contain particles
-variable	solidPacking	equal 0.2 			#Fraction of solid in the occupied region of the cylinder
+variable	solidPacking	equal 0.5 			#Fraction of solid in the occupied region of the cylinder
 variable	solidFraction	equal ${fillPerc}*${solidPacking}
 
 
