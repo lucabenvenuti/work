@@ -5,7 +5,7 @@
 ##Variables - User input##
 variable	dt		equal 0.00001   #Time step
 variable	save		equal 0.1	#Save results interval
-variable	rpm		equal 1.5	#Drum rotational speed
+variable	rpm			equal 6.0	#Drum rotational speed
 variable	radius		equal 0.0025	#Particle radius
 variable	massIns		equal 0.1	#Total mass to be inserted in the drum
 variable	runTime		equal 0.05	#Total time simulation should run
