@@ -3,20 +3,23 @@
 #Luca Benvenuti & Daniel Nasato
 
 ##Variables - User input##
+variable	fileID		equal 1
 variable	dt		equal 0.00001   #Time step
 variable	save		equal 0.1	#Save results interval
 variable	rpm		equal 1.5	#Drum rotational speed
 variable	radius		equal 0.0025	#Particle radius
 variable	massIns		equal 0.1	#Total mass to be inserted in the drum
-variable	runTime		equal 0.05	#Total time simulation should run
+variable	runTime		equal 2.5	#Total time simulation should run
 variable	fillPerc	equal 0.2	#Proportion of cylinder you want filled with particles
 	
-processors   4 4 2
+processors   1 1 1
 
-variable    numProc equal       32
+variable    numProc equal       1
 
 #########################
 ###Internal variables###
+variable	maxdiam		equal ${radius}*2
+variable	r0		equal ${radius}
 variable	saveStep	equal ${save}/${dt}
 variable	neigh		equal ${radius}*2.0
 variable        skin		equal ${neigh}
@@ -24,6 +27,8 @@ variable	massRate	equal ${massIns}/2.0
 variable	extrLen		equal ${radius}*10.0
 variable	runTimeStep	equal ${runTime}/${dt}
 variable	cylRadius	equal 0.19
+variable	scaleFactor	equal ${cylRadius}/${radius}
+variable	dcyl		equal ${cylRadius}
 variable	cylLenght	equal 1.0
 variable	period		equal 60/${rpm}
 
@@ -34,12 +39,19 @@ shell		mkdir	restart
 #variable	cylVolume	equal PI*${cylRadius}*${cylRadius}*${cylLenght}
 #variable	partVolume	equal PI*(4/3)*${radius}*${radius}*${radius}
 #variable	usedVolume	equal ${fillPerc}*${cylVolume}  #Volume of the cylinder that will contain particles
-variable	solidPacking	equal 0.2 			#Fraction of solid in the occupied region of the cylinder
+variable	solidPacking	equal 0.02 			#Fraction of solid in the occupied region of the cylinder
 variable	solidFraction	equal ${fillPerc}*${solidPacking}
 
 
 #######################
-
+#shell 	mkdir post_$a
+shell   mkdir logs
+shell   mkdir restart
+shell   mkdir post
+shell   mkdir results
+shell	mkdir area
+shell	mkdir images
+shell	mkdir post_param
 
 atom_style	granular
 atom_modify	map array
@@ -47,11 +59,11 @@ boundary	f f f
 newton		off
 
 communicate	single vel yes
-
-units		si
+read_restart	./restart/restart_${fillPerc}.drum
+#units		si
 
 region		reg block -0.2 0.2 -0.2 0.2 -0.01 1.01 units box
-create_box	2 reg
+#create_box	2 reg
 
 neighbor	${neigh} bin
 neigh_modify	delay 0
@@ -110,18 +122,30 @@ thermo_modify	lost ignore norm no
 compute_modify	thermo_temp dynamic yes
 
 #insert the first particles so that dump is not empty
-run		1
-unfix		ins
-dump		dmp all custom ${saveStep} post/dump_${fillPerc}*.drum id type type x y z ix iy iz vx vy vz fx fy fz omegax omegay omegaz radius 
-dump 		dumpstress all mesh/gran/VTK ${saveStep} post/dump_${fillPerc}*.vtk stress pt1 pt2 pt3
+#run		1
+#unfix		ins
+#dump		dmp all custom ${saveStep} post/dump_${fillPerc}*.drum id type type x y z ix iy iz vx vy vz fx fy fz omegax omegay omegaz radius 
+#dump 		dumpstress all mesh/gran/VTK ${saveStep} post/dump_${fillPerc}*.vtk stress pt1 pt2 pt3
 
 ##Create particles and let them accomodate
 variable	accomTime	equal	1.0/${dt}
-run		${accomTime}
+#run		${accomTime}
 
-fix		rotate all move/mesh mesh pt1 rotate origin 0. 0. 0. axis 0. 0. 1. period ${period}
+#fix		rotate all move/mesh mesh pt1 rotate origin 0. 0. 0. axis 0. 0. 1. period ${period}
 
-run		${runTimeStep}
+#run		${runTimeStep}
 
-write_restart	./restart/restart_${fillPerc}.drum
+#write_restart	./restart/restart_${fillPerc}.drum
+
+# evaluate convex hull
+variable	n_cuts equal 10 # 50 #2.*2 #${scaleFactor}
+#variable	cut_thickness equal ${maxdiam}/50.
+#compute		chull all crosssection skin ${skin} dim y min ${r0} max ${dcyl}  n_cuts ${n_cuts}  cut_thickness ${cut_thickness} file results/area_fid${fileID}.txt
+compute		chull all crosssection skin ${skin} dim x min -0.2 max 0.2  n_cuts 40  cut_thickness 0.01 file results/area_fid${fileID}.txt
+
+# measure angle
+variable	i equal ${n_cuts}+1
+variable	c equal c_chull[$i]
+fix		pr all print 1 "$c" screen no file results/angle_fid${fileID} title ${fileID}
+run		1
  
