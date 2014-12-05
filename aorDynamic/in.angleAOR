@@ -1,5 +1,7 @@
 ###User-Input Variables - Simulation Data###
 variable	radius		equal 0.0025 	# Particle radius
+variable	maxdiam		equal ${radius}*2
+variable	r0		equal ${radius}
 variable	density		equal 2500	# Particle density
 variable	massTotal	equal 2.5	# Total mass to be inserted in the simulation Kg	
 variable	massRate	equal 0.5	# Mass flow to be inserted in the simulation Kg/s
@@ -9,17 +11,20 @@ variable	saveInterval	equal 0.05	# Enter the interval you want to save data in s
 ############################################
 
 ###User-Input Variables - Material Parameter###
-variable	a	    universe	1 2 3 4 5 6	# Set this number according to the number of parameters set you will use
-variable	statPP	universe	0.4 0.4 0.5 0.5 0.6 0.6 
-variable	statPW	universe	0.4 0.4 0.5 0.5 0.6 0.6 
-variable	rollPP	universe	0.2 0.3 0.2 0.3 0.2 0.3	
-variable	rollPW	universe	0.2 0.2 0.3 0.3 0.2 0.3
+variable	a	    universe	2 #1 2 3 4 5 6	# Set this number according to the number of parameters set you will use
+variable        fileID	equal $a
+
+variable	statPP	universe	0.4 #0.4 0.5 0.5 0.6 0.6 
+variable	statPW	universe	0.4 #0.4 0.5 0.5 0.6 0.6 
+variable	rollPP	universe	0.2 #0.3 0.2 0.3 0.2 0.3	
+variable	rollPW	universe	0.2 #0.2 0.3 0.3 0.2 0.3
 ###############################################
 
 ###Setup Variables - DON'T TOUCH####
 variable	origRadius 	equal 	0.0001  # original Diameter we used to build the geometry
 #variable	origRadius 	equal 	0.0001  # Diameter set as original to scale geometry. If the ratio mass/system size is low just reduce this value
 variable	scaleFactor	equal	${radius}/${origRadius}
+variable	dcyl 		equal 	${scaleFactor}*${origRadius} ##OLD ###${scaleFactor}*${maxdiam}
 variable	regXminus	equal	-0.00375*${scaleFactor}*2
 variable	regXplus	equal	0.00375*${scaleFactor}*2
 variable	regYminus	equal	-0.0135*${scaleFactor}
@@ -27,6 +32,7 @@ variable	regYplus	equal	0.000312*${scaleFactor}*32.1
 variable	regZminus	equal	0.0198*${scaleFactor}
 variable	regZplus	equal	0.0360*${scaleFactor}
 variable	neighSize	equal	3*${radius}
+variable        skin		equal ${neighSize}
 variable	extrLeng	equal	3*${radius}
 variable	nTimeSteps	equal	${totalTime}/${timeStep}
 variable	saveData	equal	${saveInterval}/${timeStep}
@@ -43,7 +49,7 @@ shell	mkdir area
 shell	mkdir images
 shell	mkdir post_param
 
-processors  2 2 3
+processors  1 1 1
 
 ####################################
 
@@ -57,7 +63,7 @@ communicate	single vel yes
 
 read_restart	restart/reposeDynamic_loop_${fileID}.restart
 
-units		si
+#units		si
 
 region		reg block ${regXminus} ${regXplus} ${regYminus} ${regYplus} ${regZminus} ${regZplus} units box
 #create_box	2 reg
@@ -90,19 +96,19 @@ fix		cad6 all mesh/surface/stress file mesh/hopper.stl type 1 scale ${scaleFacto
 
 
 fix		inface all mesh/surface file mesh/inSquare.stl type 1 scale ${scaleFactor}
-fix 		wall all wall/gran model hertz tangential history mesh n_meshes 6 meshes cad1 cad2 cad3 cad5 cad6 #cad4
+fix 		wall all wall/gran model hertz tangential history mesh n_meshes 5 meshes cad1 cad2 cad3 cad5 cad6 #cad4
 
 #distributions for insertion
 fix		pts1 all particletemplate/sphere 1 atom_type 2 density constant ${density} radius constant ${radius}
 #fix		pts2 all particletemplate/sphere 1 atom_type 1 density constant 2500 radius constant 0.025
 #fix		pdd1 all particledistribution/discrete 1.  2 pts1 0.3 pts2 0.7
-fix		pdd1 all particledistribution/discrete 1.  1 pts1 1.0
+#fix		pdd1 all particledistribution/discrete 1.  1 pts1 1.0
 
 #region for insertion
 group		nve_group region reg
 
 #particle insertion
-fix			ins nve_group insert/stream seed 5330 distributiontemplate pdd1 &
+#fix			ins nve_group insert/stream seed 5330 distributiontemplate pdd1 &
 				maxattempt 100 mass ${massTotal} massrate ${massRate} overlapcheck yes vel constant 0. 0. -1.0 &
 				insertion_face inface extrude_length ${extrLeng}
 
@@ -132,9 +138,19 @@ compute_modify		thermo_temp dynamic yes
 
 #run         ${accTimeStep}
 
-write_restart	restart/reposeDynamic_loop_${fileID}.restart
+# evaluate convex hull
+variable	n_cuts equal 2.*${scaleFactor}
+variable	cut_thickness equal ${maxdiam}/2.
+compute		chull all crosssection skin ${skin} dim y min ${r0} max ${dcyl}  n_cuts ${n_cuts}  cut_thickness ${cut_thickness} file results/area_fid${fileID}.txt
+
+# measure angle
+variable	i equal ${n_cuts}+1
+variable	c equal c_chull[$i]
+fix		pr all print 1 "$c" screen no file results/angle_fid${fileID} title ${fileID}
+run		1
+
 
 #loop variables command
-next		a statPP statPW rollPP rollPW
-clear
-jump		in.setupAOR
+#next		a statPP statPW rollPP rollPW
+#clear
+#jump		in.setupAOR
