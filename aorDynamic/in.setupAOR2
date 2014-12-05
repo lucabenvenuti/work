@@ -1,4 +1,5 @@
 ###User-Input Variables - Simulation Data###
+#trotaculo
 variable	radius		equal 0.0025 	# Particle radius
 variable	density		equal 2500	# Particle density
 variable	massTotal	equal 2.5	# Total mass to be inserted in the simulation Kg	
