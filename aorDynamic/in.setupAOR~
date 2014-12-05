@@ -43,7 +43,7 @@ shell	mkdir area
 shell	mkdir images
 shell	mkdir post_param
 
-processors  1 1 1
+processors  2 1 1
 
 ####################################
 
