@@ -38,3 +38,21 @@ plotregression(z,yy,'Regression');
 %legend('Data','Fit','Y = T','FontSize', '20', 'Location', 'NorthWest' );
 set(gca, 'FontSize',20);
 %matlab2tikz( 'Regression.tikz' );
+
+%errorNN2(3*4).r2(1)
+
+% ans =
+% 
+%     0.6539
+% 
+% errorNN2(errorEstSumMaxIndex2(2)*4).r2(2)
+% 
+% ans =
+% 
+%     0.9735
+% 
+% errorNN2(errorEstSumMaxIndex2(3)*4).r2(3)
+% 
+% ans =
+% 
+%     0.9995
