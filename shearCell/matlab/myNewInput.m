@@ -3,7 +3,7 @@ function newInput = myNewInput(NNSave, errorEstSumMaxIndex, dataNN)
 %   Detailed explanation goes here
 %[, errorNN, x, zz, errorEstSum, errorEstIndex, errorEstSumMaxIndex, yyy, corrMatPca, newInput] =   myNeuNetFun(nSimCases2,data2,trainFcn2,hiddenLayerSizeVector2,  dataNN, target1, target2, target3)
 
-rest = dataNN.rest;
+    rest = dataNN.rest;
     sf = dataNN.sf;
     rf = dataNN.rf;
     dt = dataNN.dt;
@@ -31,7 +31,7 @@ rest = dataNN.rest;
     
 
     
-    if isfield (dataNN, 'dens')
+    if (isfield (dataNN, 'dens') & isfield (dataNN, 'shearperc') & isfield (dataNN, 'ctrlStress')) 
         dens = dataNN.dens;
         lengthDens = length(dens);
         totalLength = lengthRest*lengthSf*lengthRf*lengthDt*lengthDCylDp*lengthCtrlStress*lengthShearperc*lengthDens;
@@ -42,6 +42,11 @@ rest = dataNN.rest;
     elseif isfield (dataNN, 'ctrlStress')
          totalLength = lengthRest*lengthSf*lengthRf*lengthDt*lengthDCylDp*lengthCtrlStress;
          newInput=ones(totalLength,6);
+    elseif (isfield (dataNN, 'dens') & ~(isfield (dataNN, 'ctrlStress')) & ~(isfield (dataNN, 'shearperc')))
+        dens = dataNN.dens;
+        lengthDens = length(dens);
+        totalLength = lengthRest*lengthSf*lengthRf*lengthDt*lengthDCylDp*lengthDens;
+        newInput=ones(totalLength,6);
     else
         totalLength = lengthRest*lengthSf*lengthRf*lengthDt*lengthDCylDp;
         newInput=ones(totalLength,5);
@@ -163,7 +168,23 @@ if isfield (dataNN, 'ctrlStress')
 
             end
         end
+        
+      end
     
+elseif (isfield (dataNN, 'dens') & ~(isfield (dataNN, 'ctrlStress')) & ~(isfield (dataNN, 'shearperc')))
+     
+    count19=0;
+    count20=1;
+
+    for i=1:(length1/lengthSf/lengthRf/lengthDt/lengthDCylDp)
+        newInput(1+count19:count19+lengthRest*lengthSf*lengthRf*lengthDt*lengthDCylDp,6)=dens(count20);
+        count20=count20+1;
+        if count20==(lengthDens+1)
+            count20=1;
+        end
+
+        count19 = count19 + lengthRest*lengthSf*lengthRf*lengthDt*lengthDCylDp;
+
     end
 
 end
@@ -178,7 +199,7 @@ net2=NNSave{errorEstSumMaxIndex(2),2}.net;
 newInput(nIrows+1,:)=net1(newInput);
 newInput(nIrows+2,:)=net2(newInput(1:nIrows,:));
 % 
-if isfield (dataNN, 'dens')
+if (isfield (dataNN, 'dens') & isfield (dataNN, 'shearperc') & isfield (dataNN, 'ctrlStress')) 
     net3=NNSave{errorEstSumMaxIndex(3),3}.net;
     newInput(nIrows+3,:)=net3(newInput(1:nIrows,:));
 end

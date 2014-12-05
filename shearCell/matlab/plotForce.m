@@ -24,7 +24,7 @@ set(0,'DefaultTextFontSize',12);
 unitSysDefault = 'si';  % 'si' or 'cgs'
 
 % select files that should be postprocessed
-sim_dir = '../results/10/sim125_ompComparison'; % directory, where simulation files can be found
+sim_dir = '../results/10/sim122_sinterfine_reducedPolydispersity_mach32'; % directory, where simulation files can be found
 filepattern = 'force.cad*_fid*.txt'; % e.g. 'force.*.txt' %Andi
 filepatterncsv = 'sim_par*_fid*.csv'; % e.g. 'force.*.txt' %Andi
 
@@ -32,16 +32,18 @@ filepatterncsv = 'sim_par*_fid*.csv'; % e.g. 'force.*.txt' %Andi
 % example: searchCases = {'fric' 0.6
 %                         'rf'   [0.2 0.4]};
 %   for all cases use empty searchCases = {};
+
 searchCases = {...'fric' 0.4 %[0.4 0.8]
-               ...'rf'   0.6 %[0.4 0.8]
-               ...'rest'   0.5 %[0.4 0.8]
+               ...'rf'  [0.4 0.8]
+
+               ...'rest'   [0.5 0.9]
                ...'fid'  [	20025	20026	20027	20028	20029	20030 20035		20201	20202	20203	20204 20205] %20101	20102	20103	20125	20126 20001	20002
                ...'shearperc' 0.4
                ... 'ctrlStress' -1.007001977856750e+04
-               ...'expMass' 0.9275
-               ...'dens' 3000
+               'expMass' 0.9275 %8.7452
+               ...'dens' [2500 3500]
                ...'dt' 1.0e-6
-                  'dCylDp' 20
+               ...'dCylDp' 20
                };
 
 % define column of forces/position in the data file
@@ -56,7 +58,7 @@ col_numCol = 12;
 col_numBox = 13;
 
 % experimental data
-exp_flag = false; % enable the comparision to experimental data
+exp_flag = true; % enable the comparision to experimental data
 exp_dir = '.'; % directory, where the files can be found
 legendExpFlag = 'schulze'; % choose between jenike & schulze
 
@@ -84,7 +86,7 @@ dCylDpConfrontationFlag = false;
 dCylDpConfrontationFlag2 = false;
 
 %doNN
-NNFlag = false;
+NNFlag = true;
 hiddenLayerSizeVector = [5:34];
 newInputFlag = false;
 gloriaWinFlag = false;
@@ -102,7 +104,7 @@ fracColMass = 1.0; %0.12;
 
 manualPlateauFlag = false;
 %doImage
-imageFlag = ~manualPlateauFlag; % "~" gives the opposite of the boolean
+imageFlag = false; %~manualPlateauFlag; % "~" gives the opposite of the boolean
 
 startPlateauPreShearValue = .25;%.38;
 stopPlateauPreShearValue = .35;%.48;
@@ -511,13 +513,14 @@ for ii=1:nSimCases
                 vel = (pos(2:end)-pos(1:end-1))/(nDumpForce*dt);
             end
             
-            figure(hFig(1));
-            subplot(2,1,1); hold on
-            plot(timesteps,pos,'Color',cmap(ii,:));
-            
-            subplot(2,1,2); hold on
-            plot(timesteps(1:end-1),vel,'Color',cmap(ii,:));
-            
+            if (imageFlag)
+                figure(hFig(1));
+                subplot(2,1,1); hold on
+                plot(timesteps,pos,'Color',cmap(ii,:));
+
+                subplot(2,1,2); hold on
+                plot(timesteps(1:end-1),vel,'Color',cmap(ii,:));
+            end
             % legend for postion plot
             leg{1,iCnt(1)} = fname;
             iCnt(1) = iCnt(1)+1;
@@ -528,9 +531,10 @@ for ii=1:nSimCases
     %%sigmaZ = data(ii).cad(3).values(:,col_fZ).*scaleForce./data(ii).area;
 	sigmaZ = data(ii).sigmaZ;
     
-    figure(hFig(2)); hold on
-    plot(timesteps,sigmaZ,'Color',cmap(ii,:),'LineWidth',2);
-    
+    if (imageFlag)
+        figure(hFig(2)); hold on
+        plot(timesteps,sigmaZ,'Color',cmap(ii,:),'LineWidth',2);
+    end
     %xlim([-0.05 0.5]);
     
     % legend for postion plot
@@ -547,16 +551,16 @@ for ii=1:nSimCases
     % plot total x-force (only cad 2)
     %tauXZ = data(ii).cad(2).values(:,col_fX).*scaleForce./data(ii).area;
     %corrTauXZ = data(ii).cad(2).values(:,col_fX).*scaleForce./data(ii).corrArea';
-    
-    figure(hFig(3)); hold on
-    %plot(timesteps,data(ii).values(:,col_fX),'Color',cmap(ii,:)); % original data / force
-    %plot(timesteps,tauXZ,'Color',cmap(ii,:)); % non-corrected area
-	%plot(timesteps,data(ii).tauXZ,'Color',cmap(ii,:)); % non-corrected area
-    %plot(timesteps,corrTauXZ,'Color',cmap(ii,:)); % corrected area
-	plot(timesteps,data(ii).corrTauXZ,'Color',cmap(ii,:)); % corrected area
-    %plot(timesteps,corrTauXZ,'LineStyle',lineStyles{mod(ii,numel(lineStyles))+1}{iCnt(3)},'Color','black','LineWidth',2); % for documentation purposes
-	%plot(timesteps,data(ii).corrTauXZ,'LineStyle',lineStyles{mod(ii,numel(lineStyles))+1}{iCnt(3)},'Color','black','LineWidth',2); % for documentation purposes
-    
+    if (imageFlag)
+        figure(hFig(3)); hold on
+        %plot(timesteps,data(ii).values(:,col_fX),'Color',cmap(ii,:)); % original data / force
+        %plot(timesteps,tauXZ,'Color',cmap(ii,:)); % non-corrected area
+        %plot(timesteps,data(ii).tauXZ,'Color',cmap(ii,:)); % non-corrected area
+        %plot(timesteps,corrTauXZ,'Color',cmap(ii,:)); % corrected area
+        plot(timesteps,data(ii).corrTauXZ,'Color',cmap(ii,:)); % corrected area
+        %plot(timesteps,corrTauXZ,'LineStyle',lineStyles{mod(ii,numel(lineStyles))+1}{iCnt(3)},'Color','black','LineWidth',2); % for documentation purposes
+        %plot(timesteps,data(ii).corrTauXZ,'LineStyle',lineStyles{mod(ii,numel(lineStyles))+1}{iCnt(3)},'Color','black','LineWidth',2); % for documentation purposes
+    end
     %legend for force plots
     leg{3,iCnt(3)} = fname;
     iCnt(3) = iCnt(3)+1;
@@ -672,18 +676,21 @@ clear timesteps sigmaZ tauXZ corrTauXZ fname
                 case 'latex'
                     data(ii).timestepsShort = data(ii).timesteps(1:10:end);
                     muRshort = muR(1:10:end);
-                    figure(hFig(7)); 
-                    hold on
-                    %plot(data(ii).timestepsShort,muRshort,'LineStyle',lineStyles{mod(ii,numel(lineStyles))+1},'Color',cmap(mod(ii,size(cmap,1))+1,:),'LineWidth',2);
-                    plot(data(ii).timeStepSh,data(ii).muRShMean,'LineStyle',lineStyles{mod(ii,numel(lineStyles))+1},'Color',cmap(mod(ii,size(cmap,1))+1,:),'LineWidth',2);
-                    ylim([0 maxMuRall]);
+                    
+                    if (imageFlag)
+                        figure(hFig(7)); 
+                        hold on
+                        %plot(data(ii).timestepsShort,muRshort,'LineStyle',lineStyles{mod(ii,numel(lineStyles))+1},'Color',cmap(mod(ii,size(cmap,1))+1,:),'LineWidth',2);
+                        plot(data(ii).timeStepSh,data(ii).muRShMean,'LineStyle',lineStyles{mod(ii,numel(lineStyles))+1},'Color',cmap(mod(ii,size(cmap,1))+1,:),'LineWidth',2);
+                        ylim([0 maxMuRall]);
+                    end
                     %legend for force plots
                     leg{7,iCnt(7)} = fname;
                     iCnt(7) = iCnt(7)+1;
             end
             
        if (manualPlateauFlag)
-        
+        %    if (imageFlag)
             figure(13);
             plot(data(ii).timesteps,data(ii).muR)
             title('coefficient of internal friction identification');
@@ -727,7 +734,8 @@ clear timesteps sigmaZ tauXZ corrTauXZ fname
            data(ii).stopPlateauPreShear = floor(lMuR*stopPlateauPreShearValue); % stopPlateauPreShearValue = .48;
            data(ii).startPlateauShear = floor(lMuR*startPlateauShearValue); % startPlateauShearValue = .80;
            data(ii).stopPlateauShear = floor(lMuR*stopPlateauShearValue); % stopPlateauShearValue = .95;
-       end
+            end
+     %   end
           
         startPlateauPreShear = data(ii).startPlateauPreShear;
         stopPlateauPreShear = data(ii).stopPlateauPreShear;
@@ -926,10 +934,12 @@ end
     
 if (exp_flag)
       for ii=1:nSimCases
+          
+          if (imageFlag)
             figure(hFig(6));
             subplot(2,1,1); 
             hold on
-
+          end
 
                  %legend for force plots
                 leg{6,iCnt(6)} = fname;
@@ -939,6 +949,7 @@ if (exp_flag)
                 muR = data(ii).muR;
 
                 % plot coefficient of friction
+            if (imageFlag)
                 figure(hFig(6));
                 subplot(2,1,1);
                 hold on
@@ -947,7 +958,7 @@ if (exp_flag)
                 plot(data(ii).timesteps,data(ii).corrTauXZ,'LineStyle',lineStyles{mod(ii,numel(lineStyles))+1},'Color',cmap(mod(ii,size(cmap,1))+1,:),'LineWidth',2);
                 %line([data(ii).timesteps(1) data(ii).timesteps(end)],[avgMuR2(ii,1) avgMuR2(ii,1)],'Color',cmap(mod(ii,size(cmap,1))+1,:));
                 %ylim([0 1.5]);      
-        
+            end
 %         if avgMuR2(ii,1) > avgMuR1(ii,1)
 %             disp(fname)
 %            
@@ -988,18 +999,18 @@ if (exp_flag)
                     coeffShear60 = expInp.tauAb60/expOut.sigmaAb60;
                     coeffShear80 = expInp.tauAb80/expOut.sigmaAb80;
                     coeffShear100 = expOut.coeffShear100;
-                    
-                    figure(hFig(4)); hold on
-                    plot(time,tau,'Color','red','LineWidth',2);
-                    %xlim([-1 data(1).timesteps(end)+1]);
+                    if (imageFlag)
+                        figure(hFig(4)); hold on
+                        plot(time,tau,'Color','red','LineWidth',2);
+                        %xlim([-1 data(1).timesteps(end)+1]);
 
-                    leg{4,iCnt(4)} = exp_file;
-                    iCnt(4) = iCnt(4)+1;  
+                        leg{4,iCnt(4)} = exp_file;
+                        iCnt(4) = iCnt(4)+1;  
 
-                    figure(hFig(6));
-                    subplot(2,1,2);
-                    plot(time,tau,'LineWidth',2);   
-                    
+                        figure(hFig(6));
+                        subplot(2,1,2);
+                        plot(time,tau,'LineWidth',2);   
+                    end
                     jjj=1;
                     ii=1;
                     for ii=1:nSimCases
@@ -1071,10 +1082,11 @@ if (exp_flag)
 
             case {'jenike','poorMan'}     
             %plot(t,exp_shear./exp_sigma,'LineWidth',2)
-            
-            figure(hFig(6));
-            subplot(2,1,2);
-            plot(t,exp_shear,'LineWidth',2);
+            if (imageFlag)
+                figure(hFig(6));
+                subplot(2,1,2);
+                plot(t,exp_shear,'LineWidth',2);
+            end
             %ylim([0 1.5]);
             %xlim([0.0 60.0]); %%%%%%%%%%%experrimental time plotted
             
@@ -1348,7 +1360,7 @@ if (NNFlag)
     if (exist('densityBulkBoxMean'))
         %targetNN(iijj,3)=densityBulkBoxMean(iijj);
         %[NNSave2, errorNN2, x2, zz2, errorEstSum2, errorEstIndex2, errorEstSumMaxIndex2, yy2, corrMat2, newY2] =   myNeuNetFun(nSimCases,data,trainFcn,hiddenLayerSizeVector, dataNN2, avgMuR2,avgMuR1, densityBulkBoxMean);
-        [NNSave2, errorNN2, x2, zz2, errorEstSum2, errorEstIndex2, errorEstSumMaxIndex2, yy2, corrMat2] =   myNeuNetFun(nSimCases,data,trainFcn,hiddenLayerSizeVector, avgMuR2,avgMuR1, densityBulkBoxMean);
+        [NNSave2, errorNN2, x2, zz2, errorEstSum2, errorEstIndex2, errorEstSumMaxIndex2, yy2, corrMat2] =   myNeuNetFun(nSimCases,data,trainFcn,hiddenLayerSizeVector, avgMuR2,avgMuR1, densityBulkBoxMin);
         avgMuR2Pos = 9;
         avgMuR1Pos = 10;
         densityBulkBoxMeanPos = 11;
@@ -1379,7 +1391,7 @@ if (newInputFlag)
     dataNN2.shearperc = [0.4:0.2:1.0];   
     if (exist('densityBulkBoxMean'))
        dataNN2.dens = [2000:100:3500];
-       densTolerance =1.4; 
+       densTolerance = 0.05; 
     end
     
 if (exp_flag)
@@ -1391,6 +1403,7 @@ if (exp_flag)
     switch legendExpFlag
          case 'schulze' 
             jjj=1;
+            kkk=1;
             ii=1;
             meanExpFtdRhoB = mean(expFtd.rhoB);
             maxExpFtdRhoB  = max(expFtd.rhoB);
@@ -1483,14 +1496,16 @@ if (exp_flag)
                             %nY2rowsTris = length(newY2(:,ii));
                             
                             
-                            if (exist('densityBulkBoxMean') &  (newY2(nY2rowsBis+1,ii)<0.05) & (newY2(nY2rowsBis+2,ii)<0.05) &   (newY2(densityBulkBoxMeanPos,ii)<newY2(nY2rowsBis+4,ii)*densTolerance)  &  (newY2(densityBulkBoxMeanPos,ii)>newY2(nY2rowsBis+5,ii)) )
-                                gloriaAugustaSchulzeNN(1,jjj) = ii;
-                                gloriaAugustaSchulzeNN(2:(nY2rowsTris+1), jjj) = newY2(1:end,ii) ;%avgMuR1(ii);  
-                                gloriaAugustaSchulzeNN(nY2rowsTris+2, jjj) = 1;
+                            if (exist('densityBulkBoxMean') &  (newY2(nY2rowsBis+1,ii)<0.05) & (newY2(nY2rowsBis+2,ii)<0.05) &   (newY2(densityBulkBoxMeanPos,ii)<newY2(nY2rowsBis+4,ii)*(1.0+densTolerance))  ...
+                                    &  (newY2(densityBulkBoxMeanPos,ii)>newY2(nY2rowsBis+5,ii)*(1.0-densTolerance)) )
+                                gloriaAugustaSchulzeNNDens(1,kkk) = ii;
+                                gloriaAugustaSchulzeNNDens(2:(nY2rowsTris+1), kkk) = newY2(1:end,ii) ;%avgMuR1(ii);  
+                                gloriaAugustaSchulzeNNDens(nY2rowsTris+2, kkk) = 1;
+                                kkk=kkk+1;
                             elseif ((newY2(nY2rowsBis+1,ii)<0.05) & (newY2(nY2rowsBis+2,ii)<0.05)) %((data(ii).deltaRatioShear<0.05) & (data(ii).deltaRatioPreShear<0.05))
-                                gloriaAugustaSchulzeNN(1,jjj) = ii;
-                                gloriaAugustaSchulzeNN(2:(nY2rowsTris+1), jjj) = newY2(1:end,ii) ;%avgMuR1(ii);
-                                gloriaAugustaSchulzeNN(nY2rowsTris+2, jjj) = 0;
+                                gloriaAugustaSchulzeNNnoDens(1,jjj) = ii;
+                                gloriaAugustaSchulzeNNnoDens(2:(nY2rowsTris+1), jjj) = newY2(1:end,ii) ;%avgMuR1(ii);
+                                gloriaAugustaSchulzeNNnoDens(nY2rowsTris+2, jjj) = 0;
 %                                 gloriaAugustaSchulze{jjj,3} = avgMuR2(ii);
 %                                 gloriaAugustaSchulze{jjj,4} = data(ii).tauAb;
 %                                 gloriaAugustaSchulze{jjj,5} = data(ii).sigmaAb;
@@ -1504,7 +1519,10 @@ if (exp_flag)
                                 jjj=jjj+1;
                            end
                         end
-                    end
+            end
+            
+            gloriaAugustaSchulzeNN = gloriaAugustaSchulzeNNDens;
+            
                 [gASSNNrows,gASSNNcolumns] = size(gloriaAugustaSchulzeNN);
             if (gloriaWinFlag)    
                 best = find(gloriaAugustaSchulzeNN(8,:)==0.4);
@@ -1670,15 +1688,15 @@ end
 % cc
 
 %% save matlab data
-i=1;
-j=1;
-[a,b]=size(searchCases);
-
-searchName{1} = 'an';
-
-for i=1:a
-       j=i+1;
-       searchName{j}=([searchName{i},searchCases{i,1},num2str(searchCases{i,2})]);
-end
-
-save(searchName{end});
+% i=1;
+% j=1;
+% [a,b]=size(searchCases);
+% 
+% searchName{1} = 'an';
+% 
+% for i=1:a
+%        j=i+1;
+%        searchName{j}=([searchName{i},searchCases{i,1},num2str(searchCases{i,2})]);
+% end
+% 
+% save(searchName{end});

@@ -14,17 +14,17 @@
 #########################################################################################
 #                               user defined settings: settings                         #
 #########################################################################################
-variable    rad     equal       771e-6          # particle radius [m]
-variable    radmu   equal       771e-6             # particle radius mean [m]
-variable  radsigma  equal       0.00021             # particle radius sigma[m]
+variable    rad     equal       349e-6          # particle radius [m]
+variable    radmu   equal       349e-6             # particle radius mean [m]
+variable  radsigma  equal       0.000266            # particle radius sigma[m]
 variable  radR1     equal       0.001
-variable  radPerc1  equal       0.666
+variable  radPerc1  equal       0.05
 variable  radR2     equal       0.0008
 variable  radPerc2  equal       0.0
 variable  radR3     equal       0.000625
 variable  radPerc3  equal       0.0
 variable  radR4     equal       0.000315
-variable  radPerc4  equal       0.334
+variable  radPerc4  equal       0.95
 variable  radR5     equal       0.0001575
 variable  radPerc5  equal       0.0
 variable  radR6     equal       0.00006205

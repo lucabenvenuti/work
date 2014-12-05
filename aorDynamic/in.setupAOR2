@@ -1,10 +1,11 @@
 ###User-Input Variables - Simulation Data###
+#trotaculo2
 variable	radius		equal 0.0025 	# Particle radius
 variable	density		equal 2500	# Particle density
-variable	massTotal	equal 0.01	# Total mass to be inserted in the simulation Kg	
-variable	massRate	equal 0.01	# Mass flow to be inserted in the simulation Kg/s
+variable	massTotal	equal 2.5	# Total mass to be inserted in the simulation Kg	
+variable	massRate	equal 0.5	# Mass flow to be inserted in the simulation Kg/s
 variable	timeStep	equal 0.000001 	# Enter time step in s
-variable	totalTime	equal 0.1	# Enter total simulation time in s
+variable	totalTime	equal 5.0	# Enter total simulation time in s
 variable	saveInterval	equal 0.05	# Enter the interval you want to save data in s
 ############################################
 
@@ -31,19 +32,11 @@ variable	extrLeng	equal	3*${radius}
 variable	nTimeSteps	equal	${totalTime}/${timeStep}
 variable	saveData	equal	${saveInterval}/${timeStep}
 variable    balFreq     equal   0.2/${timeStep}  #balanceFrequence
-variable    accTimeStep equal   0.1/${timeStep}                 #accomodation step necessary to accomodate
+variable    accTimeStep equal   2.0/${timeStep}                 #accomodation step necessary to accomodate
 
-# create directories
-shell 	mkdir post_$a
-shell   mkdir logs
-shell   mkdir restart
-shell   mkdir post
-shell   mkdir results
-shell	mkdir area
-shell	mkdir images
-shell	mkdir post_param
+shell 	mkdir 	post_$a
 
-processors  1 1 1
+processors  2 2 3
 
 ####################################
 
@@ -88,7 +81,7 @@ fix		cad6 all mesh/surface/stress file mesh/hopper.stl type 1 scale ${scaleFacto
 
 
 fix		inface all mesh/surface file mesh/inSquare.stl type 1 scale ${scaleFactor}
-fix 		wall all wall/gran model hertz tangential history mesh n_meshes 5 meshes cad1 cad2 cad3 cad5 cad6 #cad4
+fix 		wall all wall/gran model hertz tangential history mesh n_meshes 6 meshes cad1 cad2 cad3 cad5 cad6 #cad4
 
 #distributions for insertion
 fix		pts1 all particletemplate/sphere 1 atom_type 2 density constant ${density} radius constant ${radius}
@@ -130,7 +123,7 @@ unfix       ins
 
 run         ${accTimeStep}
 
-write_restart	restart/reposeDynamic_loop_${fileID}.restart
+
 
 #loop variables command
 next		a statPP statPW rollPP rollPW

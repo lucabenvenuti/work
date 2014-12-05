@@ -26,17 +26,17 @@ if "${OMPON} == 1" then                            &
 else &
   "print 'OMP is OFF - old version'" 
 
-variable    rad     equal       771e-6          # particle radius [m]
-variable    radmu   equal       771e-6             # particle radius mean [m]
-variable  radsigma  equal       0.00021             # particle radius sigma[m]
+variable    rad     equal       349e-6          # particle radius [m]
+variable    radmu   equal       349e-6             # particle radius mean [m]
+variable  radsigma  equal       0.000266            # particle radius sigma[m]
 variable  radR1     equal       0.001
-variable  radPerc1  equal       0.666
+variable  radPerc1  equal       0.05
 variable  radR2     equal       0.0008
 variable  radPerc2  equal       0.0
 variable  radR3     equal       0.000625
 variable  radPerc3  equal       0.0
 variable  radR4     equal       0.000315
-variable  radPerc4  equal       0.334
+variable  radPerc4  equal       0.95
 variable  radR5     equal       0.0001575
 variable  radPerc5  equal       0.0
 variable  radR6     equal       0.00006205
@@ -45,8 +45,8 @@ variable    dens    equal       3000         #sinterfine   # particle density [k
 variable    ym      equal       1e7             # Young's modulus  [Pa]
 variable    pr      equal       0.4            # Poisson ratio   [-]
 variable    rest    equal       0.5           # coefficient of restitution [-]
-variable    fric    universe    0.4	# 0.6	0.8	0.4	0.6	0.8	0.4	0.6	0.8       # coefficient of friction (loop variable) [-]
-variable    rf      universe    0.4	# 0.4	0.4	0.6	0.6	0.6	0.8	0.8	0.8        # coefficient of rolling friction (optional loop) [-]
+variable    fric    universe    0.4	 0.6	0.8	0.4	0.6	0.8	0.4	0.6	0.8       # coefficient of friction (loop variable) [-]
+variable    rf      universe    0.4	 0.4	0.4	0.6	0.6	0.6	0.8	0.8	0.8        # coefficient of rolling friction (optional loop) [-]
 variable    a       equal       ${rf}*${fric}
 #variable    rvd    equal        1.0		#coefficientRollingViscousDamping (only for epsd rolling model)
 variable    rolfrtypnum equal	4		# rolling friction option ( 1 = off, 2 = cdt, 3 = epsd, 4 = epsd2)
@@ -344,7 +344,7 @@ else &
 
 
 
-pippo
+#pippo
 
 # get mass of particle column
 variable mPartBox   equal mass(all,bc)

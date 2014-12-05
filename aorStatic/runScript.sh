@@ -1,33 +1,35 @@
 #! /bin/bash
 
 date
-#OMPON=0
-#fileID="27201"
-#DCYLDP=20
+OMPON=1
+fileID="801"
+DCYLDP=20
 
-index[0]="701"
-index[1]="702"
-index[2]="703"
-index[3]="704"
+#index[0]="701"
+#index[1]="702"
+#index[2]="703"
+#index[3]="704"
 
 
-OM[0]=0
-OM[1]=1
-OM[2]=0
-OM[3]=1
+#OM[0]=0
+#OM[1]=1
+#OM[2]=0
+#OM[3]=1
 
-DCYL[0]=20
-DCYL[1]=20
-DCYL[2]=30
-DCYL[3]=30
+#DCYL[0]=20
+#DCYL[1]=20
+#DCYL[2]=30
+#DCYL[3]=30
 
-i=1
+mkdir stats
+
+i=0
 #for i in 0 1 2 3
 #do
 
-fileID=${index[$i]}
-OMPON=${OM[$i]}
-DCYLDP=${DCYL[$i]}
+#fileID=${index[$i]}
+#OMPON=${OM[$i]}
+#DCYLDP=${DCYL[$i]}
 
 if [ "$OMPON" = 1 ]; then
     echo OMP mode on
@@ -58,7 +60,7 @@ MPI_OPTIONS="-np $PROCS -report-bindings"
 VARS="-var NTHREADS $NTHREADS -var XPROCS $XPROCS -var YPROCS $YPROCS -var ZPROCS $ZPROCS -var OMPON $OMPON -var DCYLDP $DCYLDP"
 
 date
-#perf stat -o resultsInit$fileID.txt mpirun $MPI_OPTIONS $LI -in in.repose_init_packing $VARS
+perf stat -o stats/resultsInit$fileID.txt mpirun $MPI_OPTIONS $LI -in in.repose_init_packing $VARS
 
 if [ "$OMPON" = 1 ]; then
     NTHREADS=8
@@ -74,7 +76,7 @@ fi
 VARS="-var iden $fileID -var NTHREADS $NTHREADS -var XPROCS $XPROCS -var YPROCS $YPROCS -var ZPROCS $ZPROCS -var OMPON $OMPON -var DCYLDP $DCYLDP"
 
 date
-perf stat -o resultsLoop$fileID.txt mpirun $MPI_OPTIONS $LI -in in.repose_loop $VARS
+perf stat -o stats/resultsLoop$fileID.txt mpirun $MPI_OPTIONS $LI -in in.repose_loop $VARS
 
 #done
 

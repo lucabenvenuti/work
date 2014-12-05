@@ -13,13 +13,14 @@ for iijj=1:nSimCases2
         inputNN(iijj,5)=data2(iijj).dCylDp;
     end
     
-    if isfield (data2(iijj), 'ctrlStress')
-        inputNN(iijj,6)=data2(iijj).ctrlStress;
+    if (isfield (data2(iijj), 'ctrlStress') & isfield (data2(iijj), 'shearperc'))
+        inputNN(iijj,6)=abs(data2(iijj).ctrlStress);
+         inputNN(iijj,7)=data2(iijj).shearperc;
     end
 
-    if isfield (data2(iijj), 'shearperc')
-        inputNN(iijj,7)=data2(iijj).shearperc;
-    end
+%     if isfield (data2(iijj), 'shearperc')
+%         inputNN(iijj,7)=data2(iijj).shearperc;
+%     end
     
     if (exist('target1'))
         targetNN(iijj,1) = target1(iijj);
@@ -33,11 +34,17 @@ for iijj=1:nSimCases2
     end
     
     
-    if (exist('target3'))
-        aa=7;
-        %length(inputNN(iijj,:))
-        inputNN(iijj,aa+1)=data2(iijj).dens;
-        targetNN(iijj,3) = target3(iijj);
+    if (exist('target3') | isfield (data2(iijj), 'deltaRatioAORLi'))
+
+        if (exist('target3'))
+            aa=7;
+            %length(inputNN(iijj,:))
+            inputNN(iijj,aa+1)=data2(iijj).dens;
+            targetNN(iijj,3) = target3(iijj);
+        else
+            aa=5;
+            inputNN(iijj,aa+1)=data2(iijj).dens;
+        end
     end
     
 end
