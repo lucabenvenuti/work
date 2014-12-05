@@ -123,5 +123,5 @@ fix		rotate all move/mesh mesh pt1 rotate origin 0. 0. 0. axis 0. 0. 1. period $
 
 run		${runTimeStep}
 
-write_restart	./restart/restart_${fillPerc}.drum
+write_restart	./restart/restart_${fillPerc}_${solidPacking}.drum
  

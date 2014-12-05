@@ -1,19 +1,21 @@
 ###User-Input Variables - Simulation Data###
 variable	radius		equal 0.0025 	# Particle radius
 variable	density		equal 2500	# Particle density
-variable	massTotal	equal 0.01	# Total mass to be inserted in the simulation Kg	
-variable	massRate	equal 0.01	# Mass flow to be inserted in the simulation Kg/s
+variable	massTotal	equal 1.0	# Total mass to be inserted in the simulation Kg	
+variable	massRate	equal 2.0	# Mass flow to be inserted in the simulation Kg/s
 variable	timeStep	equal 0.000001 	# Enter time step in s
 variable	totalTime	equal 0.1	# Enter total simulation time in s
 variable	saveInterval	equal 0.05	# Enter the interval you want to save data in s
+
 ############################################
 
 ###User-Input Variables - Material Parameter###
-variable	a	    universe	1 2 3 4 5 6	# Set this number according to the number of parameters set you will use
-variable	statPP	universe	0.4 0.4 0.5 0.5 0.6 0.6 
-variable	statPW	universe	0.4 0.4 0.5 0.5 0.6 0.6 
-variable	rollPP	universe	0.2 0.3 0.2 0.3 0.2 0.3	
-variable	rollPW	universe	0.2 0.2 0.3 0.3 0.2 0.3
+variable	a	    universe	2 #2 3 4 5 6	# Set this number according to the number of parameters set you will use
+variable        fileID	equal $a
+variable	statPP	universe	0.4 #0.4 0.5 0.5 0.6 0.6 
+variable	statPW	universe	0.4 #0.4 0.5 0.5 0.6 0.6 
+variable	rollPP	universe	0.2 #0.3 0.2 0.3 0.2 0.3	
+variable	rollPW	universe	0.2 #0.2 0.3 0.3 0.2 0.3
 ###############################################
 
 ###Setup Variables - DON'T TOUCH####
@@ -31,7 +33,7 @@ variable	extrLeng	equal	3*${radius}
 variable	nTimeSteps	equal	${totalTime}/${timeStep}
 variable	saveData	equal	${saveInterval}/${timeStep}
 variable    balFreq     equal   0.2/${timeStep}  #balanceFrequence
-variable    accTimeStep equal   0.1/${timeStep}                 #accomodation step necessary to accomodate
+variable    accTimeStep equal   0.5/${timeStep}                 #accomodation step necessary to accomodate
 
 # create directories
 shell 	mkdir post_$a
@@ -43,7 +45,7 @@ shell	mkdir area
 shell	mkdir images
 shell	mkdir post_param
 
-processors  2 1 1
+processors  1 1 1
 
 ####################################
 
