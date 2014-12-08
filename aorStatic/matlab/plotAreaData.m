@@ -6,7 +6,8 @@ clc;
 unitSysDefault = 'si';  % 'si' or 'cgs'
 
 % select files that should be postprocessed
-sim_dir = '../results/01/sim001_sinterfine_reducedPolydispersity'; % directory, where simulation files can be found
+%sim_dir = '../results/01/sim001_sinterfine_reducedPolydispersity'; % directory, where simulation files can be found
+sim_dir = 'R:\simulations\aor\resultsAorStatic01\sim001_sinterfine_reducedPolydispersity';
 filepattern = 'area_*.txt'; % e.g. 'force.*.txt' %Andi
 filepatterncsv = 'sim_parAOR_fid*.csv'; % e.g. 'force.*.txt' %Andi
 filepatternangle = 'angle_*'; % e.g. 'force.*.txt' %Andi
@@ -28,7 +29,7 @@ col_Y = 2;
 col_Z = 3;
 
 % experimental data
-exp_flag = true; % enable the comparision to experimental data
+exp_flag = false; % enable the comparision to experimental data
 %exp_dir = '.'; % directory, where the files can be found
 %legendExpFlag = 'schulze'; % choose between jenike & schulze
 
@@ -38,7 +39,7 @@ end
            
 %doNN
 NNFlag = true;
-hiddenLayerSizeVector = 5:14;           
+hiddenLayerSizeVector = 5:40;           
            
 % save images
 saveFlag = false;           
@@ -440,9 +441,8 @@ if (exp_flag)
       end
 
     end
-end
-
-gloriaAugustaSchulzeNN = gloriaAugustaAorNNBoth';
+    
+   gloriaAugustaSchulzeNN = gloriaAugustaAorNNBoth';
 
 %% save matlab data
 i=1;
@@ -457,4 +457,8 @@ for i=1:a
 end
 
 save(['AOR',searchName{end}, '.mat'], 'dataAOR');
-%save(['AOR', ], dataAOR);%,'name','off', 'fanspeed', 'indata', 'meanoff', '-mat'); %
+%save(['AOR', ], dataAOR);%,'name','off', 'fanspeed', 'indata', 'meanoff', '-mat'); % 
+    
+    
+end
+
