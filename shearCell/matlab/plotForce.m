@@ -25,7 +25,7 @@ unitSysDefault = 'si';  % 'si' or 'cgs'
 
 % select files that should be postprocessed
 %sim_dir = '../results/10/sim122_sinterfine_reducedPolydispersity_mach32'; % directory, where simulation files can be found
-sim_dir = '/mnt/benvenutiPFMDaten/simulations/shearCell/10/sim122_sinterfine_reducedPolydispersity_mach32';
+sim_dir = '/mnt/transfer/toLuca/testShear';
 filepattern = 'force.cad*_fid*.txt'; % e.g. 'force.*.txt' %Andi
 filepatterncsv = 'sim_par*_fid*.csv'; % e.g. 'force.*.txt' %Andi
 
@@ -41,7 +41,7 @@ searchCases = {...'fric' 0.4 %[0.4 0.8]
                ...'fid'  [	20025	20026	20027	20028	20029	20030 20035		20201	20202	20203	20204 20205] %20101	20102	20103	20125	20126 20001	20002
                ...'shearperc' 0.4
                ... 'ctrlStress' -1.007001977856750e+04
-               'expMass' 0.9275 %8.7452
+               'expMass' 0.9275 %8.7452 %
                ...'dens' [2500 3500]
                ...'dt' 1.0e-6
                ...'dCylDp' 20

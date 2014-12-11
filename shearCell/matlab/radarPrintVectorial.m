@@ -1,30 +1,34 @@
 clearvars newY2 newY22 gloriaAugustaSchulzeNN dataNN2 densTolerance gloriaAugustaSchulzeNNDens gloriaAugustaSchulzeNNnoDens gloriaAugustaAorNNMa gloriaAugustaAorNNLi gloriaAugustaAorNNBoth X Y Z S 
 close all
 
-%     dataNN2.rest = sort(0.5 + (0.9-0.5).*rand(25,1)); %a + (b-a).*rand(10,1);%[0.5:0.1:0.9];
-%     dataNN2.sf= sort(0.05 + (1.0-0.05).*rand(100,1)); %[0.1:0.1:1];
-%     dataNN2.rf= sort(0.05 + (1.0-0.05).*rand(100,1)); %[0.1:0.1:1];
-%     dataNN2.dt= 1e-6; %[1e-7:1e-7:1e-6];
-%     dataNN2.dCylDp= 50;%[20:1:50];
-%    dataNN2.ctrlStress = 1068; %1068;% [1068,2069,10070];
-%     dataNN2.shearperc = [0.4:0.2:1.0];  %1.0;   
-%     if (exist('densityBulkBoxMean'))
-%        dataNN2.dens = sort(2000 + (3500-2000).*rand(25,1)); %[2000:100:3500];
-%        densTolerance =1.4; 
-%     end   
-%     
-    %load inputDataNN4.mat
-    load('/mnt/benvenutiPFMDaten/simulations/input/inputDataNN2.mat');
-     dataNN2 = rmfield(dataNN2, 'shearperc');
-    dataNN2.shearperc = 1.0;  
-     dataNN2.ctrlStress = 1.068007975188830e+03; % 1.007001977856750e+04; %1068; %1068;% [1068,2069,10070];
-     coeffPirker = 1.0;
+%      dataNN2.rest = sort(0.5 + (0.9-0.5).*rand(50,1)); %a + (b-a).*rand(10,1);%[0.5:0.1:0.9];
+%      dataNN2.sf= sort(0.05 + (1.0-0.05).*rand(100,1)); %[0.1:0.1:1];
+%      dataNN2.rf= sort(0.05 + (0.6-0.05).*rand(100,1)); %[0.1:0.1:1];
+%      dataNN2.dt= 1e-6; %[1e-7:1e-7:1e-6];
+%      dataNN2.dCylDp= 40;%[20:1:50];
+%  %   dataNN2.ctrlStress = 1068; %1068;% [1068,2069,10070];
+%    %  dataNN2.shearperc = 1.0;   % [0.4:0.2:1.0];  %1.0;   
+%      if (exist('densityBulkBoxMean'))
+%         dataNN2.dens = sort(2000 + (3500-2000).*rand(50,1)); %[2000:100:3500];
+% %         densTolerance =1.4; 
+%      end   
+% %     
+     load inputDataNN2.mat
+%  %   load('/mnt/benvenutiPFMDaten/simulations/input/inputDataNN1.mat');
+    %  dataNN2 = rmfield(dataNN2, {'shearperc', 'dCylDp'} );
+       dataNN2 = rmfield(dataNN2, 'shearperc' );
+     dataNN2.shearperc = 1.0;  
+    % dataNN2.dCylDp= 36;
+      dataNN2.ctrlStress =1.007001977856750e+04; % 1.068007975188830e+03; % 1068; %1068;% [1068,2069,10070];
+      coeffPirker = 1.0;
      densTolerance = 0.05; 
     
      c2 = datestr(clock)   
+   %  tic
      newY2 = myNewInput(NNSave2, errorEstSumMaxIndex2, dataNN2);        
     [nY2rows,nY2column] = size(newY2);
-    
+ %   toc
+  c11 = datestr(clock)   
             jjj=1;
             kkk=1;
             ii=1;
@@ -136,7 +140,7 @@ close all
           ii=1;
           kkk=1;
           ni=1;
-          tic
+          c8 = datestr(clock) 
           temp_vi = newY2( (nY2rowsBis+1), : );
           temp_i = find (temp_vi < 0.05);
           temp_vj = newY2( (nY2rowsBis+2), : );
@@ -155,12 +159,12 @@ close all
           
           ni = size(Cijkl,2) 
           
-          gloriaAugustaSchulzeNNDens = zeros( kkk+size(Cijkl,2),  nY2rowsTris+2);
+          gloriaAugustaSchulzeNNDens = zeros( kkk+size(Cijkl,2)-1,  nY2rowsTris+2);
           gloriaAugustaSchulzeNNDens( kkk:(kkk+ni-1), 1) = Cijkl'; 
           gloriaAugustaSchulzeNNDens(kkk:(kkk+ni-1), 2:(nY2rowsTris+1) ) = newY2( :, Cijkl )';
           gloriaAugustaSchulzeNNDens( kkk:(kkk+ni-1), nY2rowsTris+2) =1;
           kkk = kkk + ni
-          toc
+          c9 = datestr(clock) 
      
 %             for ii=1:nY2column
 %                        % if (dataNN2.ctrlStress*1*.95 < expOut.sigmaAnM <dataNN2.ctrlStress*1*1.05)
@@ -194,7 +198,8 @@ close all
 %             end
 c4 = datestr(clock)           
     
-    gloriaAugustaSchulzeNN = gloriaAugustaSchulzeNNDens;
+clearvars gloriaAugustaSchulzeNN X Y Z S C G
+    gloriaAugustaSchulzeNN = gloriaAugustaSchulzeNNDens';%(1:size(gloriaAugustaSchulzeNNDens,1)-1, :)';
 
     X=gloriaAugustaSchulzeNN(3,:); %sf
     Y=gloriaAugustaSchulzeNN(4,:); %rf
