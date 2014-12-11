@@ -13,9 +13,11 @@ close all
 %        densTolerance =1.4; 
 %     end   
 %     
-    load inputDataNN4.mat
+    %load inputDataNN4.mat
+    load('/mnt/benvenutiPFMDaten/simulations/input/inputDataNN2.mat');
+     dataNN2 = rmfield(dataNN2, 'shearperc');
     dataNN2.shearperc = 1.0;  
-     dataNN2.ctrlStress = 1.007001977856750e+04; %1068; %1068;% [1068,2069,10070];
+     dataNN2.ctrlStress = 1.068007975188830e+03; % 1.007001977856750e+04; %1068; %1068;% [1068,2069,10070];
      coeffPirker = 1.0;
      densTolerance = 0.05; 
     
@@ -131,37 +133,65 @@ close all
                             newY2(nY2rowsBis+5,:) =  minExpFtdRhoB;%min(expFtd.rhoB);
                             c7 = datestr(clock) 
      
+          ii=1;
+          kkk=1;
+          ni=1;
+          tic
+          temp_vi = newY2( (nY2rowsBis+1), : );
+          temp_i = find (temp_vi < 0.05);
+          temp_vj = newY2( (nY2rowsBis+2), : );
+          temp_j = find (temp_vj < 0.05);
+          temp_vk = newY2( (densityBulkBoxMeanPos), : );
+          temp_k = find (temp_vk < maxExpFtdRhoB*(1.0+densTolerance));
+          temp_l = find (temp_vk > minExpFtdRhoB*(1.0-densTolerance));
+%           ni = size(temp_i,2) 
+%           nj = size(temp_j,2) 
+%           nk = size(temp_k,2) 
+%           nl = size(temp_l,2) 
+%           
+          [Cij,aij,bij] = intersect(temp_i,temp_j);
+          [Ckl,akl,bkl] = intersect(temp_k,temp_l);
+          [Cijkl,aijkl,bijkl] = intersect(Cij,Ckl);
+          
+          ni = size(Cijkl,2) 
+          
+          gloriaAugustaSchulzeNNDens = zeros( kkk+size(Cijkl,2),  nY2rowsTris+2);
+          gloriaAugustaSchulzeNNDens( kkk:(kkk+ni-1), 1) = Cijkl'; 
+          gloriaAugustaSchulzeNNDens(kkk:(kkk+ni-1), 2:(nY2rowsTris+1) ) = newY2( :, Cijkl )';
+          gloriaAugustaSchulzeNNDens( kkk:(kkk+ni-1), nY2rowsTris+2) =1;
+          kkk = kkk + ni
+          toc
      
-            for ii=1:nY2column
-                       % if (dataNN2.ctrlStress*1*.95 < expOut.sigmaAnM <dataNN2.ctrlStress*1*1.05)
-                            
-                            if (exist('densityBulkBoxMean') &  (newY2(nY2rowsBis+1,ii)<0.05) & (newY2(nY2rowsBis+2,ii)<0.05) &   (newY2(densityBulkBoxMeanPos,ii)<maxExpFtdRhoB*(1.0+densTolerance))  ...
-                                    &  (newY2(densityBulkBoxMeanPos,ii)>minExpFtdRhoB*(1.0-densTolerance)) )
-                                                       
-      %                      if (exist('densityBulkBoxMean') &  (newY2(nY2rowsBis+1,ii)<0.05) & (newY2(nY2rowsBis+2,ii)<0.05) &   ...
-      %                              (newY2(densityBulkBoxMeanPos,ii)<newY2(nY2rowsBis+4,ii)*densTolerance)  &  (newY2(densityBulkBoxMeanPos,ii)>newY2(nY2rowsBis+5,ii)) )
-                                gloriaAugustaSchulzeNNDens(1,kkk) = ii;
-                                gloriaAugustaSchulzeNNDens(2:(nY2rowsTris+1), kkk) = newY2(1:end,ii) ;%avgMuR1(ii);  
-                                gloriaAugustaSchulzeNNDens(nY2rowsTris+2, kkk) = 1;
-                                kkk=kkk+1;
-%                             elseif ((newY2(nY2rowsBis+1,ii)<0.05) & (newY2(nY2rowsBis+2,ii)<0.05)) %((data(ii).deltaRatioShear<0.05) & (data(ii).deltaRatioPreShear<0.05))
-%                                 gloriaAugustaSchulzeNNnoDens(1,jjj) = ii;
-%                                 gloriaAugustaSchulzeNNnoDens(2:(nY2rowsTris+1), jjj) = newY2(1:end,ii) ;%avgMuR1(ii);
-%                                 gloriaAugustaSchulzeNNnoDens(nY2rowsTris+2, jjj) = 0;
-% %                                 gloriaAugustaSchulze{jjj,3} = avgMuR2(ii);
-% %                                 gloriaAugustaSchulze{jjj,4} = data(ii).tauAb;
-% %                                 gloriaAugustaSchulze{jjj,5} = data(ii).sigmaAb;
-% %                                 gloriaAugustaSchulze{jjj,6} = data(ii).coeffShear;
-% %                                 gloriaAugustaSchulze{jjj,7} = data(ii).ratioShear;
-% %                                 gloriaAugustaSchulze{jjj,8} = data(ii).deltaRatioShear;
-% %                                 gloriaAugustaSchulze{jjj,9} = data(ii).tauAbPr;
-% %                                 gloriaAugustaSchulze{jjj,10} = data(ii).coeffPreShear;
-% %                                 gloriaAugustaSchulze{jjj,11} = data(ii).ratioPreShear;
-% %                                 gloriaAugustaSchulze{jjj,12} = data(ii).deltaRatioPreShear;
-%                                 jjj=jjj+1;
-                           end
-                     %   end
-            end
+%             for ii=1:nY2column
+%                        % if (dataNN2.ctrlStress*1*.95 < expOut.sigmaAnM <dataNN2.ctrlStress*1*1.05)
+%                             
+%                             if (exist('densityBulkBoxMean') &  (newY2(nY2rowsBis+1,ii)<0.05) & (newY2(nY2rowsBis+2,ii)<0.05) &   (newY2(densityBulkBoxMeanPos,ii)<maxExpFtdRhoB*(1.0+densTolerance))  ...
+%                                     &  (newY2(densityBulkBoxMeanPos,ii)>minExpFtdRhoB*(1.0-densTolerance)) )
+%                                                        
+%       %                      if (exist('densityBulkBoxMean') &  (newY2(nY2rowsBis+1,ii)<0.05) & (newY2(nY2rowsBis+2,ii)<0.05) &   ...
+%       %                              (newY2(densityBulkBoxMeanPos,ii)<newY2(nY2rowsBis+4,ii)*densTolerance)  &  (newY2(densityBulkBoxMeanPos,ii)>newY2(nY2rowsBis+5,ii)) )
+%                                 gloriaAugustaSchulzeNNDens(1,kkk) = ii;
+%                                 gloriaAugustaSchulzeNNDens(2:(nY2rowsTris+1), kkk) = newY2(1:end,ii) ;%avgMuR1(ii);  
+%                                 gloriaAugustaSchulzeNNDens(nY2rowsTris+2, kkk) = 1;
+%                                 kkk=kkk+1;
+% %                             elseif ((newY2(nY2rowsBis+1,ii)<0.05) & (newY2(nY2rowsBis+2,ii)<0.05)) %((data(ii).deltaRatioShear<0.05) & (data(ii).deltaRatioPreShear<0.05))
+% %                                 gloriaAugustaSchulzeNNnoDens(1,jjj) = ii;
+% %                                 gloriaAugustaSchulzeNNnoDens(2:(nY2rowsTris+1), jjj) = newY2(1:end,ii) ;%avgMuR1(ii);
+% %                                 gloriaAugustaSchulzeNNnoDens(nY2rowsTris+2, jjj) = 0;
+% % %                                 gloriaAugustaSchulze{jjj,3} = avgMuR2(ii);
+% % %                                 gloriaAugustaSchulze{jjj,4} = data(ii).tauAb;
+% % %                                 gloriaAugustaSchulze{jjj,5} = data(ii).sigmaAb;
+% % %                                 gloriaAugustaSchulze{jjj,6} = data(ii).coeffShear;
+% % %                                 gloriaAugustaSchulze{jjj,7} = data(ii).ratioShear;
+% % %                                 gloriaAugustaSchulze{jjj,8} = data(ii).deltaRatioShear;
+% % %                                 gloriaAugustaSchulze{jjj,9} = data(ii).tauAbPr;
+% % %                                 gloriaAugustaSchulze{jjj,10} = data(ii).coeffPreShear;
+% % %                                 gloriaAugustaSchulze{jjj,11} = data(ii).ratioPreShear;
+% % %                                 gloriaAugustaSchulze{jjj,12} = data(ii).deltaRatioPreShear;
+% %                                 jjj=jjj+1;
+%                            end
+%                      %   end
+%             end
 c4 = datestr(clock)           
     
     gloriaAugustaSchulzeNN = gloriaAugustaSchulzeNNDens;

@@ -24,7 +24,8 @@ set(0,'DefaultTextFontSize',12);
 unitSysDefault = 'si';  % 'si' or 'cgs'
 
 % select files that should be postprocessed
-sim_dir = '../results/10/sim122_sinterfine_reducedPolydispersity_mach32'; % directory, where simulation files can be found
+%sim_dir = '../results/10/sim122_sinterfine_reducedPolydispersity_mach32'; % directory, where simulation files can be found
+sim_dir = '/mnt/benvenutiPFMDaten/simulations/shearCell/10/sim122_sinterfine_reducedPolydispersity_mach32';
 filepattern = 'force.cad*_fid*.txt'; % e.g. 'force.*.txt' %Andi
 filepatterncsv = 'sim_par*_fid*.csv'; % e.g. 'force.*.txt' %Andi
 
@@ -87,7 +88,7 @@ dCylDpConfrontationFlag2 = false;
 
 %doNN
 NNFlag = true;
-hiddenLayerSizeVector = [5:34];
+hiddenLayerSizeVector = [5:40];
 newInputFlag = false;
 gloriaWinFlag = false;
 
