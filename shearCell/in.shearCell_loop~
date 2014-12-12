@@ -41,7 +41,7 @@ variable  radR5     equal       0.0001575
 variable  radPerc5  equal       0.0
 variable  radR6     equal       0.00006205
 variable  radPerc6  equal       0.0
-variable    dens    equal       1500         #sinterfine   # particle density [kg/m3]
+variable    dens    equal       3000         #sinterfine   # particle density [kg/m3]
 variable    ym      equal       1e7             # Young's modulus  [Pa]
 variable    pr      equal       0.4            # Poisson ratio   [-]
 variable    rest    index       0.5 0.7 0.9           # coefficient of restitution [-]
@@ -61,7 +61,7 @@ variable    dCylDp  index       ${DCYLDP} #38 50 75     # ratio cylinder diamete
 
 variable    accGrev equal       9.81            # acceleration due to gravity [m/s2]
 
-variable    shearperc index 	0.4 0.6 1.0 # percentage of normal load during shear compared to the one during preshear
+variable    shearperc index 	1.0 #0.4 0.6 percentage of normal load during shear compared to the one during preshear
 
 variable    shearCellType   index 3     #1 2     #(1=PoorMan; 2=Jenike; 3=Schulze)
 
@@ -74,7 +74,7 @@ variable    ratio   equal       0.0001
 # v_max = ratio*MIN(rad)/dt
 
 # experimental parameter
-variable    expMass         index  8.711 #1.762 # [kg] mass used in experiment 
+variable    expMass         index  1.762 # 8.711[kg] mass used in experiment 
 
 variable    expDiam         equal   0.10415      # diam of shear cell [m]
 
@@ -137,8 +137,11 @@ variable    py  equal    1.05*${cylRadius}    # pos. y-value
 variable    nz  equal   -${rad}               # neg. z-value (just not 0.0)
 
 # pos. z-value
-variable    pz  equal    1.75*${cylRadius}
-  
+if "${expMass} < 1.5" then                          &
+  "variable    pz  equal    1.75*${cylRadius}"  & 
+else &
+  "variable    pz  equal    1.55*${cylRadius}"
+
 # run & dump times
 variable    nDump           equal   round(1e-1/${dt})
 variable    nScreen         equal   round(1e-2/${dt})
