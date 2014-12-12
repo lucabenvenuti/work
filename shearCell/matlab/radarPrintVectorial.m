@@ -1,5 +1,5 @@
-%   clearvars newY2 newY22 gloriaAugustaSchulzeNN dataNN2 densTolerance gloriaAugustaSchulzeNNDens gloriaAugustaSchulzeNNnoDens gloriaAugustaAorNNMa gloriaAugustaAorNNLi gloriaAugustaAorNNBoth X Y Z S 
-%   close all
+%     clearvars newY2 newY22 gloriaAugustaSchulzeNN dataNN2 densTolerance gloriaAugustaSchulzeNNDens gloriaAugustaSchulzeNNnoDens gloriaAugustaAorNNMa gloriaAugustaAorNNLi gloriaAugustaAorNNBoth X Y Z S 
+%     close all
 
 %       dataNN2.rest = [0.5:(0.9-0.5)/49:0.9]; %sort(0.5 + (0.9-0.5).*rand(50,1)); %a + (b-a).*rand(10,1);%[0.5:0.1:0.9];
 %       dataNN2.sf= [0.05:(1.0-0.05)/99:1.0]; %sort(0.05 + (1.0-0.05).*rand(100,1)); %[0.1:0.1:1];
@@ -19,10 +19,11 @@
      %  dataNN2 = rmfield(dataNN2, 'shearperc' );
     % dataNN2.shearperc = 1.0;  
     % dataNN2.dCylDp= 36;
-      dataNN2.ctrlStress = 1.068007975188830e+03; % 1.007001977856750e+04; % 1068; %1068;% [1068,2069,10070];
-      coeffPirker = 1.0;
-    densTolerance = 0.05; 
-   %  dataNN2.dCylDp= 20;
+%       dataNN2.ctrlStress = 1.068007975188830e+03; % 1.007001977856750e+04; % 1068; %1068;% [1068,2069,10070];
+%       coeffPirker = 1.0;
+%     densTolerance = 0.05; 
+%     fricTolerance = 0.05;
+%    %  dataNN2.dCylDp= 20;
     
      c2 = datestr(clock)   
    %  tic
@@ -143,9 +144,9 @@
           ni=1;
           c8 = datestr(clock) 
           temp_vi = newY2( (nY2rowsBis+1), : );
-          temp_i = find (temp_vi < densTolerance);
+          temp_i = find (temp_vi < fricTolerance);
           temp_vj = newY2( (nY2rowsBis+2), : );
-          temp_j = find (temp_vj < densTolerance*2);
+          temp_j = find (temp_vj < fricTolerance);
           temp_vk = newY2( (densityBulkBoxMeanPos), : );
           temp_k = find (temp_vk < maxExpFtdRhoB*(1.0+densTolerance));
           temp_l = find (temp_vk > minExpFtdRhoB*(1.0-densTolerance));
