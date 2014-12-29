@@ -1,12 +1,13 @@
-    clearvars newY2 newY22 gloriaAugustaSchulzeNN dataNN2 densTolerance gloriaAugustaSchulzeNNDens gloriaAugustaSchulzeNNnoDens gloriaAugustaAorNNMa gloriaAugustaAorNNLi gloriaAugustaAorNNBoth X Y Z S 
-close all
-
-    jjj=1;
+%     clearvars newY2 newY22 gloriaAugustaSchulzeNN dataNN2 densTolerance gloriaAugustaSchulzeNNDens gloriaAugustaSchulzeNNnoDens gloriaAugustaAorNNMa gloriaAugustaAorNNLi gloriaAugustaAorNNBoth X Y Z S 
+% close all
+% 
+% 
+%     %load('R:\simulations\input\inputDataNN4.mat')
+%     load('/mnt/benvenutiPFMDaten/simulations/input/inputDataNN5.mat')
+%   %  angleExp = 38.8500;
+%     dataNN2 = rmfield(dataNN2, {'shearperc','ctrlStress'});
+        jjj=1;
     ii=1;
-    %load('R:\simulations\input\inputDataNN4.mat')
-    load('/mnt/benvenutiPFMDaten/simulations/input/inputDataNN5.mat')
-  %  angleExp = 38.8500;
-    dataNN2 = rmfield(dataNN2, {'shearperc','ctrlStress'});
     c3 = datestr(clock)  
      angleExp = 38.8500;
      dataNN2.dCylDp= 50;
