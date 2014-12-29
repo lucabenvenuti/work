@@ -20,15 +20,15 @@ variable    radmu   equal       1860e-6             # particle radius mean [m]
 variable  radsigma  equal       0.001940            # particle radius sigma[m]
 variable  radR1     equal       0.00280
 variable  radPerc1  equal       0.08
-variable  radR2     equal       0.0008
-variable  radPerc2  equal       0.0
-variable  radR3     equal       0.000625
+variable  radR2     equal       0.001775
+variable  radPerc2  equal       0.92
+variable  radR3     equal       0.001
 variable  radPerc3  equal       0.0
-variable  radR4     equal       0.000315
+variable  radR4     equal       0.0005
 variable  radPerc4  equal       0.95
-variable  radR5     equal       0.0001575
+variable  radR5     equal       0.0001
 variable  radPerc5  equal       0.0
-variable  radR6     equal       0.00006205
+variable  radR6     equal       0.00005
 variable  radPerc6  equal       0.0
 #variable  volMin    equal       4/3*${radR6}*${radR6}*${radR6}*PI*0.99
 variable    dens    equal       3000      #sinterfine      # particle density [kg/m3]
