@@ -15,11 +15,11 @@
 #########################################################################################
 #                               user defined settings: settings                         #
 #########################################################################################
-variable    rad     equal       349e-6          # particle radius [m]
-variable    radmu   equal       349e-6             # particle radius mean [m]
-variable  radsigma  equal       0.000266            # particle radius sigma[m]
-variable  radR1     equal       0.001
-variable  radPerc1  equal       0.05
+variable    rad     equal       1860e-6          # particle radius [m]
+variable    radmu   equal       1860e-6             # particle radius mean [m]
+variable  radsigma  equal       0.001940            # particle radius sigma[m]
+variable  radR1     equal       0.00280
+variable  radPerc1  equal       0.08
 variable  radR2     equal       0.0008
 variable  radPerc2  equal       0.0
 variable  radR3     equal       0.000625
@@ -36,7 +36,7 @@ variable    ym      equal       1e7             # Young's modulus  [Pa]
 variable    pr      equal       0.4            # Poisson ratio   [-]
 variable    rest    equal       0.5            # coefficient of restitution [-]
 variable    fric    equal       0.3        # coefficient of friction (loop variable) [-]
-variable    rf      equal       0.3         # coefficient of rolling friction (optional loop) [-]
+variable    rf      equal       0.2         # coefficient of rolling friction (optional loop) [-]
 #variable    rvd    equal        1.0		#coefficientRollingViscousDamping (only for epsd rolling model)
 variable    rolfrtypnum equal	4		# rolling friction option ( 1 = off, 2 = cdt, 3 = epsd, 4 = epsd2)
 variable    uniSys  equal       1		 # unit System ( 1=SI, 2=cgs)

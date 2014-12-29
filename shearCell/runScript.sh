@@ -2,7 +2,7 @@
 
 date
 OMPON=0
-fileID="30001"
+fileID="31001"
 DCYLDP=30
 
 #index[0]="28201"
@@ -76,7 +76,7 @@ VARS="-var iden $fileID -var NTHREADS $NTHREADS -var XPROCS $XPROCS -var YPROCS 
 
 date
 perf stat -o stats/resultsLoop$fileID.txt mpirun $MPI_OPTIONS $LI -in in.shearCell_loop $VARS
-
+date
 #done
 
 #mpirun -np .... [OPTIONS] -in in.shearCell_init_packing
