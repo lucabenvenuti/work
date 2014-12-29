@@ -28,7 +28,7 @@ variable  radR4     equal       0.0005
 variable  radPerc4  equal       0.0
 variable  radR5     equal       0.0001
 variable  radPerc5  equal       0.0
-variable  radR6     equal       0.00005
+variable  radR6     equal       0.0005
 variable  radPerc6  equal       0.0
 #variable  volMin    equal       4/3*${radR6}*${radR6}*${radR6}*PI*0.99
 variable    dens    equal       3000      #sinterfine      # particle density [kg/m3]
