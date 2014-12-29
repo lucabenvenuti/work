@@ -74,7 +74,7 @@ variable    ratio   equal       0.0001
 # v_max = ratio*MIN(rad)/dt
 
 # experimental parameter
-variable    expMass         index  1.762 # 8.711[kg] mass used in experiment 
+variable    expMass         index  1.762 # 4.360[kg] mass used in experiment 
 
 variable    expDiam         equal   0.10415      # diam of shear cell [m]
 
