@@ -1,4 +1,4 @@
-gloriaAugustaAORNN = gloriaAugustaAorNNBoth';
+gloriaAugustaAORNN = gloriaAugustaAorNNMa';
 inter1=gloriaAugustaAORNN([2,3,4,7],:);
 inter2=gloriaAugustaSchulzeNN([2,3,4,9],:);
 inter1=inter1';

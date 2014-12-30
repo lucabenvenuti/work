@@ -1,3 +1,4 @@
+%load('radarPlot10070sinterfine0_1range.mat', 'NNSave2', 'avgMuR1', 'data', 'dataNN2', 'errorEstSumMaxIndex2', 'nSimCases')
 z = avgMuR1';
 iijj=1;
 for iijj=1:nSimCases
