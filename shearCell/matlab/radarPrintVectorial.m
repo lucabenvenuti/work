@@ -268,9 +268,9 @@ clearvars gloriaAugustaSchulzeNN X Y Z S C G
      figure(8)
      a2 = radarPlot(G)
      legend('minInput','min', '\mu - \sigma', '\mu', '\mu + \sigma', 'max', 'maxInput'); %, 'FontSize',24)
-     title (['normal stress = ', num2str(dataNN2.ctrlStress), ' [Pa], coeff. P. = ', num2str(coeffPirker)] ,'FontSize',24);
+     title (['SRSCT: normal stress = ', num2str(dataNN2.ctrlStress), ' [Pa], coeff. P. = ', num2str(coeffPirker)] ,'FontSize',24);
      %title (['AOR, coeff. P. = ', num2str(coeffPirker)] ,'FontSize',24);
-     set(gca,'fontname','times new roman')  % Set it to times
+     set(gca,'fontname','times new roman','FontSize',24)  % Set it to times
      %save -v7.3 radarPlot10070sinterfine0_1rangePirker1dot0SFRangeReducedBis
 
      %dfittool
@@ -304,5 +304,14 @@ clearvars gloriaAugustaSchulzeNN X Y Z S C G
 % PDF2069{3} = RF2069;
 % PDF2069{4} = particledensity2069;
 % save(['PDF2069sinterfine', '.mat'], 'PDF2069');
+
+% A(1,1) = meanS;
+% A(2,1) = stdS;
+% A(3,1) = meanX;
+% A(4,1) = stdX;
+% A(5,1) = meanY;
+% A(6,1) = stdY;
+% A(7,1) = meanZ;
+% A(8,1) = stdZ;
 
 

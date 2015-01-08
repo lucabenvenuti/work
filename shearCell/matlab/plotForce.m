@@ -24,7 +24,8 @@ set(0,'DefaultTextFontSize',12);
 unitSysDefault = 'si';  % 'si' or 'cgs'
 
 % select files that should be postprocessed
-sim_dir = '../results/10/sim141_cokeFine_reducedPolydispersity_gollum32'; % directory, where simulation files can be found
+%sim_dir = '../results/10/sim141_cokeFine_reducedPolydispersity_gollum32'; % directory, where simulation files can be found
+sim_dir = 'R:\simulations\shearCell\10\sim122_sinterfine_reducedPolydispersity_mach32';
 %sim_dir = '/mnt/transfer/toLuca/testShear';
 filepattern = 'force.cad*_fid*.txt'; % e.g. 'force.*.txt' %Andi
 filepatterncsv = 'sim_par*_fid*.csv'; % e.g. 'force.*.txt' %Andi
@@ -34,15 +35,15 @@ filepatterncsv = 'sim_par*_fid*.csv'; % e.g. 'force.*.txt' %Andi
 %                         'rf'   [0.2 0.4]};
 %   for all cases use empty searchCases = {};
 
-searchCases = {...'fric' 0.4 %[0.4 0.8]
-               ...'rf'  [0.4 0.8]
+searchCases = {...'fric' 0.6 %[0.4 0.8]
+               ...'rf' 0.6 %[0.4 0.8]
 
                ...'rest'   [0.5 0.9]
-               ...'fid'  [	20025	20026	20027	20028	20029	20030 20035		20201	20202	20203	20204 20205] %20101	20102	20103	20125	20126 20001	20002
-               ...'shearperc' 0.4
+               ...'fid'   23141 %[	23168 23141 ]%	20026	20027	20028	20029	20030 20035		20201	20202	20203	20204 20205] %20101	20102	20103	20125	20126 20001	20002
+               ...'shearperc' 1.0
                ... 'ctrlStress' -1.007001977856750e+04
-               ...'expMass' 0.9275 %8.7452 %
-               ...'dens' [2500 3500]
+              ... 'expMass' 8.7452 %0.9275 %
+              ... 'dens' 3500 %[2500 3500]
                ...'dt' 1.0e-6
                ...'dCylDp' 20
                };
@@ -1229,9 +1230,9 @@ end
             case 'std'
                 hLeg = legend(leg{5,1:iCnt(5)-1});
                 
-                title('Coefficient of friction. Ratio shear stress / normal stress','Interpreter','none');
+                title('Coefficient of internal friction. Ratio shear stress / normal stress','Interpreter','none');
                 xlabel('time in s');
-                ylabel('mu_{f}');
+                ylabel('\mu_{ie}');
                 
             case 'latex'
             % latex legends
