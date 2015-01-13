@@ -1,13 +1,14 @@
 k=1;
-a = zeros(6000,101);
-for j= 0.1:0.1:1
-    for i = 0.1:0.1:1
-     b= find(merge(:,1)<j & merge(:,1)>j-0.1 & merge(:,2)<i & merge(:,2)>i-0.1);
+app =0.01 ;
+a = zeros(6000,(1/app)^2+1);
+for j= app:app:1
+    for i = app:app:1
+     b= find(merge(:,1)<j & merge(:,1)>j-app & merge(:,2)<i & merge(:,2)>i-app);
      if isempty(b)
      else a(1:length(b),k) = b;
      end
        % find();
-        k=k+1;
+        k=k+1
     end
 
 end
@@ -63,24 +64,24 @@ for i=1:w
 end
 k=1;
 hold on
-for i=0.1:0.1:1
-for j=0.1:0.1:1
+for i=app:app:1
+for j=app:app:1
    % Draw tile (i,j)
      if g(k)==255
            % g(i)= 255;
-           h1=fill([i-0.1 i i i-0.1 i-0.1],[j-0.1 j-0.1 j j j-0.1], [g(k)/255 g(k)/255 g(k)/255])   ;
+           h1=fill([i-app i i i-app i-app],[j-app j-app j j j-app], [g(k)/255 g(k)/255 g(k)/255], 'EdgeColor', 'none')   ;
         elseif g(k)==224
            % g(i)= 224;
-           h2=fill([i-0.1 i i i-0.1 i-0.1],[j-0.1 j-0.1 j j j-0.1], [g(k)/255 g(k)/255 g(k)/255])   ;
+           h2=fill([i-app i i i-app i-app],[j-app j-app j j j-app], [g(k)/255 g(k)/255 g(k)/255], 'EdgeColor', 'none')   ;
         elseif g(k)==128
           %  g(i)= 128;
-          h3=fill([i-0.1 i i i-0.1 i-0.1],[j-0.1 j-0.1 j j j-0.1], [g(k)/255 g(k)/255 g(k)/255])   ;
+          h3=fill([i-app i i i-app i-app],[j-app j-app j j j-app], [g(k)/255 g(k)/255 g(k)/255], 'EdgeColor', 'none')   ;
         elseif g(k)==96
           %  g(i)= 96;
-          h4=fill([i-0.1 i i i-0.1 i-0.1],[j-0.1 j-0.1 j j j-0.1], [g(k)/255 g(k)/255 g(k)/255])   ;
+          h4=fill([i-app i i i-app i-app],[j-app j-app j j j-app], [g(k)/255 g(k)/255 g(k)/255], 'EdgeColor', 'none')   ;
         elseif g(k)==0
             %g(i)= 0;
-            h5=fill([i-0.1 i i i-0.1 i-0.1],[j-0.1 j-0.1 j j j-0.1], [g(k)/255 g(k)/255 g(k)/255])   ;
+            h5=fill([i-app i i i-app i-app],[j-app j-app j j j-app], [g(k)/255 g(k)/255 g(k)/255], 'EdgeColor', 'none')   ;
     end
     %fill([i-0.1 i i i-0.1 i-0.1],[j-0.1 j-0.1 j j j-0.1], [g(k)/255 g(k)/255 g(k)/255])   ;
     k=k+1;
@@ -95,4 +96,4 @@ end
 % h2 = plot(x3, y3, color2);
 % plot(x4, y4, color2);
 % 
- legend([h1 h2 h3 h4 h5],{'no values', '0.5<COR<0.6','0.6<COR<0.7', '0.7<COR<0.8', '0.8<COR<0.9'},'Location','SouthWest');
+ legend([h2 h3 h4 h5],{'0.5<COR<0.6','0.6<COR<0.7', '0.7<COR<0.8', '0.8<COR<0.9'},'Location','SouthWest');
