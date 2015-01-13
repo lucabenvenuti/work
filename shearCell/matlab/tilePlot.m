@@ -66,7 +66,33 @@ hold on
 for i=0.1:0.1:1
 for j=0.1:0.1:1
    % Draw tile (i,j)
-    fill([i-0.1 i i i-0.1 i-0.1],[j-0.1 j-0.1 j j j-0.1], [g(k)/255 g(k)/255 g(k)/255])   ;
+     if g(k)==255
+           % g(i)= 255;
+           h1=fill([i-0.1 i i i-0.1 i-0.1],[j-0.1 j-0.1 j j j-0.1], [g(k)/255 g(k)/255 g(k)/255])   ;
+        elseif g(k)==224
+           % g(i)= 224;
+           h2=fill([i-0.1 i i i-0.1 i-0.1],[j-0.1 j-0.1 j j j-0.1], [g(k)/255 g(k)/255 g(k)/255])   ;
+        elseif g(k)==128
+          %  g(i)= 128;
+          h3=fill([i-0.1 i i i-0.1 i-0.1],[j-0.1 j-0.1 j j j-0.1], [g(k)/255 g(k)/255 g(k)/255])   ;
+        elseif g(k)==96
+          %  g(i)= 96;
+          h4=fill([i-0.1 i i i-0.1 i-0.1],[j-0.1 j-0.1 j j j-0.1], [g(k)/255 g(k)/255 g(k)/255])   ;
+        elseif g(k)==0
+            %g(i)= 0;
+            h5=fill([i-0.1 i i i-0.1 i-0.1],[j-0.1 j-0.1 j j j-0.1], [g(k)/255 g(k)/255 g(k)/255])   ;
+    end
+    %fill([i-0.1 i i i-0.1 i-0.1],[j-0.1 j-0.1 j j j-0.1], [g(k)/255 g(k)/255 g(k)/255])   ;
     k=k+1;
 end
 end
+
+
+% h1 = plot(x1, y1, color1);
+% hold on;
+% plot(x2, y2, color1);
+
+% h2 = plot(x3, y3, color2);
+% plot(x4, y4, color2);
+% 
+ legend([h1 h2 h3 h4 h5],{'no values', '0.5<COR<0.6','0.6<COR<0.7', '0.7<COR<0.8', '0.8<COR<0.9'},'Location','SouthWest');
