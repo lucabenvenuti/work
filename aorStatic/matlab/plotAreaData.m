@@ -7,7 +7,7 @@ unitSysDefault = 'si';  % 'si' or 'cgs'
 
 % select files that should be postprocessed
 %sim_dir = '../results/01/sim001_sinterfine_reducedPolydispersity'; % directory, where simulation files can be found
-sim_dir = '/mnt/transfer/toLuca/testAOR';
+sim_dir = '/mnt/scratchPFMDaten/Luca/CokeCoarseResultsAor';
 filepattern = 'area_*.txt'; % e.g. 'force.*.txt' %Andi
 filepatterncsv = 'sim_parAOR_fid*.csv'; % e.g. 'force.*.txt' %Andi
 filepatternangle = 'angle_*'; % e.g. 'force.*.txt' %Andi
@@ -38,7 +38,7 @@ if (exp_flag)
 end
            
 %doNN
-NNFlag = true;
+NNFlag = false;
 hiddenLayerSizeVector = 5:40;           
            
 % save images
