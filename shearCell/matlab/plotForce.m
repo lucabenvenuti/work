@@ -63,6 +63,7 @@ col_numBox = 13;
 exp_flag = false; % enable the comparision to experimental data
 exp_dir = '.'; % directory, where the files can be found
 legendExpFlag = 'schulze'; % choose between jenike & schulze
+polidispersity_flag = true; % enable the comparision to experimental data
 
 if (exp_flag)
     switch legendExpFlag
@@ -71,9 +72,9 @@ if (exp_flag)
 
             
         case 'schulze'
-            exp_file = ['20131128_1824_sinterfine0-315_test01' , '.FTD']; % name of the FTD FILE, with the exp values vs time
-            summaryFile = ['20131128_1824_sinterfine0-315_test01' , '.out']; % name of the out file, with the summary values
-            sumForceFile = ['20131128_1824_sinterfine0-315_test01' , '.inp']; % name of the inp file, with the forces summary values
+            exp_file = ['20131129_0841_sinterfine0-315_test04' , '.FTD']; % name of the FTD FILE, with the exp values vs time
+            summaryFile = ['20131129_0841_sinterfine0-315_test04' , '.out']; % name of the out file, with the summary values
+            sumForceFile = ['20131129_0841_sinterfine0-315_test04' , '.inp']; % name of the inp file, with the forces summary values
     end
     
 end
@@ -393,7 +394,7 @@ for ii=1:nSimCases
         data(ii).massPartCol = data(ii).cad(3).values(:,col_massCol)*scaleMass; %[kg]
     end
 
-	% normal und shear stress
+	% normal uset(gca,'fontname','times new roman','FontSize',24)  % Set it to timesnd shear stress
     data(ii).sigmaZ  = (data(ii).cad(3).values(:,col_fZ).*scaleForce)./data(ii).area; % only servo-wall; without normal stress correction
     data(ii).sigmaZTot  = (data(ii).cad(3).values(:,col_fZ).*scaleForce+ data(ii).fPartColOld)./data(ii).area; % old normal stress correction    
     data(ii).tauXZ    = data(ii).cad(2).values(:,col_fX).*scaleForce./data(ii).area;  % shear stress without correction
@@ -767,13 +768,13 @@ clear timesteps sigmaZ tauXZ corrTauXZ fname
         figure(hFig(5));
         hold on
         
-        t=data(ii).timesteps;
-        for ijhk=1383:1812
-            data(ii).timesteps(ijhk)=  data(ii).timesteps(ijhk) - (t(1383)-t(1261));
-        end   
-            
-        plot(data(ii).timesteps([1:1261,1383:1775])/x,data(ii).muR([1:1261,1383:1775]),'LineStyle',lineStyles{mod(ii,numel(lineStyles))+1},'Color',cmap(mod(ii,size(cmap,1))+1,:),'LineWidth',2);
-     %   plot(data(ii).timesteps,data(ii).muR,'LineStyle',lineStyles{mod(ii,numel(lineStyles))+1},'Color',cmap(mod(ii,size(cmap,1))+1,:),'LineWidth',2);
+%         t=data(ii).timesteps;
+%         for ijhk=1383:1812
+%             data(ii).timesteps(ijhk)=  data(ii).timesteps(ijhk) - (t(1383)-t(1261));
+%         end   
+%             
+       % plot(data(ii).timesteps([1:1261,1383:1775])/x,data(ii).muR([1:1261,1383:1775]),'LineStyle',lineStyles{mod(ii,numel(lineStyles))+1},'Color',cmap(mod(ii,size(cmap,1))+1,:),'LineWidth',2);
+        plot(data(ii).timesteps,data(ii).muR,'LineStyle',lineStyles{mod(ii,numel(lineStyles))+1},'Color',cmap(mod(ii,size(cmap,1))+1,:),'LineWidth',2);
         ylim([0 maxMuRall]);
         %legend for force plots
         leg{5,iCnt(5)} = fname;
@@ -1366,16 +1367,21 @@ if (NNFlag)
     addpath('/mnt/DATA/liggghts/work/shearCell/matlab');
     
        
-    if (exist('densityBulkBoxMean'))
+    if (exist('densityBulkBoxMean') & ~polidispersity_flag)
         %targetNN(iijj,3)=densityBulkBoxMean(iijj);
         %[NNSave2, errorNN2, x2, zz2, errorEstSum2, errorEstIndex2, errorEstSumMaxIndex2, yy2, corrMat2, newY2] =   myNeuNetFun(nSimCases,data,trainFcn,hiddenLayerSizeVector, dataNN2, avgMuR2,avgMuR1, densityBulkBoxMean);
         [NNSave2, errorNN2, x2, zz2, errorEstSum2, errorEstIndex2, errorEstSumMaxIndex2, yy2, corrMat2] =   myNeuNetFun(nSimCases,data,trainFcn,hiddenLayerSizeVector, avgMuR2,avgMuR1, densityBulkBoxMin);
         avgMuR2Pos = 9;
         avgMuR1Pos = 10;
         densityBulkBoxMeanPos = 11;
+    elseif (exist('densityBulkBoxMean') & polidispersity_flag)
+         [NNSave2, errorNN2, x2, zz2, errorEstSum2, errorEstIndex2, errorEstSumMaxIndex2, yy2, corrMat2] =   myNeuNetFun(nSimCases,data,trainFcn,hiddenLayerSizeVector, avgMuR2,avgMuR1, densityBulkBoxMin);
+        avgMuR2Pos = 9;
+        avgMuR1Pos = 10;
+        densityBulkBoxMeanPos = 11;
     else
         %[NNSave2, errorNN2, x2, zz2, errorEstSum2, errorEstIndex2, errorEstSumMaxIndex2, yy2, corrMat2, newY2] =   myNeuNetFun(nSimCases,data,trainFcn,hiddenLayerSizeVector, dataNN2, avgMuR2,avgMuR1);
-        [NNSave2, errorNN2, x2, zz2, errorEstSum2, errorEstIndex2, errorEstSumMaxIndex2, yy2, corrMat2] =   myNeuNetFun(nSimCases,data,trainFcn,hiddenLayerSizeVector, avgMuR2,avgMuR1);
+        [NNSave2, errorNN2, x2, zz2, errorEstSum2, errorEstIndex2, errorEstSumMaxIndex2, yy2, corrMat2] =   myNeuNetFunPolidispersity(nSimCases,data,trainFcn,hiddenLayerSizeVector, avgMuR2,avgMuR1);
         avgMuR2Pos = 8;
         avgMuR1Pos = 9;
     end

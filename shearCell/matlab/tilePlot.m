@@ -1,5 +1,13 @@
+
+% gg=find(X<0.4);
+% X(gg)=0;
+
+
+merge(:,1)=X';
+merge(:,2)=Y';
+merge(:,3)=S';
 k=1;
-app =0.01 ;
+app =0.05 ;
 a = zeros(6000,(1/app)^2+1);
 for j= app:app:1
     for i = app:app:1
@@ -8,7 +16,7 @@ for j= app:app:1
      else a(1:length(b),k) = b;
      end
        % find();
-        k=k+1
+        k=k+1;
     end
 
 end
@@ -60,8 +68,9 @@ for i=1:w
     else g(i)= 255;
     end
     
-    l(:)=0;
+%    l(:)=0;
 end
+figure(25)
 k=1;
 hold on
 for i=app:app:1
@@ -69,19 +78,20 @@ for j=app:app:1
    % Draw tile (i,j)
      if g(k)==255
            % g(i)= 255;
-           h1=fill([i-app i i i-app i-app],[j-app j-app j j j-app], [g(k)/255 g(k)/255 g(k)/255], 'EdgeColor', 'none')   ;
+           h1=fill([i-app i i i-app i-app],[j-app j-app j j j-app], [g(k)/255 g(k)/255 g(k)/255]  , 'EdgeColor', 'none')   ; %
         elseif g(k)==224
            % g(i)= 224;
-           h2=fill([i-app i i i-app i-app],[j-app j-app j j j-app], [g(k)/255 g(k)/255 g(k)/255], 'EdgeColor', 'none')   ;
+           h2=fill([i-app i i i-app i-app],[j-app j-app j j j-app], [g(k)/255 g(k)/255 g(k)/255]);%, 'EdgeColor', 'none')   ;
         elseif g(k)==128
           %  g(i)= 128;
-          h3=fill([i-app i i i-app i-app],[j-app j-app j j j-app], [g(k)/255 g(k)/255 g(k)/255], 'EdgeColor', 'none')   ;
+          h3=fill([i-app i i i-app i-app],[j-app j-app j j j-app], [g(k)/255 g(k)/255 g(k)/255]);%, 'EdgeColor', 'none')   ;
         elseif g(k)==96
           %  g(i)= 96;
-          h4=fill([i-app i i i-app i-app],[j-app j-app j j j-app], [g(k)/255 g(k)/255 g(k)/255], 'EdgeColor', 'none')   ;
+          h4=fill([i-app i i i-app i-app],[j-app j-app j j j-app], [g(k)/255 g(k)/255 g(k)/255]);%, 'EdgeColor', 'none')   ;
         elseif g(k)==0
             %g(i)= 0;
-            h5=fill([i-app i i i-app i-app],[j-app j-app j j j-app], [g(k)/255 g(k)/255 g(k)/255], 'EdgeColor', 'none')   ;
+            h5=fill([i-app i i i-app i-app],[j-app j-app j j j-app], [g(k)/255 g(k)/255 g(k)/255]);%, 'EdgeColor', 'none')   ;
+            
     end
     %fill([i-0.1 i i i-0.1 i-0.1],[j-0.1 j-0.1 j j j-0.1], [g(k)/255 g(k)/255 g(k)/255])   ;
     k=k+1;
@@ -97,3 +107,9 @@ end
 % plot(x4, y4, color2);
 % 
  legend([h2 h3 h4 h5],{'0.5<COR<0.6','0.6<COR<0.7', '0.7<COR<0.8', '0.8<COR<0.9'},'Location','SouthWest');
+ legend([h2],{'0.5<COR<0.6'},'Location','SouthWest');
+ % legend([h2 h3 h4 ],{'0.5<COR<0.6','0.6<COR<0.7', '0.7<COR<0.8'},'Location','SouthWest');
+% legend([h4 h5],{'0.7<COR<0.8', '0.8<COR<0.9'},'Location','SouthWest');
+  set(gca,'fontname','times new roman','FontSize',24)  % Set it to times
+  xlabel('\mu_s [-]', 'FontSize', 24);
+ylabel('\mu_r [-]', 'FontSize', 24);
