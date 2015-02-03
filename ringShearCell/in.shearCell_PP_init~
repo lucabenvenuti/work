@@ -1,0 +1,265 @@
+#volume fraction
+#
+
+#density
+#variable    density equal 1625./${volFrac}
+
+#radii for fractions
+#
+variable    rad     equal       1860e-6          # particle radius [m]
+variable    radmu   equal       1860e-6             # particle radius mean [m]
+variable  radsigma  equal       0.001940            # particle radius sigma[m]
+variable  radR1     equal       0.00280
+variable  radPerc1  equal       0.08
+variable  radR2     equal       0.001775
+variable  radPerc2  equal       0.92
+variable  radR3     equal       0.001
+variable  radPerc3  equal       0.0
+variable  radR4     equal       0.0005
+variable  radPerc4  equal       0.0
+variable  radR5     equal       0.0001
+variable  radPerc5  equal       0.0
+variable  radR6     equal       0.0005
+variable  radPerc6  equal       0.0
+variable  r0 	    equal 	${rad}
+variable    dens    equal       3000  
+variable    ym      equal       1e7             # Young's modulus  [Pa]
+variable    pr      equal       0.4            # Poisson ratio   [-]
+variable    rest    equal       0.5            # coefficient of restitution [-]
+variable    fric    equal       0.3        # coefficient of friction (loop variable) [-]
+variable    rf      equal       0.2         # coefficient of rolling friction (optional loop) [-]
+
+variable    youngsModulus equal ${ym}
+variable    poissonsRatio equal ${pr}
+variable    coefficientRestitution equal ${rest}
+
+variable    cof    equal       ${fric}        # coefficient of friction (loop variable) [-]
+variable    corf      equal      ${rf}         # coefficient of rolling friction (optional loop) [-]
+variable    rolfrtypnum equal	4		# rolling friction option ( 1 = off, 2 = cdt, 3 = epsd, 4 = epsd2)
+variable    radDist equal       3 
+
+variable    volFrac equal 0.65
+variable volumeFraction equal ${volFrac}  #mod JoKer
+
+# time-step and gravity
+variable 	shear_mod  equal ${youngsModulus}/(2.0*(${poissonsRatio}+1.0))
+#variable	t_rayleigh equal PI*${r0}*sqrt(${density}/${shear_mod})/(0.1631*${poissonsRatio}+0.8766)
+variable	dt equal 1e-6 #10.0^(floor(log(${t_rayleigh}))-1)
+
+
+
+
+
+units		si
+#distribute processores only in x & y direction
+#processors * * 1
+processors  ${XPROCS} ${YPROCS} ${ZPROCS}
+
+variable    numProc equal       ${XPROCS}*${YPROCS}*${ZPROCS}
+
+
+
+#########################################################################################
+#                               internal settings - do not touch                        #
+#########################################################################################
+variable vthre equal 0.005
+
+variable    rad1        equal   0.99*${rad}
+variable    rad2        equal   1.01*${rad}
+variable    skin	equal	0.5*${rad}
+
+#########################################################################################
+#rolling friction options
+
+if "${rolfrtypnum} == 1" then &
+  "variable    rolfrtyp string	off" &
+elif "${rolfrtypnum} == 2" &
+  "variable    rolfrtyp string	cdt" &
+elif "${rolfrtypnum} == 3" &
+  "variable    rolfrtyp string	epsd" &
+else &
+  "variable    rolfrtyp string	epsd2" 
+#########################################################################################
+
+#shell		mkdir ../restart
+shell   mkdir logs
+shell   mkdir restart
+shell   mkdir post
+shell   mkdir results
+
+log     logs/log_init.ringShearCell_rad${rad}_dcyldp${dCylDp}.txt
+
+atom_style	granular
+atom_modify	map array
+boundary	m m fm
+newton		off
+
+communicate	single vel yes
+
+# will be set to fix later (when radius is known)
+region		reg block -0.1 0.1 -0.1 0.1 -0.2 0.06 units box
+create_box	1 reg
+
+neighbor	${skin} bin
+neigh_modify	delay 0
+
+
+#Material properties required for new pair styles
+fix     m1 all property/global youngsModulus peratomtype ${ym} ${ym}
+fix     m2 all property/global poissonsRatio peratomtype ${pr} ${pr}
+fix     m3 all property/global coefficientRestitution peratomtypepair 2 ${rest} ${rest} ${rest} ${rest}
+fix 	m4 all property/global coefficientFriction peratomtypepair 1 ${cof}
+fix 	m5 all property/global coefficientRollingFriction peratomtypepair 1 ${corf}
+
+
+pair_style 	gran model hertz tangential history rolling_friction ${rolfrtyp}
+pair_coeff	* *
+
+
+timestep	${dt}
+print "timestep ${dt}"
+
+fix		gravi all gravity 9.81 vector 0.0 0.0 -1.0
+
+#diameter fractions
+#fix     fraction0 all particletemplate/sphere 1. atom_type 1 density constant ${density} radius constant ${r0}
+
+#particle distribution for insertion
+#fix     pdd all particledistribution/discrete 1.  1 &
+#       fraction0 1
+
+# define the material in use  ## pts1 0.25 pts2 0.25  volume_limit ${volMin}"   
+if "${radDist} == 2" then                            &
+  "fix    pts3 all particletemplate/sphere 5328 atom_type 1 density constant ${dens} radius gaussian number ${radmu} ${radsigma}"  &
+  "fix	pdd  all particledistribution/discrete 5332  1 pts3 1.0 "   & 
+  "print 'particle radius distribution gaussian'"                         &
+elif "${radDist} == 3" &
+  "fix		ptsd1  all particletemplate/sphere 5333 atom_type 1 density constant ${dens} radius constant ${radR1}"                                & 
+  "fix		ptsd2  all particletemplate/sphere 5334 atom_type 1 density constant ${dens} radius constant ${radR2}"                                & 
+  "fix		ptsd3  all particletemplate/sphere 5335 atom_type 1 density constant ${dens} radius constant ${radR3}"                                & 
+  "fix		ptsd4  all particletemplate/sphere 5336 atom_type 1 density constant ${dens} radius constant ${radR4}"                                & 
+  "fix		ptsd5  all particletemplate/sphere 5337 atom_type 1 density constant ${dens} radius constant ${radR5}"                                & 
+  "fix		ptsd6  all particletemplate/sphere 5338 atom_type 1 density constant ${dens} radius constant ${radR6}" & 
+  "fix		pdd  all particledistribution/discrete 5339  6 ptsd1 ${radPerc1} ptsd2 ${radPerc2} ptsd3 ${radPerc3} ptsd4 ${radPerc4} ptsd5 ${radPerc5} ptsd6 ${radPerc6}"  &       
+  "print 'particle radius distribution discrete REAL'"    &
+else &
+  "fix		pts  all particletemplate/sphere 5330 atom_type 1 density constant ${dens} radius constant ${rad}"                                & 
+  "fix		pts1 all particletemplate/sphere 5329 atom_type 1 density constant ${dens} radius constant ${rad1}"                                & 
+  "fix		pts2 all particletemplate/sphere 5331 atom_type 1 density constant ${dens} radius constant ${rad2}" & 
+  "fix		pdd  all particledistribution/discrete 5332  3 pts 0.5 pts1 0.25 pts2 0.25"                         &       
+  "print 'particle radius distribution discrete zero99 one oneoone'" 
+
+
+
+
+# calculate maximum diameter in simulation
+fix		maxdiam all diam/max
+variable	maxdiam equal f_maxdiam
+
+# scaling factor for mesh
+#GeometrySize: R=0.1, r=0.05, h=0.04
+#scale = ratio*maxdiam / (2R-2r)  -> N of Particles in one diameter
+variable scale equal ${G_D_RATIO}*${maxdiam}/0.1
+
+#VARIABLES
+############################################
+
+
+variable lidOffSet equal 0.025*${scale} # lid z positive offset
+variable outerRadius equal .0985*${scale}
+variable innerRadius equal .0515*${scale}
+
+# set runtimes and output frequencies
+variable nStepsSettle equal 0.25/${dt}
+variable nStepsRun    equal 0.01/${dt}
+variable dumpfreq     equal round(1e-2/${dt})
+variable thermofreq   equal round(1e-3/${dt})
+
+# mesh & regions
+fix stlCell all mesh/surface file ../geo/cell.stl type 1	scale ${scale} rotate axis 1. 0. 0. angle 0.
+fix wall all wall/gran model hooke rolling_friction ${pairRollFric} mesh n_meshes 1 meshes stlCell
+
+region 	largeCyl cylinder z 0. 0.  ${outerRadius}  0. ${innerRadius} units box side in 
+region 	smallCyl cylinder z 0. 0.  ${innerRadius}  0. ${innerRadius} units box side out
+region  factoryRegion intersect 2 largeCyl smallCyl units box
+
+#change box to fff
+variable xlo equal -0.11*${scale}
+variable xhi equal 0.11*${scale}
+variable ylo equal -0.11*${scale}
+variable yhi equal 0.11*${scale}
+variable zlo equal -0.05*${scale}
+variable zhi equal ${lidOffSet}+0.04*${scale}
+change_box all x final ${xlo} ${xhi} y final ${ylo} ${yhi} z final ${zlo} ${zhi} boundary f f f units box
+
+#insert particles
+###################################
+fix insertBulk all insert/pack &
+	seed 100001 &
+	distributiontemplate pdd &
+	maxattempt 100 &
+	overlapcheck yes &
+	all_in yes &
+	insert_every once &
+	verbose yes &
+	region factoryRegion &
+	vel constant 0.0 0.0 -0.05 &
+	volumefraction_region ${volumeFraction} &
+	ntry_mc 10000
+
+fix	    integr all nve/sphere
+fix		ts all check/timestep/gran ${thermofreq} 0.1 0.1
+compute		rke all erotate/sphere
+thermo_style	custom step atoms ke c_rke f_ts[1] f_ts[2] cpu vol
+thermo		${thermofreq}
+thermo_modify	lost ignore norm no
+compute_modify	thermo_temp dynamic yes
+################################
+run 1
+
+#shell mkdir geoDump
+#shell mkdir parDump
+# dump stl
+#dump 		dumpstl all stl ${dumpfreq} geoDump/stldump_init_*.stl
+#dump		dmp all custom ${dumpfreq} parDump/dump*.init id type type x y z ix iy iz vx vy vz fx fy fz omegax omegay omegaz radius
+
+fix bal all balance 1000 xyz 10 1.2
+unfix insertBulk
+
+# make particles slightly larger (to be able to make them smaller lateron)
+compute 	rad all property/atom radius
+variable	d_grown atom 1.01*2.*c_rad
+fix		grow all adapt 1 atom diameter v_d_grown
+run		1
+unfix		grow
+
+# run particle relaxation
+compute vave all reduce ave vz vy vz
+
+variable vcmx equal vcm(all,x)
+variable vcmy equal vcm(all,y)
+variable vcmz equal vcm(all,z)
+
+variable vave equal sqrt(v_vcmx*v_vcmx+v_vcmy*v_vcmy+v_vcmz*v_vcmz)
+
+
+run     ${nStepsSettle}
+
+label loop
+  print "-----> Checking Velocity..."
+  if "${vave}<${vthre}" then "jump SELF endloop"
+  print "-----> v ave ${vave}, v threshold ${vthre}, continuing run"
+  set group all vx 0. vy 0. vz 0.
+  run ${nStepsRun}
+jump SELF loop
+label endloop
+print "-----> v ave ${vave}, v threshold ${vthre}, end run"
+
+# make particles slightly smaller to remove overlap
+variable	d_shrunk atom 1./1.01*2.*c_rad
+fix		shrink all adapt 1 atom diameter v_d_shrunk
+run		1
+unfix		shrink
+
+# write restart
+write_restart	../restart/packing.restart

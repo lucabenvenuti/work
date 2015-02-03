@@ -28,9 +28,8 @@ variable  radR4     equal       0.0005
 variable  radPerc4  equal       0.0
 variable  radR5     equal       0.0001
 variable  radPerc5  equal       0.0
-variable  radR6     equal       0.00005
+variable  radR6     equal       0.0005
 variable  radPerc6  equal       0.0
-#variable  volMin    equal       4/3*${radR6}*${radR6}*${radR6}*PI*0.99
 variable    dens    equal       3000      #sinterfine      # particle density [kg/m3]
 variable    ym      equal       1e7             # Young's modulus  [Pa]
 variable    pr      equal       0.4            # Poisson ratio   [-]
@@ -44,6 +43,9 @@ variable    radDist equal       3          # radius distribution (1 = (25%rad*0.
                                            # 2=gaussian distribution with radmu & radsigma)
                                            # for 2 you must uncomment radsigma & radmu, the latter must be equal to rad
                                            # 3=discrete distribution with real values
+variable    volFrac equal 0.65
+variable volumeFraction equal ${volFrac}
+
 variable    dt      equal       1e-6           # time step width [s]
 
 variable    dCylDp  equal       ${DCYLDP}      # ratio cylinder diameter to particle diameter (optional loop)
@@ -91,7 +93,7 @@ variable    cylDiameter     equal   ${dCylDp}*2*${rad} # 50 particle in cyl diam
 variable    cylRadius       equal   0.5*${cylDiameter} # cylinder radius; scale for geometry
 variable    cylArea         equal   0.25*${cylDiameter}*${cylDiameter}*PI
 
-variable    desiredMass     equal   ${cylArea}*0.75*${cylDiameter}*0.65*${dens}
+variable    desiredMass     equal   ${cylArea}*0.75*${cylDiameter}*${volFrac}*${dens}
 
 variable    rmRegZPos       equal   1.5*${cylRadius}
 
