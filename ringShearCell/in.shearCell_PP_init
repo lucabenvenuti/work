@@ -6,17 +6,17 @@
 
 #radii for fractions
 #
-variable    rad     equal       1860e-6          # particle radius [m]
-variable    radmu   equal       1860e-6             # particle radius mean [m]
-variable  radsigma  equal       0.001940            # particle radius sigma[m]
+variable    rad     equal       771e-6          # particle radius [m]
+variable    radmu   equal       771e-6             # particle radius mean [m]
+variable  radsigma  equal       0.000208           # particle radius sigma[m]
 variable  radR1     equal       0.00280
-variable  radPerc1  equal       0.08
+variable  radPerc1  equal       0.00
 variable  radR2     equal       0.001775
-variable  radPerc2  equal       0.92
+variable  radPerc2  equal       0.0
 variable  radR3     equal       0.001
-variable  radPerc3  equal       0.0
-variable  radR4     equal       0.0005
-variable  radPerc4  equal       0.0
+variable  radPerc3  equal       0.666
+variable  radR4     equal       0.00063
+variable  radPerc4  equal       0.334
 variable  radR5     equal       0.0001
 variable  radPerc5  equal       0.0
 variable  radR6     equal       0.0005
