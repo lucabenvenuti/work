@@ -106,9 +106,9 @@ neigh_modify	delay 0
 
 
 #Material properties required for new pair styles
-fix     m1 all property/global youngsModulus peratomtype ${ym} ${ym}
-fix     m2 all property/global poissonsRatio peratomtype ${pr} ${pr}
-fix     m3 all property/global coefficientRestitution peratomtypepair 2 ${rest} ${rest} ${rest} ${rest}
+fix     m1 all property/global youngsModulus peratomtype ${ym} #${ym}
+fix     m2 all property/global poissonsRatio peratomtype ${pr} #${pr}
+fix     m3 all property/global coefficientRestitution peratomtypepair 1 ${rest} #2  ${rest} ${rest} ${rest}
 fix 	m4 all property/global coefficientFriction peratomtypepair 1 ${cof}
 fix 	m5 all property/global coefficientRollingFriction peratomtypepair 1 ${corf}
 
@@ -204,9 +204,8 @@ fix insertBulk all insert/pack &
 	insert_every once &
 	verbose yes &
 	region factoryRegion &
-	vel constant 0.0 0.0 -0.05 &
-	volumefraction_region ${volumeFraction} &
-	ntry_mc 10000
+	volumefraction_region ${volumeFraction} #&
+	#ntry_mc 10000 vel constant 0.0 0.0 -0.05 &
 
 fix	    integr all nve/sphere
 fix		ts all check/timestep/gran ${thermofreq} 0.1 0.1

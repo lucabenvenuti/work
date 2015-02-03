@@ -106,8 +106,8 @@ neigh_modify	delay 0
 
 
 #Material properties required for new pair styles
-fix     m1 all property/global youngsModulus peratomtype ${ym} ${ym}
-fix     m2 all property/global poissonsRatio peratomtype ${pr} ${pr}
+fix     m1 all property/global youngsModulus peratomtype ${ym}
+fix     m2 all property/global poissonsRatio peratomtype ${pr}
 fix     m3 all property/global coefficientRestitution peratomtypepair 2 ${rest} ${rest} ${rest} ${rest}
 fix 	m4 all property/global coefficientFriction peratomtypepair 1 ${cof}
 fix 	m5 all property/global coefficientRollingFriction peratomtypepair 1 ${corf}
@@ -178,7 +178,7 @@ variable thermofreq   equal round(1e-3/${dt})
 
 # mesh & regions
 fix stlCell all mesh/surface file mesh/cell.stl type 1	scale ${scale} rotate axis 1. 0. 0. angle 0.
-fix wall all wall/gran model hooke rolling_friction ${pairRollFric} mesh n_meshes 1 meshes stlCell
+fix wall all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} mesh n_meshes 1 meshes stlCell
 
 region 	largeCyl cylinder z 0. 0.  ${outerRadius}  0. ${innerRadius} units box side in 
 region 	smallCyl cylinder z 0. 0.  ${innerRadius}  0. ${innerRadius} units box side out
@@ -204,9 +204,8 @@ fix insertBulk all insert/pack &
 	insert_every once &
 	verbose yes &
 	region factoryRegion &
-	vel constant 0.0 0.0 -0.05 &
-	volumefraction_region ${volumeFraction} &
-	ntry_mc 10000
+	volumefraction_region ${volumeFraction} #&
+	#ntry_mc 10000 vel constant 0.0 0.0 -0.05 &
 
 fix	    integr all nve/sphere
 fix		ts all check/timestep/gran ${thermofreq} 0.1 0.1
