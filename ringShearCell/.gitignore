@@ -18,3 +18,4 @@ stats/
 matlab/*.*~
 results*/
 restart*/
+*.dat
