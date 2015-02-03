@@ -178,7 +178,7 @@ variable thermofreq   equal round(1e-3/${dt})
 
 # mesh & regions
 fix stlCell all mesh/surface file mesh/cell.stl type 1	scale ${scale} rotate axis 1. 0. 0. angle 0.
-fix wall all wall/gran model hooke rolling_friction ${pairRollFric} mesh n_meshes 1 meshes stlCell
+fix wall all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} mesh n_meshes 1 meshes stlCell
 
 region 	largeCyl cylinder z 0. 0.  ${outerRadius}  0. ${innerRadius} units box side in 
 region 	smallCyl cylinder z 0. 0.  ${innerRadius}  0. ${innerRadius} units box side out

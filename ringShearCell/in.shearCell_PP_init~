@@ -46,7 +46,8 @@ variable 	shear_mod  equal ${youngsModulus}/(2.0*(${poissonsRatio}+1.0))
 #variable	t_rayleigh equal PI*${r0}*sqrt(${density}/${shear_mod})/(0.1631*${poissonsRatio}+0.8766)
 variable	dt equal 1e-6 #10.0^(floor(log(${t_rayleigh}))-1)
 
-
+variable    dCylDp  equal      ${DCYLDP}      # ratio cylinder diameter to particle diameter (optional loop)
+variable    G_D_RATIO  equal   ${dCylDp}
 
 
 
