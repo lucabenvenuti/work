@@ -14,4 +14,4 @@ LI="liggghts"
 VARS="-var NTHREADS $NTHREADS -var XPROCS $XPROCS -var YPROCS $YPROCS -var ZPROCS $ZPROCS -var OMPON 0 -var DCYLDP $DCYLDP"
 
 date
-perf stat -o stats/resultsInit$fileID.txt mpirun $MPI_OPTIONS $LI -in in.shearCell_PP_init $VARS
+mpirun $MPI_OPTIONS $LI -in in.shearCell_PP_init $VARS
