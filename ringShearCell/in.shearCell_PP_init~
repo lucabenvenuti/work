@@ -262,4 +262,4 @@ run		1
 unfix		shrink
 
 # write restart
-write_restart	../restart/packing.restart
+write_restart	./restart/restart.ringShearCell_rad${rad}_dcyldp${dCylDp}
