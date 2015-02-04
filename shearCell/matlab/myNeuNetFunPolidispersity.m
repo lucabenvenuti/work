@@ -16,7 +16,7 @@ for iijj=1:nSimCases2
     if (isfield (data2(iijj), 'ctrlStress') & isfield (data2(iijj), 'radsigma'))
         inputNN(iijj,6)=abs(data2(iijj).ctrlStress);
          inputNN(iijj,7)=data2(iijj).radsigma;
-    endelseif
+    end %elseif
 
 %     if isfield (data2(iijj), 'shearperc')
 %         inputNN(iijj,7)=data2(iijj).shearperc;
@@ -407,7 +407,7 @@ end
 
 
 
-return
+%return
 
 %% 
 % length2 = totalLength/length(sf);
