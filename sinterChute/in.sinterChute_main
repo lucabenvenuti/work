@@ -1,6 +1,14 @@
 #SVAI Schachtkuehler
 #Christoph Kloss, May 2011
 
+echo		both
+variable    rolfrtyp string	epsd2
+shell   mkdir restart_init
+shell   mkdir post_init
+shell   mkdir restart_main
+shell   mkdir post_main
+variable    volFrac equal 0.01 # 0.60
+
 atom_style	granular
 atom_modify	map array
 boundary	f f f
@@ -9,14 +17,14 @@ newton		off
 communicate	single vel yes
 
 #parallelization
-processors      2 2 6
-loadbalance	nlocal/simple ntry 10
+processors      ${XPROCS} ${YPROCS} ${ZPROCS}
+#loadbalance	nlocal/simple ntry 10
 
 units		si
 
 region		reg block -1.1 1.1  -1. 6.  -4.8 3.8 units box
 #create_box	2 reg
-read_restart	restart_init/schachtinit*.restart
+read_restart	restart_init/sinterChuteInit*.restart
 
 neighbor	0.03 bin
 neigh_modify	delay 0 binsize 0.08
@@ -28,7 +36,7 @@ neigh_modify 	one 3000
 #*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=
 
 #coarse graining factor
-variable 	cg equal 5.0
+variable 	cg equal ${DCYLDP} #5.0
 
 #*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=
 
@@ -94,7 +102,7 @@ fix 	pdd all particledistribution/discrete 524287 7 &
 
 
 #New pair style
-pair_style 	gran/hooke 3 0  #Hertzian without cohesion
+pair_style 	gran model hertz tangential history rolling_friction ${rolfrtyp}  #Hertzian without cohesion
 pair_coeff	* *
 
 #time-step
@@ -103,14 +111,21 @@ timestep	0.00002
 fix		gravi all gravity 9.81 vector 0.0 0.0 -1.0
 
 #meshes
-fix		cad all mesh/gran mesh.stl 2  0.001  0. 0. 0. 0. 0. 0.
-fix		inface all mesh/gran mesh_insertion.stl 2    0.001  0. 0. 0. 0. 0. 0.
-region		outsideinsmesh mesh/tet mesh_fill.vtk        0.001  0. 0. 0.  0. 0. 0. units box side out
+fix		cad all mesh/surface file mesh/mesh.stl          type     2  scale 0.001 
+fix		inface all mesh/surface/planar file mesh/mesh_insertion.stl          type     2  scale 0.001 
+region		outsideinsmesh mesh/tet  file mesh/mesh_fill.vtk          scale 0.001 move 0.0 0.0 0.0 rotate 0.0 0.0 0.0 units box side out
 
-fix		meshwalls all wall/gran/hooke 3 0 mesh/gran 1 cad
-fix		xwalls all wall/gran/hooke 3 0 xplane -1.1 1.1  2
-fix		ywalls all wall/gran/hooke 3 0 yplane -1.0 6.0  2
-fix		zwalls all wall/gran/hooke 3 0 zplane -4.8 NULL 2
+#wall/gran model hertz tangential history rolling_friction ${rolfrtyp} mesh n_meshes 1 meshes
+#fix		meshwalls all wall/gran/hooke 3 0 mesh/gran 1 cad
+#fix		meshwalls all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} mesh n_meshes 1 meshes cad
+#fix		xwalls all wall/gran/hooke 3 0 xplane -1.1 1.1  2
+#fix		ywalls all wall/gran/hooke 3 0 yplane -1.0 6.0  2
+#fix		zwalls all wall/gran/hooke 3 0 zplane -4.8 NULL 2
+fix		xwalls1 all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} primitive type 2 xplane -1.1 
+fix		xwalls2 all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} primitive type 2 xplane  1.1
+fix		ywalls1 all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} primitive type 2 yplane -1.0 
+fix		ywalls2 all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} primitive type 2 yplane  6.0
+fix		zwalls1 all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} primitive type 2 zplane -4.8 
 
 #insertion 
 #*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=
@@ -150,10 +165,10 @@ thermo_modify	lost ignore norm no
 compute_modify	thermo_temp dynamic yes
 
 #write restart files
-restart		10000	restart_run/schachtrun*.restart
+restart		10000	restart_main/sinterChuteRun*.restart
 
-dump		dmp all custom 2000 post_run/dump*.schacht id type x y z vx vy vz fx fy fz omegax omegay omegaz radius 
-dump		dmp2 all custom 500 post_run/dump*.evalout id x y z vx vy vz radius 
+dump		dmp all custom 2000 post_main/dump*.sinterChute id type x y z vx vy vz fx fy fz omegax omegay omegaz radius 
+dump		dmp2 all custom 500 post_main/dump*.evalout id type x y z vx vy vz radius 
 region		dmp2reg block -0.55 0.55  0.6 5.5  -3.6 -3.4 units box
 dump_modify	dmp2 region dmp2reg
 #dump 		dumpstress all mesh_run/gran/VTK 2000 post/dump*.vtk stress wear cad
@@ -169,4 +184,4 @@ region		delreg mesh/tet  mesh_bc.vtk  0.001  0. 0. 0.  0. 0. 0. units box
 fix		delsinter all corex/materialremove nevery 200 rate ${chargingrate} style delete seed 10007143 region delreg atomtype 1
 
 #run while inserting and removing particles
-run			10000000 upto
+run			600000 upto #10000000 upto

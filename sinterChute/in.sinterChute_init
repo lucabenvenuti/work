@@ -1,6 +1,10 @@
 #SVAI Schachtkuehler
 #Christoph Kloss, May 2011
 echo		both
+variable    rolfrtyp string	epsd2
+shell   mkdir restart_init
+shell   mkdir post_init
+variable    volFrac equal 0.01 # 0.60
 
 atom_style	granular
 atom_modify	map array
@@ -100,7 +104,7 @@ fix 	pdd all particledistribution/discrete 524287 7 &
 
 
 #New pair style
-pair_style 	gran model hertz tangential history rolling_friction epsd2  #Hertzian without cohesion
+pair_style 	gran model hertz tangential history rolling_friction ${rolfrtyp}  #Hertzian without cohesion
 pair_coeff	* *
 
 timestep	0.000001
@@ -108,22 +112,30 @@ timestep	0.000001
 fix		gravi all gravity 9.81 vector 0.0 0.0 -1.0
 
 #meshes
-fix		cad all mesh/gran mesh.stl               2   0.001  0. 0. 0.  0. 0. 0.
-fix		inface all mesh/gran mesh_insertion.stl  2   0.001  0. 0. 0.  0. 0. 0.
-region		insmesh mesh/tet mesh_fill.vtk               0.001  0. 0. 0.  0. 0. 0. units box
+fix		cad all mesh/surface file mesh/mesh.stl          type     2  scale 0.001 
+fix		inface all mesh/surface file mesh/mesh_insertion.stl          type     2  scale 0.001 
+region		insmesh mesh/tet  file mesh/mesh_fill.vtk          scale 0.001 move 0.0 0.0 0.0 rotate 0.0 0.0 0.0 units box
+#units box
 
-fix		meshwalls all wall/gran/hooke 1 0 mesh/gran 1 cad
-fix		xwalls all wall/gran/hooke 1 0 xplane -1.1 1.1  2
-fix		ywalls all wall/gran/hooke 1 0 yplane -1.0 6.0  2
-fix		zwalls all wall/gran/hooke 1 0 zplane -4.8 NULL 2
+#fix		meshwalls all wall/gran/hooke 1 0 mesh/gran 1 cad
+fix 		meshwalls all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} mesh n_meshes 1 meshes cad
+#fix		xwalls all wall/gran/hooke 1 0 xplane -1.1 1.1  2
+fix		xwalls1 all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} primitive type 1 xplane -1.1 
+fix		xwalls2 all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} primitive type 1 xplane  1.1
+fix		ywalls1 all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} primitive type 1 yplane -1.0 
+fix		ywalls2 all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} primitive type 1 yplane  6.0
+fix		zwalls1 all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} primitive type 1 zplane -4.8 
+#fix		xwalls2 all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} primitive type 1 xplane  1.1
+#fix		ywalls all wall/gran/hooke 1 0 yplane -1.0 6.0  2
+#fix		zwalls all wall/gran/hooke 1 0 zplane -4.8 NULL 2
 
 #particle insertion
 fix		ins all insert/pack seed 100001 distributiontemplate pdd &
-		insert_every once overlapcheck no volumefraction_region 0.6 region insmesh ntry_mc 10000
+		insert_every once overlapcheck no volumefraction_region ${volFrac} region insmesh ntry_mc 10000
 
 #apply relaxation integration
 variable	dx_relax equal 0.00001
-fix		integr_relax all nve/limit ${dx_relax}
+fix		integr_relax all nve/limit absolute ${dx_relax}
 
 #output settings, include total thermal energy
 compute		1 all erotate/sphere
@@ -133,11 +145,11 @@ thermo		500
 thermo_modify	lost ignore norm no
 compute_modify	thermo_temp dynamic yes
 
-restart		10000	restart_init/schachtinit*.restart
+restart		10000	restart_init/sinterChuteInit*.restart
 
 #insert the first particles so that dump is not empty
 run		1
-dump		dmp all custom 20000 post_init/dump*.schacht id type x y z vx vy vz fx fy fz omegax omegay omegaz radius 
+dump		dmp all custom 20000 post_init/dump*.sinterChute id type x y z vx vy vz fx fy fz omegax omegay omegaz radius 
 dump 		dumpstress all mesh/gran/VTK 20000 post_init/dump*.vtk stress wear cad
 
 #run
@@ -151,7 +163,7 @@ variable kin_en_thre equal 1000
 
 label loop
   print "-----> Checking Kinetic Energy..."
-  if ${ke} < ${kin_en_thre} then "jump SELF endloop"
+  if "${ke} < ${kin_en_thre}" then "jump SELF endloop"
   print "-----> ke ${ke}, ke_threshold ${kin_en_thre}, continuing run"  
   set group all vx 0. vy 0. vz 0.
   run 10000
