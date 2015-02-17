@@ -57,3 +57,40 @@ set(gca, 'FontSize',20);
 % ans =
 % 
 %     0.9995
+
+% plotRegression
+% yyy = 0.97*z;
+% hold on
+% plot(z,yyy)
+% yyy = 0.97*z+0.036;
+% plot(z,yy,'o',z,yyy)
+% plot(z,yy,'o',z,yyy)[NNSave2, errorNN2, x2, zz2, errorEstSum2, errorEstIndex2, errorEstSumMaxIndex2, yy2, corrMat2, z2, yy3] =   myNeuNetFunBis(nSimCases,data,trainFcn,hiddenLayerSizeVector, avgMuR2,avgMuR1);
+% xlim(0.8,1.5)[NNSave2, errorNN2, x2, zz2, errorEstSum2, errorEstIndex2, errorEstSumMaxIndex2, yy2, corrMat2] =   myNeuNetFun(nSimCases,data,trainFcn,hiddenLayerSizeVector, avgMuR2,avgMuR1, densityBulkBoxMin);
+
+% figure(5)
+% plot(z2,yy3(5,:),'o',z2,y5)
+% figure(5)
+% y5=0.94*z2+.073;
+% figure(5)
+% plot(z2,yy3(5,:),'ob',z2,y5,'b')
+% figure(5)
+% plot(z2,yy3(5,:),'ok',z2,y5,'b')
+% xlim(0.8,1.5)
+% xlim([0.8,1.5])
+% xlim([0.8,1.8])
+% figure(5)
+% xlim([0.8,1.8])
+% xlim([0.5,2])
+% xlim([0.8,1.8])
+% ylim([0.8,1.8])
+% legend('training values','regression line')
+% legend('training values','regression line','Location', 'NorthWest')
+% xlabel('\mu_{psh,DEM} [-]');
+% xlabel('\mu_{psh,ANN} [-]');
+% xlabel('\mu_{psh,DEM} [-]');
+% ylabel('\mu_{psh,ANN} [-]');
+% set(gca,'fontname','times new roman','FontSize',24)  % Set it to times
+% xlabel('\mu_{psh,DEM} [-]','fontname','times new roman','FontSize',24);
+% ylabel('\mu_{psh,ANN} [-]','fontname','times new roman','FontSize',24);
+ xlabel('\mu_{psh,DEM} [-]','fontname','times new roman','FontSize',36);
+ ylabel('\mu_{psh,ANN} [-]','fontname','times new roman','FontSize',36);
