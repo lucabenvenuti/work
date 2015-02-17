@@ -1,0 +1,88 @@
+#SVAI Schachtkuehler
+#Christoph Kloss, May 2011
+echo		both
+
+atom_style	granular
+atom_modify	map array
+boundary	f f f
+newton		off
+
+communicate	single vel yes
+
+#parallelization
+processors      2 2 6
+loadbalance	nlocal/simple ntry 10
+
+units		si
+
+region		reg block -1.1 1.1  -1. 6.  -4.8 3.8 units box
+create_box	2 reg
+
+neighbor	0.02 bin
+neigh_modify	delay 0 binsize 0.08
+neigh_modify 	one 3000
+
+#Material properties required for new pair styles
+include		in.materials
+
+#New pair style
+pair_style 	gran/hooke 1 0  #Hertzian without cohesion
+pair_coeff	* *
+
+timestep	0.000001
+
+fix		gravi all gravity 9.81 vector 0.0 0.0 -1.0
+
+#meshes
+fix		cad all mesh/gran mesh.stl               2   0.001  0. 0. 0.  0. 0. 0.
+fix		inface all mesh/gran mesh_insertion.stl  2   0.001  0. 0. 0.  0. 0. 0.
+region		insmesh mesh/tet mesh_fill.vtk               0.001  0. 0. 0.  0. 0. 0. units box
+
+fix		meshwalls all wall/gran/hooke 1 0 mesh/gran 1 cad
+fix		xwalls all wall/gran/hooke 1 0 xplane -1.1 1.1  2
+fix		ywalls all wall/gran/hooke 1 0 yplane -1.0 6.0  2
+fix		zwalls all wall/gran/hooke 1 0 zplane -4.8 NULL 2
+
+#particle insertion
+fix		ins all insert/pack seed 100001 distributiontemplate pdd &
+		insert_every once overlapcheck no volumefraction_region 0.6 region insmesh ntry_mc 10000
+
+#apply relaxation integration
+variable	dx_relax equal 0.00001
+fix		integr_relax all nve/limit ${dx_relax}
+
+#output settings, include total thermal energy
+compute		1 all erotate/sphere
+fix		2 all check/timestep/gran 500 0.15 0.15
+thermo_style	custom step atoms ke c_1 f_2[1] f_2[2] cpu vol
+thermo		500
+thermo_modify	lost ignore norm no
+compute_modify	thermo_temp dynamic yes
+
+restart		10000	restart_init/schachtinit*.restart
+
+#insert the first particles so that dump is not empty
+run		1
+dump		dmp all custom 20000 post_init/dump*.schacht id type x y z vx vy vz fx fy fz omegax omegay omegaz radius 
+dump 		dumpstress all mesh/gran/VTK 20000 post_init/dump*.vtk stress wear cad
+
+#run
+run			100000
+
+
+#run particle relaxation - check kinetic energy
+variable ke equal ke
+print "ke ${ke}"
+variable kin_en_thre equal 1000
+
+label loop
+  print "-----> Checking Kinetic Energy..."
+  if ${ke} < ${kin_en_thre} then "jump in.schachtkuehler_init endloop"
+  print "-----> ke ${ke}, ke_threshold ${kin_en_thre}, continuing run"  
+  set group all vx 0. vy 0. vz 0.
+  run 10000
+jump in.schachtkuehler_init loop
+label endloop
+
+write_restart	restart_init/packing.restart
+

@@ -1,0 +1,29 @@
+#*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=
+#values that are entered numerically here refer to original scale
+#values in kg/s
+#*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=
+
+#time speed-up ratio
+variable	speedup_ratio equal 20.
+
+#total charging rate - should be equal to total removal rate in kg/s
+#350 tons/h
+variable 	chargingrate equal 97.22*${speedup_ratio}
+print 		"The total simulation charging/removal rate is now ${chargingrate}"
+
+#*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=
+#central insertion of material
+#*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=
+
+variable	vz0 equal -6.0 #estimated
+
+fix		ins all insert/stream seed 5330 distributiontemplate pdd &
+		mass 1000000 massrate ${chargingrate} overlapcheck yes all_in yes &
+		vel constant 0.0 0.0 ${vz0} extrude_length 0.8 insertion_face inface 
+
+#*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=		
+#remove all particles above z=2m for initialization
+#do not do this at the moment
+#*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=
+#region		delinit block -1.1 1.1  -1. 6.  2.0 3.8 units box
+#delete_atoms 	region delinit

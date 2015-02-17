@@ -1,0 +1,7 @@
+
+
+#*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=		
+#particle removal by deletion
+#*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=
+region		delreg mesh/tet  mesh_bc.vtk  0.001  0. 0. 0.  0. 0. 0. units box
+fix		delsinter all corex/materialremove nevery 200 rate ${chargingrate} style delete seed 10007143 region delreg atomtype 1
