@@ -117,7 +117,7 @@ region		outsideinsmesh mesh/tet  file mesh/mesh_fill.vtk          scale 0.001 mo
 
 #wall/gran model hertz tangential history rolling_friction ${rolfrtyp} mesh n_meshes 1 meshes
 #fix		meshwalls all wall/gran/hooke 3 0 mesh/gran 1 cad
-#fix		meshwalls all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} mesh n_meshes 1 meshes cad
+fix		meshwalls all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} mesh n_meshes 1 meshes cad
 #fix		xwalls all wall/gran/hooke 3 0 xplane -1.1 1.1  2
 #fix		ywalls all wall/gran/hooke 3 0 yplane -1.0 6.0  2
 #fix		zwalls all wall/gran/hooke 3 0 zplane -4.8 NULL 2
@@ -180,7 +180,7 @@ run			400000
 #*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=		
 #particle removal by deletion
 #*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=
-region		delreg mesh/tet  mesh_bc.vtk  0.001  0. 0. 0.  0. 0. 0. units box
+region		delreg mesh/tet  file mesh/mesh_fill.vtk          scale 0.001 move 0.0 0.0 0.0 rotate 0.0 0.0 0.0 units box
 fix		delsinter all corex/materialremove nevery 200 rate ${chargingrate} style delete seed 10007143 region delreg atomtype 1
 
 #run while inserting and removing particles
