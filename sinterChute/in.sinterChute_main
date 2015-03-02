@@ -181,7 +181,9 @@ run			400000
 #particle removal by deletion
 #*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=
 region		delreg mesh/tet  file mesh/mesh_fill.vtk          scale 0.001 move 0.0 0.0 0.0 rotate 0.0 0.0 0.0 units box
-fix		delsinter all corex/materialremove nevery 200 rate ${chargingrate} style delete seed 10007143 region delreg atomtype 1
+#fix		delsinter all corex/materialremove nevery 200 rate ${chargingrate} style delete seed 10007143 region delreg atomtype 1
+#fix		delsinter all evaporate 200 3382 delreg 10007143
+#delete_atoms porosity delreg 0.02 482793 
 
 #run while inserting and removing particles
-run			600000 upto #10000000 upto
+run			200000 every 200 "delete_atoms porosity delreg 0.1 482793" #upto #10000000 upto

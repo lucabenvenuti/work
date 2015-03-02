@@ -40,7 +40,7 @@ searchCases = {...'fric' 0.6 %[0.4 0.8]
 
                ...'rest'   [0.5 0.9]
                ...'fid'   23141 %[	23168 23141 ]%	20026	20027	20028	20029	20030 20035		20201	20202	20203	20204 20205] %20101	20102	20103	20125	20126 20001	20002
-               ...'shearperc' 1.0
+               'shearperc' 1.0
                ... 'ctrlStress' -1.007001977856750e+04
               ... 'expMass' 8.7452 %0.9275 %
               ... 'dens' 3500 %[2500 3500]
@@ -63,7 +63,7 @@ col_numBox = 13;
 exp_flag = false; % enable the comparision to experimental data
 exp_dir = '.'; % directory, where the files can be found
 legendExpFlag = 'schulze'; % choose between jenike & schulze
-polidispersity_flag = true; % enable the comparision to experimental data
+polidispersity_flag = true; % 
 
 if (exp_flag)
     switch legendExpFlag
@@ -89,7 +89,7 @@ dCylDpConfrontationFlag = false;
 dCylDpConfrontationFlag2 = false;
 
 %doNN
-NNFlag = false;
+NNFlag = true;
 hiddenLayerSizeVector = [5:40];
 newInputFlag = false;
 gloriaWinFlag = false;
