@@ -1,9 +1,9 @@
 #! /bin/bash
+bla
 
-date
 OMPON=0
-fileID="31001"
-DCYLDP=30
+fileID="31601"
+DCYLDP=100
 
 #index[0]="28201"
 #index[1]="28202"
@@ -12,7 +12,7 @@ DCYLDP=30
 
 
 #OM[0]=0
-#OM[1]=1
+#OM[1]=1sh
 #OM[2]=0
 #OM[3]=1
 
@@ -58,8 +58,8 @@ PROCS=$(($XPROCS*$YPROCS*$ZPROCS))
 MPI_OPTIONS="-np $PROCS -report-bindings"
 VARS="-var NTHREADS $NTHREADS -var XPROCS $XPROCS -var YPROCS $YPROCS -var ZPROCS $ZPROCS -var OMPON $OMPON -var DCYLDP $DCYLDP"
 
-date
-perf stat -o stats/resultsInit$fileID.txt mpirun $MPI_OPTIONS $LI -in in.shearCell_init_packing $VARS
+
+mpirun $MPI_OPTIONS $LI -in in.shearCell_init_packing $VARS
 
 if [ "$OMPON" = 1 ]; then
     NTHREADS=8
@@ -74,9 +74,8 @@ fi
 
 VARS="-var iden $fileID -var NTHREADS $NTHREADS -var XPROCS $XPROCS -var YPROCS $YPROCS -var ZPROCS $ZPROCS -var OMPON $OMPON -var DCYLDP $DCYLDP"
 
-date
-perf stat -o stats/resultsLoop$fileID.txt mpirun $MPI_OPTIONS $LI -in in.shearCell_loop $VARS
-date
+mpirun $MPI_OPTIONS $LI -in in.shearCell_loop $VARS
+
 #done
 
 #mpirun -np .... [OPTIONS] -in in.shearCell_init_packing
