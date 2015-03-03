@@ -148,7 +148,6 @@ fix		cad19 all mesh/surface/stress file mesh/topChute.stl	type 2
 fix		inface1 all mesh/surface/planar file mesh/inlet1.stl          type     2  
 fix		inface2 all mesh/surface/planar file mesh/inlet2.stl          type     2  
 
-#massFlowFace.stl
 
 #region		outsideinsmesh mesh/tet  file mesh/mesh_fill.vtk          scale 0.001 move 0.0 0.0 0.0 rotate 0.0 0.0 0.0 units box side out
 
