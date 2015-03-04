@@ -1,5 +1,4 @@
 #! /bin/bash
-bla
 
 OMPON=0
 fileID="31601"
@@ -59,7 +58,7 @@ MPI_OPTIONS="-np $PROCS -report-bindings"
 VARS="-var NTHREADS $NTHREADS -var XPROCS $XPROCS -var YPROCS $YPROCS -var ZPROCS $ZPROCS -var OMPON $OMPON -var DCYLDP $DCYLDP"
 
 
-mpirun $MPI_OPTIONS $LI -in in.shearCell_init_packing $VARS
+perf stat -o stats/resultsInit$fileID.txt mpirun $MPI_OPTIONS $LI -in in.shearCell_init_packing $VARS
 
 if [ "$OMPON" = 1 ]; then
     NTHREADS=8
@@ -74,7 +73,7 @@ fi
 
 VARS="-var iden $fileID -var NTHREADS $NTHREADS -var XPROCS $XPROCS -var YPROCS $YPROCS -var ZPROCS $ZPROCS -var OMPON $OMPON -var DCYLDP $DCYLDP"
 
-mpirun $MPI_OPTIONS $LI -in in.shearCell_loop $VARS
+perf stat -o stats/resultsLoop$fileID.txt mpirun $MPI_OPTIONS $LI -in in.shearCell_loop $VARS
 
 #done
 

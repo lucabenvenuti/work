@@ -1,7 +1,7 @@
 #! /bin/bash
 
 date
-OMPON=1
+OMPON=0
 fileID="801"
 DCYLDP=20
 

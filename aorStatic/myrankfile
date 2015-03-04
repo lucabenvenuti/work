@@ -1,4 +1,4 @@
-rank 0=node41.service slot=0:0-7
-rank 1=node41.service slot=0:8-15
-rank 2=node41.service slot=1:0-7
-rank 3=node41.service slot=1:8-15
+rank 0=F39BenDeb slot=0:0-7
+rank 1=F39BenDeb slot=0:8-15
+rank 2=F39BenDeb slot=1:0-7
+rank 3=F39BenDeb slot=1:8-15

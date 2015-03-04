@@ -41,7 +41,7 @@ communicate	single vel yes
 processors      ${XPROCS} ${YPROCS} ${ZPROCS}
 #loadbalance	nlocal/simple ntry 10
 # load balancing
-fix     lb all balance 0 xyz 10 1.05
+
 
 units		si
 
@@ -135,35 +135,60 @@ pair_coeff	* *
 #time-step
 timestep	${dt}
 
-#meshes & gravity
+#meshes & gravity #heal auto_remove_duplicates # Face to output mass
 if "${OMPON} == 1" then                            &
-
+"fix		gravi all gravity/omp 9.81 vector 0.0 0.0 -1.0 " &
+"fix		cad1 all mesh/surface/omp file mesh/beamsTop.stl	type 2 " & 
+"fix		cad2 all mesh/surface/omp file mesh/brickConv1.stl	type 2  heal auto_remove_duplicates " &
+"fix		cad3 all mesh/surface/omp file mesh/brickConv2.stl	type 2  heal auto_remove_duplicates " &
+"fix		cad4 all mesh/surface/omp file mesh/bricTop1.stl	type 2  " &
+"fix		cad5 all mesh/surface/omp file mesh/bricTop2.stl	type 2  " &
+"fix		cad6 all mesh/surface/omp file mesh/bricTop3.stl	type 2  " &
+"fix		cad7 all mesh/surface/omp file mesh/convChute1.stl	type 2  " &
+"fix		cad8 all mesh/surface/omp file mesh/convChute2.stl	type 2  " &
+"fix		cad9 all mesh/surface/omp file mesh/brickInt1.stl	type 2  " &
+"fix		cad10 all mesh/surface/omp file mesh/brickInt2.stl	type 2  " &
+"fix		cad11 all mesh/surface/omp file mesh/brickInt3.stl	type 2  " &
+"fix		cad12 all mesh/surface/omp file mesh/deflectorInternal.stl	type 2  " &
+"fix		cad13 all mesh/surface/omp file mesh/internals_noPipe.stl	type 2  " &
+"fix		cad14 all mesh/surface/omp file mesh/pipeCut.stl	type 2  " &
+"fix		cad15 all mesh/surface/omp file mesh/separators.stl	type 2  " &
+"fix		cad16 all mesh/surface/omp file mesh/separatorsWalls.stl	type 2  " &
+"fix		cad17 all mesh/surface/omp file mesh/sidesChute.stl	type 2  " &
+"fix		cad18 all mesh/surface/omp file mesh/sideSmallChute.stl	type 2  " &
+"fix		cad19 all mesh/surface/omp file mesh/topChute.stl	type 2  " &
+"fix		inface1 all mesh/surface/omp file mesh/inlet1.stl          type     2  " &
+"fix		inface2 all mesh/surface/omp file mesh/inlet2.stl          type     2  " &
+"fix		massFace all mesh/surface/omp file mesh/massFlowFace.stl	type     2 " & 
+"fix		meshwalls all wall/gran/omp model hertz tangential history rolling_friction ${rolfrtyp} mesh n_meshes 19 meshes cad1 cad2 &
+cad3 cad4 cad5 cad6 cad7 cad8 cad9 cad10 cad11 cad12 cad13 cad14 cad15 cad16 cad17 cad18 cad19" &
 else &
-"fix		gravi all gravity 9.81 vector 0.0 0.0 -1.0
-"fix		cad1 all mesh/surface/stress file mesh/beamsTop.stl	type 2  #heal auto_remove_duplicates
-"fix		cad2 all mesh/surface/stress file mesh/brickConv1.stl	type 2  heal auto_remove_duplicates
-"fix		cad3 all mesh/surface/stress file mesh/brickConv2.stl	type 2  heal auto_remove_duplicates
-"fix		cad4 all mesh/surface/stress file mesh/bricTop1.stl	type 2  
-fix		cad5 all mesh/surface/stress file mesh/bricTop2.stl	type 2  
-fix		cad6 all mesh/surface/stress file mesh/bricTop3.stl	type 2  
-fix		cad7 all mesh/surface/stress file mesh/convChute1.stl	type 2  
-fix		cad8 all mesh/surface/stress file mesh/convChute2.stl	type 2  
-fix		cad9 all mesh/surface/stress file mesh/brickInt1.stl	type 2  
-fix		cad10 all mesh/surface/stress file mesh/brickInt2.stl	type 2  
-fix		cad11 all mesh/surface/stress file mesh/brickInt3.stl	type 2  
-fix		cad12 all mesh/surface/stress file mesh/deflectorInternal.stl	type 2  
-fix		cad13 all mesh/surface/stress file mesh/internals_noPipe.stl	type 2  
-fix		cad14 all mesh/surface/stress file mesh/pipeCut.stl	type 2  
-fix		cad15 all mesh/surface/stress file mesh/separators.stl	type 2  
-fix		cad16 all mesh/surface/stress file mesh/separatorsWalls.stl	type 2  
-fix		cad17 all mesh/surface/stress file mesh/sidesChute.stl	type 2  
-fix		cad18 all mesh/surface/stress file mesh/sideSmallChute.stl	type 2  
-fix		cad19 all mesh/surface/stress file mesh/topChute.stl	type 2  
-fix		inface1 all mesh/surface/planar file mesh/inlet1.stl          type     2  
-fix		inface2 all mesh/surface/planar file mesh/inlet2.stl          type     2  
-fix		massFace all mesh/surface/planar file mesh/massFlowFace.stl	type     2 # Face to output mass
-fix		meshwalls all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} mesh n_meshes 19 meshes cad1 cad2 &
-cad3 cad4 cad5 cad6 cad7 cad8 cad9 cad10 cad11 cad12 cad13 cad14 cad15 cad16 cad17 cad18 cad19
+"fix		gravi all gravity 9.81 vector 0.0 0.0 -1.0 " &
+"fix		cad1 all mesh/surface/stress file mesh/beamsTop.stl	type 2 " & 
+"fix		cad2 all mesh/surface/stress file mesh/brickConv1.stl	type 2  heal auto_remove_duplicates " &
+"fix		cad3 all mesh/surface/stress file mesh/brickConv2.stl	type 2  heal auto_remove_duplicates " &
+"fix		cad4 all mesh/surface/stress file mesh/bricTop1.stl	type 2  " &
+"fix		cad5 all mesh/surface/stress file mesh/bricTop2.stl	type 2  " &
+"fix		cad6 all mesh/surface/stress file mesh/bricTop3.stl	type 2  " &
+"fix		cad7 all mesh/surface/stress file mesh/convChute1.stl	type 2  " &
+"fix		cad8 all mesh/surface/stress file mesh/convChute2.stl	type 2  " &
+"fix		cad9 all mesh/surface/stress file mesh/brickInt1.stl	type 2  " &
+"fix		cad10 all mesh/surface/stress file mesh/brickInt2.stl	type 2  " &
+"fix		cad11 all mesh/surface/stress file mesh/brickInt3.stl	type 2  " &
+"fix		cad12 all mesh/surface/stress file mesh/deflectorInternal.stl	type 2  " &
+"fix		cad13 all mesh/surface/stress file mesh/internals_noPipe.stl	type 2  " &
+"fix		cad14 all mesh/surface/stress file mesh/pipeCut.stl	type 2  " &
+"fix		cad15 all mesh/surface/stress file mesh/separators.stl	type 2  " &
+"fix		cad16 all mesh/surface/stress file mesh/separatorsWalls.stl	type 2  " &
+"fix		cad17 all mesh/surface/stress file mesh/sidesChute.stl	type 2  " &
+"fix		cad18 all mesh/surface/stress file mesh/sideSmallChute.stl	type 2  " &
+"fix		cad19 all mesh/surface/stress file mesh/topChute.stl	type 2  " &
+"fix		inface1 all mesh/surface/planar file mesh/inlet1.stl          type     2  " &
+"fix		inface2 all mesh/surface/planar file mesh/inlet2.stl          type     2  " &
+"fix		massFace all mesh/surface/planar file mesh/massFlowFace.stl	type     2 " & 
+"fix		meshwalls all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} mesh n_meshes 19 meshes cad1 cad2 &
+cad3 cad4 cad5 cad6 cad7 cad8 cad9 cad10 cad11 cad12 cad13 cad14 cad15 cad16 cad17 cad18 cad19" &
+"fix     lb all balance 0 xyz 10 1.05"
 
 #insertion 
 #*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=
@@ -197,7 +222,10 @@ fix		ins2 all insert/stream seed 5330 distributiontemplate pdd &
 #*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=	
 
 #apply nve integration
-fix		integr all nve/sphere
+if "${OMPON} == 1" then                            &
+  "fix		integr all nve/sphere/omp"  &
+else &
+  "fix		integr all nve/sphere" 
 
 #Calculate mass flow
 fix 		mass all massflow/mesh mesh massFace count once vec_side 0. 0. -1.0 # Fix to calculate mass flow
@@ -211,8 +239,7 @@ thermo_modify	lost ignore norm no
 compute_modify	thermo_temp dynamic yes
 
 #write restart files
-restart		${saveRestSteps} restart_main/sinterChuteRun*.restart
-
+restart		${saveRestSteps} restart_main/sinterChuteRun_${OMPON}*.restart
 run		1
 #dump		dmp all custom ${saveIntSteps} post_main/dump*.sinterChute id type x y z vx vy vz fx fy fz omegax omegay omegaz radius 
 dump 		dmp all custom/vtk ${saveIntSteps} post_main/sinterChute*.vtu id type x y z vx vy vz fx fy fz omegax omegay omegaz radius 
