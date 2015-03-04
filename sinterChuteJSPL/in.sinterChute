@@ -21,6 +21,7 @@ variable	saveRestSteps	equal ${saveRestart}/${dt}
 
 shell   	mkdir restart_main
 shell   	mkdir post_main
+shell		mkdir postMass
 variable    	volFrac equal 0.01 # 0.60
 
 atom_style	granular
@@ -36,7 +37,7 @@ processors      ${XPROCS} ${YPROCS} ${ZPROCS}
 
 units		si
 
-region		reg block -23.6 -17.1 -5.3 2.9 4.8 12.7 units box
+region		reg block -23.6 -17.1 -5.3 2.9 4.6 12.7 units box
 create_box	2 reg
 #read_restart	restart_init/sinterChuteInit*.restart
 
@@ -148,7 +149,7 @@ fix		cad19 all mesh/surface/stress file mesh/topChute.stl	type 2
 fix		inface1 all mesh/surface/planar file mesh/inlet1.stl          type     2  
 fix		inface2 all mesh/surface/planar file mesh/inlet2.stl          type     2  
 
-#massFlowFace.stl
+fix		massFace all mesh/surface/planar file mesh/massFlowFace.stl	type     2 # Face to output mass
 
 #region		outsideinsmesh mesh/tet  file mesh/mesh_fill.vtk          scale 0.001 move 0.0 0.0 0.0 rotate 0.0 0.0 0.0 units box side out
 
@@ -201,6 +202,9 @@ fix		ins2 all insert/stream seed 5330 distributiontemplate pdd &
 #apply nve integration
 fix		integr all nve/sphere
 
+#Calculate mass flow
+fix 		mass all massflow/mesh mesh massFace count once vec_side 0. 0. -1.0 # Fix to calculate mass flow
+
 #output settings, include total thermal energy
 compute		1 all erotate/sphere
 fix		2 all check/timestep/gran ${saveIntSteps} 0.15 0.15
@@ -214,9 +218,25 @@ restart		${saveRestSteps} restart_main/sinterChuteRun*.restart
 
 run		1
 dump		dmp all custom ${saveIntSteps} post_main/dump*.sinterChute id type x y z vx vy vz fx fy fz omegax omegay omegaz radius 
-dump		dmp2 all custom ${saveIntSteps} post_main/dump*.evalout id type x y z vx vy vz radius 
+#dump		dmp2 all custom ${saveIntSteps} post_main/dump*.evalout id type x y z vx vy vz radius # I think you could comment this dump?! I don't think you need it.
 dump 		dumpstress all mesh/gran/VTK ${saveIntSteps} post_main/dump*.vtk stress cad1 cad2 &
 cad3 cad4 cad5 cad6 cad7 cad8 cad9 cad10 cad11 cad12 cad13 cad14 cad15 cad16 cad17 cad18 cad19
+
+####### Output Mass #########
+variable outMass	equal f_mass[1]
+variable outParticle	equal f_mass[2]
+variable outMassRate	equal f_mass[3]
+variable outPartRate	equal f_mass[4]
+variable outDelMass	equal f_mass[5]
+variable outDelPart	equal f_mass[6]
+variable simulatedTime	equal ${dt}*step		
+
+variable dumpMassRate equal 0.01/${dt} # Set mass flow output interval!
+ 
+fix 	 dumpMass all print ${dumpMassRate} "${simulatedTime} ${outMass} ${outParticle} ${outMassRate} ${outPartRate} ${outDelMass} ${outDelPart}" &
+screen no title "Time Mass Particle MassRate PartRate delMass delPart" file postMass/massFlow.txt
+#############################
+
 #region		dmp2reg block -0.55 0.55  0.6 5.5  -3.6 -3.4 units box
 #dump_modify	dmp2 region dmp2reg
 #dump 		dumpstress all mesh_run/gran/VTK 2000 post/dump*.vtk stress wear cad
