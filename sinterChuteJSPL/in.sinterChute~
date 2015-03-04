@@ -41,7 +41,7 @@ communicate	single vel yes
 processors      ${XPROCS} ${YPROCS} ${ZPROCS}
 #loadbalance	nlocal/simple ntry 10
 # load balancing
-fix     lb all balance 0 xyz 10 1.05
+
 
 units		si
 
@@ -187,7 +187,8 @@ else &
 "fix		inface2 all mesh/surface/planar file mesh/inlet2.stl          type     2  " &
 "fix		massFace all mesh/surface/planar file mesh/massFlowFace.stl	type     2 " & 
 "fix		meshwalls all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} mesh n_meshes 19 meshes cad1 cad2 &
-cad3 cad4 cad5 cad6 cad7 cad8 cad9 cad10 cad11 cad12 cad13 cad14 cad15 cad16 cad17 cad18 cad19"
+cad3 cad4 cad5 cad6 cad7 cad8 cad9 cad10 cad11 cad12 cad13 cad14 cad15 cad16 cad17 cad18 cad19" &
+"fix     lb all balance 0 xyz 10 1.05"
 
 #insertion 
 #*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=
