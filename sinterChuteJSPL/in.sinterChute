@@ -1,10 +1,8 @@
-#SVAI Schachtkuehler
-#Christoph Kloss, May 2011
+#Sinter Chute
+#Nasato, Benvenuti, Kloss, March 2015
 
 echo		both
 variable    	rolfrtyp string	epsd2
-#shell 		mkdir restart_init
-#shell   	mkdir post_init
 
 #### USER input variables
 variable	runTime 	equal 20	# Total simulation time in (s)
@@ -24,6 +22,14 @@ shell   	mkdir post_main
 shell		mkdir postMass
 variable    	volFrac equal 0.01 # 0.60
 
+# ompOn check
+if "${OMPON} == 1" then                            &
+  "package omp ${NTHREADS} force/neigh thread-binding verbose"  &
+  "modify_timing on"      & 
+  "print 'OMP is ON'"                         &
+else &
+  "print 'OMP is OFF - old version'" 
+
 atom_style	granular
 atom_modify	map array
 boundary	f f f
@@ -34,6 +40,8 @@ communicate	single vel yes
 #parallelization
 processors      ${XPROCS} ${YPROCS} ${ZPROCS}
 #loadbalance	nlocal/simple ntry 10
+# load balancing
+fix     lb all balance 0 xyz 10 1.05
 
 units		si
 
@@ -117,19 +125,25 @@ fix 	pdd all particledistribution/discrete 524287 7 &
 
 
 #New pair style
-pair_style 	gran model hertz tangential history rolling_friction ${rolfrtyp}  #Hertzian without cohesion
+# pair style # ompOn check
+if "${OMPON} == 1" then                            &
+  "pair_style 	gran/omp model hertz tangential history rolling_friction ${rolfrtyp}"  &
+else &
+  "pair_style 	gran model hertz tangential history rolling_friction ${rolfrtyp}" 
 pair_coeff	* *
 
 #time-step
 timestep	${dt}
 
-fix		gravi all gravity 9.81 vector 0.0 0.0 -1.0
+#meshes & gravity
+if "${OMPON} == 1" then                            &
 
-#meshes
-fix		cad1 all mesh/surface/stress file mesh/beamsTop.stl	type 2  #heal auto_remove_duplicates
-fix		cad2 all mesh/surface/stress file mesh/brickConv1.stl	type 2  heal auto_remove_duplicates
-fix		cad3 all mesh/surface/stress file mesh/brickConv2.stl	type 2  heal auto_remove_duplicates
-fix		cad4 all mesh/surface/stress file mesh/bricTop1.stl	type 2  
+else &
+"fix		gravi all gravity 9.81 vector 0.0 0.0 -1.0
+"fix		cad1 all mesh/surface/stress file mesh/beamsTop.stl	type 2  #heal auto_remove_duplicates
+"fix		cad2 all mesh/surface/stress file mesh/brickConv1.stl	type 2  heal auto_remove_duplicates
+"fix		cad3 all mesh/surface/stress file mesh/brickConv2.stl	type 2  heal auto_remove_duplicates
+"fix		cad4 all mesh/surface/stress file mesh/bricTop1.stl	type 2  
 fix		cad5 all mesh/surface/stress file mesh/bricTop2.stl	type 2  
 fix		cad6 all mesh/surface/stress file mesh/bricTop3.stl	type 2  
 fix		cad7 all mesh/surface/stress file mesh/convChute1.stl	type 2  
@@ -145,28 +159,11 @@ fix		cad16 all mesh/surface/stress file mesh/separatorsWalls.stl	type 2
 fix		cad17 all mesh/surface/stress file mesh/sidesChute.stl	type 2  
 fix		cad18 all mesh/surface/stress file mesh/sideSmallChute.stl	type 2  
 fix		cad19 all mesh/surface/stress file mesh/topChute.stl	type 2  
-
 fix		inface1 all mesh/surface/planar file mesh/inlet1.stl          type     2  
 fix		inface2 all mesh/surface/planar file mesh/inlet2.stl          type     2  
-
 fix		massFace all mesh/surface/planar file mesh/massFlowFace.stl	type     2 # Face to output mass
-
-#region		outsideinsmesh mesh/tet  file mesh/mesh_fill.vtk          scale 0.001 move 0.0 0.0 0.0 rotate 0.0 0.0 0.0 units box side out
-
-#wall/gran model hertz tangential history rolling_friction ${rolfrtyp} mesh n_meshes 1 meshes
-#fix		meshwalls all wall/gran/hooke 3 0 mesh/gran 1 cad
 fix		meshwalls all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} mesh n_meshes 19 meshes cad1 cad2 &
 cad3 cad4 cad5 cad6 cad7 cad8 cad9 cad10 cad11 cad12 cad13 cad14 cad15 cad16 cad17 cad18 cad19
-
-
-#fix		xwalls all wall/gran/hooke 3 0 xplane -1.1 1.1  2
-#fix		ywalls all wall/gran/hooke 3 0 yplane -1.0 6.0  2
-#fix		zwalls all wall/gran/hooke 3 0 zplane -4.8 NULL 2
-#fix		xwalls1 all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} primitive type 2 xplane -1.1 
-#fix		xwalls2 all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} primitive type 2 xplane  1.1
-#fix		ywalls1 all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} primitive type 2 yplane -1.0 
-#fix		ywalls2 all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} primitive type 2 yplane  6.0
-#fix		zwalls1 all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} primitive type 2 zplane -4.8 
 
 #insertion 
 #*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=
@@ -217,7 +214,8 @@ compute_modify	thermo_temp dynamic yes
 restart		${saveRestSteps} restart_main/sinterChuteRun*.restart
 
 run		1
-dump		dmp all custom ${saveIntSteps} post_main/dump*.sinterChute id type x y z vx vy vz fx fy fz omegax omegay omegaz radius 
+#dump		dmp all custom ${saveIntSteps} post_main/dump*.sinterChute id type x y z vx vy vz fx fy fz omegax omegay omegaz radius 
+dump 		dmp all custom/vtk ${saveIntSteps} post_main/sinterChute*.vtu id type x y z vx vy vz fx fy fz omegax omegay omegaz radius 
 #dump		dmp2 all custom ${saveIntSteps} post_main/dump*.evalout id type x y z vx vy vz radius # I think you could comment this dump?! I don't think you need it.
 dump 		dumpstress all mesh/gran/VTK ${saveIntSteps} post_main/dump*.vtk stress cad1 cad2 &
 cad3 cad4 cad5 cad6 cad7 cad8 cad9 cad10 cad11 cad12 cad13 cad14 cad15 cad16 cad17 cad18 cad19
@@ -235,23 +233,5 @@ variable dumpMassRate equal 0.01/${dt} # Set mass flow output interval!
  
 fix 	 dumpMass all print ${dumpMassRate} "${simulatedTime} ${outMass} ${outParticle} ${outMassRate} ${outPartRate} ${outDelMass} ${outDelPart}" &
 screen no title "Time Mass Particle MassRate PartRate delMass delPart" file postMass/massFlow.txt
-#############################
 
-#region		dmp2reg block -0.55 0.55  0.6 5.5  -3.6 -3.4 units box
-#dump_modify	dmp2 region dmp2reg
-#dump 		dumpstress all mesh_run/gran/VTK 2000 post/dump*.vtk stress wear cad
-
-#run a few steps just with insertion, no removal to fill the chute
 run		${runTimeSteps}
-
-#removal 
-#*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=		
-#particle removal by deletion
-#*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=
-#region		delreg mesh/tet  file mesh/mesh_fill.vtk          scale 0.001 move 0.0 0.0 0.0 rotate 0.0 0.0 0.0 units box
-#fix		delsinter all corex/materialremove nevery 200 rate ${chargingrate} style delete seed 10007143 region delreg atomtype 1
-#fix		delsinter all evaporate 200 3382 delreg 10007143
-#delete_atoms porosity delreg 0.02 482793 
-
-#run while inserting and removing particles
-#run			200000 every 200 "delete_atoms porosity delreg 0.1 482793" #upto #10000000 upto
