@@ -18,9 +18,9 @@ if [ "$OMPON" = 1 ]; then
     echo "rank 1=$NODE_NAME slot=0:8-15" >> myrankfile
     echo "rank 2=$NODE_NAME slot=1:0-7" >> myrankfile
     echo "rank 3=$NODE_NAME slot=1:8-15" >> myrankfile
-    alias LI="/home/luca/LIGGGHTS/LIGGGHTS-PFM-3.0.7/src-build/liggghts"
+    LI="liggghts_hybrid"
 else
-    alias LI="/home/luca/LIGGGHTS/LIGGGHTS-PFM-3.0.6/src/lmp_ubuntuVTK"
+    LI="liggghts"
     echo old mode on
 fi
 
@@ -51,3 +51,4 @@ VARS="-var iden $fileID -var NTHREADS $NTHREADS -var XPROCS $XPROCS -var YPROCS 
 perf stat -o stats/resultsLoop$fileID.txt mpirun $MPI_OPTIONS $LI -in in.sinterChute $VARS
 
 ####mpirun -np 8 liggghts -in in.sinterChute -var NTHREADS 1 -var XPROCS 2 -var YPROCS 2 -var ZPROCS 2 -var DCYLDP 5 -var OMPON 0
+
