@@ -241,6 +241,11 @@ thermo		${saveIntSteps}
 thermo_modify	lost ignore norm no
 compute_modify	thermo_temp dynamic yes
 
+if "${OMPON} == 1" then                            &
+  "partitioner_style zoltan RCB_REUSE 1 OBJ_WEIGHT_DIM 1"  &
+else &
+  "print 'OMP is OFF - old version - bis'"  
+
 #write restart files
 restart		${saveRestSteps} restart_main/sinterChuteRun_${OMPON}*.restart
 run		1
