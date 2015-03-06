@@ -353,7 +353,7 @@ if (NNFlag)
 %     dataNN2.shearperc = [0.4:0.2:1.0];
     
 if (polidispersity_flag)
-         [NNSave2, errorNN2, x2, zz2, errorEstSum2, errorEstIndex2, errorEstSumMaxIndex2, yy2, corrMat2] =   myNeuNetFun(nSimCases,dataAOR,trainFcn,hiddenLayerSizeVector, angleLi, angleMa);
+         [NNSave2, errorNN2, x2, zz2, errorEstSum2, errorEstIndex2, errorEstSumMaxIndex2, yy2, corrMat2] =   myNeuNetFunPolidispersity(nSimCases,dataAOR,trainFcn,hiddenLayerSizeVector, angleLi, angleMa);
 %         avgMuR2Pos = 9;
 %         avgMuR1Pos = 10;
 %         densityBulkBoxMeanPos = 11;
@@ -460,6 +460,9 @@ end
 save(['AOR',searchName{end}, '.mat'], 'dataAOR');
 %save(['AOR', ], dataAOR);%,'name','off', 'fanspeed', 'indata', 'meanoff', '-mat'); % 
     
-    
+else
+    for ii=1:nSimCases
+        dataAOR(ii).deltaRatioAORLi = 0;
+    end
 end
 

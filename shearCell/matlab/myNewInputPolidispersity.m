@@ -27,8 +27,10 @@ function newInput = myNewInputPolidispersity(NNSave, errorEstSumMaxIndex, dataNN
         lengthRadsigma = length(radsigma);
     end
     
-    
-    
+    if isfield (dataNN, 'radsigma')
+        dens = dataNN.dens;
+        lengthDens = length(dens);
+    end
 
     
     if (isfield (dataNN, 'dens') & isfield (dataNN, 'radsigma') & isfield (dataNN, 'ctrlStress')) 
@@ -36,10 +38,13 @@ function newInput = myNewInputPolidispersity(NNSave, errorEstSumMaxIndex, dataNN
         lengthDens = length(dens);
         totalLength = lengthRest*lengthSf*lengthRf*lengthRadmu*lengthDCylDp*lengthCtrlStress*lengthRadsigma*lengthDens;
         newInput=ones(totalLength,8);
-    elseif isfield (dataNN, 'radsigma')
+    elseif (isfield (dataNN, 'radsigma') & isfield (dataNN, 'ctrlStress') & ~(isfield (dataNN, 'dens')))
          totalLength = lengthRest*lengthSf*lengthRf*lengthRadmu*lengthDCylDp*lengthCtrlStress*lengthRadsigma;
          newInput=ones(totalLength,7);
-    elseif isfield (dataNN, 'ctrlStress')
+    elseif (isfield (dataNN, 'radsigma') & isfield (dataNN, 'dens') & ~(isfield (dataNN, 'ctrlStress')))  %AOR
+         totalLength = lengthRest*lengthSf*lengthRf*lengthRadmu*lengthDCylDp*lengthDens*lengthRadsigma;
+         newInput=ones(totalLength,7);
+    elseif (isfield (dataNN, 'ctrlStress') & ~(isfield (dataNN, 'radsigma')) & ~(isfield (dataNN, 'dens')))
          totalLength = lengthRest*lengthSf*lengthRf*lengthRadmu*lengthDCylDp*lengthCtrlStress;
          newInput=ones(totalLength,6);
     elseif (isfield (dataNN, 'dens') & ~(isfield (dataNN, 'ctrlStress')) & ~(isfield (dataNN, 'radsigma')))
@@ -171,21 +176,41 @@ if isfield (dataNN, 'ctrlStress')
         
       end
     
-elseif (isfield (dataNN, 'dens') & ~(isfield (dataNN, 'ctrlStress')) & ~(isfield (dataNN, 'radsigma')))
+elseif isfield (dataNN, 'dens')
      
-    count19=0;
-    count20=1;
+   
+        count19=0;
+        count20=1;
 
-    for i=1:(length1/lengthSf/lengthRf/lengthRadmu/lengthDCylDp)
-        newInput(1+count19:count19+lengthRest*lengthSf*lengthRf*lengthRadmu*lengthDCylDp,6)=dens(count20);
-        count20=count20+1;
-        if count20==(lengthDens+1)
-            count20=1;
+        for i=1:(length1/lengthSf/lengthRf/lengthRadmu/lengthDCylDp)
+            newInput(1+count19:count19+lengthRest*lengthSf*lengthRf*lengthRadmu*lengthDCylDp,6)=dens(count20);
+            count20=count20+1;
+            if count20==(lengthDens+1)
+                count20=1;
+            end
+
+            count19 = count19 + lengthRest*lengthSf*lengthRf*lengthRadmu*lengthDCylDp;
+
         end
+%     if (~(isfield (dataNN, 'ctrlStress')) & ~(isfield (dataNN, 'radsigma')))
+%     else
+      if (isfield (dataNN, 'radsigma') & ~(isfield (dataNN, 'ctrlStress')))  %AOR
+                count21=0;
+        count22=1;
 
-        count19 = count19 + lengthRest*lengthSf*lengthRf*lengthRadmu*lengthDCylDp;
+        for i=1:(length1/lengthSf/lengthRf/lengthRadmu/lengthDCylDp/lengthDens)
+            newInput(1+count21:count21+lengthRest*lengthSf*lengthRf*lengthRadmu*lengthDCylDp*lengthDens,7)=radsigma(count22);
+            count22=count22+1;
+            if count22==(lengthRadsigma+1)
+                count22=1;
+            end
 
+            count21 = count21 + lengthRest*lengthSf*lengthRf*lengthRadmu*lengthDCylDp*lengthDens;
+
+
+        end
     end
+%
 
 end
 

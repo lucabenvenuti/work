@@ -44,6 +44,10 @@ for iijj=1:nSimCases2
         else
             aa=5;
             inputNN(iijj,aa+1)=data2(iijj).dens;
+            if isfield (data2(iijj), 'radsigma')
+                inputNN(iijj,aa+2)=data2(iijj).radsigma;
+            end
+            
         end
     end
     

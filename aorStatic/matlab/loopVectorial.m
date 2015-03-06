@@ -38,7 +38,7 @@
 %     c2 = datestr(clock)   
     
     
-    tic
+  
    temp_v = newY2( (newY2rows+2), : );
    temp_i = find (temp_v < 0.05);
    ni = size(temp_i,2) 
@@ -47,4 +47,4 @@
    gloriaAugustaAorNNLi( kkk:(kkk+ni-1), 2:(newY2rows+3) ) = newY2( :, temp_i )';
    gloriaAugustaAorNNLi( kkk:(kkk+ni-1), newY2rows+4) = 1;
    kkk = kkk + ni
-   toc
+   
