@@ -8,12 +8,12 @@ function [ gloriaAugustaSchulzeNNDens, a2 ] = radarPrintVectorialPolidispersityF
      fricTolerance = 0.05;
 % %    %  dataNN2.dCylDp= 20;
     
-     c2 = datestr(clock)   
+%      c2 = datestr(clock)   
    %  tic
      newY2 = myNewInputPolidispersity(NNSave2, errorEstSumMaxIndex2, dataNN2);        
     [nY2rows,nY2column] = size(newY2);
  %   toc
-  c11 = datestr(clock)   
+%   c11 = datestr(clock)   
             jjj=1;
             kkk=1;
             ii=1;
@@ -45,7 +45,7 @@ function [ gloriaAugustaSchulzeNNDens, a2 ] = radarPrintVectorialPolidispersityF
 
      
      
-     c1 = datestr(clock)     
+%      c1 = datestr(clock)     
                                          newY2(nY2rows+1,:) = newY2(avgMuR2Pos,:)/coeffShear100; 
                                     newY2(nY2rows+2,:) =  newY2(avgMuR1Pos,:)/expOut.coeffPreShear100 ;  
                                     newY2(nY2rows+3,:) = expOut.tauAbPr100; %expInp.tauAb100; 
@@ -71,7 +71,7 @@ function [ gloriaAugustaSchulzeNNDens, a2 ] = radarPrintVectorialPolidispersityF
           ii=1;
           kkk=1;
           ni=1;
-          c8 = datestr(clock) 
+%           c8 = datestr(clock) 
           temp_vi = newY2( (nY2rowsBis+1), : );
           temp_i = find (temp_vi < fricTolerance);
           temp_vj = newY2( (nY2rowsBis+2), : );
@@ -105,9 +105,11 @@ function [ gloriaAugustaSchulzeNNDens, a2 ] = radarPrintVectorialPolidispersityF
           gloriaAugustaSchulzeNNDens( kkk:ni, nY2rowsTris+2) =1;
 %           size(gloriaAugustaSchulzeNNDens)
           kkk = kkk + ni
-          c9 = datestr(clock) 
+%           c9 = datestr(clock) 
     
-c4 = datestr(clock)           
+% c4 = datestr(clock)           
+
+if (ni>0)
     
 clearvars gloriaAugustaSchulzeNN X Y Z S C G
     gloriaAugustaSchulzeNN = gloriaAugustaSchulzeNNDens';%(1:size(gloriaAugustaSchulzeNNDens,1)-1, :)';
@@ -172,10 +174,11 @@ clearvars gloriaAugustaSchulzeNN X Y Z S C G
      figure(numFig)
      a2 = radarPlot(G)
      legend('minInput','min', '\mu - \sigma', '\mu', '\mu + \sigma', 'max', 'maxInput'); %, 'FontSize',24)
-     title (['SRSCT: normal stress = ', num2str(dataNN2.ctrlStress), ' [Pa], coeff. P. = ', num2str(coeffPirker)] ,'FontSize',24);
+     title ([exp_file_name, 'SRSCT: normal stress = ', num2str(dataNN2.ctrlStress), ' [Pa], coeff. P. = ', num2str(coeffPirker)] ,'FontSize',24);
      %title (['AOR, coeff. P. = ', num2str(coeffPirker)] ,'FontSize',24);
 %      set(gca,'fontname','times new roman','FontSize',24)  % Set it to times
 %      gca
-
+else a2=0;
+end
 end
 

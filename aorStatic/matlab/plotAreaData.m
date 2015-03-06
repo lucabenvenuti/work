@@ -7,7 +7,7 @@ unitSysDefault = 'si';  % 'si' or 'cgs'
 
 % select files that should be postprocessed
 %sim_dir = '../results/01/sim001_sinterfine_reducedPolydispersity'; % directory, where simulation files can be found
-sim_dir = '/mnt/scratchPFMDaten/Luca/CokeCoarseResultsAor';
+sim_dir = '/mnt/scratchPFMDaten/Luca/testPolidispersityAorCokeCoarseCokeFineSinterFine';
 filepattern = 'area_*.txt'; % e.g. 'force.*.txt' %Andi
 filepatterncsv = 'sim_parAOR_fid*.csv'; % e.g. 'force.*.txt' %Andi
 filepatternangle = 'angle_*'; % e.g. 'force.*.txt' %Andi
@@ -39,6 +39,7 @@ end
            
 %doNN
 NNFlag = false;
+polidispersity_flag = true; % 
 hiddenLayerSizeVector = 5:40;           
            
 % save images
@@ -351,14 +352,14 @@ if (NNFlag)
 %     dataNN2.ctrlStress = 1068;% [1068,2069,10070];
 %     dataNN2.shearperc = [0.4:0.2:1.0];
     
-    if (exist('densityBulkBoxMean'))
-        %targetNN(iijj,3)=densityBulkBoxMean(iijj);
-        [NNSave2, errorNN2, x2, zz2, errorEstSum2, errorEstIndex2, errorEstSumMaxIndex2, yy2, corrMat2] =   myNeuNetFun(nSimCases,dataAOR,trainFcn,hiddenLayerSizeVector, avgMuR2,avgMuR1, densityBulkBoxMean);
-    else
+if (polidispersity_flag)
+         [NNSave2, errorNN2, x2, zz2, errorEstSum2, errorEstIndex2, errorEstSumMaxIndex2, yy2, corrMat2] =   myNeuNetFun(nSimCases,dataAOR,trainFcn,hiddenLayerSizeVector, angleLi, angleMa);
+%         avgMuR2Pos = 9;
+%         avgMuR1Pos = 10;
+%         densityBulkBoxMeanPos = 11;
+ else
         [NNSave2, errorNN2, x2, zz2, errorEstSum2, errorEstIndex2, errorEstSumMaxIndex2, yy2, corrMat2] =   myNeuNetFun(nSimCases,dataAOR,trainFcn,hiddenLayerSizeVector, angleLi, angleMa);
-        %                                                                                                   myNeuNetFun(nSimCases2,data2,trainFcn2,hiddenLayerSizeVector2, target1, target2, target3)
-    end
-    
+end
     %myNeuNetFun(nSimCases,data
 %         net=NNSave2{errorEstSumMaxIndex2(1),1}.net;
 %         yy3=net(x2);

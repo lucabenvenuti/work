@@ -5,7 +5,7 @@ function [coeffShear40, coeffShear60, coeffShear80, coeffShear100, expFtd, expIn
 %%experimental import
 exp_flag = true;
 %exp_dir = '.'; % directory, where the files can be found
-exp_dir = '/mnt/DATA/Cloud/Dropbox/Materials2Simulation2Application/BS/Luca_final/';
+exp_dir = '/mnt/benvenutiPFMDaten/Materials2Simulation2Application_RnR/BS/Luca_final/';
 % exp_file_name = '20131128_1612_sinterfine315-10_test01';
 legendExpFlag = 'schulze'; % choose between jenike & schulze
 imageFlag = false;

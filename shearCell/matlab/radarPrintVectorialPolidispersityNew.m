@@ -20,34 +20,34 @@
 % % % %        % densTolerance =1.4; 
 % % % % end   
 % % %     
-load testPolidispersityCokeCoarseCokeFineSinterFineLimestoneFine.mat
-load testInputNNpolidispersity.mat
+load /mnt/scratchPFMDaten/Luca/testPolidispersityShearCellCokeCoarseCokeFineSinterFineLimestoneFineMatlab/testPolidispersityCokeCoarseCokeFineSinterFineLimestoneFineNew.mat
+load /mnt/scratchPFMDaten/Luca/testPolidispersityShearCellCokeCoarseCokeFineSinterFineLimestoneFineMatlab/testInputNNpolidispersity.mat
 
 dataNN2.ctrlStress = 1056; %1068;% [1068,2069,10070];
 dataNN2.radmu = 0.00184;
 dataNN2.radsigma = 0.00192;
-exp_file_name = '20131129_1000_limestone315-10_test02';
+exp_file_name = '20131128_1612_sinterfine315-10_test01';
 
 [ gloriaAugustaSchulzeNNDens01, gca01 ] = radarPrintVectorialPolidispersityFun(densityBulkBoxMean, NNSave2, errorEstSumMaxIndex2, avgMuR2Pos, avgMuR1Pos,densityBulkBoxMeanPos, dataNN2, exp_file_name, 1);
 
 dataNN2.ctrlStress = 2057; %1068;% [1068,2069,10070];
 dataNN2.radmu = 0.00184;
 dataNN2.radsigma = 0.00192;
-exp_file_name = '20131129_1000_limestone315-10_test02';
+exp_file_name = '20131128_1712_sinterfine315-10_test02';
 
 [ gloriaAugustaSchulzeNNDens02, gca02 ] = radarPrintVectorialPolidispersityFun(densityBulkBoxMean, NNSave2, errorEstSumMaxIndex2, avgMuR2Pos, avgMuR1Pos,densityBulkBoxMeanPos, dataNN2, exp_file_name, 2);
 
 dataNN2.ctrlStress = 5059; %1068;% [1068,2069,10070];
 dataNN2.radmu = 0.00184;
 dataNN2.radsigma = 0.00192;
-exp_file_name = '20131129_1000_limestone315-10_test02';
+exp_file_name = '20131128_1742_sinterfine315-10_test03';
 
 [ gloriaAugustaSchulzeNNDens03, gca03 ] = radarPrintVectorialPolidispersityFun(densityBulkBoxMean, NNSave2, errorEstSumMaxIndex2, avgMuR2Pos, avgMuR1Pos,densityBulkBoxMeanPos, dataNN2, exp_file_name,  3);
 
 dataNN2.ctrlStress = 2050; %1068;% [1068,2069,10070];
 dataNN2.radmu = 0.00155;
 dataNN2.radsigma = 0.00147;
-exp_file_name = '20131129_1000_limestone315-10_test02';
+exp_file_name = '20131129_0921_limestone315-10_test01';
 
 [ gloriaAugustaSchulzeNNDens04, gca04 ] = radarPrintVectorialPolidispersityFun(densityBulkBoxMean, NNSave2, errorEstSumMaxIndex2, avgMuR2Pos, avgMuR1Pos,densityBulkBoxMeanPos, dataNN2, exp_file_name,  4);
 

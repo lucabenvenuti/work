@@ -1375,7 +1375,7 @@ if (NNFlag)
         avgMuR1Pos = 10;
         densityBulkBoxMeanPos = 11;
     elseif (exist('densityBulkBoxMean') & polidispersity_flag)
-         [NNSave2, errorNN2, x2, zz2, errorEstSum2, errorEstIndex2, errorEstSumMaxIndex2, yy2, corrMat2] =   myNeuNetFun(nSimCases,data,trainFcn,hiddenLayerSizeVector, avgMuR2,avgMuR1, densityBulkBoxMin);
+         [NNSave2, errorNN2, x2, zz2, errorEstSum2, errorEstIndex2, errorEstSumMaxIndex2, yy2, corrMat2] =   myNeuNetFunPolidispersity(nSimCases,data,trainFcn,hiddenLayerSizeVector, avgMuR2,avgMuR1, densityBulkBoxMin);
         avgMuR2Pos = 9;
         avgMuR1Pos = 10;
         densityBulkBoxMeanPos = 11;
