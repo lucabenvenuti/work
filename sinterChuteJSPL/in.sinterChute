@@ -181,8 +181,7 @@ else &
 "fix		cad18 all mesh/surface/stress file mesh/sideSmallChute.stl	type 2  " &
 "fix		cad19 all mesh/surface/stress file mesh/topChute.stl	type 2  " &
 "fix		meshwalls all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} mesh n_meshes 19 meshes cad1 cad2 &
-cad3 cad4 cad5 cad6 cad7 cad8 cad9 cad10 cad11 cad12 cad13 cad14 cad15 cad16 cad17 cad18 cad19" &
-"fix     lb all balance 0 xyz 10 1.05"
+cad3 cad4 cad5 cad6 cad7 cad8 cad9 cad10 cad11 cad12 cad13 cad14 cad15 cad16 cad17 cad18 cad19" 
 
 fix		inface1 all mesh/surface/planar file mesh/inlet1.stl          type     2
 fix		inface2 all mesh/surface/planar file mesh/inlet2.stl          type     2
@@ -198,7 +197,7 @@ fix		massFace all mesh/surface/planar file mesh/massFlowFace.stl	type     2
 variable	speedup_ratio equal 1.
 
 #total charging rate - should be equal to total removal rate in kg/s
-#350 tons/h
+#350 tons/h = 97.22 kg/s
 variable 	chargingrate equal 97.22*${speedup_ratio}
 print 		"The total simulation charging/removal rate is now ${chargingrate}"
 
@@ -215,6 +214,12 @@ fix		ins1 all insert/stream seed 5330 distributiontemplate pdd &
 fix		ins2 all insert/stream seed 5330 distributiontemplate pdd &
 		mass 1000000 massrate ${chargingrate} overlapcheck yes all_in yes &
 		vel constant 1.0 0.0 ${vz0} extrude_length 0.8 insertion_face inface2
+# ompOn check
+if "${OMPON} == 1" then                            &
+  "print 'OMP is ON'"                         &
+else &
+  "print 'OMP is OFF - old version'" &
+"fix     lb all balance 0 xyz 10 1.05"
 
 
 #*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=	

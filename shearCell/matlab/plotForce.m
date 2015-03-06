@@ -26,7 +26,7 @@ unitSysDefault = 'si';  % 'si' or 'cgs'
 % select files that should be postprocessed
 %sim_dir = '../results/10/sim141_cokeFine_reducedPolydispersity_gollum32'; % directory, where simulation files can be found
 %sim_dir = 'R:\simulations\shearCell\10\sim122_sinterfine_reducedPolydispersity_mach32';
-sim_dir = '/mnt/scratchPFMDaten/Luca/testPolidispersity';
+sim_dir = '/mnt/scratchPFMDaten/Luca/testPolidispersityCokeCoarseCokeFineSinterFineLimestoneFine';
 filepattern = 'force.cad*_fid*.txt'; % e.g. 'force.*.txt' %Andi
 filepatterncsv = 'sim_par*_fid*.csv'; % e.g. 'force.*.txt' %Andi
 
