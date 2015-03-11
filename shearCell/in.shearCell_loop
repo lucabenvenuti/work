@@ -1,11 +1,11 @@
 #########################################################################################
 # title: in.shearCell_loop                                                              #
-# version: 3.17                                                                         #
+# version: 4.01                                                                         #
 # additional files: folder mesh,                                                        #
 #                   folder matlab,                                                      #
 #                   postprocessing-script plotForce_v3_16.m                             #
-# date: Apr. 2014                                                                       #
-# authors: Benvenuti, L., Queteschiner, D., Aigner, A., Berger R.                       #
+# date: Mar. 2015                                                                       #
+# authors: Benvenuti, L., Queteschiner, D., Aigner, A., Berger R., Nasato, D.           #
 # e-mail: luca.benvenuti@jku.at                                                         #
 # short description: liggghts-input file for computing the shear force of a simple      #
 # shear tester while varying the coefficient of friction.                               #
@@ -155,7 +155,6 @@ variable    nStepsRun4      equal   ${nStepsRun}*2
 variable    totaltime	    equal   ${dt}*${nStepsRun}*2
 variable    zoltanSteps	    equal   round(${nStepsRun}/10.0)
 
-#### Added by Nasato D. in March 2015 #####
 variable 	sDump 			equal	round(1e-2/${dt}) # Interval to check force
 variable 	ForceZCad3M 	equal 	-0.99*${ctrlForce} # loop break criteria - force in servo wall reaches 99% of the expected force
 variable 	ForceExpect  	equal	-1.0*${ctrlForce} # Just inverted signal, so print looks nice :D
