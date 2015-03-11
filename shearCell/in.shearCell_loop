@@ -155,6 +155,11 @@ variable    nStepsRun4      equal   ${nStepsRun}*2
 variable    totaltime	    equal   ${dt}*${nStepsRun}*2
 variable    zoltanSteps	    equal   round(${nStepsRun}/10.0)
 
+#### Added by Nasato D. in March 2015 #####
+variable 	sDump 			equal	round(1e-2/${dt}) # Interval to check force
+variable 	ForceZCad3M 	equal 	-0.99*${ctrlForce} # loop break criteria - force in servo wall reaches 99% of the expected force
+variable 	ForceExpect  	equal	-1.0*${ctrlForce} # Just inverted signal, so print looks nice :D
+
 #########################################################################################
 #rolling friction options
 
@@ -330,6 +335,19 @@ fix DumpTextCad3 all print ${nDumpForce} "${ForceXCad3} ${ForceYCad3} ${ForceZCa
 
 #settle particles
 run     ${nStepsSettle}
+
+#### LOOP to guarantee that servo wall force reached the expected value ####
+
+
+run     ${sDump}
+label stable
+  print "-----> Checking ServoForce..."
+  if "${ForceZCad3}>${ForceZCad3M}" then "jump SELF endstable" # Check if force in ServoWall is bigger than criteria then break loop
+  print "-----> Fexpected ${ForceExpect}, Fcurrent ${ForceZCad3}, continuing run"  # If not, continue looping
+  run ${sDump}
+jump SELF stable
+label endstable
+############################################################################
 
 # move 
 fix     move all move/mesh mesh cad2 linear -${velWall} 0. 0.
