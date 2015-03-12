@@ -20,6 +20,12 @@ variable	saveRestSteps	equal ${saveRestart}/${dt}
 shell   	mkdir restart_main
 shell   	mkdir post_main
 shell		mkdir postMass
+shell   	mkdir logs
+
+# writing log file to post folder
+log     logs/log_omp${OMPON}_runTime${runTime}.txt
+
+
 variable    	volFrac equal 0.01 # 0.60
 
 # ompOn check
@@ -268,5 +274,65 @@ variable dumpMassRate equal 0.01/${dt} # Set mass flow output interval!
  
 fix 	 dumpMass all print ${dumpMassRate} "${simulatedTime} ${outMass} ${outParticle} ${outMassRate} ${outPartRate} ${outDelMass} ${outDelPart}" &
 screen no title "Time Mass Particle MassRate PartRate delMass delPart" file postMass/massFlow.txt
+
+
+####### Output size distribution % #########
+region		bottom block -23.6 -17.1 -5.3 2.9 4.6 7.3 units box
+region		central block -23.6 -17.1 -5.3 2.9 7.3 10.0 units box
+region		top block -23.6 -17.1 -5.3 2.9 10.0 12.7 units box
+
+compute atRad all property/atom radius
+
+#variable comp equal "c_atRad >= ${rS6}"
+#print "-----> Fexpected ${comp}"
+
+variable rS0atom atom "c_atRad >= 0.0125"
+variable rS1atom atom "c_atRad >= 0.0150"
+variable rS2atom atom "c_atRad >= 0.0250"
+variable rS3atom atom "c_atRad >= 0.0400"
+variable rS4atom atom "c_atRad >= 0.0625"
+variable rS5atom atom "c_atRad >= 0.1000"
+variable rS6atom atom "c_atRad >= 0.1250"
+
+group rS0group dynamic all var rS0atom every ${dumpMassRate}
+group rS1group dynamic all var rS1atom every ${dumpMassRate}
+group rS2group dynamic all var rS2atom every ${dumpMassRate}
+group rS3group dynamic all var rS3atom every ${dumpMassRate}
+group rS4group dynamic all var rS4atom every ${dumpMassRate}
+group rS5group dynamic all var rS5atom every ${dumpMassRate}
+group rS6group dynamic all var rS6atom every ${dumpMassRate}
+
+variable rS0percBottom   	equal count(rS0group,bottom)
+variable rS1percBottom   	equal count(rS1group,bottom)
+variable rS2percBottom   	equal count(rS2group,bottom)
+variable rS3percBottom   	equal count(rS3group,bottom)
+variable rS4percBottom   	equal count(rS4group,bottom)
+variable rS5percBottom   	equal count(rS5group,bottom)
+variable rS6percBottom   	equal count(rS6group,bottom)
+variable rS0percCentral   	equal count(rS0group,central)
+variable rS1percCentral   	equal count(rS1group,central)
+variable rS2percCentral  	equal count(rS2group,central)
+variable rS3percCentral 	equal count(rS3group,central)
+variable rS4percCentral   	equal count(rS4group,central)
+variable rS5percCentral   	equal count(rS5group,central)
+variable rS6percCentral   	equal count(rS6group,central)
+variable rS0percTop   		equal count(rS0group,top)
+variable rS1percTop   		equal count(rS1group,top)
+variable rS2percTop   		equal count(rS2group,top)
+variable rS3percTop   		equal count(rS3group,top)
+variable rS4percTop   		equal count(rS4group,top)
+variable rS5percTop   		equal count(rS5group,top)
+variable rS6percTop   		equal count(rS6group,top)
+
+variable countRate 		equal ${dumpMassRate}+2
+
+fix 	 dumpRate all print ${countRate} "${rS0percBottom} ${rS1percBottom} ${rS2percBottom} ${rS3percBottom} ${rS4percBottom} ${rS5percBottom} ${rS6percBottom}       &
+					  ${rS0percCentral} ${rS1percCentral} ${rS2percCentral} ${rS3percCentral} ${rS4percCentral} ${rS5percCentral} ${rS6percCentral} &
+					  ${rS0percTop} ${rS1percTop} ${rS2percTop} ${rS3percTop} ${rS4percTop} ${rS5percTop} ${rS6percTop}                       " &
+screen no title 			"rS0percBottom rS1percBottom rS2percBottom rS3percBottom rS4percBottom rS5percBottom rS6percBottom       &
+					 rS0percCentral rS1percCentral rS2percCentral rS3percCentral rS4percCentral rS5percCentral rS6percCentral &
+					 rS0percTop rS1percTop rS2percTop rS3percTop rS4percTop rS5percTop rS6percTop " file postMass/countRate.txt
+
+#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
 
 run		${runTimeSteps}
