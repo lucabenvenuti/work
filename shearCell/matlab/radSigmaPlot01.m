@@ -51,3 +51,22 @@ rhoBstd(i)= std(newY2(11,col(i,:)));
 
 end
 
+avgMuR2mean = avgMuR2mean./max(avgMuR2mean);
+avgMuR1mean = avgMuR1mean./max(avgMuR1mean);
+rhoBmean = rhoBmean./max(rhoBmean);
+
+avgMuR2std = avgMuR2std./max(avgMuR2std);
+avgMuR1std = avgMuR1std./max(avgMuR1std);
+rhoBstd = rhoBstd./max(rhoBstd);
+
+figure(1)
+plot(dataNN2.radsigma',avgMuR2mean,dataNN2.radsigma',avgMuR1mean,dataNN2.radsigma',rhoBmean)
+xlabel('std dev radius [m]');
+% ylabel('zPos [m]');
+legend('avgMuR2mean [-]','avgMuR1mean [-]', 'rhoBmean [-]'); %, 'FontSize',24)
+
+figure(2)
+plot(dataNN2.radsigma',avgMuR2std,dataNN2.radsigma',avgMuR1std,dataNN2.radsigma',rhoBstd)
+xlabel('std dev radius [m]');
+% ylabel('zPos [m]');
+legend('avgMuR2std [-]','avgMuR1std [-]', 'rhoBstd [-]'); %, 'FontSize',24)
