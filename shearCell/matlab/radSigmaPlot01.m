@@ -20,9 +20,10 @@
 load /mnt/scratchPFMDaten/Luca/testPolidispersityShearCellCokeCoarseCokeFineSinterFineLimestoneFineMatlab/testPolidispersityCokeCoarseCokeFineSinterFineLimestoneFineNew.mat
 load /mnt/scratchPFMDaten/Luca/testPolidispersityShearCellCokeCoarseCokeFineSinterFineLimestoneFineMatlab/inputRadSigma.mat
 
-dataNN2.ctrlStress = 1056; %1068;% [1068,2069,10070];
+dataNN2.ctrlStress = 5000; %1068;% [1068,2069,10070];
 dataNN2.radmu = 0.001;
 dataNN2.dens = 2500;
+dataNN2.radsigma = dataNN2.radsigma/10;
 %exp_file_name = '20131128_1612_sinterfine315-10_test01';
 
 newY2 = myNewInputPolidispersity(NNSave2, errorEstSumMaxIndex2, dataNN2);        
@@ -32,10 +33,11 @@ newY2 = myNewInputPolidispersity(NNSave2, errorEstSumMaxIndex2, dataNN2);
     
 lim = max(dataNN2.radsigma);
 x = [dataNN2.radmu-lim:(lim/499.5):dataNN2.radmu+lim];
-norm = normpdf(x,dataNN2.radmu,dataNN2.radsigma(i));
+%norm = normpdf(x,dataNN2.radmu,dataNN2.radsigma(i));
 
 for i=1:length(dataNN2.radsigma)
 norm(i,:) = normpdf(x,dataNN2.radmu,dataNN2.radsigma(i)');
+norm(i,:) = norm(i,:)/max(norm(i,:));
 % figure(i);
 % plot(x,norm(i,:));
 col(i,:)=find(newY2(7,:)==dataNN2.radsigma(i)');
@@ -59,14 +61,35 @@ avgMuR2std = avgMuR2std./max(avgMuR2std);
 avgMuR1std = avgMuR1std./max(avgMuR1std);
 rhoBstd = rhoBstd./max(rhoBstd);
 
-figure(1)
+figure(6)
 plot(dataNN2.radsigma',avgMuR2mean,dataNN2.radsigma',avgMuR1mean,dataNN2.radsigma',rhoBmean)
 xlabel('std dev radius [m]');
 % ylabel('zPos [m]');
 legend('avgMuR2mean [-]','avgMuR1mean [-]', 'rhoBmean [-]'); %, 'FontSize',24)
 
-figure(2)
+figure(7)
 plot(dataNN2.radsigma',avgMuR2std,dataNN2.radsigma',avgMuR1std,dataNN2.radsigma',rhoBstd)
+xlabel('std dev radius [m]');
+% ylabel('zPos [m]');
+legend('avgMuR2std [-]','avgMuR1std [-]', 'rhoBstd [-]'); %, 'FontSize',24)
+
+figure(4)
+plot(x,norm(1,:));
+xlabel('radius [m]');
+
+figure(5)
+plot(x,norm(50,:));
+xlabel('radius [m]');
+
+
+figure(8)
+semilogx(dataNN2.radsigma',avgMuR2mean,dataNN2.radsigma',avgMuR1mean,dataNN2.radsigma',rhoBmean)
+xlabel('std dev radius [m]');
+% ylabel('zPos [m]');
+legend('avgMuR2mean [-]','avgMuR1mean [-]', 'rhoBmean [-]'); %, 'FontSize',24)
+
+figure(9)
+semilogx(dataNN2.radsigma',avgMuR2std,dataNN2.radsigma',avgMuR1std,dataNN2.radsigma',rhoBstd)
 xlabel('std dev radius [m]');
 % ylabel('zPos [m]');
 legend('avgMuR2std [-]','avgMuR1std [-]', 'rhoBstd [-]'); %, 'FontSize',24)

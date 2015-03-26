@@ -25,8 +25,8 @@ unitSysDefault = 'si';  % 'si' or 'cgs'
 
 % select files that should be postprocessed
 %sim_dir = '../results/10/sim141_cokeFine_reducedPolydispersity_gollum32'; % directory, where simulation files can be found
-%sim_dir = 'R:\simulations\shearCell\10\sim122_sinterfine_reducedPolydispersity_mach32';
-sim_dir = '/mnt/scratchPFMDaten/Luca/testPolidispersityCokeCoarseCokeFineSinterFineLimestoneFine';
+sim_dir = 'S:\Luca\testPolidispersityShearCellCokeCoarseCokeFineSinterFineLimestoneFine';
+%sim_dir = '/mnt/scratchPFMDaten/Luca/testPolidispersityShearCellCokeCoarseCokeFineSinterFineLimestoneFine';
 filepattern = 'force.cad*_fid*.txt'; % e.g. 'force.*.txt' %Andi
 filepatterncsv = 'sim_par*_fid*.csv'; % e.g. 'force.*.txt' %Andi
 
@@ -46,6 +46,7 @@ searchCases = {...'fric' 0.6 %[0.4 0.8]
               ... 'dens' 3500 %[2500 3500]
                ...'dt' 1.0e-6
                ...'dCylDp' 20
+               ...'radmu' 0.000551
                };
 
 % define column of forces/position in the data file
