@@ -5,7 +5,7 @@ echo		both
 variable    	rolfrtyp string	epsd2
 
 #### USER input variables
-variable	runTime 	equal 20	# Total simulation time in (s)
+variable	runTime 	equal 200	# Total simulation time in (s)
 variable	saveInterval	equal 0.05 	# Save interval
 variable	saveRestart	equal 0.5
 variable	dt		equal 0.00002 	# Time step
@@ -51,7 +51,7 @@ processors      ${XPROCS} ${YPROCS} ${ZPROCS}
 
 units		si
 
-region		reg block -23.6 -17.1 -5.3 2.9 4.6 12.7 units box
+region		reg block -23.6 -17.1 -5.3 4.12 4.05 12.7 units box
 create_box	2 reg
 #read_restart	restart_init/sinterChuteInit*.restart
 
@@ -163,8 +163,16 @@ if "${OMPON} == 1" then                            &
 "fix		cad17 all mesh/surface/omp file mesh/sidesChute.stl	type 2  " &
 "fix		cad18 all mesh/surface/omp file mesh/sideSmallChute.stl	type 2  " &
 "fix		cad19 all mesh/surface/omp file mesh/topChute.stl	type 2  " &
-"fix		meshwalls all wall/gran/omp model hertz tangential history rolling_friction ${rolfrtyp} mesh n_meshes 19 meshes cad1 cad2 &
-cad3 cad4 cad5 cad6 cad7 cad8 cad9 cad10 cad11 cad12 cad13 cad14 cad15 cad16 cad17 cad18 cad19" &
+"fix		cad20 all mesh/surface/omp file mesh/conveyor.stl	type 2  " &
+"fix		cad21 all mesh/surface/omp file mesh/convSide1.stl	type 2  " &
+"fix		cad22 all mesh/surface/omp file mesh/convSide2.stl	type 2  " &
+"fix		cad23 all mesh/surface/omp file mesh/guideSide1V.stl	type 2  " &
+"fix		cad24 all mesh/surface/omp file mesh/guideSide2V.stl	type 2  " &
+"fix		cad25 all mesh/surface/omp file mesh/scraper.stl	type 2  move 0.0 -2.0 0.0" &
+"fix		cad26 all mesh/surface/omp file mesh/scraper.stl	type 2  move 0.0  3.2 0.0" &
+"fix		cad27 all mesh/surface/omp file mesh/scraper.stl	type 2  move 0.0  0.6 0.0" &
+"fix		meshwalls all wall/gran/omp model hertz tangential history rolling_friction ${rolfrtyp} mesh n_meshes 27 meshes cad1 cad2 &
+cad3 cad4 cad5 cad6 cad7 cad8 cad9 cad10 cad11 cad12 cad13 cad14 cad15 cad16 cad17 cad18 cad19 cad20 cad21 cad22 cad23 cad24 cad25 cad26 cad27" &
 else &
 "fix		gravi all gravity 9.81 vector 0.0 0.0 -1.0 " &
 "fix		cad1 all mesh/surface/stress file mesh/beamsTop.stl	type 2 " & 
@@ -186,8 +194,16 @@ else &
 "fix		cad17 all mesh/surface/stress file mesh/sidesChute.stl	type 2  " &
 "fix		cad18 all mesh/surface/stress file mesh/sideSmallChute.stl	type 2  " &
 "fix		cad19 all mesh/surface/stress file mesh/topChute.stl	type 2  " &
-"fix		meshwalls all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} mesh n_meshes 19 meshes cad1 cad2 &
-cad3 cad4 cad5 cad6 cad7 cad8 cad9 cad10 cad11 cad12 cad13 cad14 cad15 cad16 cad17 cad18 cad19" 
+"fix		cad20 all mesh/surface/stress file mesh/conveyor.stl	type 2  " &
+"fix		cad21 all mesh/surface/stress file mesh/convSide1.stl	type 2  " &
+"fix		cad22 all mesh/surface/stress file mesh/convSide2.stl	type 2  " &
+"fix		cad23 all mesh/surface/stress file mesh/guideSide1V.stl	type 2  " &
+"fix		cad24 all mesh/surface/stress file mesh/guideSide2V.stl	type 2  " &
+"fix		cad25 all mesh/surface/stress file mesh/scraper.stl	type 2  move 0.0 -2.0 0.0" &
+"fix		cad26 all mesh/surface/stress file mesh/scraper.stl	type 2  move 0.0 3.2 0.0" &
+"fix		cad27 all mesh/surface/stress file mesh/scraper.stl	type 2  move 0.0 0.6 0.0" &
+"fix		meshwalls all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} mesh n_meshes 27 meshes cad1 cad2 &
+cad3 cad4 cad5 cad6 cad7 cad8 cad9 cad10 cad11 cad12 cad13 cad14 cad15 cad16 cad17 cad18 cad19 cad20 cad21 cad22 cad23 cad24 cad25 cad26 cad27" 
 
 fix		inface1 all mesh/surface/planar file mesh/inlet1.stl          type     2
 fix		inface2 all mesh/surface/planar file mesh/inlet2.stl          type     2
@@ -221,11 +237,11 @@ fix		ins2 all insert/stream seed 5330 distributiontemplate pdd &
 		mass 1000000 massrate ${chargingrate} overlapcheck yes all_in yes &
 		vel constant 1.0 0.0 ${vz0} extrude_length 0.8 insertion_face inface2
 # ompOn check
-if "${OMPON} == 1" then                            &
-  "print 'OMP is ON'"                         &
-else &
-  "print 'OMP is OFF - old version'" &
-"fix     lb all balance 0 xyz 10 1.05"
+#if "${OMPON} == 1" then                            &
+#  "print 'OMP is ON'"                         &
+#else &
+#  "print 'OMP is OFF - old version'" &
+#"fix     lb all balance 0 xyz 10 1.05"
 
 
 #*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=	
@@ -259,7 +275,7 @@ run		1
 dump 		dmp all custom/vtk ${saveIntSteps} post_main/sinterChute*.vtu id type x y z vx vy vz fx fy fz omegax omegay omegaz radius 
 #dump		dmp2 all custom ${saveIntSteps} post_main/dump*.evalout id type x y z vx vy vz radius # I think you could comment this dump?! I don't think you need it.
 dump 		dumpstress all mesh/gran/VTK ${saveIntSteps} post_main/dump*.vtk stress cad1 cad2 &
-cad3 cad4 cad5 cad6 cad7 cad8 cad9 cad10 cad11 cad12 cad13 cad14 cad15 cad16 cad17 cad18 cad19
+cad3 cad4 cad5 cad6 cad7 cad8 cad9 cad10 cad11 cad12 cad13 cad14 cad15 cad16 cad17 cad18 cad19 cad20 cad21 cad22 cad23 cad24 cad25 cad26 cad27
 
 ####### Output Mass #########
 variable outMass	equal f_mass[1]
