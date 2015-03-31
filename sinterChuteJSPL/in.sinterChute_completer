@@ -5,7 +5,7 @@ echo		both
 variable    	rolfrtyp string	epsd2
 
 #### USER input variables
-variable	runTime 	equal 500	# Total simulation time in (s)
+variable	runTime 	equal 526	# Total simulation time in (s)
 variable	saveInterval	equal 0.02 	# Save interval
 variable	saveRestart	equal 1.0
 variable	dt		equal 0.00002 	# Time step
@@ -21,7 +21,7 @@ variable	saveRestSteps	equal ${saveRestart}/${dt}
 ##################
 
 #shell   	mkdir restart_main
-shell   	mkdir restart_second
+shell   	mkdir restart_completer
 shell   	mkdir post_main
 shell		mkdir postMass
 shell   	mkdir logs
@@ -57,7 +57,7 @@ units		si
 
 #region		reg block -23.6 -17.1 -5.3 2.9 4.6 12.7 units box
 #create_box	2 reg
-read_restart	restart_main/sinterChuteRun_02300000.restart
+read_restart	restart_main/sinterChuteRun_*.restart
 
 neighbor	0.03 bin
 neigh_modify	delay 0 #binsize 0.08
@@ -167,14 +167,14 @@ if "${OMPON} == 1" then                            &
 "fix		cad17 all mesh/surface/omp file mesh/sidesChute.stl	type 2  " &
 "fix		cad18 all mesh/surface/omp file mesh/sideSmallChute.stl	type 2  " &
 "fix		cad19 all mesh/surface/omp file mesh/topChute.stl	type 2  " &
-"fix		cad20 all mesh/surface/omp file mesh/conveyor.stl	type 2  surface_vel 0.0 -0.1 0.0" &
-"fix		cad21 all mesh/surface/omp file mesh/convSide1.stl	type 2  surface_vel 0.0 -0.1 0.0" &
-"fix		cad22 all mesh/surface/omp file mesh/convSide2.stl	type 2  surface_vel 0.0 -0.1 0.0" &
-"fix		cad23 all mesh/surface/omp file mesh/guideSide1V.stl	type 2  surface_vel 0.0 -0.1 0.0" &
-"fix		cad24 all mesh/surface/omp file mesh/guideSide2V.stl	type 2  surface_vel 0.0 -0.1 0.0" &
+"fix		cad20 all mesh/surface/omp file mesh/conveyor.stl	type 2" &
+"fix		cad21 all mesh/surface/omp file mesh/convSide1.stl	type 2" &
+"fix		cad22 all mesh/surface/omp file mesh/convSide2.stl	type 2" &
+"fix		cad23 all mesh/surface/omp file mesh/guideSide1V.stl	type 2" &
+"fix		cad24 all mesh/surface/omp file mesh/guideSide2V.stl	type 2" &
 "fix		cad25 all mesh/surface/omp file mesh/scraper.stl	type 2  move 0.0 -2.0 0.0" &
-"fix		cad26 all mesh/surface/omp file mesh/scraper.stl	type 2  move 0.0  3.2 0.0" &
-"fix		cad27 all mesh/surface/omp file mesh/scraper.stl	type 2  move 0.0  0.6 0.0" &
+"fix		cad26 all mesh/surface/omp file mesh/scraper.stl	type 2  move 0.0 3.2 0.0" &
+"fix		cad27 all mesh/surface/omp file mesh/scraper.stl	type 2  move 0.0 0.6 0.0" &
 "fix		meshwalls all wall/gran/omp model hertz tangential history rolling_friction ${rolfrtyp} mesh n_meshes 27 meshes cad1 cad2 &
 cad3 cad4 cad5 cad6 cad7 cad8 cad9 cad10 cad11 cad12 cad13 cad14 cad15 cad16 cad17 cad18 cad19 cad20 cad21 cad22 cad23 cad24 cad25 cad26 cad27" &
 else &
@@ -198,11 +198,11 @@ else &
 "fix		cad17 all mesh/surface/stress file mesh/sidesChute.stl	type 2  " &
 "fix		cad18 all mesh/surface/stress file mesh/sideSmallChute.stl	type 2  " &
 "fix		cad19 all mesh/surface/stress file mesh/topChute.stl	type 2  " &
-"fix		cad20 all mesh/surface/stress file mesh/conveyor.stl	type 2  surface_vel 0.0 -0.1 0.0 " &
-"fix		cad21 all mesh/surface/stress file mesh/convSide1.stl	type 2  surface_vel 0.0 -0.1 0.0" &
-"fix		cad22 all mesh/surface/stress file mesh/convSide2.stl	type 2  surface_vel 0.0 -0.1 0.0" &
-"fix		cad23 all mesh/surface/stress file mesh/guideSide1V.stl	type 2  surface_vel 0.0 -0.1 0.0" &
-"fix		cad24 all mesh/surface/stress file mesh/guideSide2V.stl	type 2  surface_vel 0.0 -0.1 0.0" &
+"fix		cad20 all mesh/surface/stress file mesh/conveyor.stl	type 2" &
+"fix		cad21 all mesh/surface/stress file mesh/convSide1.stl	type 2" &
+"fix		cad22 all mesh/surface/stress file mesh/convSide2.stl	type 2" &
+"fix		cad23 all mesh/surface/stress file mesh/guideSide1V.stl	type 2" &
+"fix		cad24 all mesh/surface/stress file mesh/guideSide2V.stl	type 2" &
 "fix		cad25 all mesh/surface/stress file mesh/scraper.stl	type 2  move 0.0 -2.0 0.0" &
 "fix		cad26 all mesh/surface/stress file mesh/scraper.stl	type 2  move 0.0 3.2 0.0" &
 "fix		cad27 all mesh/surface/stress file mesh/scraper.stl	type 2  move 0.0 0.6 0.0" &
@@ -273,12 +273,12 @@ else &
   "print 'OMP is OFF - old version - bis'"  
 
 #write restart files
-restart		${saveRestSteps} restart_second/sinterChuteRunSecond_${OMPON}*.restart
+restart		${saveRestSteps} restart_completer/sinterChuteRunCompleter_${OMPON}*.restart
 run		1
-dump		dmp all custom ${saveIntSteps} post_main/dump*.sinterChute id type x y z vx vy vz fx fy fz omegax omegay omegaz radius 
+dump		dmp all custom ${saveIntSteps} post_main/dump*.sinterChuteCompleter id type x y z vx vy vz fx fy fz omegax omegay omegaz radius 
 #dump 		dmp all custom/vtk ${saveIntSteps} post_main/sinterChute*.vtu id type x y z vx vy vz fx fy fz omegax omegay omegaz radius 
 #dump		dmp2 all custom ${saveIntSteps} post_main/dump*.evalout id type x y z vx vy vz radius # I think you could comment this dump?! I don't think you need it.
-dump 		dumpstress all mesh/gran/VTK ${saveIntSteps} post_main/dump*.vtk stress cad1 cad2 &
+dump 		dumpstress all mesh/gran/VTK ${saveIntSteps} post_main/dumpCompleter*.vtk stress cad1 cad2 &
 cad3 cad4 cad5 cad6 cad7 cad8 cad9 cad10 cad11 cad12 cad13 cad14 cad15 cad16 cad17 cad18 cad19 cad20 cad21 cad22 cad23 cad24 cad25 cad26 cad27
 
 ####### Output Mass #########
@@ -298,43 +298,5 @@ screen no title "Time Mass Particle MassRate PartRate delMass delPart" file post
 
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
 
-#run		${runCompletInit}
-
-fix		movSc1 all move/mesh mesh cad25 linear 0.0 -0.1 0.0
-fix		movSc2 all move/mesh mesh cad26 linear 0.0 -0.1 0.0
-fix		movSc3 all move/mesh mesh cad27 linear 0.0 -0.1 0.0
-
-variable	runMoveScrap	equal 26.0/${dt}
-run		${runMoveScrap}
-
-unfix		movSc1
-unfix		movSc2
-unfix		movSc3 
-
-undump		dumpstress
-
-unfix		cad20
-unfix		cad21
-unfix		cad22
-unfix		cad23
-unfix		cad24
-
-unfix		meshwalls	
-
-
-fix		cad20N all mesh/surface/stress file mesh/conveyor.stl	type 2 surface_vel 0.0 0.0 0.0
-fix		cad21N all mesh/surface/stress file mesh/convSide1.stl	type 2  surface_vel 0.0 0.0 0.0
-fix		cad22N all mesh/surface/stress file mesh/convSide2.stl	type 2  surface_vel 0.0 0.0 0.0
-fix		cad23N all mesh/surface/stress file mesh/guideSide1V.stl	type 2  surface_vel 0.0 0.0 0.0
-fix		cad24N all mesh/surface/stress file mesh/guideSide2V.stl	type 2  surface_vel 0.0 0.0 0.0
-
-fix		meshwalls2 all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} mesh n_meshes 27 meshes cad1 cad2 &
-cad3 cad4 cad5 cad6 cad7 cad8 cad9 cad10 cad11 cad12 cad13 cad14 cad15 cad16 cad17 cad18 cad19 cad20N cad21N cad22N cad23N cad24N cad25 cad26 cad27
-
-dump 		dumpstress2 all mesh/gran/VTK ${saveIntSteps} post/dump_secondBatch*.vtk stress cad1 cad2 &
-cad3 cad4 cad5 cad6 cad7 cad8 cad9 cad10 cad11 cad12 cad13 cad14 cad15 cad16 cad17 cad18 cad19 cad20N cad21N cad22N cad23N cad24N cad25 cad26 cad27
-#fix_modify	cad20 surface_vel 0.0 0.0 0.0
-
-
-
-run		${runSecondFill}
+run		${runCompletInit}
+write_restart 	restart_completer/sinterChuteRunCompleter_${OMPON}_Final.restart
