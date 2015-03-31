@@ -6,14 +6,14 @@ variable    	rolfrtyp string	epsd2
 
 #### USER input variables
 variable	runTime 	equal 500	# Total simulation time in (s)
-variable	saveInterval	equal 0.05 	# Save interval
+variable	saveInterval	equal 0.001 	# Save interval
 variable	saveRestart	equal 0.5
 variable	dt		equal 0.00002 	# Time step
 
 ###################
 
 ### SYSTEM variables
-variable	runCompletInit	equal 50.0/${dt}
+variable	runCompletInit	equal 0.002/${dt}
 variable	runSecondFill	equal 250.0/${dt}
 variable	runTimeSteps	equal ${runTime}/${dt}
 variable	saveIntSteps	equal ${saveInterval}/${dt}
@@ -25,7 +25,7 @@ shell   	mkdir restart_second
 shell   	mkdir post_main
 shell		mkdir postMass
 shell   	mkdir logs
-
+shell		mkdir post_secondBatch
 # writing log file to post folder
 log     logs/log_omp${OMPON}_runTime${runTime}.txt
 
@@ -57,7 +57,7 @@ units		si
 
 #region		reg block -23.6 -17.1 -5.3 2.9 4.6 12.7 units box
 #create_box	2 reg
-read_restart	restart_main/sinterChuteRun_05550000.restart
+read_restart	restart_main/sinterChuteRun_02300000.restart
 
 neighbor	0.03 bin
 neigh_modify	delay 0 #binsize 0.08
@@ -167,7 +167,7 @@ if "${OMPON} == 1" then                            &
 "fix		cad17 all mesh/surface/omp file mesh/sidesChute.stl	type 2  " &
 "fix		cad18 all mesh/surface/omp file mesh/sideSmallChute.stl	type 2  " &
 "fix		cad19 all mesh/surface/omp file mesh/topChute.stl	type 2  " &
-"fix		cad20 all mesh/surface/omp file mesh/conveyor.stl	type 2  " &
+"fix		cad20 all mesh/surface/omp file mesh/conveyor.stl	type 2  surface_vel 0.0 -20.0 0.0" &
 "fix		cad21 all mesh/surface/omp file mesh/convSide1.stl	type 2  " &
 "fix		cad22 all mesh/surface/omp file mesh/convSide2.stl	type 2  " &
 "fix		cad23 all mesh/surface/omp file mesh/guideSide1V.stl	type 2  " &
@@ -196,7 +196,7 @@ else &
 "fix		cad17 all mesh/surface/stress file mesh/sidesChute.stl	type 2  " &
 "fix		cad18 all mesh/surface/stress file mesh/sideSmallChute.stl	type 2  " &
 "fix		cad19 all mesh/surface/stress file mesh/topChute.stl	type 2  " &
-"fix		cad20 all mesh/surface/stress file mesh/conveyor.stl	type 2  " &
+"fix		cad20 all mesh/surface/stress file mesh/conveyor.stl	type 2 surface_vel 0.0 -200.0 0.0 " &
 "fix		cad21 all mesh/surface/stress file mesh/convSide1.stl	type 2  " &
 "fix		cad22 all mesh/surface/stress file mesh/convSide2.stl	type 2  " &
 "fix		cad23 all mesh/surface/stress file mesh/guideSide1V.stl	type 2  " &
@@ -271,8 +271,8 @@ else &
 #write restart files
 restart		${saveRestSteps} restart_second/sinterChuteRunSecond_${OMPON}*.restart
 run		1
-#dump		dmp all custom ${saveIntSteps} post_main/dump*.sinterChute id type x y z vx vy vz fx fy fz omegax omegay omegaz radius 
-dump 		dmp all custom/vtk ${saveIntSteps} post_main/sinterChute*.vtu id type x y z vx vy vz fx fy fz omegax omegay omegaz radius 
+dump		dmp all custom ${saveIntSteps} post_main/dump*.sinterChute id type x y z vx vy vz fx fy fz omegax omegay omegaz radius 
+#dump 		dmp all custom/vtk ${saveIntSteps} post_main/sinterChute*.vtu id type x y z vx vy vz fx fy fz omegax omegay omegaz radius 
 #dump		dmp2 all custom ${saveIntSteps} post_main/dump*.evalout id type x y z vx vy vz radius # I think you could comment this dump?! I don't think you need it.
 dump 		dumpstress all mesh/gran/VTK ${saveIntSteps} post_main/dump*.vtk stress cad1 cad2 &
 cad3 cad4 cad5 cad6 cad7 cad8 cad9 cad10 cad11 cad12 cad13 cad14 cad15 cad16 cad17 cad18 cad19 cad20 cad21 cad22 cad23 cad24 cad25
@@ -292,65 +292,26 @@ fix 	 dumpMass all print ${dumpMassRate} "${simulatedTime} ${outMass} ${outParti
 screen no title "Time Mass Particle MassRate PartRate delMass delPart" file postMass/massFlow.txt
 
 
-####### Output size distribution % #########
-region		bottom block -23.6 -17.1 -5.3 2.9 4.6 7.3 units box
-region		central block -23.6 -17.1 -5.3 2.9 7.3 10.0 units box
-region		top block -23.6 -17.1 -5.3 2.9 10.0 12.7 units box
-
-compute atRad all property/atom radius
-
-#variable comp equal "c_atRad >= ${rS6}"
-#print "-----> Fexpected ${comp}"
-
-variable rS0atom atom "c_atRad >= 0.0125"
-variable rS1atom atom "c_atRad >= 0.0150"
-variable rS2atom atom "c_atRad >= 0.0250"
-variable rS3atom atom "c_atRad >= 0.0400"
-variable rS4atom atom "c_atRad >= 0.0625"
-variable rS5atom atom "c_atRad >= 0.1000"
-variable rS6atom atom "c_atRad >= 0.1250"
-
-group rS0group dynamic all var rS0atom every ${dumpMassRate}
-group rS1group dynamic all var rS1atom every ${dumpMassRate}
-group rS2group dynamic all var rS2atom every ${dumpMassRate}
-group rS3group dynamic all var rS3atom every ${dumpMassRate}
-group rS4group dynamic all var rS4atom every ${dumpMassRate}
-group rS5group dynamic all var rS5atom every ${dumpMassRate}
-group rS6group dynamic all var rS6atom every ${dumpMassRate}
-
-variable rS0percBottom   	equal count(rS0group,bottom)
-variable rS1percBottom   	equal count(rS1group,bottom)
-variable rS2percBottom   	equal count(rS2group,bottom)
-variable rS3percBottom   	equal count(rS3group,bottom)
-variable rS4percBottom   	equal count(rS4group,bottom)
-variable rS5percBottom   	equal count(rS5group,bottom)
-variable rS6percBottom   	equal count(rS6group,bottom)
-variable rS0percCentral   	equal count(rS0group,central)
-variable rS1percCentral   	equal count(rS1group,central)
-variable rS2percCentral  	equal count(rS2group,central)
-variable rS3percCentral 	equal count(rS3group,central)
-variable rS4percCentral   	equal count(rS4group,central)
-variable rS5percCentral   	equal count(rS5group,central)
-variable rS6percCentral   	equal count(rS6group,central)
-variable rS0percTop   		equal count(rS0group,top)
-variable rS1percTop   		equal count(rS1group,top)
-variable rS2percTop   		equal count(rS2group,top)
-variable rS3percTop   		equal count(rS3group,top)
-variable rS4percTop   		equal count(rS4group,top)
-variable rS5percTop   		equal count(rS5group,top)
-variable rS6percTop   		equal count(rS6group,top)
-
-variable countRate 		equal ${dumpMassRate}+2
-
-fix 	 dumpRate all print ${countRate} "${rS0percBottom} ${rS1percBottom} ${rS2percBottom} ${rS3percBottom} ${rS4percBottom} ${rS5percBottom} ${rS6percBottom}       &
-					  ${rS0percCentral} ${rS1percCentral} ${rS2percCentral} ${rS3percCentral} ${rS4percCentral} ${rS5percCentral} ${rS6percCentral} &
-					  ${rS0percTop} ${rS1percTop} ${rS2percTop} ${rS3percTop} ${rS4percTop} ${rS5percTop} ${rS6percTop}                       " &
-screen no title 			"rS0percBottom rS1percBottom rS2percBottom rS3percBottom rS4percBottom rS5percBottom rS6percBottom       &
-					 rS0percCentral rS1percCentral rS2percCentral rS3percCentral rS4percCentral rS5percCentral rS6percCentral &
-					 rS0percTop rS1percTop rS2percTop rS3percTop rS4percTop rS5percTop rS6percTop " file postMass/countRate.txt
-
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
+fix		movSc all move/mesh mesh cad25 linear 0.0 -200.0 0.0
+
 run		${runCompletInit}
-fix		movSc all move/mesh linear 0.0 -0.1 0.0
+
+unfix		movSc 
+undump		dumpstress
+unfix		cad20
+unfix		meshwalls	
+
+
+fix		cad20N all mesh/surface/stress file mesh/conveyor.stl	type 2 surface_vel 0.0 0.0 0.0
+fix		meshwalls2 all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} mesh n_meshes 25 meshes cad1 cad2 &
+cad3 cad4 cad5 cad6 cad7 cad8 cad9 cad10 cad11 cad12 cad13 cad14 cad15 cad16 cad17 cad18 cad19 cad20N cad21 cad22 cad23 cad24 cad25
+
+dump 		dumpstress2 all mesh/gran/VTK ${saveIntSteps} post_secondBatch/dump*.vtk stress cad1 cad2 &
+cad3 cad4 cad5 cad6 cad7 cad8 cad9 cad10 cad11 cad12 cad13 cad14 cad15 cad16 cad17 cad18 cad19 cad20N cad21 cad22 cad23 cad24 cad25
+#fix_modify	cad20 surface_vel 0.0 0.0 0.0
+
+
+run		${runCompletInit}
 
 run		${runSecondFill}
