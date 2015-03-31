@@ -5,19 +5,22 @@ echo		both
 variable    	rolfrtyp string	epsd2
 
 #### USER input variables
-variable	runTime 	equal 20	# Total simulation time in (s)
+variable	runTime 	equal 500	# Total simulation time in (s)
 variable	saveInterval	equal 0.05 	# Save interval
 variable	saveRestart	equal 0.5
 variable	dt		equal 0.00002 	# Time step
+
 ###################
 
 ### SYSTEM variables
+variable	runCompletInit	equal 50.0/${dt}
+variable	runSecondFill	equal 250.0/${dt}
 variable	runTimeSteps	equal ${runTime}/${dt}
 variable	saveIntSteps	equal ${saveInterval}/${dt}
 variable	saveRestSteps	equal ${saveRestart}/${dt}
 ##################
 
-shell   	mkdir restart_main
+#shell   	mkdir restart_main
 shell   	mkdir restart_second
 shell   	mkdir post_main
 shell		mkdir postMass
@@ -52,9 +55,9 @@ processors      ${XPROCS} ${YPROCS} ${ZPROCS}
 
 units		si
 
-region		reg block -23.6 -17.1 -5.3 2.9 4.6 12.7 units box
-create_box	2 reg
-read_restart	post_main/sinterChuteRun_05550000.restart
+#region		reg block -23.6 -17.1 -5.3 2.9 4.6 12.7 units box
+#create_box	2 reg
+read_restart	restart_main/sinterChuteRun_05550000.restart
 
 neighbor	0.03 bin
 neigh_modify	delay 0 #binsize 0.08
@@ -266,7 +269,7 @@ else &
   "print 'OMP is OFF - old version - bis'"  
 
 #write restart files
-restart		${saveRestSteps} restart_main/sinterChuteRun_${OMPON}*.restart
+restart		${saveRestSteps} restart_second/sinterChuteRunSecond_${OMPON}*.restart
 run		1
 #dump		dmp all custom ${saveIntSteps} post_main/dump*.sinterChute id type x y z vx vy vz fx fy fz omegax omegay omegaz radius 
 dump 		dmp all custom/vtk ${saveIntSteps} post_main/sinterChute*.vtu id type x y z vx vy vz fx fy fz omegax omegay omegaz radius 
@@ -347,5 +350,7 @@ screen no title 			"rS0percBottom rS1percBottom rS2percBottom rS3percBottom rS4p
 					 rS0percTop rS1percTop rS2percTop rS3percTop rS4percTop rS5percTop rS6percTop " file postMass/countRate.txt
 
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
+run		${runCompletInit}
+fix		movSc all move/mesh linear 0.0 -0.1 0.0
 
-run		${runTimeSteps}
+run		${runSecondFill}
