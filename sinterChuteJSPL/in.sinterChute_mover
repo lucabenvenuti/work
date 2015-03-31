@@ -58,7 +58,7 @@ units		si
 
 #region		reg block -23.6 -17.1 -5.3 2.9 4.6 12.7 units box
 #create_box	2 reg
-read_restart	restart_completer/sinterChuteRunCompleter_${OMPON}_Final.restart
+read_restart	./restart_completer/sinterChuteRunCompleter_${OMPON}_Final.restart
 
 neighbor	0.03 bin
 neigh_modify	delay 0 #binsize 0.08
@@ -274,12 +274,12 @@ else &
   "print 'OMP is OFF - old version - bis'"  
 
 #write restart files
-restart		${saveRestSteps} restart_mover/sinterChuteRunMover_${OMPON}*.restart
+restart		${saveRestSteps} ./restart_mover/sinterChuteRunMover_${OMPON}*.restart
 run		1
-dump		dmp all custom ${saveIntSteps} post_main/dump*.sinterChute id type x y z vx vy vz fx fy fz omegax omegay omegaz radius 
+dump		dmp all custom ${saveIntSteps} ./post_main/dump*.sinterChuteMover id type x y z vx vy vz fx fy fz omegax omegay omegaz radius 
 #dump 		dmp all custom/vtk ${saveIntSteps} post_main/sinterChute*.vtu id type x y z vx vy vz fx fy fz omegax omegay omegaz radius 
 #dump		dmp2 all custom ${saveIntSteps} post_main/dump*.evalout id type x y z vx vy vz radius # I think you could comment this dump?! I don't think you need it.
-dump 		dumpstress all mesh/gran/VTK ${saveIntSteps} post_main/dump*.vtk stress cad1 cad2 &
+dump 		dumpstress all mesh/gran/VTK ${saveIntSteps} post_main/dumpMover*.vtk stress cad1 cad2 &
 cad3 cad4 cad5 cad6 cad7 cad8 cad9 cad10 cad11 cad12 cad13 cad14 cad15 cad16 cad17 cad18 cad19 cad20 cad21 cad22 cad23 cad24 cad25 cad26 cad27
 
 ####### Output Mass #########
@@ -294,7 +294,7 @@ variable simulatedTime	equal ${dt}*step
 variable dumpMassRate equal 0.01/${dt} # Set mass flow output interval!
  
 fix 	 dumpMass all print ${dumpMassRate} "${simulatedTime} ${outMass} ${outParticle} ${outMassRate} ${outPartRate} ${outDelMass} ${outDelPart}" &
-screen no title "Time Mass Particle MassRate PartRate delMass delPart" file postMass/massFlow.txt
+screen no title "Time Mass Particle MassRate PartRate delMass delPart" file postMass/massFlowMover.txt
 
 
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
@@ -332,7 +332,7 @@ fix		cad24N all mesh/surface/stress file mesh/guideSide2V.stl	type 2  surface_ve
 fix		meshwalls2 all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} mesh n_meshes 27 meshes cad1 cad2 &
 cad3 cad4 cad5 cad6 cad7 cad8 cad9 cad10 cad11 cad12 cad13 cad14 cad15 cad16 cad17 cad18 cad19 cad20N cad21N cad22N cad23N cad24N cad25 cad26 cad27
 
-dump 		dumpstress2 all mesh/gran/VTK ${saveIntSteps} post/dump_secondBatch*.vtk stress cad1 cad2 &
+dump 		dumpstress2 all mesh/gran/VTK ${saveIntSteps} post/dump_Mover*.vtk stress cad1 cad2 &
 cad3 cad4 cad5 cad6 cad7 cad8 cad9 cad10 cad11 cad12 cad13 cad14 cad15 cad16 cad17 cad18 cad19 cad20N cad21N cad22N cad23N cad24N cad25 cad26 cad27
 #fix_modify	cad20 surface_vel 0.0 0.0 0.0
 

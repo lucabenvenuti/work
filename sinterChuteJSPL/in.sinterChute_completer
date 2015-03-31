@@ -57,7 +57,7 @@ units		si
 
 #region		reg block -23.6 -17.1 -5.3 2.9 4.6 12.7 units box
 #create_box	2 reg
-read_restart	restart_main/sinterChuteRun_*.restart
+read_restart	./restart_main/sinterChuteRun_*.restart
 
 neighbor	0.03 bin
 neigh_modify	delay 0 #binsize 0.08
@@ -275,7 +275,7 @@ else &
 #write restart files
 restart		${saveRestSteps} restart_completer/sinterChuteRunCompleter_${OMPON}*.restart
 run		1
-dump		dmp all custom ${saveIntSteps} post_main/dump*.sinterChuteCompleter id type x y z vx vy vz fx fy fz omegax omegay omegaz radius 
+dump		dmp all custom ${saveIntSteps} ./post_main/dump*.sinterChuteCompleter id type x y z vx vy vz fx fy fz omegax omegay omegaz radius 
 #dump 		dmp all custom/vtk ${saveIntSteps} post_main/sinterChute*.vtu id type x y z vx vy vz fx fy fz omegax omegay omegaz radius 
 #dump		dmp2 all custom ${saveIntSteps} post_main/dump*.evalout id type x y z vx vy vz radius # I think you could comment this dump?! I don't think you need it.
 dump 		dumpstress all mesh/gran/VTK ${saveIntSteps} post_main/dumpCompleter*.vtk stress cad1 cad2 &
@@ -293,10 +293,10 @@ variable simulatedTime	equal ${dt}*step
 variable dumpMassRate equal 0.01/${dt} # Set mass flow output interval!
  
 fix 	 dumpMass all print ${dumpMassRate} "${simulatedTime} ${outMass} ${outParticle} ${outMassRate} ${outPartRate} ${outDelMass} ${outDelPart}" &
-screen no title "Time Mass Particle MassRate PartRate delMass delPart" file postMass/massFlow.txt
+screen no title "Time Mass Particle MassRate PartRate delMass delPart" file ./postMass/massFlowCompleter.txt
 
 
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
 
 run		${runCompletInit}
-write_restart 	restart_completer/sinterChuteRunCompleter_${OMPON}_Final.restart
+write_restart 	./restart_completer/sinterChuteRunCompleter_${OMPON}_Final.restart
