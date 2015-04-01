@@ -335,19 +335,6 @@ fix DumpTextCad3 all print ${nDumpForce} "${ForceXCad3} ${ForceYCad3} ${ForceZCa
 #settle particles
 run     ${nStepsSettle}
 
-#### LOOP to guarantee that servo wall force reached the expected value ####
-
-
-run     ${sDump}
-label stable
-  print "-----> Checking ServoForce..."
-  if "${ForceZCad3}>${ForceZCad3M}" then "jump SELF endstable" # Check if force in ServoWall is bigger than criteria then break loop
-  print "-----> Fexpected ${ForceExpect}, Fcurrent ${ForceZCad3}, continuing run"  # If not, continue looping
-  run ${sDump}
-jump SELF stable
-label endstable
-############################################################################
-
 # move 
 fix     move all move/mesh mesh cad2 linear -${velWall} 0. 0.
 
