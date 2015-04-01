@@ -20,7 +20,7 @@ wei(:,3) = [0.25;0.25;0.25;0.25];
 wei(:,4) = [0.33;0.17;0.17;0.33];
 
 j=1;
-for i=1:8
+for i=5:8
     
     if i<5
         diameter = [0.00450;0.00350;0.00250;0.00150];
@@ -64,11 +64,14 @@ hold off
 
 j=j+1;
 
-figure(j);
+h1=figure(j);
 bar(radius,weight)
 hold on
 plot(x2,norm2)
+xlabel('radius [m]');
+ylabel('% [--]');
 hold off
+%print(h1,'-djpeg','-r300',['0',num2str(41+i),'simulationRadiusDistribution',num2str(i)])
 j=j+1;
 
 end
