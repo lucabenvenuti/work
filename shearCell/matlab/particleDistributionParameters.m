@@ -56,11 +56,17 @@ x2 = [min(radius):(max(radius)-min(radius))/199:max(radius)];
 norm2 = normpdf(x2,weightedMeanRad(i),stddevRad(i));
 norm2=norm2/max(norm2);
 
-figure(j);
-bar(diameter,weight)
-hold on
-plot(x,norm)
-hold off
+minDiam = 0.000315;
+maxDiam = 6.3/1000;
+
+% figure(j);
+% %xlim = ([minDiam  maxDiam]);
+% bar(diameter,weight)
+% %xlim = ([minDiam  maxDiam]);
+% hold on
+% plot(x,norm)
+% xlim([minDiam  maxDiam]);
+% hold off
 
 j=j+1;
 
@@ -68,10 +74,11 @@ h1=figure(j);
 bar(radius,weight)
 hold on
 plot(x2,norm2)
+xlim([minDiam  maxDiam]/2);
 xlabel('radius [m]');
 ylabel('% [--]');
 hold off
-%print(h1,'-djpeg','-r300',['0',num2str(41+i),'simulationRadiusDistribution',num2str(i)])
+print(h1,'-djpeg','-r300',['0',num2str(41+i),'simulationRadiusDistribution',num2str(i)])
 j=j+1;
 
 end
