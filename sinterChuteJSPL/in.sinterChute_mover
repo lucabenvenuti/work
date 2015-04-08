@@ -199,11 +199,11 @@ else &
 "fix		cad17 all mesh/surface/stress file mesh/sidesChute.stl	type 2  " &
 "fix		cad18 all mesh/surface/stress file mesh/sideSmallChute.stl	type 2  " &
 "fix		cad19 all mesh/surface/stress file mesh/topChute.stl	type 2  " &
-"fix		cad20 all mesh/surface/stress file mesh/conveyor.stl	type 2  surface_vel 0.0 -0.1 0.0 " &
-"fix		cad21 all mesh/surface/stress file mesh/convSide1.stl	type 2  surface_vel 0.0 -0.1 0.0" &
-"fix		cad22 all mesh/surface/stress file mesh/convSide2.stl	type 2  surface_vel 0.0 -0.1 0.0" &
-"fix		cad23 all mesh/surface/stress file mesh/guideSide1V.stl	type 2  surface_vel 0.0 -0.1 0.0" &
-"fix		cad24 all mesh/surface/stress file mesh/guideSide2V.stl	type 2  surface_vel 0.0 -0.1 0.0" &
+"fix		cad20 all mesh/surface/stress file mesh/conveyor.stl	type 2" &
+"fix		cad21 all mesh/surface/stress file mesh/convSide1.stl	type 2" &
+"fix		cad22 all mesh/surface/stress file mesh/convSide2.stl	type 2" &
+"fix		cad23 all mesh/surface/stress file mesh/guideSide1V.stl	type 2" &
+"fix		cad24 all mesh/surface/stress file mesh/guideSide2V.stl	type 2" &
 "fix		cad25 all mesh/surface/stress file mesh/scraper.stl	type 2  move 0.0 -2.0 0.0" &
 "fix		cad26 all mesh/surface/stress file mesh/scraper.stl	type 2  move 0.0 3.2 0.0" &
 "fix		cad27 all mesh/surface/stress file mesh/scraper.stl	type 2  move 0.0 0.6 0.0" &
@@ -298,6 +298,31 @@ screen no title "Time Mass Particle MassRate PartRate delMass delPart" file post
 
 
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
+unfix		cad20
+unfix		cad21
+unfix		cad22
+unfix		cad23
+unfix		cad24
+
+unfix		meshwalls	
+undump		dumpstress
+
+fix		cad20B all mesh/surface/stress file mesh/conveyor.stl	type 2  surface_vel 0.0 -0.1 0.0
+fix		cad21B all mesh/surface/stress file mesh/convSide1.stl	type 2  surface_vel 0.0 -0.1 0.0
+fix		cad22B all mesh/surface/stress file mesh/convSide2.stl	type 2  surface_vel 0.0 -0.1 0.0
+fix		cad23B all mesh/surface/stress file mesh/guideSide1V.stl	type 2  surface_vel 0.0 -0.1 0.0
+fix		cad24B all mesh/surface/stress file mesh/guideSide2V.stl	type 2  surface_vel 0.0 -0.1 0.0
+
+fix		meshwallsB all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} mesh n_meshes 27 meshes cad1 cad2 &
+cad3 cad4 cad5 cad6 cad7 cad8 cad9 cad10 cad11 cad12 cad13 cad14 cad15 cad16 cad17 cad18 cad19 cad20B cad21B cad22B cad23B cad24B cad25 cad26 cad27 
+
+dump 		dumpstressB all mesh/gran/VTK ${saveIntSteps} post_main/dumpMover*.vtk stress cad1 cad2 &
+cad3 cad4 cad5 cad6 cad7 cad8 cad9 cad10 cad11 cad12 cad13 cad14 cad15 cad16 cad17 cad18 cad19 cad20B cad21B cad22B cad23B cad24B cad25 cad26 cad27
+
+run		1
+
+#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
+
 
 #run		${runCompletInit}
 
@@ -312,15 +337,15 @@ unfix		movSc1
 unfix		movSc2
 unfix		movSc3 
 
-undump		dumpstress
+undump		dumpstressB
 
-unfix		cad20
-unfix		cad21
-unfix		cad22
-unfix		cad23
-unfix		cad24
+unfix		cad20B
+unfix		cad21B
+unfix		cad22B
+unfix		cad23B
+unfix		cad24B
 
-unfix		meshwalls	
+unfix		meshwallsB	
 
 
 fix		cad20N all mesh/surface/stress file mesh/conveyor.stl	type 2 surface_vel 0.0 0.0 0.0
