@@ -168,11 +168,11 @@ if "${OMPON} == 1" then                            &
 "fix		cad17 all mesh/surface/omp file mesh/sidesChute.stl	type 2  " &
 "fix		cad18 all mesh/surface/omp file mesh/sideSmallChute.stl	type 2  " &
 "fix		cad19 all mesh/surface/omp file mesh/topChute.stl	type 2  " &
-"fix		cad20 all mesh/surface/omp file mesh/conveyor.stl	type 2  surface_vel 0.0 -0.1 0.0" &
-"fix		cad21 all mesh/surface/omp file mesh/convSide1.stl	type 2  surface_vel 0.0 -0.1 0.0" &
-"fix		cad22 all mesh/surface/omp file mesh/convSide2.stl	type 2  surface_vel 0.0 -0.1 0.0" &
-"fix		cad23 all mesh/surface/omp file mesh/guideSide1V.stl	type 2  surface_vel 0.0 -0.1 0.0" &
-"fix		cad24 all mesh/surface/omp file mesh/guideSide2V.stl	type 2  surface_vel 0.0 -0.1 0.0" &
+"fix		cad20 all mesh/surface/omp file mesh/conveyor.stl	type 2" &
+"fix		cad21 all mesh/surface/omp file mesh/convSide1.stl	type 2" &
+"fix		cad22 all mesh/surface/omp file mesh/convSide2.stl	type 2" &
+"fix		cad23 all mesh/surface/omp file mesh/guideSide1V.stl	type 2" &
+"fix		cad24 all mesh/surface/omp file mesh/guideSide2V.stl	type 2" &
 "fix		cad25 all mesh/surface/omp file mesh/scraper.stl	type 2  move 0.0 -2.0 0.0" &
 "fix		cad26 all mesh/surface/omp file mesh/scraper.stl	type 2  move 0.0  3.2 0.0" &
 "fix		cad27 all mesh/surface/omp file mesh/scraper.stl	type 2  move 0.0  0.6 0.0" &
