@@ -24,9 +24,9 @@ set(0,'DefaultTextFontSize',12);
 unitSysDefault = 'si';  % 'si' or 'cgs'
 
 % select files that should be postprocessed
-%sim_dir = '../results/10/sim141_cokeFine_reducedPolydispersity_gollum32'; % directory, where simulation files can be found
+sim_dir = '/mnt/scratchPFMDaten/Luca/testShearCellPoli20150407'; % directory, where simulation files can be found
 %sim_dir = 'S:\Luca\testPolidispersityShearCellCokeCoarseCokeFineSinterFineLimestoneFine';
-sim_dir = '/mnt/scratchPFMDaten/Luca/20150401testPolidispersityShort';
+%sim_dir = '/mnt/scratchPFMDaten/Luca/20150401testPolidispersityShort';
 filepattern = 'force.cad*_fid*.txt'; % e.g. 'force.*.txt' %Andi
 filepatterncsv = 'sim_par*_fid*.csv'; % e.g. 'force.*.txt' %Andi
 
@@ -90,7 +90,7 @@ dCylDpConfrontationFlag = false;
 dCylDpConfrontationFlag2 = false;
 
 %doNN
-NNFlag = false;
+NNFlag = true;
 hiddenLayerSizeVector = [5:40];
 newInputFlag = false;
 gloriaWinFlag = false;

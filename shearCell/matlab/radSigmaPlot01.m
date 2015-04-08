@@ -23,6 +23,7 @@ load /mnt/scratchPFMDaten/Luca/testPolidispersityShearCellCokeCoarseCokeFineSint
 dataNN2.ctrlStress = 5000; %1068;% [1068,2069,10070];
 dataNN2.radmu = 0.001;
 dataNN2.dens = 2500;
+dataNN2.dCylDp= 30;
 dataNN2.radsigma = dataNN2.radsigma/10;
 %exp_file_name = '20131128_1612_sinterfine315-10_test01';
 
