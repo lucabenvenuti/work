@@ -62,11 +62,12 @@ avgMuR2std = avgMuR2std./max(avgMuR2std);
 avgMuR1std = avgMuR1std./max(avgMuR1std);
 rhoBstd = rhoBstd./max(rhoBstd);
 
-figure(6)
+h1=figure(6);
 plot(dataNN2.radsigma',avgMuR2mean,dataNN2.radsigma',avgMuR1mean,dataNN2.radsigma',rhoBmean)
 xlabel('std dev radius [m]');
 % ylabel('zPos [m]');
-legend('avgMuR2mean [-]','avgMuR1mean [-]', 'rhoBmean [-]'); %, 'FontSize',24)
+legend('avgMuR2mean [-]','avgMuR1mean [-]', 'rhoBmean [-]','Location', 'SouthEast' );
+print(h1,'-djpeg','-r300',['0',num2str(41+i),'simulationRadiusDistribution',num2str(i)])
 
 figure(7)
 plot(dataNN2.radsigma',avgMuR2std,dataNN2.radsigma',avgMuR1std,dataNN2.radsigma',rhoBstd)

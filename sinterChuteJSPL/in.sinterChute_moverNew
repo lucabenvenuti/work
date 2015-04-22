@@ -59,7 +59,7 @@ units		si
 
 #region		reg block -23.6 -17.1 -5.3 2.9 4.6 12.7 units box
 #create_box	2 reg
-read_restart	./restart_completer/sinterChuteRunCompleter_${OMPON}_Final.restart
+read_restart	./restart_main/sinterChuteRun_05550000.restart
 
 neighbor	0.03 bin
 neigh_modify	delay 0 #binsize 0.08
