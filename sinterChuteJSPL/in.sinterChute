@@ -6,8 +6,8 @@ variable    	rolfrtyp string	epsd2
 
 #### USER input variables
 variable	runTime 	equal 200	# Total simulation time in (s)
-variable	saveInterval	equal 0.05 	# Save interval
-variable	saveRestart	equal 0.5
+variable	saveInterval	equal 0.5 	# Save interval
+variable	saveRestart	equal 5.0
 variable	dt		equal 0.00002 	# Time step
 ###################
 
@@ -352,3 +352,5 @@ dump		dmp all custom ${saveIntSteps} post_main/dump*.sinterChute id type x y z v
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
 
 run		${runTimeSteps}
+
+write_restart 	./restart_main/sinterChuteInit_Final.restart

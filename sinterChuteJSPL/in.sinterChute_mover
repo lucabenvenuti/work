@@ -6,8 +6,8 @@ variable    	rolfrtyp string	epsd2
 
 #### USER input variables
 variable	runTime 	equal 526	# Total simulation time in (s)
-variable	saveInterval	equal 0.02 	# Save interval
-variable	saveRestart	equal 1.0
+variable	saveInterval	equal 0.5 	# Save interval
+variable	saveRestart	equal 5.0
 variable	dt		equal 0.00002 	# Time step
 
 ###################
