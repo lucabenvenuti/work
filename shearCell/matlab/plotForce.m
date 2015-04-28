@@ -447,13 +447,19 @@ for ii=1:nSimCases
         
         psi = floor(length(data(ii).densityBulkBox)/2);
         
-        densityBulkBoxPreShearMean(ii,1) = mean(data(ii).densityBulkBox(1:psi));
-        densityBulkBoxPreShearMin(ii,1) = min(data(ii).densityBulkBox(1:psi));
-        densityBulkBoxPreShearMax(ii,1) = max(data(ii).densityBulkBox(1:psi));
+        startBulkPre = floor(length(data(ii).densityBulkBox)*0.2);
+        endBulkPre = floor(length(data(ii).densityBulkBox)*0.4);
         
-        densityBulkBoxShearMean(ii,1) = mean(data(ii).densityBulkBox(1+psi:end));
-        densityBulkBoxShearMin(ii,1) = min(data(ii).densityBulkBox(1+psi:end));
-        densityBulkBoxShearMax(ii,1) = max(data(ii).densityBulkBox(1+psi:end));
+        startBulkPost = floor(length(data(ii).densityBulkBox)*0.7);
+        endBulkPost = floor(length(data(ii).densityBulkBox)*0.9);
+        
+        densityBulkBoxPreShearMean(ii,1) = mean(data(ii).densityBulkBox(startBulkPre:endBulkPre));
+        densityBulkBoxPreShearMin(ii,1) = min(data(ii).densityBulkBox(startBulkPre:endBulkPre));
+        densityBulkBoxPreShearMax(ii,1) = max(data(ii).densityBulkBox(startBulkPre:endBulkPre));
+        
+        densityBulkBoxShearMean(ii,1) = mean(data(ii).densityBulkBox(startBulkPost:endBulkPost));
+        densityBulkBoxShearMin(ii,1) = min(data(ii).densityBulkBox(startBulkPost:endBulkPost));
+        densityBulkBoxShearMax(ii,1) = max(data(ii).densityBulkBox(startBulkPost:endBulkPost));
         
         %data(ii).density = 1368;
         %     %data(ii).fPartColumnWeight2 = data(ii).fPartColumnWeight;
@@ -1689,6 +1695,19 @@ if (NNFlag)
     end
     
 end
+
+% 
+% clearvars jjj
+% 
+% figure(30)
+% 
+% for jjj = 1:nData
+%    plot(data(jjj).timesteps,data(jjj).densityBulkBox,'Color',cmap(jjj,:));
+%    hold on
+%     
+%     
+%     
+% end
 
 %
 % find(gloriaAugustaSchulzeNN(2,:)==0.9);
