@@ -24,7 +24,7 @@ set(0,'DefaultTextFontSize',12);
 unitSysDefault = 'si';  % 'si' or 'cgs'
 
 % select files that should be postprocessed
-sim_dir = '/mnt/scratchPFMDaten/Luca/testShearCellPoli20150416'; % directory, where simulation files can be found
+sim_dir = '/mnt/scratchPFMDaten/Luca/redoCheckShearCell/results'; % directory, where simulation files can be found
 %sim_dir = 'S:\Luca\testPolidispersityShearCellCokeCoarseCokeFineSinterFineLimestoneFine';
 %sim_dir = '/mnt/transfer/to_Luca/test';
 filepattern = 'force.cad*_fid*.txt'; % e.g. 'force.*.txt' %Andi
@@ -61,7 +61,7 @@ col_numCol = 12;
 col_numBox = 13;
 
 % experimental data
-exp_flag = false; % enable the comparision to experimental data
+exp_flag = true; % enable the comparision to experimental data
 exp_dir = '.'; % directory, where the files can be found
 legendExpFlag = 'schulze'; % choose between jenike & schulze
 polidispersity_flag = true; %
@@ -73,9 +73,9 @@ if (exp_flag)
             
             
         case 'schulze'
-            exp_file = ['20131129_0841_sinterfine0-315_test04' , '.FTD']; % name of the FTD FILE, with the exp values vs time
-            summaryFile = ['20131129_0841_sinterfine0-315_test04' , '.out']; % name of the out file, with the summary values
-            sumForceFile = ['20131129_0841_sinterfine0-315_test04' , '.inp']; % name of the inp file, with the forces summary values
+            exp_file = ['/mnt/benvenutiPFMDaten/Materials2Simulation2Application_RnR/BS/Luca_final/20131129_0841_sinterfine0-315_test04' , '.FTD']; % name of the FTD FILE, with the exp values vs time
+            summaryFile = ['/mnt/benvenutiPFMDaten/Materials2Simulation2Application_RnR/BS/Luca_final/20131129_0841_sinterfine0-315_test04' , '.out']; % name of the out file, with the summary values
+            sumForceFile = ['/mnt/benvenutiPFMDaten/Materials2Simulation2Application_RnR/BS/Luca_final/20131129_0841_sinterfine0-315_test04' , '.inp']; % name of the inp file, with the forces summary values
     end
     
 end
@@ -108,7 +108,7 @@ fracColMass = 1.0; %0.12;
 
 manualPlateauFlag = false;
 %doImage
-imageFlag = false; %~manualPlateauFlag; % "~" gives the opposite of the boolean
+imageFlag = true; %~manualPlateauFlag; % "~" gives the opposite of the boolean
 
 startPlateauPreShearValue = .25;%.38;
 stopPlateauPreShearValue = .35;%.48;
