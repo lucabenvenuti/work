@@ -274,8 +274,8 @@ run		1
 dump		dmp all custom ${saveIntSteps} post_main/dump*.sinterChute id type x y z vx vy vz fx fy fz omegax omegay omegaz radius 
 #dump 		dmp all custom/vtk ${saveIntSteps} post_main/sinterChute*.vtu id type x y z vx vy vz fx fy fz omegax omegay omegaz radius 
 #dump		dmp2 all custom ${saveIntSteps} post_main/dump*.evalout id type x y z vx vy vz radius # I think you could comment this dump?! I don't think you need it.
-#dump 		dumpstress all mesh/gran/VTK ${saveIntSteps} post_main/dump*.vtk stress cad1 cad2 &
-#cad3 cad4 cad5 cad6 cad7 cad8 cad9 cad10 cad11 cad12 cad13 cad14 cad15 cad16 cad17 cad18 cad19 cad20 cad21 cad22 cad23 cad24 cad25 cad26 cad27
+dump 		dumpstress all mesh/gran/VTK ${saveIntSteps} post_main/dump*.vtk stress cad1 cad2 &
+cad3 cad4 cad5 cad6 cad7 cad8 cad9 cad10 cad11 cad12 cad13 cad14 cad15 cad16 cad17 cad18 cad19 cad20 cad21 cad22 cad23 cad24 cad25 cad26 cad27
 
 ####### Output Mass #########
 #variable outMass	equal f_mass[1]
