@@ -3,9 +3,9 @@
 % X(gg)=0;
 
 
-merge(:,1)=X';
-merge(:,2)=Y';
-merge(:,3)=S';
+merge(:,1)=Y';%(sf) %X'; (sf)
+merge(:,2)=Z';%(rf) %Y'; (rf)
+merge(:,3)=S';%(rad_sigma) %S'; (cor)
 k=1;
 app =0.05 ;
 a = zeros(6000,(1/app)^2+1);
@@ -38,11 +38,16 @@ for i=1:v
 end
 
 for i=1:w
-    a1 = find(c(:,i)==0);
-    a2 = find(c(:,i)<0.6 & c(:,i)>0.49);
-    a3 = find(c(:,i)<0.7 & c(:,i)>0.6);
-    a4 = find(c(:,i)<0.8 & c(:,i)>0.7);
-    a5 = find(c(:,i)<0.9 & c(:,i)>0.8);
+%     a1 = find(c(:,i)==0);
+%     a2 = find(c(:,i)<0.6 & c(:,i)>0.49);
+%     a3 = find(c(:,i)<0.7 & c(:,i)>0.6);
+%     a4 = find(c(:,i)<0.8 & c(:,i)>0.7);
+%     a5 = find(c(:,i)<0.9 & c(:,i)>0.8);
+    
+    a2 = find(c(:,i)<6.9e-05 & c(:,i)>2.5e-05);
+    a3 = find(c(:,i)<1.1e-04 & c(:,i)>6.9e-05);
+    a4 = find(c(:,i)<1.5e-04 & c(:,i)>1.1e-04);
+    a5 = find(c(:,i)<2e-04 & c(:,i)>1.5e-04);
     
     if (~isempty(a2) | ~isempty(a3) | ~isempty(a4) | ~isempty(a5))
         %select max
@@ -70,7 +75,7 @@ for i=1:w
     
 %    l(:)=0;
 end
-figure(25)
+h7=figure(25)
 k=1;
 hold on
 for i=app:app:1
@@ -78,7 +83,7 @@ for j=app:app:1
    % Draw tile (i,j)
      if g(k)==255
            % g(i)= 255;
-           h1=fill([i-app i i i-app i-app],[j-app j-app j j j-app], [g(k)/255 g(k)/255 g(k)/255]  , 'EdgeColor', 'none')   ; %
+           h2=fill([i-app i i i-app i-app],[j-app j-app j j j-app], [g(k)/255 g(k)/255 g(k)/255]  , 'EdgeColor', 'none')   ; %
         elseif g(k)==224
            % g(i)= 224;
            h2=fill([i-app i i i-app i-app],[j-app j-app j j j-app], [g(k)/255 g(k)/255 g(k)/255]);%, 'EdgeColor', 'none')   ;
@@ -99,17 +104,18 @@ end
 end
 
 
-% h1 = plot(x1, y1, color1);
+% h2 = plot(x1, y1, color1);
 % hold on;
 % plot(x2, y2, color1);
 
 % h2 = plot(x3, y3, color2);
 % plot(x4, y4, color2);
 % 
- legend([h2 h3 h4 h5],{'0.5<COR<0.6','0.6<COR<0.7', '0.7<COR<0.8', '0.8<COR<0.9'},'Location','SouthWest');
- legend([h2],{'0.5<COR<0.6'},'Location','SouthWest');
+ %legend([h2 h3 h4 h5],{'0.5<COR<0.6','0.6<COR<0.7', '0.7<COR<0.8', '0.8<COR<0.9'},'Location','SouthWest');
+ legend([h2 h3 h4 h5],{'2.5e-05<rad-sigma<6.9e-05','6.9e-05<rad-sigma<1.1e-04', '1.1e-04<rad-sigma<1.5e-04', '1.5e-04<rad-sigma<2e-04'},'Location','SouthEast');
+% legend([h2],{'0.5<COR<0.6'},'Location','SouthWest');
  % legend([h2 h3 h4 ],{'0.5<COR<0.6','0.6<COR<0.7', '0.7<COR<0.8'},'Location','SouthWest');
 % legend([h4 h5],{'0.7<COR<0.8', '0.8<COR<0.9'},'Location','SouthWest');
-  set(gca,'fontname','times new roman','FontSize',24)  % Set it to times
-  xlabel('\mu_s [-]', 'FontSize', 24);
-ylabel('\mu_r [-]', 'FontSize', 24);
+  set(gca,'fontname','times new roman','FontSize',20)  % Set it to times
+  xlabel('\mu_s [-]', 'FontSize', 20);
+ylabel('\mu_r [-]', 'FontSize', 20);
