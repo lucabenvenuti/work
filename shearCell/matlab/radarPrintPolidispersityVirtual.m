@@ -5,12 +5,18 @@ close all
 clc
 
 % load /mnt/scratchPFMDaten/Luca/testPolidispersityShearCellCokeCoarseCokeFineSinterFineLimestoneFineMatlab/DensityBulkBoxPreShearMaxTest.mat
+load elaboratedTest02Completed.mat
 
-load S:\Luca\testShearCellPoli20150428\testPolidispersityDensityBulkBoxBis.mat
+%load S:\Luca\testShearCellPoli20150428\testPolidispersityDensityBulkBoxBis.mat
+load testPolidispersityDensityBulkBoxQuater.mat
 %exp_file_name = '20131129_1059_limestone0-315_test03';
 
+clearvars newY3
+
+prob = mode([startMinAvgMuR2Index startMinAvgMuR1Index startMinRhoPreIndex startMinRhoPostIndex]);
+
 exp_file_name_list = {'20131001_1117_Iron_ore',1;'20131001_1157_Iron_ore',2;'20131001_13011_Iron_ore',3;'20131128_0957_PP_test01',4;'20131128_1016_PP_test02',5;'20131128_1058_PP_test03',6;'20131128_1114_PP_test04',7;'20131128_1140_PP_test05',8;'20131128_1158_silibeads2mm_test01',9;'20131128_1218_silibeads2mm_test02',10;'20131128_1238_silibeads2mm_test03',11;'20131128_1443_silibeads4mm_test01',12;'20131128_1517_silibeads4mm_test02',13;'20131128_1612_sinterfine315-10_test01',14;'20131128_1712_sinterfine315-10_test02',15;'20131128_1742_sinterfine315-10_test03',16;'20131128_1824_sinterfine0-315_test01',17;'20131128_1851_sinterfine0-315_test02',18;'20131128_1951_sinterfine0-315_test03',19;'20131129_0841_sinterfine0-315_test04',20;'20131129_0921_limestone315-10_test01',21;'20131129_1000_limestone315-10_test02',22;'20131129_1019_limestone0-315_test01',23;'20131129_1035_limestone0-315_test02',24;'20131129_1059_limestone0-315_test03',25;'20131129_1121_limestone0-315_test04',26;'20131129_1155_coal315-10_test01',27;'20131129_1245_coal315-10_test02',28;'20131129_1356_coal0-315_test02',29;'20131129_1418_coal0-315_test03',30;'20131129_1437_coal0-315_test04',31;'20131129_1514_ironore315-10_test01',32;'20131129_1554_ironore315-10_test02',33;'20131129_1610_ironore0-315_test01',34;'20131129_1629_ironore0-315_test02',35;'20131129_1648_ironore0-315_test03',36;'20131129_1713_ironore0-315_test04',37;'20131129_1733_ironore0-315_test05',38;'20131129_1831_ironore315-10_test03',39;'20131129_1854_saatbau_test01',40;'20131129_1915_perlite_test01',41;'Iron_ore1030-011013',42;'Iron_ore1030-011013.in',43};
-exp_file_name = exp_file_name_list{30,1}; %'20131129_1059_limestone0-315_test03';
+exp_file_name = exp_file_name_list{25,1}; 
 [coeffShear40, coeffShear60, coeffShear80, coeffShear100, expFtd, expInp, expOut] = experimentalImport(exp_file_name );
 coeffPirker = 1.0;
 densTolerance = 0.05;
@@ -91,8 +97,8 @@ temp_m = find (temp_vm < maxExpFtdRhoB*(1.0+densTolerance));
 temp_n = find (temp_vm > minExpFtdRhoB*(1.0-densTolerance));
 
 [Cij,aij,bij] = intersect(temp_i,temp_j);
-%[Ckl,akl,bkl] = intersect(temp_k,temp_m);
-[Ckl,akl,bkl] = intersect(temp_l,temp_n);
+[Ckl,akl,bkl] = intersect(temp_k,temp_m);
+%[Ckl,akl,bkl] = intersect(temp_l,temp_n);
 [Cijkl,aijkl,bijkl] = intersect(Cij,Ckl);
 
 ni = size(Cijkl,2) ;
@@ -172,7 +178,7 @@ legend('minInput','min', '\mu - \sigma', '\mu', '\mu + \sigma', 'max', 'maxInput
 title ([exp_file_name, 'SRSCT: normal stress = ', num2str(dataNN2.ctrlStress), ' [Pa], coeff. P. = ', num2str(coeffPirker)] ,'FontSize',24);
 print(h1,'-djpeg','-r300',[exp_file_name, 'SRSCTnormalstress', num2str(dataNN2.ctrlStress), 'PacoeffP', num2str(coeffPirker),'0',num2str(41+i),'radarPlot',num2str(i)])
 
-save -v7.3 testPolidispersityDensityBulkBoxTris.mat
+%save -v7.3 testPolidispersityDensityBulkBoxTris.mat
 
 % k=1;
 % 

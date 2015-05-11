@@ -2,6 +2,8 @@
 % gg=find(X<0.4);
 % X(gg)=0;
 
+clearvars merge
+
 
 merge(:,1)=Y';%(sf) %X'; (sf)
 merge(:,2)=Z';%(rf) %Y'; (rf)
@@ -119,3 +121,4 @@ end
   set(gca,'fontname','times new roman','FontSize',20)  % Set it to times
   xlabel('\mu_s [-]', 'FontSize', 20);
 ylabel('\mu_r [-]', 'FontSize', 20);
+print(h7,'-djpeg','-r300',[exp_file_name, 'SRSCTnormalstress', num2str(dataNN2.ctrlStress), 'PacoeffP', num2str(coeffPirker),'0',num2str(41+i),'cloudPlot',num2str(i)])
