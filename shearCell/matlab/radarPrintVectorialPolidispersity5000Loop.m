@@ -38,7 +38,7 @@ for i = 1:3
             merge(:,2)=[res{kkk}.gloriaAugustaSchulzeNN(4,:)]';%(rf) %Y'; (rf)
             merge(:,3)=[res{kkk}.gloriaAugustaSchulzeNN(5,:)]';%(rad_sigma) %S'; (cor)
             
-            [ h7 ] = tilePlotFun( merge,  length(exp2) + kkk,  exp2{j,1}.exp_file_name, dataNN2, coeffPirker );
+            [ h7 ] = tilePlotFun( merge,  length(exp2) + kkk + 100,  exp2{j,1}.exp_file_name, dataNN2, coeffPirker );
         end
         
         kkk = kkk + 1;
