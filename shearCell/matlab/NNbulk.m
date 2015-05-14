@@ -9,6 +9,8 @@ else
  load S:\Luca\testPolidispersityShearCellCokeCoarseCokeFineSinterFineLimestoneFineMatlab\inputRadSigma.mat
 end
 
+dataNN2.rf = sort([dataNN2.rf', 0.025:0.05:0.975]');
+dataNN2.sf = sort([dataNN2.sf', 0.025:0.05:0.975]');
 dataNN2.ctrlStress = 5000; %1068;% [1068,2069,10070];
 dataNN2.radmu = 0.001;
 dataNN2.dens = 2500;
@@ -359,12 +361,18 @@ startMinRhoPreIndex = startMinRhoPreIndex + 3;
 [startMinRhoPostMin, startMinRhoPostIndex] = min(rhoBShearMaxmean(1,7:9));
 startMinRhoPostIndex = startMinRhoPostIndex + 6;
 
-h1=figure(6);
+formatOut = 'yyyy-mm-dd-HH-MM-SS';
+date1 = datestr(now,formatOut);
+
+h2=figure(6);
 %plot(dataNN2.radsigma',avgMuR2mean,dataNN2.radsigma',avgMuR1mean,dataNN2.radsigma',rhoBShearMaxmean,dataNN2.radsigma',rhoBPreShearMaxmean)
 plot(dataNN2.radsigma',avgMuR2mean(:,startMinAvgMuR2Index),dataNN2.radsigma',avgMuR1mean(:, startMinAvgMuR1Index),dataNN2.radsigma',rhoBShearMaxmean(:,startMinRhoPostIndex ),dataNN2.radsigma',rhoBPreShearMaxmean(:, startMinRhoPreIndex))
-xlabel('std dev radius [m]');
-% ylabel('zPos [m]');
+xlabel('std dev radius [m]', 'FontSize', 20);
+set(gca,'fontname','times new roman','FontSize',20)  % Set it to times
+set(h1, 'Position', [100 100 1500 800])
 legend('avgMuR2mean [-]','avgMuR1mean [-]', 'rhoBShearMaxmean [-]', 'rhoBPreShearMaxmean [-]','Location', 'SouthEast' );
-print(h1,'-djpeg','-r300',['0',num2str(41+i),'simulationRadiusDistribution',num2str(i)])
+
+addpath('/mnt/DATA/liggghts/work/shearCell/matlab/exportFig');
+export_fig(['0',num2str(41+i),'simulationRadiusDistribution',num2str(i),date1],'-jpg', '-nocrop', h1);
 
 save -v7.3 testPolidispersityDensityBulkBoxBis.mat

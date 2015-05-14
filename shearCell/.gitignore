@@ -10,6 +10,7 @@ matlab/*.tikz
 matlab/*.FTD
 matlab/*.out
 matlab/*.inp
+matlab/*.jpg
 matlab/BS/
 *.txt
 stats/

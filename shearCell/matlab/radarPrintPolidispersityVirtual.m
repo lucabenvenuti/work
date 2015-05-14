@@ -5,11 +5,12 @@ close all
 clc
 
 % load /mnt/scratchPFMDaten/Luca/testPolidispersityShearCellCokeCoarseCokeFineSinterFineLimestoneFineMatlab/DensityBulkBoxPreShearMaxTest.mat
-load elaboratedTest02Completed.mat
+%load S:\Luca\testShearCellPoli20150428\elaboratedTest02Completed.mat
 
 %load S:\Luca\testShearCellPoli20150428\testPolidispersityDensityBulkBoxBis.mat
-load testPolidispersityDensityBulkBoxQuater.mat
-%exp_file_name = '20131129_1059_limestone0-315_test03';
+%load S:\Luca\testShearCellPoli20150428\testPolidispersityDensityBulkBoxQuater.mat
+load testPolidispersityDensityBulkBoxSepties.mat
+%exp_file_name = '20131129_1059_limestone0-315_test03';sexies
 
 clearvars newY3
 
@@ -33,6 +34,10 @@ densityPostPos = 7;
 densityPrePos = 8;
 
 clearvars newY2
+% startMinAvgMuR2Index = 10 ;
+% startMinAvgMuR1Index = 10 ;
+% startMinRhoPostIndex = 11 ;
+% startMinRhoPreIndex  = 12 ;
 
 newY3(avgMuR2Pos,:) = bulkValue(startMinAvgMuR2Index).avgMuR2;
 newY3(avgMuR1Pos,:) = bulkValue(startMinAvgMuR1Index).avgMuR1;
@@ -98,7 +103,9 @@ temp_n = find (temp_vm > minExpFtdRhoB*(1.0-densTolerance));
 
 [Cij,aij,bij] = intersect(temp_i,temp_j);
 [Ckl,akl,bkl] = intersect(temp_k,temp_m);
-%[Ckl,akl,bkl] = intersect(temp_l,temp_n);
+if (size(akl,1)<1)
+    [Ckl,akl,bkl] = intersect(temp_l,temp_n);
+end
 [Cijkl,aijkl,bijkl] = intersect(Cij,Ckl);
 
 ni = size(Cijkl,2) ;
@@ -172,12 +179,19 @@ G(4,5)= meanZ + stdZ;
 G(4,6)= maxZ;
 G(4,7)= maxZ; %3499; %max(dataNN2.dens); %Z
 
+formatOut = 'yyyy-mm-dd-HH-MM-SS';
+date1 = datestr(now,formatOut);
+
 h1=figure(1)
 a2 = radarPlot(G)
 legend('minInput','min', '\mu - \sigma', '\mu', '\mu + \sigma', 'max', 'maxInput'); %, 'FontSize',24)
 title ([exp_file_name, 'SRSCT: normal stress = ', num2str(dataNN2.ctrlStress), ' [Pa], coeff. P. = ', num2str(coeffPirker)] ,'FontSize',24);
-print(h1,'-djpeg','-r300',[exp_file_name, 'SRSCTnormalstress', num2str(dataNN2.ctrlStress), 'PacoeffP', num2str(coeffPirker),'0',num2str(41+i),'radarPlot',num2str(i)])
-
+set(gca,'fontname','times new roman','FontSize',20)  % Set it to times
+set(h1, 'Position', [100 100 1500 800])
+print(h1,'-djpeg','-r300',[exp_file_name, 'SRSCTnormalstress', num2str(dataNN2.ctrlStress), 'PacoeffP', num2str(coeffPirker*10),'0',num2str(41+i),'radarPlot',num2str(i),date1])
+%export_fig [exp_file_name, 'SRSCTnormalstress', num2str(dataNN2.ctrlStress), 'PacoeffP', num2str(coeffPirker*10),'0',num2str(41+i),'radarPlot',num2str(i),date1,.jpg]
+addpath('/mnt/DATA/liggghts/work/shearCell/matlab/exportFig');
+export_fig([exp_file_name, 'SRSCTnormalstress', num2str(dataNN2.ctrlStress), 'PacoeffP', num2str(coeffPirker*10),'0',num2str(41+i),'radarPlot',num2str(i),date1],'-jpg', '-nocrop', h1);
 %save -v7.3 testPolidispersityDensityBulkBoxTris.mat
 
 % k=1;

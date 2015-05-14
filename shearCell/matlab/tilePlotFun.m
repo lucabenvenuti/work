@@ -1,13 +1,10 @@
-
+function [ h7 ] = tilePlotFun( merge, loopNumber, exp_file_name, dataNN2, coeffPirker )
 % gg=find(X<0.4);
 % X(gg)=0;
 
-clearvars merge
-% 
-% 
-merge(:,1)=Y';%(sf) %X'; (sf)
-merge(:,2)=Z';%(rf) %Y'; (rf)
-merge(:,3)=S';%(rad_sigma) %S'; (cor)
+%clearvars merge
+
+
 
 % merge = [merge1;merge2];
 
@@ -99,7 +96,7 @@ for i=1:w
     
     %    l(:)=0;
 end
-h7=figure(25)
+h7=figure(loopNumber);
 k=1;
 hold on
 for i=app:app:1
@@ -107,16 +104,19 @@ for i=app:app:1
         % Draw tile (i,j)
         if g(k)==255
             % g(i)= 255;
-            h2=fill([i-app i i i-app i-app],[j-app j-app j j j-app], [g(k)/255 g(k)/255 g(k)/255]  , 'EdgeColor', 'none')   ; %
-        elseif g(k)==224
+            h0=fill([i-app i i i-app i-app],[j-app j-app j j j-app], [g(k)/255 g(k)/255 g(k)/255]  , 'EdgeColor', 'none')   ; %
+        elseif g(k)==192
             % g(i)= 224;
-            h2=fill([i-app i i i-app i-app],[j-app j-app j j j-app], [g(k)/255 g(k)/255 g(k)/255]);%, 'EdgeColor', 'none')   ;
+            %h2=fill([i-app i i i-app i-app],[j-app j-app j j j-app], [g(k)/255 g(k)/255 g(k)/255]);%, 'EdgeColor', 'none')   ;
+            h2=fill([i-app i i i-app i-app],[j-app j-app j j j-app], [255/255 0/255 0/255]);%, 'EdgeColor', 'none')   ;
         elseif g(k)==128
             %  g(i)= 128;
-            h3=fill([i-app i i i-app i-app],[j-app j-app j j j-app], [g(k)/255 g(k)/255 g(k)/255]);%, 'EdgeColor', 'none')   ;
+            %h3=fill([i-app i i i-app i-app],[j-app j-app j j j-app], [g(k)/255 g(k)/255 g(k)/255]);%, 'EdgeColor', 'none')   ;
+            h3=fill([i-app i i i-app i-app],[j-app j-app j j j-app], [102/255 204/255 0/255]);%, 'EdgeColor', 'none')   ;
         elseif g(k)==96
             %  g(i)= 96;
-            h4=fill([i-app i i i-app i-app],[j-app j-app j j j-app], [g(k)/255 g(k)/255 g(k)/255]);%, 'EdgeColor', 'none')   ;
+            %             h4=fill([i-app i i i-app i-app],[j-app j-app j j j-app], [g(k)/255 g(k)/255 g(k)/255]);%, 'EdgeColor', 'none')   ;
+            h4=fill([i-app i i i-app i-app],[j-app j-app j j j-app], [0/255 128/255 255/255]);%, 'EdgeColor', 'none')   ;
         elseif g(k)==0
             %g(i)= 0;
             h5=fill([i-app i i i-app i-app],[j-app j-app j j j-app], [g(k)/255 g(k)/255 g(k)/255]);%, 'EdgeColor', 'none')   ;
@@ -137,6 +137,7 @@ end
 %
 %legend([h2 h3 h4 h5],{'0.5<COR<0.6','0.6<COR<0.7', '0.7<COR<0.8', '0.8<COR<0.9'},'Location','SouthWest');
 %legend([h2 h3 h4 h5],{'2.5e-05<rad-sigma<6.9e-05','6.9e-05<rad-sigma<1.1e-04', '1.1e-04<rad-sigma<1.5e-04', '1.5e-04<rad-sigma<2e-04'},'Location','SouthEast');
+if (exist('h2') & exist('h3') & exist('h4') & exist('h5'))
 legend([h2 h3 h4 h5],{[num2str(minC),'<' ,legend1, '<', num2str(int1)],[num2str(int1),'<' ,legend1, '<', ...
     num2str(int2)], [num2str(int2),'<' ,legend1, '<', num2str(int3)], [num2str(int3),'<' ,legend1, '<', num2str(maxC)]},'Location','SouthEast');
 title ([exp_file_name, 'SRSCT: normal stress = ', num2str(dataNN2.ctrlStress), ' [Pa], coeff. P. = ', num2str(coeffPirker)] ,'FontSize',24);
@@ -144,7 +145,7 @@ title ([exp_file_name, 'SRSCT: normal stress = ', num2str(dataNN2.ctrlStress), '
 % legend([h2 h3 h4 ],{'0.5<COR<0.6','0.6<COR<0.7', '0.7<COR<0.8'},'Location','SouthWest');
 % legend([h4 h5],{'0.7<COR<0.8', '0.8<COR<0.9'},'Location','SouthWest');
 set(gca,'fontname','times new roman','FontSize',20)  % Set it to times
- set(h7, 'Position', [100 100 1500 800])
+set(h7, 'Position', [100 100 1500 800])
 %set(gca, 'Position', [0 0 8 ])
 % set(ah,'PaperPositionMode', 'manual', ...
 % 'PaperUnits','centimeters', ...
@@ -154,6 +155,12 @@ ylabel('\mu_r [-]', 'FontSize', 20);
 
 formatOut = 'yyyy-mm-dd-HH-MM-SS';
 date1 = datestr(now,formatOut);
-export_fig([exp_file_name, 'SRSCTnormalstress', num2str(dataNN2.ctrlStress), 'PacoeffP', num2str(coeffPirker*10),'0',num2str(41+i),'cloudPlot',num2str(i),date1],'-jpg', '-nocrop', h1);
 
+if (isunix)
+    addpath('/mnt/DATA/liggghts/work/shearCell/matlab/exportFig');
+else
+    addpath('E:\liggghts\work\shearCell\matlab\exportFig');
+end
+export_fig([exp_file_name, 'SRSCTnormalstress', num2str(dataNN2.ctrlStress), 'PacoeffP', num2str(coeffPirker*10),'0',num2str(41+i),'cloudPlot',num2str(i),date1],'-jpg', '-nocrop', h7);
+end
 % print(h7,'-djpeg','-r300',[exp_file_name, 'SRSCTnormalstress', num2str(dataNN2.ctrlStress), 'PacoeffP', num2str(coeffPirker*10),'0',num2str(41+i),'cloudPlot',num2str(i),date1])
