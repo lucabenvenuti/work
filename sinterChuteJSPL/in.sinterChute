@@ -32,11 +32,12 @@ variable    	volFrac equal 0.01 # 0.60
 if "${OMPON} == 1" then                            &
   "package omp ${NTHREADS} force/neigh thread-binding verbose"  &
   "modify_timing on"      & 
+  "atom_style	granular/omp"                         &
   "print 'OMP is ON'"                         &
 else &
+  "atom_style	granular"  					&
   "print 'OMP is OFF - old version'" 
 
-atom_style	granular
 atom_modify	map array
 boundary	f f f
 newton		off
