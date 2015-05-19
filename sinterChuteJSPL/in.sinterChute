@@ -5,7 +5,7 @@ echo		both
 variable    	rolfrtyp string	epsd2
 
 #### USER input variables
-variable	runTime 	equal 200	# Total simulation time in (s)
+variable	runTime 	equal 100.0	# Total simulation time in (s)
 variable	saveInterval	equal 0.5 	# Save interval
 variable	saveRestart	equal 5.0
 variable	dt		equal 0.00002 	# Time step
@@ -118,13 +118,13 @@ fix		sinter5 all particletemplate/sphere 1 atom_type 1 density constant ${Sinter
 fix		sinter6 all particletemplate/sphere 1 atom_type 1 density constant ${SinterDens} radius constant ${rS6}
 
 #NEW mass % for diameter fractions
-variable	mS0 equal 0.207
-variable	mS1 equal 0.179
-variable	mS2 equal 0.237
-variable	mS3 equal 0.158
-variable	mS4 equal 0.119
-variable	mS5 equal 0.1
-variable	mS6 equal 0.0
+variable	mS0 equal 0.000 # 0.207
+variable	mS1 equal 0.196 # 0.179
+variable	mS2 equal 0.260 # 0.237
+variable	mS3 equal 0.173 # 0.158
+variable	mS4 equal 0.130 # 0.119
+variable	mS5 equal 0.110 # 0.1
+variable	mS6 equal 0.131 # 0.0
 
 fix 	pdd all particledistribution/discrete 524287 7 &
 		sinter0 ${mS0} sinter1 ${mS1} sinter2 ${mS2} sinter3 ${mS3} &
