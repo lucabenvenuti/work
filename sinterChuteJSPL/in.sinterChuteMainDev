@@ -301,8 +301,8 @@ region		top block -23.6 -17.1 -5.3 2.9 10.0 12.7 units box
 
 compute atRad all property/atom radius
 
-variable comp equal "c_atRad >= ${rS6}"
-print "-----> Fexpected ${comp}"
+#variable comp equal "c_atRad >= ${rS6}"
+#print "-----> Fexpected ${comp}"
 
 variable rS0atom atom "c_atRad >= 0.0125"
 variable rS1atom atom "c_atRad >= 0.0150"
