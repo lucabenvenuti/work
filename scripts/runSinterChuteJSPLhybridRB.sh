@@ -3,7 +3,7 @@
 # -------------- PBS Torque settings 
 
 #PBS -N LIGSinthybrid
-#PBS -o $HOME/output/outSinterChuteJSPLhybrid__${PBS_JOBID}.out
+#PBS -o outSinterChuteJSPLhybrid__${PBS_JOBID}.out
 #PBS -j oe
 #PBS -l nodes=8:ppn=8
 #PBS -l walltime=240:00:00

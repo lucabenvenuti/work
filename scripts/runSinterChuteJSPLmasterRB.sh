@@ -3,7 +3,7 @@
 # -------------- PBS Torque settings 
 
 #PBS -N LIGSintmaster
-#PBS -o $HOME/output/outSinterChuteJSPLmaster__${PBS_JOBID}.out
+#PBS -o outSinterChuteJSPLmaster__${PBS_JOBID}.out
 #PBS -j oe
 #PBS -l nodes=8:ppn=8
 #PBS -l walltime=240:00:00
