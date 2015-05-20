@@ -24,3 +24,6 @@
 
 #text files
 *.txt
+
+liseSim/
+lise*
