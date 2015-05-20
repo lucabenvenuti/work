@@ -157,7 +157,7 @@ if "${OMPON} == 1" then                            &
 "fix		cad10 all mesh/surface/omp file mesh/brickInt2.stl	type 2  " &
 "fix		cad11 all mesh/surface/omp file mesh/brickInt3.stl	type 2  " &
 "fix		cad12 all mesh/surface/omp file mesh/deflectorInternal.stl	type 2  " &
-"fix		cad13 all mesh/surface/omp file mesh/internals_noPipe.stl	type 2  " &
+"fix		cad13 all mesh/surface/omp file mesh/internalsNoPipe.stl	type 2  " &
 "fix		cad14 all mesh/surface/omp file mesh/pipeCut.stl	type 2  " &
 "fix		cad15 all mesh/surface/omp file mesh/separators.stl	type 2  " &
 "fix		cad16 all mesh/surface/omp file mesh/separatorsWalls.stl	type 2  " &
@@ -188,7 +188,7 @@ else &
 "fix		cad10 all mesh/surface/stress file mesh/brickInt2.stl	type 2  " &
 "fix		cad11 all mesh/surface/stress file mesh/brickInt3.stl	type 2  " &
 "fix		cad12 all mesh/surface/stress file mesh/deflectorInternal.stl	type 2  " &
-"fix		cad13 all mesh/surface/stress file mesh/internals_noPipe.stl	type 2  " &
+"fix		cad13 all mesh/surface/stress file mesh/internalsNoPipe.stl	type 2  " &
 "fix		cad14 all mesh/surface/stress file mesh/pipeCut.stl	type 2  " &
 "fix		cad15 all mesh/surface/stress file mesh/separators.stl	type 2  " &
 "fix		cad16 all mesh/surface/stress file mesh/separatorsWalls.stl	type 2  " &
