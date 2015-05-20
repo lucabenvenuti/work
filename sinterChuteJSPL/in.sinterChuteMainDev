@@ -156,18 +156,18 @@ if "${OMPON} == 1" then                            &
 "fix		cad10 all mesh/surface/omp file mesh/brickInt2.stl	type 2  " &
 "fix		cad11 all mesh/surface/omp file mesh/brickInt3.stl	type 2  " &
 "fix		cad12 all mesh/surface/omp file mesh/deflectorInternal.stl	type 2  " &
-"fix		cad13 all mesh/surface/omp file mesh/internals_noPipe.stl	type 2  " &
+"fix		cad13 all mesh/surface/omp file mesh/internalsNoPipe.stl	type 2  heal auto_remove_duplicates" &
 "fix		cad14 all mesh/surface/omp file mesh/pipeCut.stl	type 2  " &
-"fix		cad15 all mesh/surface/omp file mesh/separators.stl	type 2  " &
-"fix		cad16 all mesh/surface/omp file mesh/separatorsWalls.stl	type 2  " &
-"fix		cad17 all mesh/surface/omp file mesh/sidesChute.stl	type 2  " &
-"fix		cad18 all mesh/surface/omp file mesh/sideSmallChute.stl	type 2  " &
-"fix		cad19 all mesh/surface/omp file mesh/topChute.stl	type 2  " &
-"fix		cad20 all mesh/surface/omp file mesh/conveyor.stl	type 2  " &
-"fix		cad21 all mesh/surface/omp file mesh/convSide1.stl	type 2  " &
-"fix		cad22 all mesh/surface/omp file mesh/convSide2.stl	type 2  " &
-"fix		cad23 all mesh/surface/omp file mesh/guideSide1V.stl	type 2  " &
-"fix		cad24 all mesh/surface/omp file mesh/guideSide2V.stl	type 2  " &
+"fix		cad15 all mesh/surface/omp file mesh/separators.stl	type 2   heal auto_remove_duplicates  " &
+"fix		cad16 all mesh/surface/omp file mesh/separatorsWalls.stl	type 2   heal auto_remove_duplicates  " &
+"fix		cad17 all mesh/surface/omp file mesh/sidesChute.stl	type 2   heal auto_remove_duplicates  " &
+"fix		cad18 all mesh/surface/omp file mesh/sideSmallChute.stl	type 2   heal auto_remove_duplicates  " &
+"fix		cad19 all mesh/surface/omp file mesh/topChute.stl	type 2   heal auto_remove_duplicates  " &
+"fix		cad20 all mesh/surface/omp file mesh/conveyor.stl	type 2   heal auto_remove_duplicates  " &
+"fix		cad21 all mesh/surface/omp file mesh/convSide1.stl	type 2   heal auto_remove_duplicates  " &
+"fix		cad22 all mesh/surface/omp file mesh/convSide2.stl	type 2   heal auto_remove_duplicates  " &
+"fix		cad23 all mesh/surface/omp file mesh/guideSide1V.stl	type 2   heal auto_remove_duplicates  " &
+"fix		cad24 all mesh/surface/omp file mesh/guideSide2V.stl	type 2   heal auto_remove_duplicates  " &
 "fix		cad25 all mesh/surface/omp file mesh/scraper.stl	type 2  move 0.0 -2.0 0.0" &
 "fix		cad26 all mesh/surface/omp file mesh/scraper.stl	type 2  move 0.0  3.2 0.0" &
 "fix		cad27 all mesh/surface/omp file mesh/scraper.stl	type 2  move 0.0  0.6 0.0" &
