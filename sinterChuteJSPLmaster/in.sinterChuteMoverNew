@@ -186,7 +186,6 @@ fix		ins1 all insert/stream seed 5330 distributiontemplate pdd &
 
 fix     lb all balance 0 xyz 10 1.05
 
-
 #*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=	
 
 fix		integr all nve/sphere
