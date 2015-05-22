@@ -130,7 +130,7 @@ timestep	${dt}
 
 #meshes & gravity #heal auto_remove_duplicates # Face to output mass
                          &
-fix		gravi all gravity/omp 9.81 vector 0.0 0.0 -1.0 " &
+fix		gravi all gravity/omp 9.81 vector 0.0 0.0 -1.0
 fix		cad1 all mesh/surface/omp file mesh/beamsTop.stl	type 2
 fix		cad2 all mesh/surface/omp file mesh/brickConv1.stl	type 2  heal auto_remove_duplicates
 fix		cad3 all mesh/surface/omp file mesh/brickConv2.stl	type 2  heal auto_remove_duplicates
@@ -159,7 +159,7 @@ fix		cad25 all mesh/surface/omp file mesh/scraper.stl	type 2  heal auto_remove_d
 fix		cad26 all mesh/surface/omp file mesh/scraper.stl	type 2  heal auto_remove_duplicates  move 0.0  3.2 0.0
 fix		cad27 all mesh/surface/omp file mesh/scraper.stl	type 2  heal auto_remove_duplicates  move 0.0  0.6 0.0
 fix		meshwalls all wall/gran/omp model hertz tangential history rolling_friction ${rolfrtyp} mesh n_meshes 27 meshes cad1 cad2 &
-cad3 cad4 cad5 cad6 cad7 cad8 cad9 cad10 cad11 cad12 cad13 cad14 cad15 cad16 cad17 cad18 cad19 cad20 cad21 cad22 cad23 cad24 cad25 cad26 cad27" &
+cad3 cad4 cad5 cad6 cad7 cad8 cad9 cad10 cad11 cad12 cad13 cad14 cad15 cad16 cad17 cad18 cad19 cad20 cad21 cad22 cad23 cad24 cad25 cad26 cad27
 
 fix		massFace all mesh/surface/planar file mesh/massFlowFace.stl	type     2
 fix		inface1 all mesh/surface/planar file mesh/inletSingle.stl	type     2
