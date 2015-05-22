@@ -135,10 +135,10 @@ fix		cad9 all mesh/surface/stress file mesh/brickInt1.stl	type 2
 fix		cad10 all mesh/surface/stress file mesh/brickInt2.stl	type 2
 fix		cad11 all mesh/surface/stress file mesh/brickInt3.stl	type 2
 fix		cad12 all mesh/surface/stress file mesh/deflectorInternal.stl	type 2
-fix		cad13 all mesh/surface/stress file mesh/internalsNoPipe.stl	type 2
-fix		cad14 all mesh/surface/stress file mesh/pipeCut.stl	type 2
+fix		cad13 all mesh/surface/stress file mesh/internalsNoPipe.stl	type 2 heal auto_remove_duplicates
+fix		cad14 all mesh/surface/stress file mesh/pipeCut.stl	type 2 heal auto_remove_duplicates
 fix		cad15 all mesh/surface/stress file mesh/separators.stl	type 2
-fix		cad16 all mesh/surface/stress file mesh/separatorsWalls.stl	type 2
+fix		cad16 all mesh/surface/stress file mesh/separatorsWalls.stl	type 2 heal auto_remove_duplicates
 fix		cad17 all mesh/surface/stress file mesh/sidesChute.stl	type 2
 fix		cad18 all mesh/surface/stress file mesh/sideSmallChute.stl	type 2
 fix		cad19 all mesh/surface/stress file mesh/topChute.stl	type 2
@@ -179,7 +179,7 @@ variable	vz0 equal -6.0 #estimated
 fix		ins1 all insert/stream seed 5330 distributiontemplate pdd &
 		mass 1000000 massrate ${chargingrate} overlapcheck yes all_in yes &
 		vel constant 0.0 0.0 ${vz0} extrude_length 0.8 insertion_face inface1
-		
+			
 fix     lb all balance 0 xyz 10 1.05
 
 #*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=	

@@ -121,9 +121,7 @@ fix 	pdd all particledistribution/discrete 524287 7 &
 		sinter0 ${mS0} sinter1 ${mS1} sinter2 ${mS2} sinter3 ${mS3} &
 		sinter4 ${mS4} sinter5 ${mS5} sinter6 ${mS6}
 
-
-
-pair_style 	gran model hertz tangential history rolling_friction ${rolfrtyp} 
+pair_style 	gran model hertz tangential history rolling_friction ${rolfrtyp}
 pair_coeff	* *
 
 #time-step
