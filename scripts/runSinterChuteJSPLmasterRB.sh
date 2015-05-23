@@ -5,8 +5,8 @@
 #PBS -N LIGSintmaster
 #PBS -o ${PBS_JOBID}__outSinterChuteJSPLmaster__${PBS_JOBID}.out
 #PBS -j oe
-#PBS -l nodes=8:ppn=8
-#PBS -l walltime=240:00:00
+#PBS -l nodes=1:ppn=8
+#PBS -l walltime=1:00:00
 #PBS -M luca.benvenuti@jku.at
 #PBS -m bea
 
@@ -38,9 +38,9 @@ DCYLDP=5
 
 echo master mode on
 NTHREADS=1
-XPROCS=4
-YPROCS=4
-ZPROCS=4
+XPROCS=2
+YPROCS=2
+ZPROCS=2
 PROCS=$(($XPROCS*$YPROCS*$ZPROCS))
 MPI_OPTIONS="-np $PROCS"
 

@@ -5,8 +5,8 @@
 #PBS -N LIGSinthybrid
 #PBS -o ${PBS_JOBID}__outSinterChuteJSPLhybrid__${PBS_JOBID}.out
 #PBS -j oe
-#PBS -l nodes=8:ppn=8
-#PBS -l walltime=240:00:00
+#PBS -l nodes=1:ppn=8
+#PBS -l walltime=1:00:00
 #PBS -M luca.benvenuti@jku.at
 #PBS -m bea
 
@@ -42,9 +42,9 @@ export MV2_ENABLE_AFFINITY=0
 export MV2_USE_SHARED_MEM=0
 export MV2_SHOW_CPU_BINDING=1
 NTHREADS=8
-XPROCS=2
-YPROCS=2
-ZPROCS=2
+XPROCS=1
+YPROCS=1
+ZPROCS=1
 PROCS=$(($XPROCS*$YPROCS*$ZPROCS))
 MPI_OPTIONS="-np $PROCS -env MV2_ENABLE_AFFINITY 0 -env MV2_USE_SHARED_MEM 0"
 
