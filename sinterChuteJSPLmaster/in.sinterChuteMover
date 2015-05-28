@@ -46,7 +46,7 @@ units		si
 read_restart	./restart_main/sinterChuteInit_Final.restart
 
 neighbor	0.03 bin
-neigh_modify	delay 0 #binsize 0.08
+neigh_modify	delay 0 binsize 0.08 one 1000
 
 #Material properties required for new pair styles
 #*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=

@@ -42,8 +42,7 @@ region		reg block -23.6 -17.1 -5.3 4.12 4.05 12.7 units box
 create_box	2 reg
 
 neighbor	0.03 bin
-neigh_modify	delay 0 #binsize 0.08
-#neigh_modify 	one 3000
+neigh_modify	delay 0 binsize 0.08 one 1000
 
 #Material properties required for new pair styles
 #*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=
