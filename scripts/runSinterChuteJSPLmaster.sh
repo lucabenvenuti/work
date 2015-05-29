@@ -68,8 +68,8 @@ fi
 
 VARS="-var iden ${PBS_JOBID} -var NTHREADS $NTHREADS -var XPROCS $XPROCS -var YPROCS $YPROCS -var ZPROCS $ZPROCS -var OMPON $OMPON -var DCYLDP $DCYLDP"
 
-#date
-#mpiexec $MPI_OPTIONS liggghts -in in.sinterChute $VARS
+date
+mpiexec $MPI_OPTIONS liggghts -in in.sinterChute $VARS
 date
 mpiexec $MPI_OPTIONS liggghts -in in.sinterChuteMover $VARS
 date
