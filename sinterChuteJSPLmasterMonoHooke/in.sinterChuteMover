@@ -35,7 +35,7 @@ variable    	volFrac equal 0.01 # 0.60
 
 atom_style	granular
 atom_modify	map array
-boundary	m m m 
+boundary	m m m
 newton		off
 
 communicate	single vel yes
@@ -107,19 +107,20 @@ fix		sinter6 all particletemplate/sphere 1 atom_type 1 density constant ${Sinter
 
 #NEW mass % for diameter fractions
 variable	mS0 equal 0.000 # 0.207
-variable	mS1 equal 0.196 # 0.179
-variable	mS2 equal 0.260 # 0.237
-variable	mS3 equal 0.173 # 0.158
-variable	mS4 equal 0.130 # 0.119
-variable	mS5 equal 0.110 # 0.1
-variable	mS6 equal 0.131 # 0.0
+variable	mS1 equal 0.0 # 0.196 # 0.179
+variable	mS2 equal 0.0 # 0.260 # 0.237
+variable	mS3 equal 0.0 # 0.173 # 0.158
+variable	mS4 equal 1.0 # 0.130 # 0.119
+variable	mS5 equal 0.0 # 0.110 # 0.1
+variable	mS6 equal 0.0 # 0.131 # 0.0
 
 fix 	pdd all particledistribution/discrete 524287 7 &
 		sinter0 ${mS0} sinter1 ${mS1} sinter2 ${mS2} sinter3 ${mS3} &
 		sinter4 ${mS4} sinter5 ${mS5} sinter6 ${mS6}
 
 
-pair_style 	gran model hertz tangential history rolling_friction ${rolfrtyp}
+#pair_style 	gran model hertz tangential history rolling_friction ${rolfrtyp}
+pair_style gran model hooke
 pair_coeff	* *
 
 #time-step
@@ -154,6 +155,9 @@ fix		cad24 all mesh/surface/stress file mesh/guideSide2V.stl	type 2
 fix		cad25 all mesh/surface/stress file mesh/scraper.stl	type 2  move 0.0 -2.0 0.0
 fix		cad26 all mesh/surface/stress file mesh/scraper.stl	type 2  move 0.0 3.2 0.0
 fix		cad27 all mesh/surface/stress file mesh/scraper.stl	type 2  move 0.0 0.6 0.0
+#fix		meshwalls all wall/gran model hooke mesh n_meshes 27 meshes cad1 cad2 &
+#cad3 cad4 cad5 cad6 cad7 cad8 cad9 cad10 cad11 cad12 cad13 cad14 cad15 cad16 cad17 cad18 cad19 cad20 cad21 cad22 cad23 cad24 cad25 cad26 cad27 
+
 fix		meshwalls all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} mesh n_meshes 27 meshes cad1 cad2 &
 cad3 cad4 cad5 cad6 cad7 cad8 cad9 cad10 cad11 cad12 cad13 cad14 cad15 cad16 cad17 cad18 cad19 cad20 cad21 cad22 cad23 cad24 cad25 cad26 cad27 
 
@@ -181,7 +185,7 @@ print 		"The total simulation charging/removal rate is now ${chargingrate}"
 variable	vz0 equal -6.0 #estimated
 
 fix		ins1 all insert/stream seed 5330 distributiontemplate pdd &
-		mass 1000000 massrate ${chargingrate} overlapcheck yes all_in yes &
+		mass 100000 massrate ${chargingrate} overlapcheck yes all_in yes &
 		vel constant 0.0 0.0 ${vz0} extrude_length 0.8 insertion_face inface1
 
 fix     lb all balance 0 xyz 10 1.05
