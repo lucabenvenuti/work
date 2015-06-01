@@ -141,7 +141,7 @@ fix		cad25 all mesh/surface/stress file mesh/scraper.stl	type 2  move 0.0 -2.0 0
 fix		cad26 all mesh/surface/stress file mesh/scraper.stl	type 2  move 0.0 3.2 0.0
 fix		cad27 all mesh/surface/stress file mesh/scraper.stl	type 2  move 0.0 0.6 0.0
 
-fix		meshwalls all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} mesh n_meshes 27 meshes cad1 cad2 &
+fix		meshwalls all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} mesh n_meshes 13 meshes cad1 cad2 &
 cad3 cad4 cad12 cad20 cad21 cad22 cad23 cad24 cad25 cad26 cad27 
 
 fix		massFace all mesh/surface/planar file mesh/massFlowFace.stl	type     2
