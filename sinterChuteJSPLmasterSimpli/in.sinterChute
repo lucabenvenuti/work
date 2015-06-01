@@ -125,7 +125,7 @@ fix		gravi all gravity 9.81 vector 0.0 0.0 -1.0
 fix		cad1 all mesh/surface/stress file mesh/bigs.stl	type 2
 fix		cad2 all mesh/surface/stress file mesh/brickConv1.stl	type 2  heal auto_remove_duplicates
 fix		cad3 all mesh/surface/stress file mesh/brickConv2.stl	type 2  heal auto_remove_duplicates
-fix		cad4 all mesh/surface/stress file mesh/smalls.stl	type 2
+fix		cad4 all mesh/surface/stress file mesh/smalls.stl	type 2  heal auto_remove_duplicates
 fix		cad12 all mesh/surface/stress file mesh/deflectorInternal.stl	type 2
 fix		cad20 all mesh/surface/stress file mesh/conveyor.stl	type 2
 fix		cad21 all mesh/surface/stress file mesh/convSide1.stl	type 2
