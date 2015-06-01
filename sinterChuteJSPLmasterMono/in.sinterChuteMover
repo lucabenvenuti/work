@@ -35,7 +35,7 @@ variable    	volFrac equal 0.01 # 0.60
 
 atom_style	granular
 atom_modify	map array
-boundary	m m m
+boundary	f f f
 newton		off
 
 communicate	single vel yes
@@ -228,7 +228,7 @@ run		${runCompletInit}
 
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
 ## Change domain size to fit moving mesh
-change_box 	all x final -23.6 -17.1 y final -7.9 4.12 z final 4.05 12.7 boundary f f f units box
+change_box 	all x final -23.6 -17.1 y final -7.9 4.12 z final 4.05 12.7 boundary m m m units box
 
 ### Remove the excess of particles
 fix		partRemove all mesh/surface/planar file mesh/removePart.stl	type     2
