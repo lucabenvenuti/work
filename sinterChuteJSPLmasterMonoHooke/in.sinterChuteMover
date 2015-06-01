@@ -35,7 +35,7 @@ variable    	volFrac equal 0.01 # 0.60
 
 atom_style	granular
 atom_modify	map array
-boundary	m m m
+boundary	f f f
 newton		off
 
 communicate	single vel yes
