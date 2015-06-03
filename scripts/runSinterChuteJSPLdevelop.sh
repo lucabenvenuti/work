@@ -13,7 +13,7 @@
 #source /etc/csh/login.d/modules
 module() { eval `/usr/bin/modulecmd bash $*`; }
 module use $HOME/modules
-module load gcc mvapich2 zoltan liggghts/APP/develop
+module load gcc mvapich2 zoltan liggghts/PFM/develop
 
 echo "===== main cluster node is:  `hostname `  "
 echo "===== the PBS_NODEFILE: $PBS_NODEFILE"
