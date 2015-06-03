@@ -21,7 +21,6 @@ variable	saveIntSteps	equal ${saveInterval}/${dt}
 variable	saveRestSteps	equal ${saveRestart}/${dt}
 ##################
 
-#shell   	mkdir restart_main
 shell   	mkdir restart_mover
 shell   	mkdir post_main
 shell		mkdir postMass
@@ -42,14 +41,12 @@ newton		off
 communicate	single vel yes
 
 processors      ${XPROCS} ${YPROCS} ${ZPROCS}
-#loadbalance	nlocal/simple ntry 10
-
 units		si
 
 read_restart	./restart_main/sinterChuteInit_Final.restart
 
 neighbor	0.03 bin
-neigh_modify	delay 0 #binsize 0.08
+neigh_modify	delay 0 binsize 0.08 one 1000
 
 #Material properties required for new pair styles
 #*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=
@@ -183,15 +180,13 @@ print 		"The total simulation charging/removal rate is now ${chargingrate}"
 variable	vz0 equal -6.0 #estimated
 
 fix		ins1 all insert/stream seed 5330 distributiontemplate pdd &
-		mass 1000000 massrate ${chargingrate} overlapcheck yes all_in yes &
+		mass 100000 massrate ${chargingrate} overlapcheck yes all_in yes &
 		vel constant 0.0 0.0 ${vz0} extrude_length 0.8 insertion_face inface1
 
 fix     lb all balance 0 xyz 10 1.05
 
-
 #*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=	
 
-#apply nve integration
 fix		integr all nve/sphere
 
 #Calculate mass flow
@@ -232,8 +227,7 @@ run		${runCompletInit}
 
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
 ## Change domain size to fit moving mesh
-change_box 	all x final -23.6 -17.1 y final -7.9 4.12 z final 4.05 12.7 boundary f f f units box
-
+change_box      all x final -26.6 -14.1 y final -10.9 7.12 z final 1.05 15.7 boundary f f f units box
 ### Remove the excess of particles
 fix		partRemove all mesh/surface/planar file mesh/removePart.stl	type     2
 fix 		remP all massflow/mesh mesh partRemove count once vec_side 0. -1.0 0. delete_atoms yes 

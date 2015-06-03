@@ -6,7 +6,7 @@
 #PBS -o ${PBS_JOBID}__outSinterChuteJSPLmaster__${PBS_JOBID}.out
 #PBS -j oe
 #PBS -l nodes=8:ppn=8
-#PBS -l walltime=1:00:00
+#PBS -l walltime=48:00:00
 #PBS -M luca.benvenuti@jku.at
 #PBS -m bea
 
@@ -46,8 +46,8 @@ MPI_OPTIONS="-np $PROCS"
 
 VARS="-var iden ${PBS_JOBID} -var NTHREADS $NTHREADS -var XPROCS $XPROCS -var YPROCS $YPROCS -var ZPROCS $ZPROCS -var OMPON $OMPON -var DCYLDP $DCYLDP"
 
-#date
-#mpiexec $MPI_OPTIONS liggghts -in in.sinterChute $VARS
+date
+mpiexec $MPI_OPTIONS liggghts -in in.sinterChute $VARS
 date
 mpiexec $MPI_OPTIONS liggghts -in in.sinterChuteMover $VARS
 date

@@ -35,21 +35,14 @@ newton		off
 
 communicate	single vel yes
 
-#parallelization
 processors      ${XPROCS} ${YPROCS} ${ZPROCS}
-#loadbalance	nlocal/simple ntry 10
-# load balancing
-
-
 units		si
 
 region		reg block -23.6 -17.1 -5.3 4.12 4.05 12.7 units box
 create_box	2 reg
-#read_restart	restart_init/sinterChuteInit*.restart
 
 neighbor	0.03 bin
-neigh_modify	delay 0 #binsize 0.08
-#neigh_modify 	one 3000
+neigh_modify	delay 0 binsize 0.08 one 1000
 
 #Material properties required for new pair styles
 #*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=
@@ -183,9 +176,8 @@ print 		"The total simulation charging/removal rate is now ${chargingrate}"
 variable	vz0 equal -6.0 #estimated
 
 fix		ins1 all insert/stream seed 5330 distributiontemplate pdd &
-		mass 1000000 massrate ${chargingrate} overlapcheck yes all_in yes &
+		mass 100000 massrate ${chargingrate} overlapcheck yes all_in yes &
 		vel constant 0.0 0.0 ${vz0} extrude_length 0.8 insertion_face inface1
-
 fix     lb all balance 0 xyz 10 1.05
 
 #*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=	
