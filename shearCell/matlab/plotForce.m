@@ -428,15 +428,15 @@ for ii=1:nSimCases
     data(ii).zzzz = data(ii).cad(3).values(:,col_Z)*scaleLength;
     
     if isfield (data(ii), 'numPartBox')
-        data(ii).volSolidBox = data(ii).volPar*data(ii).numPartBox;  %da count
-        data(ii).volSolidCol = data(ii).volPar*data(ii).numPartCol;  %da count
+        data(ii).volSolidBox = data(ii).volPar*data(ii).numPartBox;  %da count, ok only for monodispersed
+        data(ii).volSolidCol = data(ii).volPar*data(ii).numPartCol;  %da count, ok only for monodispersed
         data(ii).volumeTotBox =  data(ii).area*data(ii).zzzz;       %da z
         data(ii).volumeTotCol =  data(ii).area*(data(ii).zzzz-0.25*data(ii).cylDiam); %da z
         
-        data(ii).voidFracBox = (data(ii).volumeTotBox - data(ii).volSolidBox)./data(ii).volSolidBox; %da count
-        data(ii).porosityBox = (data(ii).volumeTotBox - data(ii).volSolidBox)./data(ii).volumeTotBox;  %da count
-        data(ii).voidFracCol = (data(ii).volumeTotCol - data(ii).volSolidCol)./data(ii).volSolidCol; %da count
-        data(ii).porosityCol = (data(ii).volumeTotCol - data(ii).volSolidCol)./data(ii).volumeTotCol;  %da count
+        data(ii).voidFracBox = (data(ii).volumeTotBox - data(ii).volSolidBox)./data(ii).volSolidBox; %da count, ok only for monodispersed
+        data(ii).porosityBox = (data(ii).volumeTotBox - data(ii).volSolidBox)./data(ii).volumeTotBox;  %da count, ok only for monodispersed
+        data(ii).voidFracCol = (data(ii).volumeTotCol - data(ii).volSolidCol)./data(ii).volSolidCol; %da count, ok only for monodispersed
+        data(ii).porosityCol = (data(ii).volumeTotCol - data(ii).volSolidCol)./data(ii).volumeTotCol;  %da count, ok only for monodispersed
         
         
         data(ii).densityBulkBox = data(ii).massPartBox./data(ii).volumeTotBox; %da mass  %[kg/m3]

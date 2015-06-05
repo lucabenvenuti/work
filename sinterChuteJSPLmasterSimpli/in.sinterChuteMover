@@ -214,7 +214,7 @@ run		${runCompletInit}
 
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
 ## Change domain size to fit moving mesh
-change_box      all x final -26.6 -14.1 y final -10.9 7.12 z final 1.05 15.7 boundary f f f units box
+change_box all x final -50.0 50.0 y final -50.0 50.0 z final -50.0 50.0 boundary f f f units box
 ### Remove the excess of particles
 fix		partRemove all mesh/surface/planar file mesh/removePart.stl	type     2
 fix 		remP all massflow/mesh mesh partRemove count once vec_side 0. -1.0 0. delete_atoms yes 
