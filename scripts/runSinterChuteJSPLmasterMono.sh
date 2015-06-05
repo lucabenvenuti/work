@@ -5,8 +5,8 @@
 #PBS -N LIGSintmasterMono
 #PBS -o ${PBS_JOBID}__outSinterChuteJSPLmasterMono__${PBS_JOBID}.out
 #PBS -j oe
-#PBS -l nodes=1:ppn=8
-#PBS -l walltime=2:00:00
+#PBS -l nodes=8:ppn=8
+#PBS -l walltime=48:00:00
 #PBS -M luca.benvenuti@jku.at
 #PBS -m bea
 
@@ -38,16 +38,16 @@ DCYLDP=5
 
 echo master mode on
 NTHREADS=1
-XPROCS=2
-YPROCS=2
-ZPROCS=2
+XPROCS=4
+YPROCS=4
+ZPROCS=4
 PROCS=$(($XPROCS*$YPROCS*$ZPROCS))
 MPI_OPTIONS="-np $PROCS"
 
 VARS="-var iden ${PBS_JOBID} -var NTHREADS $NTHREADS -var XPROCS $XPROCS -var YPROCS $YPROCS -var ZPROCS $ZPROCS -var OMPON $OMPON -var DCYLDP $DCYLDP"
 
-#date
-#mpiexec $MPI_OPTIONS liggghts -in in.sinterChute $VARS
+date
+mpiexec $MPI_OPTIONS liggghts -in in.sinterChute $VARS
 date
 mpiexec $MPI_OPTIONS liggghts -in in.sinterChuteMover $VARS
 date
