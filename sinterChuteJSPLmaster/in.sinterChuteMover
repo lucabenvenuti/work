@@ -227,7 +227,7 @@ run		${runCompletInit}
 
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
 ## Change domain size to fit moving mesh
-change_box      all x final -24.6 -16.1 y final -6.3 5.12 z final 3.05 13.7 boundary f f f units box
+change_box      all x final -23.6 -17.1 y final -5.3 4.12 z final 4.05 13.7 boundary f f f units box
 run 			10	
 print 		"First box expansion completed"
 
