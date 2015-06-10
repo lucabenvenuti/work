@@ -118,7 +118,6 @@ fix 	pdd all particledistribution/discrete 524287 7 &
 		sinter0 ${mS0} sinter1 ${mS1} sinter2 ${mS2} sinter3 ${mS3} &
 		sinter4 ${mS4} sinter5 ${mS5} sinter6 ${mS6}
 
-
 pair_style 	gran model hertz tangential history rolling_friction ${rolfrtyp}
 pair_coeff	* *
 
@@ -228,6 +227,18 @@ run		${runCompletInit}
 
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
 ## Change domain size to fit moving mesh
+change_box      all x final -24.6 -16.1 y final -6.3 5.12 z final 3.05 13.7 boundary f f f units box
+run 			10	
+print 		"First box expansion completed"
+
+change_box      all x final -25.6 -15.1 y final -7.3 6.12 z final 2.05 14.7 boundary f f f units box
+run 			10
+print 		"Second box expansion completed"
+
+change_box      all x final -25.6 -15.1 y final -9.9 6.12 z final 2.05 14.7 boundary f f f units box
+run 			10
+print 		"Third box expansion completed"
+
 change_box      all x final -26.6 -14.1 y final -10.9 7.12 z final 1.05 15.7 boundary f f f units box
 ### Remove the excess of particles
 fix		partRemove all mesh/surface/planar file mesh/removePart.stl	type     2
