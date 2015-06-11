@@ -267,7 +267,7 @@ change_box      all x final -23.6 -17.1 y final -6.0 5.12 z final 3.05 13.7 boun
 run                     10
 print        "First 10 box expansion completed"
 
-change_box      all x final -23.6 -17.1 y final -6.1 5.12 z final 3.05 13.7 boundary f f f units box
+change_box      all x final -23.6 -17.1 y final -6.05 5.12 z final 3.05 13.7 boundary f f f units box
 run                     10
 print        "First 11 box expansion completed"
 
