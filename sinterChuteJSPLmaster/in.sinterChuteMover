@@ -239,17 +239,33 @@ change_box      all x final -23.6 -17.1 y final -5.3 5.12 z final 3.05 13.7 boun
 run 			10	
 print 		"First 3 box expansion completed"
 
+change_box      all x final -23.6 -17.1 y final -5.4 5.12 z final 3.05 13.7 boundary f f f units box
+run                     10
+print       "First 4 box expansion completed"
+
 change_box      all x final -23.6 -17.1 y final -5.5 5.12 z final 3.05 13.7 boundary f f f units box
-run 			10	
-print 		"First 4 box expansion completed"
+run                     10
+print        "First 5 box expansion completed"
+
+change_box      all x final -23.6 -17.1 y final -5.6 5.12 z final 3.05 13.7 boundary f f f units box
+run                     10
+print        "First 6 box expansion completed"
 
 change_box      all x final -23.6 -17.1 y final -5.7 5.12 z final 3.05 13.7 boundary f f f units box
-run 			10	
-print 		"First 5 box expansion completed"
+run                     10
+print        "First 7 box expansion completed"
+
+change_box      all x final -23.6 -17.1 y final -5.8 5.12 z final 3.05 13.7 boundary f f f units box
+run                     10
+print        "First 8 box expansion completed"
 
 change_box      all x final -23.6 -17.1 y final -5.9 5.12 z final 3.05 13.7 boundary f f f units box
-run 			10	
-print 		"First 6 box expansion completed"
+run                     10
+print        "First 9 box expansion completed"
+
+change_box      all x final -23.6 -17.1 y final -6.0 5.12 z final 3.05 13.7 boundary f f f units box
+run                     10
+print        "First 10 box expansion completed"
 
 #change_box      all x final -25.6 -16.1 y final -7.3 6.12 z final 2.05 14.7 boundary f f f units box
 #run 			10
