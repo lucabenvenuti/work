@@ -38,7 +38,7 @@ communicate	single vel yes
 processors      ${XPROCS} ${YPROCS} ${ZPROCS}
 units		si
 
-region		reg block -23.6 -17.1 -5.3 4.12 4.05 12.7 units box
+region		reg block -24.5 -16.2 -7.0 5.12 3.05 13.7 units box
 create_box	2 reg
 
 neighbor	0.03 bin
