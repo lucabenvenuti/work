@@ -211,9 +211,9 @@ fix 	 dumpMass all print ${dumpMassRate} "${simulatedTime} ${outMass} ${outParti
 screen no title "Time Mass Particle MassRate PartRate delMass delPart" file postMass/massFlowMover.txt
 
 ####### Output size distribution % #########
-region		lay8 block -22.0 -18.0 0.15 2.15 4.15 4.35 units box
-region		lay7 block -22.0 -18.0 0.15 2.15 4.85 5.05 units box
-region		lay6 block -22.0 -18.0 0.15 2.15 5.55 5.75 units box
+region		lay8 block -22.0 -18.0 0.15 2.15 4.15 4.75 units box
+region		lay7 block -22.0 -18.0 0.15 2.15 4.75 5.25 units box
+region		lay6 block -22.0 -18.0 0.15 2.15 5.25 5.75 units box
 
 compute atRad all property/atom radius
 
@@ -268,7 +268,7 @@ fix 	 dumpRate all print ${countRate} "${simulatedTime} step ${rS0percLay8} ${rS
 screen no title 			"simulatedTime step rS0percLay8 rS1percLay8 rS2percLay8 rS3percLay8 rS4percLay8 rS5percLay8 &
 							rS6percLay8       &
 					 rS0percLay7 rS1percLay7 rS2percLay7 rS3percLay7 rS4percLay7 rS5percLay7 rS6percLay7 &
-					 rS0percLay6 rS1percLay6 rS2percLay6 rS3percLay6 rS4percLay6 rS5percLay6 rS6percLay6 " file postMass/countRateLayer.txt
+					 rS0percLay6 rS1percLay6 rS2percLay6 rS3percLay6 rS4percLay6 rS5percLay6 rS6percLay6 " file postMass/countRateLayer3.txt
 
 
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-

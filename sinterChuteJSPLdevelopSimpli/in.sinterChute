@@ -267,12 +267,56 @@ variable rS6percTop   		equal count(rS6group,top)
 
 variable countRate 		equal ${dumpMassRate}+2
 
-fix 	 dumpRate all print ${countRate} "${rS0percBottom} ${rS1percBottom} ${rS2percBottom} ${rS3percBottom} ${rS4percBottom} ${rS5percBottom} ${rS6percBottom}       &
+fix 	 dumpRate1 all print ${countRate} "${rS0percBottom} ${rS1percBottom} ${rS2percBottom} ${rS3percBottom} ${rS4percBottom} ${rS5percBottom} ${rS6percBottom}       &
 					  ${rS0percCentral} ${rS1percCentral} ${rS2percCentral} ${rS3percCentral} ${rS4percCentral} ${rS5percCentral} ${rS6percCentral} &
 					  ${rS0percTop} ${rS1percTop} ${rS2percTop} ${rS3percTop} ${rS4percTop} ${rS5percTop} ${rS6percTop}                       " &
 screen no title 			"rS0percBottom rS1percBottom rS2percBottom rS3percBottom rS4percBottom rS5percBottom rS6percBottom       &
 					 rS0percCentral rS1percCentral rS2percCentral rS3percCentral rS4percCentral rS5percCentral rS6percCentral &
-					 rS0percTop rS1percTop rS2percTop rS3percTop rS4percTop rS5percTop rS6percTop " file postMass/countRate.txt
+					 rS0percTop rS1percTop rS2percTop rS3percTop rS4percTop rS5percTop rS6percTop " file postMass/countRate1.txt
+
+#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
+####### Output size distribution % #########
+region		lay8 block -22.0 -18.0 0.15 2.15 4.15 4.75 units box
+region		lay7 block -22.0 -18.0 0.15 2.15 4.75 5.25 units box
+region		lay6 block -22.0 -18.0 0.15 2.15 5.25 5.75 units box
+
+variable rS0percLay8   	equal count(rS0group,lay8)
+variable rS1percLay8   	equal count(rS1group,lay8)
+variable rS2percLay8   	equal count(rS2group,lay8)
+variable rS3percLay8   	equal count(rS3group,lay8)
+variable rS4percLay8   	equal count(rS4group,lay8)
+variable rS5percLay8   	equal count(rS5group,lay8)
+variable rS6percLay8   	equal count(rS6group,lay8)
+
+variable rS0percLay7   	equal count(rS0group,lay7)
+variable rS1percLay7   	equal count(rS1group,lay7)
+variable rS2percLay7   	equal count(rS2group,lay7)
+variable rS3percLay7   	equal count(rS3group,lay7)
+variable rS4percLay7   	equal count(rS4group,lay7)
+variable rS5percLay7   	equal count(rS5group,lay7)
+variable rS6percLay7   	equal count(rS6group,lay7)
+
+variable rS0percLay6   	equal count(rS0group,lay6)
+variable rS1percLay6   	equal count(rS1group,lay6)
+variable rS2percLay6   	equal count(rS2group,lay6)
+variable rS3percLay6   	equal count(rS3group,lay6)
+variable rS4percLay6   	equal count(rS4group,lay6)
+variable rS5percLay6   	equal count(rS5group,lay6)
+variable rS6percLay6   	equal count(rS6group,lay6)
+
+#variable countRate 		equal ${dumpMassRate}+2
+#simulatedTime	equal ${dt}*step		
+fix 	 dumpRate2 all print ${countRate} "${simulatedTime} step ${rS0percLay8} ${rS1percLay8} ${rS2percLay8} ${rS3percLay8} &
+										${rS4percLay8} ${rS5percLay8} ${rS6percLay8}       &
+					  					${rS0percLay7} ${rS1percLay7} ${rS2percLay7} ${rS3percLay7} &
+										${rS4percLay7} ${rS5percLay7} ${rS6percLay7} &
+					  					${rS0percLay6} ${rS1percLay6} ${rS2percLay6} ${rS3percLay6} &
+										${rS4percLay6} ${rS5percLay6} ${rS6percLay6}        " &
+screen no title 			"simulatedTime step rS0percLay8 rS1percLay8 rS2percLay8 rS3percLay8 rS4percLay8 rS5percLay8 &
+							rS6percLay8       &
+					 rS0percLay7 rS1percLay7 rS2percLay7 rS3percLay7 rS4percLay7 rS5percLay7 rS6percLay7 &
+					 rS0percLay6 rS1percLay6 rS2percLay6 rS3percLay6 rS4percLay6 rS5percLay6 rS6percLay6 " file postMass/countRateLayer2.txt
+
 
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
 
