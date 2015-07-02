@@ -14,7 +14,7 @@ variable	dt		equal 0.00002 	# Time step
 
 ### SYSTEM variables
 variable	runCompletInit	equal 1000 # 50/${dt}
-variable	runSecondFill	equal 1000 #250.0/${dt}
+variable	runSecondFill	equal 100.0/${dt}
 variable	runMoveScrap	equal 25.0/${dt}
 variable	runTimeSteps	equal ${runTime}/${dt}
 variable	saveIntSteps	equal ${saveInterval}/${dt}
@@ -211,9 +211,9 @@ fix 	 dumpMass all print ${dumpMassRate} "${simulatedTime} ${outMass} ${outParti
 screen no title "Time Mass Particle MassRate PartRate delMass delPart" file postMass/massFlowMover.txt
 
 ####### Output size distribution % #########
-region		lay8 block -22.0 -18.0 0.15 2.15 4.15 4.75 units box
-region		lay7 block -22.0 -18.0 0.15 2.15 4.75 5.25 units box
-region		lay6 block -22.0 -18.0 0.15 2.15 5.25 5.75 units box
+region		lay8 block -22.0 -18.0 -2.15 0.15 4.15 4.75 units box
+region		lay7 block -22.0 -18.0 -2.15 0.15 4.75 5.25 units box
+region		lay6 block -22.0 -18.0 -2.15 0.15 5.25 5.75 units box
 
 compute atRad all property/atom radius
 
