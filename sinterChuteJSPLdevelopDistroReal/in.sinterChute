@@ -227,11 +227,11 @@ region		top 	block -23.6 -17.1 -5.3 2.9 10.0 12.7 units box
 region		lay8 	block -22.0 -18.0 -2.15 0.15 4.15 4.75 units box
 region		lay7 	block -22.0 -18.0 -2.15 0.15 4.75 5.25 units box
 region		lay6	block -22.0 -18.0 -2.15 0.15 5.25 5.75 units box
-region		lay5 	block -22.0 -18.0 -3.15 -0.85 5.75 6.25 units box
-region		lay4 	block -22.0 -18.0 -3.15 -0.85 6.25 6.75 units box
-region		lay3 	block -22.0 -18.0 -3.15 -0.85 6.75 7.25 units box
-region		lay2 	block -22.0 -18.0 -3.15 -0.85 7.25 7.75 units box
-region		lay1 	block -22.0 -18.0 -3.15 -0.85 7.75 8.25 units box
+region		lay5 	block -22.0 -18.0 -0.85 1.15 5.75 6.25 units box
+region		lay4 	block -22.0 -18.0 -0.85 1.15 6.25 6.75 units box
+region		lay3 	block -22.0 -18.0 -0.85 1.15 6.75 7.25 units box
+region		lay2 	block -22.0 -18.0 -0.85 1.15 7.25 7.75 units box
+region		lay1 	block -22.0 -18.0 -0.85 1.15 7.75 8.25 units box
 
 compute atRad all property/atom radius
 
