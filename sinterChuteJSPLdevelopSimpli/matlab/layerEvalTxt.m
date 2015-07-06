@@ -13,7 +13,13 @@ close all
 clc
 
 %% Initialize variables.
-filename = '/mnt/scratchPFMDaten/Luca/20150706/sinterChuteJSPLdevelopSimpli/postMass/countRateLayer3.txt';
+
+if (isunix)
+    filename = '/mnt/scratchPFMDaten/Luca/20150706/sinterChuteJSPLdevelopSimpli/postMass/countRateLayer3.txt';
+else
+    filename = 'S:\Luca\20150706\sinterChuteJSPLdevelopSimpli\postMass\countRateLayer3.txt';
+end
+
 delimiter = ' ';
 
 %% Read columns of data as strings:
