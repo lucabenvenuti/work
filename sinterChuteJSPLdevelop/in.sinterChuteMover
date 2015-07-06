@@ -13,8 +13,8 @@ variable	dt		equal 0.00002 	# Time step
 ###################
 
 ### SYSTEM variables
-variable	runCompletInit	equal 1 # 50/${dt}
-variable	runSecondFill	equal 1 #250.0/${dt}
+variable	runCompletInit	equal 1000 # 50/${dt}
+variable	runSecondFill	equal 100.0/${dt}
 variable	runMoveScrap	equal 25.0/${dt}
 variable	runTimeSteps	equal ${runTime}/${dt}
 variable	saveIntSteps	equal ${saveInterval}/${dt}
@@ -126,25 +126,11 @@ timestep	${dt}
 
 #meshes & gravity #heal auto_remove_duplicates # Face to output mass
 fix		gravi all gravity 9.81 vector 0.0 0.0 -1.0
-fix		cad1 all mesh/surface/stress file mesh/beamsTop.stl	type 2
+fix		cad1 all mesh/surface/stress file mesh/bigs.stl	type 2
 fix		cad2 all mesh/surface/stress file mesh/brickConv1.stl	type 2  heal auto_remove_duplicates
 fix		cad3 all mesh/surface/stress file mesh/brickConv2.stl	type 2  heal auto_remove_duplicates
-fix		cad4 all mesh/surface/stress file mesh/bricTop1.stl	type 2
-fix		cad5 all mesh/surface/stress file mesh/bricTop2.stl	type 2
-fix		cad6 all mesh/surface/stress file mesh/bricTop3.stl	type 2
-fix		cad7 all mesh/surface/stress file mesh/convChute1.stl	type 2
-fix		cad8 all mesh/surface/stress file mesh/convChute2.stl	type 2
-fix		cad9 all mesh/surface/stress file mesh/brickInt1.stl	type 2
-fix		cad10 all mesh/surface/stress file mesh/brickInt2.stl	type 2
-fix		cad11 all mesh/surface/stress file mesh/brickInt3.stl	type 2
+fix		cad4 all mesh/surface/stress file mesh/smalls.stl	type 2  heal auto_remove_duplicates
 fix		cad12 all mesh/surface/stress file mesh/deflectorInternal.stl	type 2
-fix		cad13 all mesh/surface/stress file mesh/internalsNoPipe.stl	type 2
-fix		cad14 all mesh/surface/stress file mesh/pipeCut.stl	type 2
-fix		cad15 all mesh/surface/stress file mesh/separators.stl	type 2
-fix		cad16 all mesh/surface/stress file mesh/separatorsWalls.stl	type 2
-fix		cad17 all mesh/surface/stress file mesh/sidesChute.stl	type 2
-fix		cad18 all mesh/surface/stress file mesh/sideSmallChute.stl	type 2
-fix		cad19 all mesh/surface/stress file mesh/topChute.stl	type 2
 fix		cad20 all mesh/surface/stress file mesh/conveyor.stl	type 2
 fix		cad21 all mesh/surface/stress file mesh/convSide1.stl	type 2
 fix		cad22 all mesh/surface/stress file mesh/convSide2.stl	type 2
@@ -153,8 +139,9 @@ fix		cad24 all mesh/surface/stress file mesh/guideSide2V.stl	type 2
 fix		cad25 all mesh/surface/stress file mesh/scraper.stl	type 2  move 0.0 -2.0 0.0
 fix		cad26 all mesh/surface/stress file mesh/scraper.stl	type 2  move 0.0 3.2 0.0
 fix		cad27 all mesh/surface/stress file mesh/scraper.stl	type 2  move 0.0 0.6 0.0
-fix		meshwalls all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} mesh n_meshes 27 meshes cad1 cad2 &
-cad3 cad4 cad5 cad6 cad7 cad8 cad9 cad10 cad11 cad12 cad13 cad14 cad15 cad16 cad17 cad18 cad19 cad20 cad21 cad22 cad23 cad24 cad25 cad26 cad27 
+
+fix		meshwalls all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} mesh n_meshes 13 meshes cad1 cad2 &
+cad3 cad4 cad12 cad20 cad21 cad22 cad23 cad24 cad25 cad26 cad27 
 
 fix		massFace all mesh/surface/planar file mesh/massFlowFace.stl	type     2
 fix		inface1 all mesh/surface/planar file mesh/inletSingle.stl	type     2
@@ -207,7 +194,7 @@ dump		dmp all custom ${saveIntSteps} ./post_main/dump*.sinterChuteMover id type 
 #dump 		dmp all custom/vtk ${saveIntSteps} post_main/sinterChute*.vtu id type x y z vx vy vz fx fy fz omegax omegay omegaz radius 
 #dump		dmp2 all custom ${saveIntSteps} post_main/dump*.evalout id type x y z vx vy vz radius # I think you could comment this dump?! I don't think you need it.
 dump 		dumpstress all mesh/gran/VTK ${saveIntSteps} post_main/dumpMover*.vtk stress cad1 cad2 &
-cad3 cad4 cad5 cad6 cad7 cad8 cad9 cad10 cad11 cad12 cad13 cad14 cad15 cad16 cad17 cad18 cad19 cad20 cad21 cad22 cad23 cad24 cad25 cad26 cad27
+cad3 cad4 cad12 cad20 cad21 cad22 cad23 cad24 cad25 cad26 cad27
 
 ####### Output Mass #########
 variable outMass	equal f_mass[1]
@@ -223,11 +210,72 @@ variable dumpMassRate equal 0.01/${dt} # Set mass flow output interval!
 fix 	 dumpMass all print ${dumpMassRate} "${simulatedTime} ${outMass} ${outParticle} ${outMassRate} ${outPartRate} ${outDelMass} ${outDelPart}" &
 screen no title "Time Mass Particle MassRate PartRate delMass delPart" file postMass/massFlowMover.txt
 
+####### Output size distribution % #########
+region		lay8 block -22.0 -18.0 -2.15 0.15 4.15 4.75 units box
+region		lay7 block -22.0 -18.0 -2.15 0.15 4.75 5.25 units box
+region		lay6 block -22.0 -18.0 -2.15 0.15 5.25 5.75 units box
+
+compute atRad all property/atom radius
+
+variable rS0atom atom "c_atRad >= 0.0125"
+variable rS1atom atom "c_atRad >= 0.0150"
+variable rS2atom atom "c_atRad >= 0.0250"
+variable rS3atom atom "c_atRad >= 0.0400"
+variable rS4atom atom "c_atRad >= 0.0625"
+variable rS5atom atom "c_atRad >= 0.1000"
+variable rS6atom atom "c_atRad >= 0.1250"
+
+group rS0group dynamic all var rS0atom every ${dumpMassRate}
+group rS1group dynamic all var rS1atom every ${dumpMassRate}
+group rS2group dynamic all var rS2atom every ${dumpMassRate}
+group rS3group dynamic all var rS3atom every ${dumpMassRate}
+group rS4group dynamic all var rS4atom every ${dumpMassRate}
+group rS5group dynamic all var rS5atom every ${dumpMassRate}
+group rS6group dynamic all var rS6atom every ${dumpMassRate}
+
+variable rS0percLay8   	equal count(rS0group,lay8)
+variable rS1percLay8   	equal count(rS1group,lay8)
+variable rS2percLay8   	equal count(rS2group,lay8)
+variable rS3percLay8   	equal count(rS3group,lay8)
+variable rS4percLay8   	equal count(rS4group,lay8)
+variable rS5percLay8   	equal count(rS5group,lay8)
+variable rS6percLay8   	equal count(rS6group,lay8)
+
+variable rS0percLay7   	equal count(rS0group,lay7)
+variable rS1percLay7   	equal count(rS1group,lay7)
+variable rS2percLay7   	equal count(rS2group,lay7)
+variable rS3percLay7   	equal count(rS3group,lay7)
+variable rS4percLay7   	equal count(rS4group,lay7)
+variable rS5percLay7   	equal count(rS5group,lay7)
+variable rS6percLay7   	equal count(rS6group,lay7)
+
+variable rS0percLay6   	equal count(rS0group,lay6)
+variable rS1percLay6   	equal count(rS1group,lay6)
+variable rS2percLay6   	equal count(rS2group,lay6)
+variable rS3percLay6   	equal count(rS3group,lay6)
+variable rS4percLay6   	equal count(rS4group,lay6)
+variable rS5percLay6   	equal count(rS5group,lay6)
+variable rS6percLay6   	equal count(rS6group,lay6)
+
+variable countRate 		equal ${dumpMassRate}+2
+#simulatedTime	equal ${dt}*step		
+fix 	 dumpRate all print ${countRate} "${simulatedTime} step ${rS0percLay8} ${rS1percLay8} ${rS2percLay8} ${rS3percLay8} &
+										${rS4percLay8} ${rS5percLay8} ${rS6percLay8}       &
+					  					${rS0percLay7} ${rS1percLay7} ${rS2percLay7} ${rS3percLay7} &
+										${rS4percLay7} ${rS5percLay7} ${rS6percLay7} &
+					  					${rS0percLay6} ${rS1percLay6} ${rS2percLay6} ${rS3percLay6} &
+										${rS4percLay6} ${rS5percLay6} ${rS6percLay6}        " &
+screen no title 			"simulatedTime step rS0percLay8 rS1percLay8 rS2percLay8 rS3percLay8 rS4percLay8 rS5percLay8 &
+							rS6percLay8       &
+					 rS0percLay7 rS1percLay7 rS2percLay7 rS3percLay7 rS4percLay7 rS5percLay7 rS6percLay7 &
+					 rS0percLay6 rS1percLay6 rS2percLay6 rS3percLay6 rS4percLay6 rS5percLay6 rS6percLay6 " file postMass/countRateLayer3.txt
+
+
+#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
+
 run		${runCompletInit}
 
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
-## Change domain size to fit moving mesh
-change_box      all x final -26.6 -14.1 y final -10.9 7.12 z final 1.05 15.7 boundary f f f units box
 ### Remove the excess of particles
 fix		partRemove all mesh/surface/planar file mesh/removePart.stl	type     2
 fix 		remP all massflow/mesh mesh partRemove count once vec_side 0. -1.0 0. delete_atoms yes 
@@ -239,8 +287,6 @@ variable outMassRateR	equal f_remP[3]
 variable outPartRateR	equal f_remP[4]
 variable outDelMassR	equal f_remP[5]
 variable outDelPartR	equal f_remP[6]
-#variable simulatedTime	equal ${dt}*step		
-#variable dumpMassRate equal 0.01/${dt} # Set mass flow output interval!
  
 fix 	 deleteMass all print ${dumpMassRate} "${simulatedTime} ${outMassR} ${outParticleR} ${outMassRateR} ${outPartRateR} ${outDelMassR} ${outDelPartR}" &
 screen no title "Time Mass Particle MassRate PartRate delMass delPart" file ./postMassRem/massRemoved.txt
