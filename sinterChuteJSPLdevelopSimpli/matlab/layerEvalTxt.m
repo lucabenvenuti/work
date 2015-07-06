@@ -16,8 +16,10 @@ clc
 
 if (isunix)
     filename = '/mnt/scratchPFMDaten/Luca/20150706/sinterChuteJSPLdevelopSimpli/postMass/countRateLayer3.txt';
+    addpath('/mnt/DATA/liggghts/work/shearCell/matlab/exportFig');
 else
     filename = 'S:\Luca\20150706\sinterChuteJSPLdevelopSimpli\postMass\countRateLayer3.txt';
+    addpath('E:\liggghts\work\shearCell\matlab\exportFig');
 end
 
 delimiter = ' ';
@@ -282,36 +284,92 @@ set(gca,'fontname','times new roman','FontSize',20)  % Set it to times
 xlim([-0.01 0.31])
 hold off;
 
-figure(5)
+h5 = figure(5);
 plot(asimulatedTime,rS8totalVolume,'DisplayName','rS0percLay8');
 hold all;
 plot(asimulatedTime,rS7totalVolume,'DisplayName','rS1percLay8');
+legend('Location','SouthWest' )
+xlabel('time (s)','FontSize',20)
+ylabel('volume (m^3)','FontSize',20)
+set(gca,'fontname','times new roman','FontSize',20)  % Set it to times
 hold off;
 
-figure(6)
-plot(asimulatedTime,rS6percLay6,'DisplayName','rS6percLay6');hold all;plot(asimulatedTime,rS6percLay7,'DisplayName','rS6percLay7');plot(asimulatedTime,rS6percLay8,'DisplayName','rS6percLay8');hold off;
-
-figure(7)
-plot(asimulatedTime,rS5percLay6,'DisplayName','rS5percLay6');hold all;plot(asimulatedTime,rS5percLay7,'DisplayName','rS5percLay7');plot(asimulatedTime,rS5percLay8,'DisplayName','rS5percLay8');hold off;
+formatOut = 'yyyy-mm-dd-HH-MM-SS';
+date1 = datestr(now,formatOut);
 
 
-figure(8)
-plot(asimulatedTime,rS4percLay6,'DisplayName','rS4percLay6');hold all;plot(asimulatedTime,rS4percLay7,'DisplayName','rS4percLay7');plot(asimulatedTime,rS4percLay8,'DisplayName','rS4percLay8');hold off;
+h6 = figure(6);
+plot(asimulatedTime,rS6percLay6,'DisplayName','rS6percLay6');hold all;plot(asimulatedTime,rS6percLay7,'DisplayName','rS6percLay7');plot(asimulatedTime,rS6percLay8,'DisplayName','rS6percLay8');
+legend('Location','SouthWest' )
+title('rS6: radius = 0.025 m');
+xlabel('time (s)','FontSize',20)
+ylabel('volume (m^3)','FontSize',20)
+set(gca,'fontname','times new roman','FontSize',20)
+hold off;
+export_fig(['rS6',date1],'-jpg', '-nocrop', h6);
+
+h7 = figure(7);
+plot(asimulatedTime,rS5percLay6,'DisplayName','rS5percLay6');hold all;plot(asimulatedTime,rS5percLay7,'DisplayName','rS5percLay7');plot(asimulatedTime,rS5percLay8,'DisplayName','rS5percLay8');
+legend('Location','SouthWest' )
+title('rS5: radius = 0.020 m');
+xlabel('time (s)','FontSize',20)
+ylabel('volume (m^3)','FontSize',20)
+set(gca,'fontname','times new roman','FontSize',20)
+hold off;
+export_fig(['rS5',date1],'-jpg', '-nocrop', h7);
 
 
-figure(9)
-plot(asimulatedTime,rS3percLay6,'DisplayName','rS3percLay6');hold all;plot(asimulatedTime,rS3percLay7,'DisplayName','rS3percLay7');plot(asimulatedTime,rS3percLay8,'DisplayName','rS3percLay8');hold off;
+h8 = figure(8);
+plot(asimulatedTime,rS4percLay6,'DisplayName','rS4percLay6');hold all;plot(asimulatedTime,rS4percLay7,'DisplayName','rS4percLay7');plot(asimulatedTime,rS4percLay8,'DisplayName','rS4percLay8');
+legend('Location','SouthWest' )
+title('rS4: radius = 0.010 m');
+xlabel('time (s)','FontSize',20)
+ylabel('volume (m^3)','FontSize',20)
+set(gca,'fontname','times new roman','FontSize',20)
+hold off;
+export_fig(['rS4',date1],'-jpg', '-nocrop', h8);
 
 
-figure(10)
-plot(asimulatedTime,rS2percLay6,'DisplayName','rS2percLay6');hold all;plot(asimulatedTime,rS2percLay7,'DisplayName','rS2percLay7');plot(asimulatedTime,rS2percLay8,'DisplayName','rS2percLay8');hold off;
+h9 = figure(9);
+plot(asimulatedTime,rS3percLay6,'DisplayName','rS3percLay6');hold all;plot(asimulatedTime,rS3percLay7,'DisplayName','rS3percLay7');plot(asimulatedTime,rS3percLay8,'DisplayName','rS3percLay8');
+legend('Location','SouthWest' )
+title('rS3: radius = 0.008 m');
+xlabel('time (s)','FontSize',20)
+ylabel('volume (m^3)','FontSize',20)
+set(gca,'fontname','times new roman','FontSize',20)
+hold off;
+export_fig(['rS3',date1],'-jpg', '-nocrop', h9);
+
+h10 = figure(10);
+plot(asimulatedTime,rS2percLay6,'DisplayName','rS2percLay6');hold all;plot(asimulatedTime,rS2percLay7,'DisplayName','rS2percLay7');plot(asimulatedTime,rS2percLay8,'DisplayName','rS2percLay8');
+legend('Location','SouthWest' )
+title('rS2: radius = 0.005 m');
+xlabel('time (s)','FontSize',20)
+ylabel('volume (m^3)','FontSize',20)
+set(gca,'fontname','times new roman','FontSize',20)
+hold off;
+export_fig(['rS2',date1],'-jpg', '-nocrop', h10);
 
 
-figure(11)
-plot(asimulatedTime,rS1percLay6,'DisplayName','rS1percLay6');hold all;plot(asimulatedTime,rS1percLay7,'DisplayName','rS1percLay7');plot(asimulatedTime,rS1percLay8,'DisplayName','rS1percLay8');hold off;
+h11 = figure(11);
+plot(asimulatedTime,rS1percLay6,'DisplayName','rS1percLay6');hold all;plot(asimulatedTime,rS1percLay7,'DisplayName','rS1percLay7');plot(asimulatedTime,rS1percLay8,'DisplayName','rS1percLay8');
+legend('Location','SouthWest' )
+title('rS1: radius = 0.0025 m');
+xlabel('time (s)','FontSize',20)
+ylabel('volume (m^3)','FontSize',20)
+set(gca,'fontname','times new roman','FontSize',20)
+hold off;
+export_fig(['rS1',date1],'-jpg', '-nocrop', h11);
 
 
-figure(12)
-plot(asimulatedTime,rS0percLay6,'DisplayName','rS0percLay6');hold all;plot(asimulatedTime,rS0percLay7,'DisplayName','rS0percLay7');plot(asimulatedTime,rS0percLay8,'DisplayName','rS0percLay8');hold off;
+h12 = figure(12);
+plot(asimulatedTime,rS0percLay6,'DisplayName','rS0percLay6');hold all;plot(asimulatedTime,rS0percLay7,'DisplayName','rS0percLay7');plot(asimulatedTime,rS0percLay8,'DisplayName','rS0percLay8');
+legend('Location','SouthWest' )
+title('rS0: radius = 0.002 m');
+xlabel('time (s)','FontSize',20)
+ylabel('volume (m^3)','FontSize',20)
+set(gca,'fontname','times new roman','FontSize',20)
+hold off;
+export_fig(['rS0',date1],'-jpg', '-nocrop', h12);
 
 
