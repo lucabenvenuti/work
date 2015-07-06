@@ -150,7 +150,7 @@ fix		cad27 all mesh/surface/stress file mesh/scraper.stl	type 2  move 0.0 0.6 0.
 
 
 fix		meshwalls all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} mesh n_meshes 13 meshes cad1 cad2 &
-cad3 cad4 cad12 cad20 cad21 cad22 cad23 cad24 cad25 cad26 cad27  
+cad3 cad4 cad12 cad20 cad21 cad22 cad23 cad24 cad25 cad26 cad27
 
 fix		massFace all mesh/surface/planar file mesh/massFlowFace.stl	type     2
 fix		inface1 all mesh/surface/planar file mesh/inletSingle.stl	type     2
@@ -221,9 +221,17 @@ screen no title "Time Mass Particle MassRate PartRate delMass delPart" file post
 
 
 ####### Output size distribution % #########
-region		bottom block -23.6 -17.1 -5.3 2.9 4.6 7.3 units box
+region		bottom 	block -23.6 -17.1 -5.3 2.9 4.6 7.3 units box
 region		central block -23.6 -17.1 -5.3 2.9 7.3 10.0 units box
-region		top block -23.6 -17.1 -5.3 2.9 10.0 12.7 units box
+region		top 	block -23.6 -17.1 -5.3 2.9 10.0 12.7 units box
+region		lay8 	block -22.0 -18.0 -2.15 0.15 4.15 4.75 units box
+region		lay7 	block -22.0 -18.0 -2.15 0.15 4.75 5.25 units box
+region		lay6	block -22.0 -18.0 -2.15 0.15 5.25 5.75 units box
+region		lay5 	block -22.0 -18.0 -3.15 -0.85 5.75 6.25 units box
+region		lay4 	block -22.0 -18.0 -3.15 -0.85 6.25 6.75 units box
+region		lay3 	block -22.0 -18.0 -3.15 -0.85 6.75 7.25 units box
+region		lay2 	block -22.0 -18.0 -3.15 -0.85 7.25 7.75 units box
+region		lay1 	block -22.0 -18.0 -3.15 -0.85 7.75 8.25 units box
 
 compute atRad all property/atom radius
 
@@ -265,58 +273,116 @@ variable rS4percTop   		equal count(rS4group,top)
 variable rS5percTop   		equal count(rS5group,top)
 variable rS6percTop   		equal count(rS6group,top)
 
-variable countRate 		equal ${dumpMassRate}+2
+variable rS0percLay8   		equal count(rS0group,lay8)
+variable rS1percLay8   		equal count(rS1group,lay8)
+variable rS2percLay8   		equal count(rS2group,lay8)
+variable rS3percLay8   		equal count(rS3group,lay8)
+variable rS4percLay8   		equal count(rS4group,lay8)
+variable rS5percLay8   		equal count(rS5group,lay8)
+variable rS6percLay8   		equal count(rS6group,lay8)
 
-fix 	 dumpRate1 all print ${countRate} "${rS0percBottom} ${rS1percBottom} ${rS2percBottom} ${rS3percBottom} ${rS4percBottom} ${rS5percBottom} ${rS6percBottom}       &
-					  ${rS0percCentral} ${rS1percCentral} ${rS2percCentral} ${rS3percCentral} ${rS4percCentral} ${rS5percCentral} ${rS6percCentral} &
-					  ${rS0percTop} ${rS1percTop} ${rS2percTop} ${rS3percTop} ${rS4percTop} ${rS5percTop} ${rS6percTop}                       " &
-screen no title 			"rS0percBottom rS1percBottom rS2percBottom rS3percBottom rS4percBottom rS5percBottom rS6percBottom       &
-					 rS0percCentral rS1percCentral rS2percCentral rS3percCentral rS4percCentral rS5percCentral rS6percCentral &
-					 rS0percTop rS1percTop rS2percTop rS3percTop rS4percTop rS5percTop rS6percTop " file postMass/countRate1.txt
+variable rS0percLay7   		equal count(rS0group,lay7)
+variable rS1percLay7   		equal count(rS1group,lay7)
+variable rS2percLay7   		equal count(rS2group,lay7)
+variable rS3percLay7   		equal count(rS3group,lay7)
+variable rS4percLay7   		equal count(rS4group,lay7)
+variable rS5percLay7   		equal count(rS5group,lay7)
+variable rS6percLay7   		equal count(rS6group,lay7)
+
+variable rS0percLay6   		equal count(rS0group,lay6)
+variable rS1percLay6   		equal count(rS1group,lay6)
+variable rS2percLay6   		equal count(rS2group,lay6)
+variable rS3percLay6   		equal count(rS3group,lay6)
+variable rS4percLay6   		equal count(rS4group,lay6)
+variable rS5percLay6   		equal count(rS5group,lay6)
+variable rS6percLay6   		equal count(rS6group,lay6)
+
+variable rS0percLay5   		equal count(rS0group,lay5)
+variable rS1percLay5   		equal count(rS1group,lay5)
+variable rS2percLay5   		equal count(rS2group,lay5)
+variable rS3percLay5   		equal count(rS3group,lay5)
+variable rS4percLay5   		equal count(rS4group,lay5)
+variable rS5percLay5   		equal count(rS5group,lay5)
+variable rS6percLay5   		equal count(rS6group,lay5)
+
+variable rS0percLay4   		equal count(rS0group,lay4)
+variable rS1percLay4   		equal count(rS1group,lay4)
+variable rS2percLay4   		equal count(rS2group,lay4)
+variable rS3percLay4   		equal count(rS3group,lay4)
+variable rS4percLay4   		equal count(rS4group,lay4)
+variable rS5percLay4   		equal count(rS5group,lay4)
+variable rS6percLay4   		equal count(rS6group,lay4)
+
+variable rS0percLay3   		equal count(rS0group,lay3)
+variable rS1percLay3   		equal count(rS1group,lay3)
+variable rS2percLay3   		equal count(rS2group,lay3)
+variable rS3percLay3   		equal count(rS3group,lay3)
+variable rS4percLay3   		equal count(rS4group,lay3)
+variable rS5percLay3   		equal count(rS5group,lay3)
+variable rS6percLay3   		equal count(rS6group,lay3)
+
+variable rS0percLay2   		equal count(rS0group,lay2)
+variable rS1percLay2   		equal count(rS1group,lay2)
+variable rS2percLay2   		equal count(rS2group,lay2)
+variable rS3percLay2   		equal count(rS3group,lay2)
+variable rS4percLay2   		equal count(rS4group,lay2)
+variable rS5percLay2   		equal count(rS5group,lay2)
+variable rS6percLay2   		equal count(rS6group,lay2)
+
+variable rS0percLay1   		equal count(rS0group,lay1)
+variable rS1percLay1   		equal count(rS1group,lay1)
+variable rS2percLay1   		equal count(rS2group,lay1)
+variable rS3percLay1   		equal count(rS3group,lay1)
+variable rS4percLay1   		equal count(rS4group,lay1)
+variable rS5percLay1   		equal count(rS5group,lay1)
+variable rS6percLay1   		equal count(rS6group,lay1)
 
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
-####### Output size distribution % #########
-region		lay8 block -22.0 -18.0 0.15 2.15 4.15 4.75 units box
-region		lay7 block -22.0 -18.0 0.15 2.15 4.75 5.25 units box
-region		lay6 block -22.0 -18.0 0.15 2.15 5.25 5.75 units box
 
-variable rS0percLay8   	equal count(rS0group,lay8)
-variable rS1percLay8   	equal count(rS1group,lay8)
-variable rS2percLay8   	equal count(rS2group,lay8)
-variable rS3percLay8   	equal count(rS3group,lay8)
-variable rS4percLay8   	equal count(rS4group,lay8)
-variable rS5percLay8   	equal count(rS5group,lay8)
-variable rS6percLay8   	equal count(rS6group,lay8)
-
-variable rS0percLay7   	equal count(rS0group,lay7)
-variable rS1percLay7   	equal count(rS1group,lay7)
-variable rS2percLay7   	equal count(rS2group,lay7)
-variable rS3percLay7   	equal count(rS3group,lay7)
-variable rS4percLay7   	equal count(rS4group,lay7)
-variable rS5percLay7   	equal count(rS5group,lay7)
-variable rS6percLay7   	equal count(rS6group,lay7)
-
-variable rS0percLay6   	equal count(rS0group,lay6)
-variable rS1percLay6   	equal count(rS1group,lay6)
-variable rS2percLay6   	equal count(rS2group,lay6)
-variable rS3percLay6   	equal count(rS3group,lay6)
-variable rS4percLay6   	equal count(rS4group,lay6)
-variable rS5percLay6   	equal count(rS5group,lay6)
-variable rS6percLay6   	equal count(rS6group,lay6)
-
-#variable countRate 		equal ${dumpMassRate}+2
-#simulatedTime	equal ${dt}*step		
-fix 	 dumpRate2 all print ${countRate} "${simulatedTime} step ${rS0percLay8} ${rS1percLay8} ${rS2percLay8} ${rS3percLay8} &
-										${rS4percLay8} ${rS5percLay8} ${rS6percLay8}       &
-					  					${rS0percLay7} ${rS1percLay7} ${rS2percLay7} ${rS3percLay7} &
-										${rS4percLay7} ${rS5percLay7} ${rS6percLay7} &
-					  					${rS0percLay6} ${rS1percLay6} ${rS2percLay6} ${rS3percLay6} &
-										${rS4percLay6} ${rS5percLay6} ${rS6percLay6}        " &
-screen no title 			"simulatedTime step rS0percLay8 rS1percLay8 rS2percLay8 rS3percLay8 rS4percLay8 rS5percLay8 &
-							rS6percLay8       &
-					 rS0percLay7 rS1percLay7 rS2percLay7 rS3percLay7 rS4percLay7 rS5percLay7 rS6percLay7 &
-					 rS0percLay6 rS1percLay6 rS2percLay6 rS3percLay6 rS4percLay6 rS5percLay6 rS6percLay6 " file postMass/countRateLayer2.txt
-
+fix 	 dumpRate1 all print ${dumpMassRate} "${simulatedTime} ${dumpMassRate} ${rS0percBottom} ${rS1percBottom} ${rS2percBottom} 			 &
+										   ${rS3percBottom} ${rS4percBottom} ${rS5percBottom} ${rS6percBottom}       						 &
+					 					   ${rS0percCentral} ${rS1percCentral} ${rS2percCentral} ${rS3percCentral} 							 &
+										   ${rS4percCentral} ${rS5percCentral} ${rS6percCentral} 											 &
+										   ${rS0percTop} ${rS1percTop} ${rS2percTop} ${rS3percTop}											 &
+										   ${rS4percTop} ${rS5percTop} ${rS6percTop}             									         &
+										   ${rS0percLay8} ${rS1percLay8} ${rS2percLay8} ${rS3percLay8}										 &
+										   ${rS4percLay8} ${rS5percLay8} ${rS6percLay8}      												 &
+					  					   ${rS0percLay7} ${rS1percLay7} ${rS2percLay7} ${rS3percLay7}										 &
+										   ${rS4percLay7} ${rS5percLay7} ${rS6percLay7}														 &
+					  					   ${rS0percLay6} ${rS1percLay6} ${rS2percLay6} ${rS3percLay6}										 &
+										   ${rS4percLay6} ${rS5percLay6} ${rS6percLay6} 													 &
+					  					   ${rS0percLay5} ${rS1percLay5} ${rS2percLay5} ${rS3percLay5}										 &
+										   ${rS4percLay5} ${rS5percLay5} ${rS6percLay5} 													 &	
+					  					   ${rS0percLay4} ${rS1percLay4} ${rS2percLay4} ${rS3percLay4}										 &
+										   ${rS4percLay4} ${rS5percLay4} ${rS6percLay4} 													 &
+					  					   ${rS0percLay3} ${rS1percLay3} ${rS2percLay3} ${rS3percLay3}										 &
+										   ${rS4percLay3} ${rS5percLay3} ${rS6percLay3} 													 &
+					  					   ${rS0percLay2} ${rS1percLay2} ${rS2percLay2} ${rS3percLay2}										 &
+										   ${rS4percLay2} ${rS5percLay2} ${rS6percLay2} 													 &
+					  					   ${rS0percLay1} ${rS1percLay1} ${rS2percLay1} ${rS3percLay1}										 &
+										   ${rS4percLay1} ${rS5percLay1} ${rS6percLay1}													   " &
+screen no title 			"simulatedTime dumpMassRate rS0percBottom rS1percBottom rS2percBottom 										  	 &
+										   rS3percBottom rS4percBottom rS5percBottom rS6percBottom       									 &
+					 					   rS0percCentral rS1percCentral rS2percCentral rS3percCentral 										 &
+										   rS4percCentral rS5percCentral rS6percCentral 													 &
+										   rS0percTop rS1percTop rS2percTop rS3percTop														 &
+										   rS4percTop rS5percTop rS6percTop             											         &
+										   rS0percLay8 rS1percLay8 rS2percLay8 rS3percLay8													 &
+										   rS4percLay8 rS5percLay8 rS6percLay8      														 &
+					  					   rS0percLay7 rS1percLay7 rS2percLay7 rS3percLay7													 &
+										   rS4percLay7 rS5percLay7 rS6percLay7																 &
+					  					   rS0percLay6 rS1percLay6 rS2percLay6 rS3percLay6													 &
+										   rS4percLay6 rS5percLay6 rS6percLay6 																 &
+					  					   rS0percLay5 rS1percLay5 rS2percLay5 rS3percLay5													 &
+										   rS4percLay5 rS5percLay5 rS6percLay5 																 &	
+					  					   rS0percLay4 rS1percLay4 rS2percLay4 rS3percLay4													 &
+										   rS4percLay4 rS5percLay4 rS6percLay4 																 &
+					  					   rS0percLay3 rS1percLay3 rS2percLay3 rS3percLay3													 &
+										   rS4percLay3 rS5percLay3 rS6percLay3 																 &
+					  					   rS0percLay2 rS1percLay2 rS2percLay2 rS3percLay2													 &
+										   rS4percLay2 rS5percLay2 rS6percLay2 																 &
+					  					   rS0percLay1 rS1percLay1 rS2percLay1 rS3percLay1													 &
+										   rS4percLay1 rS5percLay1 rS6percLay1								   " file postMass/countRate1.txt
 
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
 

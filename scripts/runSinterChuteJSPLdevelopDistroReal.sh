@@ -2,8 +2,8 @@
 
 # -------------- PBS Torque settings 
 
-#PBS -N LIGSintdevelopSimpli
-#PBS -o ${PBS_JOBID}__outSinterChuteJSPLdevelopSimpli__${PBS_JOBID}.out
+#PBS -N LIGSintdevelopDistroReal
+#PBS -o ${PBS_JOBID}__outSinterChuteJSPLdevelopDistroReal__${PBS_JOBID}.out
 #PBS -j oe
 #PBS -l nodes=8:ppn=8
 #PBS -l walltime=48:00:00
@@ -31,12 +31,12 @@ if [ ! -f $SCRIPT_NAME  ]
     exit -1
 fi
 
-cd ../sinterChuteJSPLdevelopSimpli
+cd ../sinterChuteJSPLdevelopDistroReal
 
 OMPON=2   # develop = 2 
 DCYLDP=5
 
-echo developSimpli mode on
+echo developDistroReal mode on
 NTHREADS=1
 XPROCS=4
 YPROCS=4
@@ -48,9 +48,6 @@ VARS="-var iden ${PBS_JOBID} -var NTHREADS $NTHREADS -var XPROCS $XPROCS -var YP
 
 date
 mpiexec $MPI_OPTIONS liggghts -in in.sinterChute $VARS
-
-echo $?
-
 date
 mpiexec $MPI_OPTIONS liggghts -in in.sinterChuteMover $VARS
 date

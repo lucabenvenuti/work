@@ -2,8 +2,8 @@
 
 # -------------- PBS Torque settings 
 
-#PBS -N LIGSintdevelop
-#PBS -o ${PBS_JOBID}__outSinterChuteJSPLdevelop__${PBS_JOBID}.out
+#PBS -N LIGSintdevelopDistroSimpli
+#PBS -o ${PBS_JOBID}__outSinterChuteJSPLdevelopDistroSimpli__${PBS_JOBID}.out
 #PBS -j oe
 #PBS -l nodes=8:ppn=8
 #PBS -l walltime=48:00:00
@@ -31,12 +31,12 @@ if [ ! -f $SCRIPT_NAME  ]
     exit -1
 fi
 
-cd ../sinterChuteJSPLdevelop
+cd ../sinterChuteJSPLdevelopDistroSimpli
 
 OMPON=2   # develop = 2 
 DCYLDP=5
 
-echo develop mode on
+echo developDistroSimpli mode on
 NTHREADS=1
 XPROCS=4
 YPROCS=4

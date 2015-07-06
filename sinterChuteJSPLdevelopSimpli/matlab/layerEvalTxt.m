@@ -13,7 +13,7 @@ close all
 clc
 
 %% Initialize variables.
-filename = '/mnt/scratchPFMDaten/Luca/20150703/sinterChuteJSPLdevelopSimpli/postMass/countRateLayer3.txt';
+filename = '/mnt/scratchPFMDaten/Luca/20150706/sinterChuteJSPLdevelopSimpli/postMass/countRateLayer3.txt';
 delimiter = ' ';
 
 %% Read columns of data as strings:
