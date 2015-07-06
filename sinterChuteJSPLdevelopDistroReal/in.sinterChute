@@ -153,7 +153,7 @@ fix		meshwalls all wall/gran model hertz tangential history rolling_friction ${r
 cad3 cad4 cad12 cad20 cad21 cad22 cad23 cad24 cad25 cad26 cad27
 
 fix		massFace all mesh/surface/planar file mesh/massFlowFace.stl	type     2
-fix		inface1 all mesh/surface/planar file mesh/inletSingle.stl	type     2
+fix		inface1 all mesh/surface/planar file mesh/inletSingle.stl	type     2  move 0.0 0.0 -1.0
 
 #insertion 
 #*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=
@@ -177,7 +177,7 @@ variable	vz0 equal -6.0 #estimated
 
 fix		ins1 all insert/stream seed 5330 distributiontemplate pdd &
 		mass 100000 massrate ${chargingrate} overlapcheck yes all_in yes &
-		vel constant 0.0 0.0 ${vz0} extrude_length 3.0 insertion_face inface1
+		vel constant 0.0 0.0 ${vz0} extrude_length 4.0 insertion_face inface1
 fix     lb all balance 0 xyz 10 1.05
 
 #*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=	
