@@ -87,11 +87,11 @@ fix 		m7 all property/global k_finnie peratomtypepair 2 &
 variable	SinterDens equal 2500.
 
 #NEW sinter: radii for fractions
-variable	rS0 equal ${cg}*0.005/2.
-variable	rS1 equal ${cg}*0.006/2.
+variable	rS0 equal ${cg}*0.004/2.
+variable	rS1 equal ${cg}*0.005/2.
 variable	rS2 equal ${cg}*0.010/2.
 variable	rS3 equal ${cg}*0.016/2.
-variable	rS4 equal ${cg}*0.025/2.
+variable	rS4 equal ${cg}*0.020/2.
 variable	rS5 equal ${cg}*0.040/2.
 variable	rS6 equal ${cg}*0.050/2.
 
@@ -107,12 +107,12 @@ fix		sinter6 all particletemplate/sphere 1 atom_type 1 density constant ${Sinter
 
 #NEW mass % for diameter fractions
 variable	mS0 equal 0.000 # 0.207
-variable	mS1 equal 0.196 # 0.179
-variable	mS2 equal 0.260 # 0.237
-variable	mS3 equal 0.173 # 0.158
-variable	mS4 equal 0.130 # 0.119
-variable	mS5 equal 0.110 # 0.1
-variable	mS6 equal 0.131 # 0.0
+variable	mS1 equal 0.150 # 0.179
+variable	mS2 equal 0.250 # 0.237
+variable	mS3 equal 0.000 # 0.158
+variable	mS4 equal 0.250 # 0.119
+variable	mS5 equal 0.000 # 0.1
+variable	mS6 equal 0.350 # 0.0
 
 fix 	pdd all particledistribution/discrete 524287 7 &
 		sinter0 ${mS0} sinter1 ${mS1} sinter2 ${mS2} sinter3 ${mS3} &
