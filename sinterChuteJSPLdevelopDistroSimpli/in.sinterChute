@@ -49,11 +49,6 @@ neigh_modify	delay 0 binsize 0.08 one 1000
 #  ALL VARIABLES HERE ARE PARAMETERS
 #*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=
 
-#coarse graining factor
-variable 	cg equal 5.0
-
-#*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=
-
 #Material properties for material 1 = coal,  material 2 = dri material 3 = wall
 #friction angle of 25 deg with wall
 fix 		m1 all property/global youngsModulus peratomtype 300.e6 200.e6
@@ -83,13 +78,13 @@ fix 		m7 all property/global k_finnie peratomtypepair 2 &
 variable	SinterDens equal 2500.
 
 #NEW sinter: radii for fractions
-variable	rS0 equal ${cg}*0.004/2.
-variable	rS1 equal ${cg}*0.005/2.
-variable	rS2 equal ${cg}*0.010/2.
-variable	rS3 equal ${cg}*0.016/2.
-variable	rS4 equal ${cg}*0.020/2.
-variable	rS5 equal ${cg}*0.040/2.
-variable	rS6 equal ${cg}*0.050/2.
+variable	rS0 equal 0.0100
+variable	rS1 equal 0.0125
+variable	rS2 equal 0.0250
+variable	rS3 equal 0.0400
+variable	rS4 equal 0.0500
+variable	rS5 equal 0.1000
+variable	rS6 equal 0.1250
 
 
 #coal diameter fractions
@@ -102,17 +97,14 @@ fix		sinter5 all particletemplate/sphere 1 atom_type 1 density constant ${Sinter
 fix		sinter6 all particletemplate/sphere 1 atom_type 1 density constant ${SinterDens} radius constant ${rS6}
 
 #NEW mass % for diameter fractions
-variable	mS0 equal 0.000 # 0.207
-variable	mS1 equal 0.150 # 0.179
-variable	mS2 equal 0.250 # 0.237
-variable	mS3 equal 0.000 # 0.158
-variable	mS4 equal 0.250 # 0.119
-variable	mS5 equal 0.000 # 0.1
-variable	mS6 equal 0.350 # 0.0
+variable	mS1 equal 0.150
+variable	mS2 equal 0.250
+variable	mS4 equal 0.250
+variable	mS6 equal 0.350
 
-fix 	pdd all particledistribution/discrete 524287 7 &
-		sinter0 ${mS0} sinter1 ${mS1} sinter2 ${mS2} sinter3 ${mS3} &
-		sinter4 ${mS4} sinter5 ${mS5} sinter6 ${mS6}
+fix 	pdd all particledistribution/discrete 524287 4 &
+		sinter1 ${mS1} sinter2 ${mS2} &
+		sinter4 ${mS4} sinter6 ${mS6}
 
 pair_style 	gran model hertz tangential history rolling_friction ${rolfrtyp}
 pair_coeff	* *

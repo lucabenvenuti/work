@@ -15,7 +15,7 @@ clc
 %filename = '/mnt/scratchPFMDaten/Luca/20150714/workTest/sinterChuteJSPLdevelopDistroSimpli/postMass/countRate1.txt';
 
 if (isunix)
-    filename =  '/mnt/scratchPFMDaten/Luca/20150714/postMass/countRate1.txt';
+    filename =  '/mnt/scratchPFMDaten/Luca/20150714/sinterChuteJSPLdevelopDistroSimpli/postMass/countRate1.txt';
     addpath('/mnt/DATA/liggghts/work/shearCell/matlab/exportFig');
 else
     filename = 'S:\Luca\20150714\workTest\sinterChuteJSPLdevelopDistroSimpli\postMass\countRateLayer1.txt';
@@ -315,48 +315,48 @@ plot(asimulatedTime,rS6percLay7,'DisplayName','rS6percLay7');
 hold off;
 
 
-figure(4)
-h01 = plot(asimulatedTime(1185:1215),rS0percLay8(1185:1215),'b','LineWidth',2,'DisplayName','r =  2.5 mm, bottom layer');
-hold all;
-h02 = plot(asimulatedTime(1185:1215),rS1percLay8(1185:1215),'m','LineWidth',2,'DisplayName','r =  3.0 mm, bottom layer');
-h03 = plot(asimulatedTime(1185:1215),rS2percLay8(1185:1215),'g','LineWidth',2,'DisplayName','r =  5.0 mm, bottom layer');
-h04 = plot(asimulatedTime(1185:1215),rS3percLay8(1185:1215),'r','LineWidth',2,'DisplayName','r =  8.0 mm, bottom layer');
-h05 = plot(asimulatedTime(1185:1215),rS4percLay8(1185:1215),'c','LineWidth',2,'DisplayName','r = 12.5 mm, bottom layer');
-h06 = plot(asimulatedTime(1185:1215),rS5percLay8(1185:1215),'y','LineWidth',2,'DisplayName','r = 20.0 mm, bottom layer');
-h07 = plot(asimulatedTime(1185:1215),rS6percLay8(1185:1215),'k','LineWidth',2,'DisplayName','r = 25.0 mm, bottom layer');
-
-h08 = plot(asimulatedTime(1185:1215),rS0percLay7(1185:1215),'b','LineWidth',2,'DisplayName','r =  2.5 mm, central layer');
-h09 = plot(asimulatedTime(1185:1215),rS1percLay7(1185:1215),'m','LineWidth',2,'DisplayName','r =  3.0 mm, central layer');
-h10 = plot(asimulatedTime(1185:1215),rS2percLay7(1185:1215),'g','LineWidth',2,'DisplayName','r =  5.0 mm, central layer');
-%  plot(asimulatedTime(1185:1215),rS3percLay7(1185:1215),'r','DisplayName','rS3percLay7');
-%  plot(asimulatedTime(1185:1215),rS4percLay7(1185:1215),'c','DisplayName','rS4percLay7');
-%  plot(asimulatedTime(1185:1215),rS5percLay7(1185:1215),'y','DisplayName','rS5percLay7');
-%  plot(asimulatedTime(1185:1215),rS6percLay7(1185:1215),'k','DisplayName','rS6percLay7');
-
-h11 = plot(asimulatedTime(1185:3:1215),rS0percLay8(1185:3:1215),'b*','markers',18,'DisplayName','r =  2.5 mm, bottom layer');
-
-h12 = plot(asimulatedTime(1185:3:1215),rS1percLay8(1185:3:1215),'m*','markers',18,'DisplayName','r =  3.0 mm, bottom layer');
-h13 = plot(asimulatedTime(1185:3:1215),rS2percLay8(1185:3:1215),'g*','markers',18,'DisplayName','r =  5.0 mm, bottom layer');
-h14 = plot(asimulatedTime(1185:3:1215),rS3percLay8(1185:3:1215),'r*','markers',18,'DisplayName','r =  8.0 mm, bottom layer');
-h15 = plot(asimulatedTime(1185:3:1215),rS4percLay8(1185:3:1215),'c*','markers',18,'DisplayName','r = 12.5 mm, bottom layer');
-%  h16 = plot(asimulatedTime(1185:3:1215),rS5percLay8(1185:3:1215),'y*','DisplayName','r = 20.0 mm, bottom layer');
-h17 = plot(asimulatedTime(1185:3:1215),rS6percLay8(1185:3:1215),'k*','markers',18,'DisplayName','r = 25.0 mm, bottom layer');
-
-h18 = plot(asimulatedTime(1185:3:1215),rS0percLay7(1185:3:1215),'bo','markers',18,'DisplayName','r =  2.5 mm, central layer');
-
-h19 = plot(asimulatedTime(1185:3:1215),rS1percLay7(1185:3:1215),'mo','markers',18,'DisplayName','r =  3.0 mm, central layer');
-h20 = plot(asimulatedTime(1185:3:1215),rS2percLay7(1185:3:1215),'go','markers',18,'DisplayName','r =  5.0 mm, central layer');
-%  plot(asimulatedTime(1185:3:1215),rS3percLay7(1185:3:1215),'ro','DisplayName','rS3percLay7');
-%  plot(asimulatedTime(1185:3:1215),rS4percLay7(1185:3:1215),'co','DisplayName','rS4percLay7');
-%  plot(asimulatedTime(1185:3:1215),rS5percLay7(1185:3:1215),'yo','DisplayName','rS5percLay7');
-%  plot(asimulatedTime(1185:3:1215),rS6percLay7(1185:3:1215),'ko','DisplayName','rS6percLay7');
-%legend('rS0percLay8', 'rS1percLay8', 'rS2percLay8', , , , , , , , , , ,)
-legend([h11 h12 h13 h14 h15 h17 h18 h19 h20], 'Location', 'NorthWest');  %
-xlabel('time (s)','FontSize',20)
-ylabel('volume (m^3)','FontSize',20)
-set(gca,'fontname','times new roman','FontSize',20)  % Set it to times
-xlim([-0.01 0.31])
-hold off;
+% figure(4)
+% h01 = plot(asimulatedTime(1185:1215),rS0percLay8(1185:1215),'b','LineWidth',2,'DisplayName','r =  2.5 mm, bottom layer');
+% hold all;
+% h02 = plot(asimulatedTime(1185:1215),rS1percLay8(1185:1215),'m','LineWidth',2,'DisplayName','r =  3.0 mm, bottom layer');
+% h03 = plot(asimulatedTime(1185:1215),rS2percLay8(1185:1215),'g','LineWidth',2,'DisplayName','r =  5.0 mm, bottom layer');
+% h04 = plot(asimulatedTime(1185:1215),rS3percLay8(1185:1215),'r','LineWidth',2,'DisplayName','r =  8.0 mm, bottom layer');
+% h05 = plot(asimulatedTime(1185:1215),rS4percLay8(1185:1215),'c','LineWidth',2,'DisplayName','r = 12.5 mm, bottom layer');
+% h06 = plot(asimulatedTime(1185:1215),rS5percLay8(1185:1215),'y','LineWidth',2,'DisplayName','r = 20.0 mm, bottom layer');
+% h07 = plot(asimulatedTime(1185:1215),rS6percLay8(1185:1215),'k','LineWidth',2,'DisplayName','r = 25.0 mm, bottom layer');
+% 
+% h08 = plot(asimulatedTime(1185:1215),rS0percLay7(1185:1215),'b','LineWidth',2,'DisplayName','r =  2.5 mm, central layer');
+% h09 = plot(asimulatedTime(1185:1215),rS1percLay7(1185:1215),'m','LineWidth',2,'DisplayName','r =  3.0 mm, central layer');
+% h10 = plot(asimulatedTime(1185:1215),rS2percLay7(1185:1215),'g','LineWidth',2,'DisplayName','r =  5.0 mm, central layer');
+% %  plot(asimulatedTime(1185:1215),rS3percLay7(1185:1215),'r','DisplayName','rS3percLay7');
+% %  plot(asimulatedTime(1185:1215),rS4percLay7(1185:1215),'c','DisplayName','rS4percLay7');
+% %  plot(asimulatedTime(1185:1215),rS5percLay7(1185:1215),'y','DisplayName','rS5percLay7');
+% %  plot(asimulatedTime(1185:1215),rS6percLay7(1185:1215),'k','DisplayName','rS6percLay7');
+% 
+% h11 = plot(asimulatedTime(1185:3:1215),rS0percLay8(1185:3:1215),'b*','markers',18,'DisplayName','r =  2.5 mm, bottom layer');
+% 
+% h12 = plot(asimulatedTime(1185:3:1215),rS1percLay8(1185:3:1215),'m*','markers',18,'DisplayName','r =  3.0 mm, bottom layer');
+% h13 = plot(asimulatedTime(1185:3:1215),rS2percLay8(1185:3:1215),'g*','markers',18,'DisplayName','r =  5.0 mm, bottom layer');
+% h14 = plot(asimulatedTime(1185:3:1215),rS3percLay8(1185:3:1215),'r*','markers',18,'DisplayName','r =  8.0 mm, bottom layer');
+% h15 = plot(asimulatedTime(1185:3:1215),rS4percLay8(1185:3:1215),'c*','markers',18,'DisplayName','r = 12.5 mm, bottom layer');
+% %  h16 = plot(asimulatedTime(1185:3:1215),rS5percLay8(1185:3:1215),'y*','DisplayName','r = 20.0 mm, bottom layer');
+% h17 = plot(asimulatedTime(1185:3:1215),rS6percLay8(1185:3:1215),'k*','markers',18,'DisplayName','r = 25.0 mm, bottom layer');
+% 
+% h18 = plot(asimulatedTime(1185:3:1215),rS0percLay7(1185:3:1215),'bo','markers',18,'DisplayName','r =  2.5 mm, central layer');
+% 
+% h19 = plot(asimulatedTime(1185:3:1215),rS1percLay7(1185:3:1215),'mo','markers',18,'DisplayName','r =  3.0 mm, central layer');
+% h20 = plot(asimulatedTime(1185:3:1215),rS2percLay7(1185:3:1215),'go','markers',18,'DisplayName','r =  5.0 mm, central layer');
+% %  plot(asimulatedTime(1185:3:1215),rS3percLay7(1185:3:1215),'ro','DisplayName','rS3percLay7');
+% %  plot(asimulatedTime(1185:3:1215),rS4percLay7(1185:3:1215),'co','DisplayName','rS4percLay7');
+% %  plot(asimulatedTime(1185:3:1215),rS5percLay7(1185:3:1215),'yo','DisplayName','rS5percLay7');
+% %  plot(asimulatedTime(1185:3:1215),rS6percLay7(1185:3:1215),'ko','DisplayName','rS6percLay7');
+% %legend('rS0percLay8', 'rS1percLay8', 'rS2percLay8', , , , , , , , , , ,)
+% legend([h11 h12 h13 h14 h15 h17 h18 h19 h20], 'Location', 'NorthWest');  %
+% xlabel('time (s)','FontSize',20)
+% ylabel('volume (m^3)','FontSize',20)
+% set(gca,'fontname','times new roman','FontSize',20)  % Set it to times
+% xlim([-0.01 0.31])
+% hold off;
 
 h5 = figure(5);
 plot(asimulatedTime,rS8totalVolume,'DisplayName','rS0percLay8');
