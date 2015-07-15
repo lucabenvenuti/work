@@ -301,7 +301,7 @@ date1 = datestr(now,formatOut);
 h6 = figure(6);
 plot(asimulatedTime,rS6percLay6,'DisplayName','rS6percLay6');hold all;plot(asimulatedTime,rS6percLay7,'DisplayName','rS6percLay7');plot(asimulatedTime,rS6percLay8,'DisplayName','rS6percLay8');
 legend('Location','SouthWest' )
-title('rS6: radius = 0.025 m');
+title('rS6: radius = 0.025 m','FontSize',20)
 xlabel('time (s)','FontSize',20)
 ylabel('volume (m^3)','FontSize',20)
 set(gca,'fontname','times new roman','FontSize',20)
@@ -311,7 +311,7 @@ export_fig(['rS6',date1],'-jpg', '-nocrop', h6);
 h7 = figure(7);
 plot(asimulatedTime,rS5percLay6,'DisplayName','rS5percLay6');hold all;plot(asimulatedTime,rS5percLay7,'DisplayName','rS5percLay7');plot(asimulatedTime,rS5percLay8,'DisplayName','rS5percLay8');
 legend('Location','SouthWest' )
-title('rS5: radius = 0.020 m');
+title('rS5: radius = 0.020 m','FontSize',20)
 xlabel('time (s)','FontSize',20)
 ylabel('volume (m^3)','FontSize',20)
 set(gca,'fontname','times new roman','FontSize',20)
@@ -322,7 +322,7 @@ export_fig(['rS5',date1],'-jpg', '-nocrop', h7);
 h8 = figure(8);
 plot(asimulatedTime,rS4percLay6,'DisplayName','rS4percLay6');hold all;plot(asimulatedTime,rS4percLay7,'DisplayName','rS4percLay7');plot(asimulatedTime,rS4percLay8,'DisplayName','rS4percLay8');
 legend('Location','SouthWest' )
-title('rS4: radius = 0.010 m');
+title('rS4: radius = 0.010 m','FontSize',20)
 xlabel('time (s)','FontSize',20)
 ylabel('volume (m^3)','FontSize',20)
 set(gca,'fontname','times new roman','FontSize',20)
@@ -333,7 +333,7 @@ export_fig(['rS4',date1],'-jpg', '-nocrop', h8);
 h9 = figure(9);
 plot(asimulatedTime,rS3percLay6,'DisplayName','rS3percLay6');hold all;plot(asimulatedTime,rS3percLay7,'DisplayName','rS3percLay7');plot(asimulatedTime,rS3percLay8,'DisplayName','rS3percLay8');
 legend('Location','SouthWest' )
-title('rS3: radius = 0.008 m');
+title('rS3: radius = 0.008 m','FontSize',20)
 xlabel('time (s)','FontSize',20)
 ylabel('volume (m^3)','FontSize',20)
 set(gca,'fontname','times new roman','FontSize',20)
@@ -343,7 +343,7 @@ export_fig(['rS3',date1],'-jpg', '-nocrop', h9);
 h10 = figure(10);
 plot(asimulatedTime,rS2percLay6,'DisplayName','rS2percLay6');hold all;plot(asimulatedTime,rS2percLay7,'DisplayName','rS2percLay7');plot(asimulatedTime,rS2percLay8,'DisplayName','rS2percLay8');
 legend('Location','SouthWest' )
-title('rS2: radius = 0.005 m');
+title('rS2: radius = 0.005 m','FontSize',20)
 xlabel('time (s)','FontSize',20)
 ylabel('volume (m^3)','FontSize',20)
 set(gca,'fontname','times new roman','FontSize',20)
@@ -354,7 +354,7 @@ export_fig(['rS2',date1],'-jpg', '-nocrop', h10);
 h11 = figure(11);
 plot(asimulatedTime,rS1percLay6,'DisplayName','rS1percLay6');hold all;plot(asimulatedTime,rS1percLay7,'DisplayName','rS1percLay7');plot(asimulatedTime,rS1percLay8,'DisplayName','rS1percLay8');
 legend('Location','SouthWest' )
-title('rS1: radius = 0.0025 m');
+title('rS1: radius = 0.0025 m','FontSize',20)
 xlabel('time (s)','FontSize',20)
 ylabel('volume (m^3)','FontSize',20)
 set(gca,'fontname','times new roman','FontSize',20)
@@ -365,7 +365,7 @@ export_fig(['rS1',date1],'-jpg', '-nocrop', h11);
 h12 = figure(12);
 plot(asimulatedTime,rS0percLay6,'DisplayName','rS0percLay6');hold all;plot(asimulatedTime,rS0percLay7,'DisplayName','rS0percLay7');plot(asimulatedTime,rS0percLay8,'DisplayName','rS0percLay8');
 legend('Location','SouthWest' )
-title('rS0: radius = 0.002 m');
+title('rS0: radius = 0.002 m','FontSize',20)
 xlabel('time (s)','FontSize',20)
 ylabel('volume (m^3)','FontSize',20)
 set(gca,'fontname','times new roman','FontSize',20)

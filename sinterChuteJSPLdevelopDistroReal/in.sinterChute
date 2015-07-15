@@ -8,7 +8,7 @@ variable    	rolfrtyp string	epsd2
 variable	runTime 	equal 100.0	# Total simulation time in (s)
 variable	saveInterval	equal 0.5 	# Save interval
 variable	saveRestart	equal 5.0
-variable	dt		equal 0.00002 	# Time step
+variable	dt		equal 5e-06 	# Time step
 ###################
 
 ### SYSTEM variables
@@ -38,10 +38,11 @@ communicate	single vel yes
 processors      ${XPROCS} ${YPROCS} ${ZPROCS}
 units		si
 
-region		reg block -24.5 -16.2 -7.0 5.12 3.05 13.7 units box
+region		reg block -24.5 -16.2 -7.0 5.12 3.05 18.0 units box
 create_box	2 reg
 
-neighbor	0.03 bin
+variable    skin            equal   0.5*${0.1}
+neighbor	${skin} bin
 neigh_modify	delay 0 binsize 0.08 one 1000
 
 #Material properties required for new pair styles

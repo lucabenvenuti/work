@@ -5,11 +5,10 @@ echo		both
 variable    	rolfrtyp string	epsd2
 
 #### USER input variables
-variable	runTime 	equal 226	# Total simulation time in (s)
+variable	runTime 	equal 226.0	# Total simulation time in (s)
 variable	saveInterval	equal 0.5 	# Save interval
 variable	saveRestart	equal 5.0
-variable	dt		equal 0.00002 	# Time step
-
+variable	dt		equal 5e-06 	# Time step
 ###################
 
 ### SYSTEM variables
@@ -45,7 +44,8 @@ units		si
 
 read_restart	./restart_main/sinterChuteInit_Final.restart
 
-neighbor	0.03 bin
+variable    skin            equal   0.5*${0.1}
+neighbor	${skin} bin
 neigh_modify	delay 0 binsize 0.08 one 1000
 
 #Material properties required for new pair styles
