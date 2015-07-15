@@ -41,6 +41,9 @@ units		si
 region		reg block -24.5 -16.2 -7.0 5.12 3.05 18.0 units box
 create_box	2 reg
 
+#coarse graining factor
+variable 	cg equal ${DCYLDP} #5.0
+
 #NEW sinter: radii for fractions
 variable	rS0 equal ${cg}*0.004/2.
 variable	rS1 equal ${cg}*0.005/2.
@@ -59,8 +62,7 @@ neigh_modify	delay 0 binsize 0.08 one 1000
 #  ALL VARIABLES HERE ARE PARAMETERS
 #*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=
 
-#coarse graining factor
-variable 	cg equal ${DCYLDP} #5.0
+
 
 #*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=
 

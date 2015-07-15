@@ -44,6 +44,9 @@ units		si
 
 read_restart	./restart_main/sinterChuteInit_Final.restart
 
+#coarse graining factor
+variable 	cg equal ${DCYLDP} #5.0
+
 #NEW sinter: radii for fractions
 variable	rS0 equal ${cg}*0.004/2.
 variable	rS1 equal ${cg}*0.005/2.
@@ -61,9 +64,6 @@ neigh_modify	delay 0 binsize 0.08 one 1000
 #*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=
 #  ALL VARIABLES HERE ARE PARAMETERS
 #*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=
-
-#coarse graining factor
-variable 	cg equal ${DCYLDP} #5.0
 
 #*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=
 
