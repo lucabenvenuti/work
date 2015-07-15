@@ -41,7 +41,16 @@ units		si
 region		reg block -24.5 -16.2 -7.0 5.12 3.05 18.0 units box
 create_box	2 reg
 
-variable    skin            equal   0.5*${0.1}
+#NEW sinter: radii for fractions
+variable	rS0 equal ${cg}*0.004/2.
+variable	rS1 equal ${cg}*0.005/2.
+variable	rS2 equal ${cg}*0.010/2.
+variable	rS3 equal ${cg}*0.020/2.
+variable	rS4 equal ${cg}*0.050/2.
+variable	rS5 equal ${cg}*0.200/2.
+variable	rS6 equal ${cg}*0.500/2.
+
+variable    skin            equal   0.5*${rS6}
 neighbor	${skin} bin
 neigh_modify	delay 0 binsize 0.08 one 1000
 
@@ -83,14 +92,7 @@ fix 		m7 all property/global k_finnie peratomtypepair 2 &
 #densities
 variable	SinterDens equal 2500.
 
-#NEW sinter: radii for fractions
-variable	rS0 equal ${cg}*0.004/2.
-variable	rS1 equal ${cg}*0.005/2.
-variable	rS2 equal ${cg}*0.010/2.
-variable	rS3 equal ${cg}*0.020/2.
-variable	rS4 equal ${cg}*0.050/2.
-variable	rS5 equal ${cg}*0.200/2.
-variable	rS6 equal ${cg}*0.500/2.
+
 
 
 #coal diameter fractions
@@ -219,7 +221,6 @@ variable dumpMassRate equal 0.01/${dt} # Set mass flow output interval!
  
 fix 	 dumpMass all print ${dumpMassRate} "${simulatedTime} ${outMass} ${outParticle} ${outMassRate} ${outPartRate} ${outDelMass} ${outDelPart}" &
 screen no title "Time Mass Particle MassRate PartRate delMass delPart" file postMass/massFlow.txt
-
 
 ####### Output size distribution % #########
 region		bottom 	block -23.6 -17.1 -5.3 2.9 4.6 7.3 units box
