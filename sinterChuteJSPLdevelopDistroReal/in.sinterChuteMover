@@ -45,7 +45,7 @@ units		si
 read_restart	./restart_main/sinterChuteInit_Final.restart
 
 #coarse graining factor
-variable 	cg equal ${DCYLDP} #5.0
+variable 	cg equal 1.0 #5.0
 
 #NEW sinter: radii for fractions
 variable	rS0 equal ${cg}*0.004/2.
@@ -237,13 +237,13 @@ region		lay1 	block -22.0 -18.0 -0.85 1.15 7.75 8.25 units box
 
 compute atRad all property/atom radius
 
-variable rS0atom atom "c_atRad >= 0.0125"
-variable rS1atom atom "c_atRad >= 0.0150"
-variable rS2atom atom "c_atRad >= 0.0250"
-variable rS3atom atom "c_atRad >= 0.0400"
-variable rS4atom atom "c_atRad >= 0.0625"
+variable rS0atom atom "c_atRad >= 0.0020"
+variable rS1atom atom "c_atRad >= 0.0025"
+variable rS2atom atom "c_atRad >= 0.0050"
+variable rS3atom atom "c_atRad >= 0.0100"
+variable rS4atom atom "c_atRad >= 0.0250"
 variable rS5atom atom "c_atRad >= 0.1000"
-variable rS6atom atom "c_atRad >= 0.1250"
+variable rS6atom atom "c_atRad >= 0.2500"
 
 group rS0group dynamic all var rS0atom every ${dumpMassRate}
 group rS1group dynamic all var rS1atom every ${dumpMassRate}
