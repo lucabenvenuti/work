@@ -235,11 +235,11 @@ region		lay1 	block -22.0 -18.0 -0.85 1.15 7.75 8.25 units box
 
 compute atRad all property/atom radius
 
-variable rS0atom atom "c_atRad >= 0.0125"
-variable rS1atom atom "c_atRad >= 0.0150"
+variable rS0atom atom "c_atRad >= 0.0100"
+variable rS1atom atom "c_atRad >= 0.0125"
 variable rS2atom atom "c_atRad >= 0.0250"
 variable rS3atom atom "c_atRad >= 0.0400"
-variable rS4atom atom "c_atRad >= 0.0625"
+variable rS4atom atom "c_atRad >= 0.0500"
 variable rS5atom atom "c_atRad >= 0.1000"
 variable rS6atom atom "c_atRad >= 0.1250"
 
