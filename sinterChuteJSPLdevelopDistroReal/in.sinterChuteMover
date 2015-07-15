@@ -58,7 +58,7 @@ variable	rS6 equal 0.2500
 
 variable    skin            equal   0.5*${rS5}
 neighbor	${skin} bin
-neigh_modify	delay 0 binsize 0.08 one 1000
+neigh_modify	delay 0 binsize 0.08 one 3000
 
 #Material properties required for new pair styles
 #*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=
