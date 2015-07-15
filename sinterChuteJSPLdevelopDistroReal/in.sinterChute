@@ -45,15 +45,15 @@ create_box	2 reg
 variable 	cg equal 1.0 #5.0
 
 #NEW sinter: radii for fractions
-variable	rS0 equal ${cg}*0.004/2.
-variable	rS1 equal ${cg}*0.005/2.
-variable	rS2 equal ${cg}*0.010/2.
-variable	rS3 equal ${cg}*0.020/2.
-variable	rS4 equal ${cg}*0.050/2.
-variable	rS5 equal ${cg}*0.200/2.
-variable	rS6 equal ${cg}*0.500/2.
+variable	rS0 equal 0.0020
+variable	rS1 equal 0.0025
+variable	rS2 equal 0.0050
+variable	rS3 equal 0.0100
+variable	rS4 equal 0.0250
+variable	rS5 equal 0.1000
+variable	rS6 equal 0.2500
 
-variable    skin            equal   0.5*${rS6}
+variable    skin            equal   0.5*${rS5}
 neighbor	${skin} bin
 neigh_modify	delay 0 binsize 0.08 one 1000
 
@@ -107,17 +107,17 @@ fix		sinter5 all particletemplate/sphere 1 atom_type 1 density constant ${Sinter
 fix		sinter6 all particletemplate/sphere 1 atom_type 1 density constant ${SinterDens} radius constant ${rS6}
 
 #NEW mass % for diameter fractions
-variable	mS0 equal 0.000 
+#variable	mS0 equal 0.000 
 variable	mS1 equal 0.300 
 variable	mS2 equal 0.250
 variable	mS3 equal 0.250 
 variable	mS4 equal 0.150
 variable	mS5 equal 0.050
-variable	mS6 equal 0.000
+#variable	mS6 equal 0.000
 
-fix 	pdd all particledistribution/discrete 524287 7 &
-		sinter0 ${mS0} sinter1 ${mS1} sinter2 ${mS2} sinter3 ${mS3} &
-		sinter4 ${mS4} sinter5 ${mS5} sinter6 ${mS6}
+fix 	pdd all particledistribution/discrete 524287 5 &
+		sinter1 ${mS1} sinter2 ${mS2} sinter3 ${mS3} &
+		sinter4 ${mS4} sinter5 ${mS5}
 
 pair_style 	gran model hertz tangential history rolling_friction ${rolfrtyp}
 pair_coeff	* *
