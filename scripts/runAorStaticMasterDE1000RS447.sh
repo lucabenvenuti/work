@@ -2,8 +2,8 @@
 
 # -------------- PBS Torque settings 
 
-#PBS -N LAoStMasDE1000RS387
-#PBS -o ${PBS_JOBID}__outAorStaticMasterDE1000RS387__${PBS_JOBID}.out
+#PBS -N LAoStMasDE1000RS447
+#PBS -o ${PBS_JOBID}__outAorStaticMasterDE1000RS447__${PBS_JOBID}.out
 #PBS -j oe
 #PBS -l nodes=4:ppn=8
 #PBS -l walltime=72:00:00
@@ -31,7 +31,7 @@ if [ ! -f $SCRIPT_NAME  ]
     exit -1
 fi
 
-cd ../aorStaticMasterDE1000RS387
+cd ../aorStaticMasterDE1000RS447
 
 OMPON=0   # master = 0 
 DCYLDP=20
@@ -44,7 +44,7 @@ ZPROCS=2
 PROCS=$(($XPROCS*$YPROCS*$ZPROCS))
 MPI_OPTIONS="-np $PROCS"
 
-VARS="-var iden 2001 -var NTHREADS $NTHREADS -var XPROCS $XPROCS -var YPROCS $YPROCS -var ZPROCS $ZPROCS -var OMPON $OMPON -var DCYLDP $DCYLDP"
+VARS="-var iden 2021 -var NTHREADS $NTHREADS -var XPROCS $XPROCS -var YPROCS $YPROCS -var ZPROCS $ZPROCS -var OMPON $OMPON -var DCYLDP $DCYLDP"
 
 date
 mpiexec $MPI_OPTIONS liggghts -in in.repose_init_packing $VARS
