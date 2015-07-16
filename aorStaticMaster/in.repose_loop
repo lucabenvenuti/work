@@ -1,10 +1,10 @@
 #########################################################################################
-# title: in.repose_loop                                                              #
-# version: 5.01                                                                         #
+# title: in.repose_loop                                                                 #
+# version: 6.01                                                                         #
 # additional files: folder mesh,                                                        #
 #                   folder matlab,                                                      #
 #                   postprocessing-script plotForce_v3_16.m                             #
-# date: Aug. 2014                                                                       #
+# date: Jul. 2015                                                                       #
 # authors: Benvenuti, L., Queteschiner, D., Aigner, A. , Berger R.                      #
 # e-mail: luca.benvenuti@jku.at                                                         #
 # short description: liggghts-input file for computing the shear force of a simple      #

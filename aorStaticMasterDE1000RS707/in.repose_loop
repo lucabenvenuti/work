@@ -1,5 +1,5 @@
 #########################################################################################
-# title: in.repose_loop                                                                 #
+# title: in.repose_loop                                                              #
 # version: 6.01                                                                         #
 # additional files: folder mesh,                                                        #
 #                   folder matlab,                                                      #
@@ -20,17 +20,17 @@ label loopiteration
 
 variable    rad     equal       1500e-6          # particle radius [m]
 variable    radmu   equal       1500e-6             # particle radius mean [m]
-variable  radsigma  equal       387e-6            # particle radius sigma[m]
+variable  radsigma  equal       707e-6            # particle radius sigma[m]
 variable  radR1     equal       0.0025
-variable  radPerc1  equal       0.05
+variable  radPerc1  equal       0.20
 variable  radR2     equal       0.002
-variable  radPerc2  equal       0.10
+variable  radPerc2  equal       0.20
 variable  radR3     equal       0.0015
-variable  radPerc3  equal       0.70
+variable  radPerc3  equal       0.20
 variable  radR4     equal       0.001
-variable  radPerc4  equal       0.10
+variable  radPerc4  equal       0.20
 variable  radR5     equal       0.0005
-variable  radPerc5  equal       0.05
+variable  radPerc5  equal       0.20
 variable  radR6     equal       0.0001
 variable  radPerc6  equal       0.0
 variable    dens    equal       1000         #sinterfine   # particle density [kg/m3]
