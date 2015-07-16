@@ -18,27 +18,27 @@
 variable fileID equal ${iden}
 label loopiteration
 
-variable    rad     equal       349e-6          # particle radius [m]
-variable    radmu   equal       349e-6             # particle radius mean [m]
-variable  radsigma  equal       0.000266            # particle radius sigma[m]
-variable  radR1     equal       0.001
-variable  radPerc1  equal       0.05
-variable  radR2     equal       0.0008
-variable  radPerc2  equal       0.0
-variable  radR3     equal       0.000625
-variable  radPerc3  equal       0.0
-variable  radR4     equal       0.000315
-variable  radPerc4  equal       0.95
-variable  radR5     equal       0.0001575
-variable  radPerc5  equal       0.0
-variable  radR6     equal       0.00006205
+variable    rad     equal       1500e-6          # particle radius [m]
+variable    radmu   equal       1500e-6             # particle radius mean [m]
+variable  radsigma  equal       570e-6            # particle radius sigma[m]
+variable  radR1     equal       0.0025
+variable  radPerc1  equal       0.1
+variable  radR2     equal       0.002
+variable  radPerc2  equal       0.25
+variable  radR3     equal       0.0015
+variable  radPerc3  equal       0.3
+variable  radR4     equal       0.001
+variable  radPerc4  equal       0.25
+variable  radR5     equal       0.0005
+variable  radPerc5  equal       0.1
+variable  radR6     equal       0.0001
 variable  radPerc6  equal       0.0
 variable    dens    equal       3000         #sinterfine   # particle density [kg/m3]
 variable    ym      equal       1e7             # Young's modulus  [Pa]
 variable    pr      equal       0.4            # Poisson ratio   [-]
-variable    rest    equal       0.5           # coefficient of restitution [-]
-variable    fric    universe    0.4	 0.6	0.8	0.4	0.6	0.8	0.4	0.6	0.8       # coefficient of friction (loop variable) [-]
-variable    rf      universe    0.4	 0.4	0.4	0.6	0.6	0.6	0.8	0.8	0.8        # coefficient of rolling friction (optional loop) [-]
+variable    rest    index       0.5 0.9           # coefficient of restitution [-]
+variable    fric    index       0.1 0.5 0.9        # coefficient of friction (loop variable) [-]
+variable    rf      index       0.1 0.5 0.9        # coefficient of rolling friction (optional loop) [-]
 variable    a       equal       ${rf}*${fric}
 variable    rolfrtypnum equal	4		# rolling friction option ( 1 = off, 2 = cdt, 3 = epsd, 4 = epsd2)
 variable    rolfrtyp string	epsd2
@@ -236,7 +236,7 @@ variable fileID equal ${fileID}+1
 
 # loop
 clear
-next     fric rf
+next     fric
 jump     SELF loopiteration
 variable fric delete
 
