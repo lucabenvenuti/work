@@ -18,14 +18,6 @@
 variable fileID equal ${iden}
 label loopiteration
 
-# ompOn check
-if "${OMPON} == 1" then                            &
-  "package omp ${NTHREADS} force/neigh thread-binding verbose"  &
-  "modify_timing on"      & 
-  "print 'OMP is ON'"                         &
-else &
-  "print 'OMP is OFF - old version'" 
-
 variable    rad     equal       349e-6          # particle radius [m]
 variable    radmu   equal       349e-6             # particle radius mean [m]
 variable  radsigma  equal       0.000266            # particle radius sigma[m]
@@ -48,8 +40,8 @@ variable    rest    equal       0.5           # coefficient of restitution [-]
 variable    fric    universe    0.4	 0.6	0.8	0.4	0.6	0.8	0.4	0.6	0.8       # coefficient of friction (loop variable) [-]
 variable    rf      universe    0.4	 0.4	0.4	0.6	0.6	0.6	0.8	0.8	0.8        # coefficient of rolling friction (optional loop) [-]
 variable    a       equal       ${rf}*${fric}
-#variable    rvd    equal        1.0		#coefficientRollingViscousDamping (only for epsd rolling model)
 variable    rolfrtypnum equal	4		# rolling friction option ( 1 = off, 2 = cdt, 3 = epsd, 4 = epsd2)
+variable    rolfrtyp string	epsd2
 variable    uniSys  equal       1		 # unit System ( 1=SI, 2=cgs)
 variable    radDist equal       3         # radius distribution (1 = (25%rad*0.99 , 25%rad*1.01, 50%rad ; 
                                            # 2=gaussian distribution with radmu & radsigma)
@@ -68,10 +60,6 @@ processors   ${XPROCS} ${YPROCS} ${ZPROCS}
 variable    numProc equal       ${XPROCS}*${YPROCS}*${ZPROCS}*${NTHREADS}
 
 variable    ratio   equal       0.0001    
-# defines the maximum wall velocity in the vicinity of particles (only for the 'auto' mode)
-# v_max = ratio*MIN(rad)/dt
-
-#variable    expDiam         equal   0.10415      # diam of shear cell [m]
 
 #########################################################################################
 #   DUMP COMMANDS ARE DISABLED. IF YOU NEED THEM UNCOMMENT THEM. SEARCH FOR 'MARKDUMP'  #
@@ -84,81 +72,33 @@ variable    ratio   equal       0.0001
 #########################################################################################
 #                               internal settings - do not touch                        #
 #########################################################################################
-
-#########################################################################################
 units		si
 #########################################################################################
-# geometry scaling, mass, number of timesteps, ...
-#variable    sVelWall        equal   3 # scale that defines the wall velocity (default = 3)
-#variable    velWall         equal   ${rad}*${sVelWall}
 
 # geometry scaling, mass, number of timesteps, ...
 variable    rad1            equal   0.99*${rad}
 variable    rad2            equal   1.01*${rad}
 
 variable    skin            equal   0.50*${radR1}
-#variable    velMax          equal   0.49*${skin}/${dt}
-
-# radii for fractions
 variable    r0              equal        ${rad}
 
-#variable    cylDiameter     equal   ${dCylDp}*2*${rad} # 50 particle in cyl diameter
-#variable    cylRadius       equal   0.5*${cylDiameter} 
-#variable    cylArea         equal   0.25*${cylDiameter}*${cylDiameter}*PI
-
-#variable    desiredMass     equal   ${cylArea}*0.75*${cylDiameter}*0.65*${dens}
 variable    desiredVolumeFraction     equal   0.62
-#variable    ctrlStress      equal   -${accGrev}*${expMass}/(${expDiam}*${expDiam}*PI*0.25) 
-#variable    ctrlForce       equal   ${ctrlStress}*${cylArea}
-#variable    ctrlForcemain   equal   ${ctrlForce}*${shearperc}
-#variable    ctrlForceZero   equal   ${ctrlForce}*0.001
-
-#variable    bottomPos       equal   0.5*${cylRadius}
 variable    characteristicVelocity equal 0.1
-
-#variable    rmRegZPos       equal   1.5*${cylRadius}
-
-# dimensions of simulation domain
-#variable    nx  equal   -2.01*${cylRadius}    # neg. x-value .. bigger for motion
-#variable    px  equal    1.5*${cylRadius}     # pos. x-value
-#variable    ny  equal   -1.05*${cylRadius}    # neg. y-value
-#variable    py  equal    1.05*${cylRadius}    # pos. y-value
-#variable    nz  equal   -${rad}               # neg. z-value (just not 0.0)
-#variable    pz  equal    1.75*${cylRadius}
-
 
 # run & dump times
 variable    nDump           equal   round(1e-2/${dt})
 variable    nScreen         equal   round(1e-3/${dt})
 variable    nDumpForce      equal   round(1e-3/${dt})
 
-#variable    nStepsSettle    equal   round(${pz}/(0.5*${velMax}*${dt}))
-#variable    nStepsRun       equal   round(0.5*0.375*${cylRadius}/(${velWall}*${dt}))
-#variable    nStepsRun2      equal   round(${nStepsRun}/20)
-#variable    nStepsRun3      equal   ${nStepsRun2}*19
-#variable    nStepsRun4      equal   ${nStepsRun}*2
 variable    totaltime	 equal   20.0
 variable	nStepsSettle equal round(0.001/${dt})
 variable	nStepsRun    equal round(0.01/${dt})
 variable	dumpfreq     equal round(0.01/${dt})
 variable	thermofreq   equal round(0.001/${dt})
-#variable	nstep        equal round(20./${dt}) #2000000
 variable	nstep        equal round(${totaltime}/${dt}) #2000000
 variable	deletefreq   equal round(0.1/${dt}) #10000
 variable    zoltanSteps	    equal   round(${nStepsRun}/20.0)
 
-
-#########################################################################################
-#rolling friction options
-
-if "${rolfrtypnum} == 1" then &
-  "variable    rolfrtyp string	off" &
-elif "${rolfrtypnum} == 2" &
-  "variable    rolfrtyp string	cdt" &
-elif "${rolfrtypnum} == 3" &
-  "variable    rolfrtyp string	epsd" &
-else &
-  "variable    rolfrtyp string	epsd2" 
 #########################################################################################
 
 # create directories
@@ -194,31 +134,16 @@ fix     m3 all property/global coefficientRestitution peratomtypepair 2 ${rest} 
 fix     m4 all property/global coefficientFriction peratomtypepair 2 ${fric} 0.0 0.0 0.0
 fix     m5 all property/global coefficientRollingFriction peratomtypepair 2 ${rf} 0.0 0.0 0.0
 fix     m6 all property/global characteristicVelocity scalar ${characteristicVelocity}
-#fix    m7 all property/global coefficientRollingViscousDamping peratomtypepair 2 ${rvd} 0.0 0.0 0.0
 
-# define the material in use  ## pts1 0.25 pts2 0.25  volume_limit ${volMin}"   
-if "${radDist} == 2" then                            &
-  "fix    pts3 all particletemplate/sphere 5328 atom_type 1 density constant ${dens} radius gaussian number ${radmu} ${radsigma}"  &
-  "fix	pdd  all particledistribution/discrete 5332  1 pts3 1.0 "   & 
-  "print 'particle radius distribution gaussian'"                         &
-elif "${radDist} == 3" &
-  "fix		ptsd1  all particletemplate/sphere 5333 atom_type 1 density constant ${dens} radius constant ${radR1}"                                & 
-  "fix		ptsd2  all particletemplate/sphere 5334 atom_type 1 density constant ${dens} radius constant ${radR2}"                                & 
-  "fix		ptsd3  all particletemplate/sphere 5335 atom_type 1 density constant ${dens} radius constant ${radR3}"                                & 
-  "fix		ptsd4  all particletemplate/sphere 5336 atom_type 1 density constant ${dens} radius constant ${radR4}"                                & 
-  "fix		ptsd5  all particletemplate/sphere 5337 atom_type 1 density constant ${dens} radius constant ${radR5}"                                & 
-  "fix		ptsd6  all particletemplate/sphere 5338 atom_type 1 density constant ${dens} radius constant ${radR6}" & 
-  "fix		pdd  all particledistribution/discrete 5339  6 ptsd1 ${radPerc1} ptsd2 ${radPerc2} ptsd3 ${radPerc3} ptsd4 ${radPerc4} ptsd5 ${radPerc5} ptsd6 ${radPerc6}"  &       
-  "print 'particle radius distribution discrete REAL'"    &
-else &
-  "fix		pts  all particletemplate/sphere 5330 atom_type 1 density constant ${dens} radius constant ${rad}"                                & 
-  "fix		pts1 all particletemplate/sphere 5329 atom_type 1 density constant ${dens} radius constant ${rad1}"                                & 
-  "fix		pts2 all particletemplate/sphere 5331 atom_type 1 density constant ${dens} radius constant ${rad2}" & 
-  "fix		pdd  all particledistribution/discrete 5332  3 pts 0.5 pts1 0.25 pts2 0.25"                         &       
-  "print 'particle radius distribution discrete zero99 one oneoone'" 
+# define the material in use   
+fix		ptsd1  all particletemplate/sphere 5333 atom_type 1 density constant ${dens} radius constant ${radR1} 
+fix		ptsd2  all particletemplate/sphere 5334 atom_type 1 density constant ${dens} radius constant ${radR2} 
+fix		ptsd3  all particletemplate/sphere 5335 atom_type 1 density constant ${dens} radius constant ${radR3} 
+fix		ptsd4  all particletemplate/sphere 5336 atom_type 1 density constant ${dens} radius constant ${radR4} 
+fix		ptsd5  all particletemplate/sphere 5337 atom_type 1 density constant ${dens} radius constant ${radR5} 
+fix		ptsd6  all particletemplate/sphere 5338 atom_type 1 density constant ${dens} radius constant ${radR6}
+fix		pdd  all particledistribution/discrete 5339  6 ptsd1 ${radPerc1} ptsd2 ${radPerc2} ptsd3 ${radPerc3} ptsd4 ${radPerc4} ptsd5 ${radPerc5} ptsd6 ${radPerc6}       
 
-#variable	maxdiam equal ${radR1}*2
-# calculate maximum diameter in simulation
 fix		maxdiam all diam/max
 variable	maxdiam equal f_maxdiam
 print		"max diameter in sim: ${maxdiam}"
@@ -231,34 +156,15 @@ variable	dcyl equal ${G_D_RATIO}*${maxdiam}
 # upward velocity of cylinder
 variable	vup equal (1.2*${dcyl})/(${dt}*${nstep})
 
-# pair style
-#pair_style 	gran model hertz tangential history rolling_friction ${rolfrtyp}
-#pair_style 	gran model hooke
-# pair style # ompOn check
-if "${OMPON} == 1" then                            &
-  "pair_style 	gran/omp model hertz tangential history rolling_friction ${rolfrtyp}"  &
-else &
-  "pair_style 	gran model hertz tangential history rolling_friction ${rolfrtyp}"  
+pair_style 	gran model hertz tangential history rolling_friction ${rolfrtyp}  
 pair_coeff	* *
-#pair_style	${pairStyle} rolling_friction ${pairStyleRollingFriction} cohesion ${pairStyleCohesion} tangential_damping ${pairStyleDamping} # viscous ${pairStyleViscous}
-#pair_coeff	* *
 
 #Timestep
 timestep	${dt}
 
-#Gravity
-#fix		gravi all gravity ${accGrev} vector 0.0 0.0 -1.0
-# load balancing
-#fix     lb all balance 0 xyz 10 1.05
-#apply nve integration to all particles that are inserted as single particles
-#fix		integr all nve/sphere
-if "${OMPON} == 1" then                            &
-  "fix		gravi all gravity/omp ${accGrev} vector 0.0 0.0 -1.0"  &
-  "fix		integr all nve/sphere/omp"  &
-else &
-  "fix		gravi all gravity ${accGrev} vector 0.0 0.0 -1.0" &
-  "fix		integr all nve/sphere"  &
-  "fix     lb all balance 0 xyz 10 1.05"
+fix		gravi all gravity ${accGrev} vector 0.0 0.0 -1.0
+fix		integr all nve/sphere
+fix     lb all balance 0 xyz 10 1.05
 
 
 
@@ -268,18 +174,10 @@ variable hcyl equal 8./13.*${G_D_RATIO}*${maxdiam}
 region	bc cylinder z 0.0 0.0 ${rcyl}  0.0 ${hcyl} units box
 
 # meshes # use the imported meshes as granular wall
-if "${OMPON} == 1" then                            &
-  "fix		cad1 all mesh/surface/omp file meshes/ground.stl type 1 scale ${scale}"    &
-  "fix		cad2 all mesh/surface/omp file meshes/cylinder.stl type 1 scale ${scale}"  &
-  "fix		granwalls all wall/gran/omp model hooke mesh n_meshes 2 meshes cad1 cad2"  &
-  "fix		topwall all wall/gran/omp model hooke primitive type 1 zplane 1.0"     &
-else &
-  "fix		cad1 all mesh/surface file meshes/ground.stl type 1 scale ${scale}"    &
-  "fix		cad2 all mesh/surface file meshes/cylinder.stl type 1 scale ${scale}"  &
-  "fix		granwalls all wall/gran model hooke mesh n_meshes 2 meshes cad1 cad2"  &
-  "fix		topwall all wall/gran model hooke primitive type 1 zplane 1.0"
-
-
+fix		cad1 all mesh/surface file meshes/ground.stl type 1 scale ${scale}
+fix		cad2 all mesh/surface file meshes/cylinder.stl type 1 scale ${scale}
+fix		granwalls all wall/gran model hooke mesh n_meshes 2 meshes cad1 cad2
+fix		topwall all wall/gran model hooke primitive type 1 zplane 1.0
 
 # lower region to delete particles from
 region		lower block INF INF INF INF INF 0. units box
@@ -294,57 +192,29 @@ thermo		${thermofreq}
 thermo_modify	lost ignore norm no
 compute_modify	thermo_temp dynamic yes
 
-if "${OMPON} == 1" then                            &
-  "partitioner_style zoltan EVERY ${zoltanSteps} RCB_REUSE 1"  &
-else &
-  "print 'OMP is OFF - old version - bis'"  
-
-
-
 # dump
-dump		dumpstl all stl ${dumpfreq} post_param/stldump_${rf}_*.stl
-dump		dmp all custom ${dumpfreq} post_param/dump_${rf}_*.fill id type x y z ix iy iz vx vy vz fx fy fz omegax omegay omegaz radius
+#dump		dumpstl all stl ${dumpfreq} post_param/stldump_${rf}_*.stl
+#dump		dmp all custom ${dumpfreq} post_param/dump_${rf}_*.fill id type x y z ix iy iz vx vy vz fx fy fz omegax omegay omegaz radius
 
 ### print a csv file with all the parameteres #2gauss
-if "${radDist} == 2" then                            &
-  "fix csv all print 1 '${rad}, ${dens}, ${ym}, ${pr}, ${rest}, ${fric}, ${rf}, ${dt}, ${dCylDp}, ${totaltime}, ${fileID}, &
-		${rolfrtypnum}, ${nStepsSettle}, ${uniSys}, ${radDist}, ${radmu}, ${radsigma}, ${numProc}, ${XPROCS}, ${YPROCS}, ${ZPROCS}, ${NTHREADS}, ${OMPON}, ${nStepsRun}' &
-		file ./results/sim_parAOR_fid${fileID}.csv &
-		title 'rad, dens, ym, pr, rest, fric, rf, dt, dCylDp, totaltime, fileID, rolfrtypnum, nStepsSettle, uniSys, radDist, radmu, radsigma, numProc, xProcs, yProcs, zProcs, nThreads, OMPON, nStepsRun'" &
-elif "${radDist} == 3" &
-"fix csv all print 1 '${rad}, ${dens}, ${ym}, ${pr}, ${rest}, ${fric}, ${rf}, ${dt}, ${dCylDp}, ${totaltime}, ${fileID}, &
+fix csv all print 1 "${rad}, ${dens}, ${ym}, ${pr}, ${rest}, ${fric}, ${rf}, ${dt}, ${dCylDp}, ${totaltime}, ${fileID}, &
 		${rolfrtypnum}, ${nStepsSettle}, ${uniSys}, ${radDist}, ${radmu}, ${radsigma}, ${radR1}, ${radPerc1}, ${radR2}, ${radPerc2}, ${radR3}, ${radPerc3}, &
-        ${radR4}, ${radPerc4}, ${radR5}, ${radPerc5}, ${radR6}, ${radPerc6}, ${numProc}, ${XPROCS}, ${YPROCS}, ${ZPROCS}, ${NTHREADS}, ${OMPON}, ${nStepsRun}' &
+        ${radR4}, ${radPerc4}, ${radR5}, ${radPerc5}, ${radR6}, ${radPerc6}, ${numProc}, ${XPROCS}, ${YPROCS}, ${ZPROCS}, ${NTHREADS}, ${OMPON}, ${nStepsRun}" &
 		file ./results/sim_parAOR_fid${fileID}.csv &
-		title 'rad, dens, ym, pr, rest, fric, rf, dt, dCylDp, totaltime, fileID, rolfrtypnum, nStepsSettle, uniSys, radDist, radmu, radsigma, &
-        radR1, radPerc1, radR2, radPerc2, radR3, radPerc3, radR4, radPerc4, radR5, radPerc5, radR6, radPerc6, numProc, xProcs, yProcs, zProcs, nThreads, OMPON, nStepsRun'" &
-else &
-  "fix csv all print 1 '${rad}, ${dens}, ${ym}, ${pr}, ${rest}, ${fric}, ${rf}, ${dt}, ${dCylDp}, ${ctrlStress}, ${expDiam}, ${expMass}, ${shearperc}, ${totaltime}, ${fileID}, &
-		${rolfrtypnum}, ${nStepsSettle}, ${uniSys}, ${shearCellType}, ${radDist}, ${numProc}, ${XPROCS}, ${YPROCS}, ${ZPROCS}, ${NTHREADS}, ${OMPON}, ${nStepsRun}' &
-		file ./results/sim_parAOR_fid${fileID}.csv &
-		title 'rad, dens, ym, pr, rest, fric, rf, dt, dCylDp, totaltime, fileID, rolfrtypnum, nStepsSettle, uniSys, radDist, numProc, xProcs, yProcs, zProcs, nThreads, OMPON, nStepsRun'" 
-
+		title "rad, dens, ym, pr, rest, fric, rf, dt, dCylDp, totaltime, fileID, rolfrtypnum, nStepsSettle, uniSys, radDist, radmu, radsigma, &
+        radR1, radPerc1, radR2, radPerc2, radR3, radPerc3, radR4, radPerc4, radR5, radPerc5, radR6, radPerc6, numProc, xProcs, yProcs, zProcs, nThreads, OMPON, nStepsRun"
+        
 # run 1 step to perform restart with hooke, then change interaction
 run		1
 unfix		granwalls
 unfix		topwall
 unfix csv
-# pair style # ompOn check
-if "${OMPON} == 1" then                            &
-  "pair_style 	gran/omp model hertz tangential history rolling_friction ${rolfrtyp}"  &
-else &
-  "pair_style 	gran model hertz tangential history rolling_friction ${rolfrtyp}"  
+
+# pair style
+pair_style 	gran model hertz tangential history rolling_friction ${rolfrtyp}  
 pair_coeff	* *
-#fix		    granwalls all wall/${pairStyle} rolling_friction ${pairStyleRollingFriction} mesh n_meshes 2 meshes cad1 cad2
 
-if "${OMPON} == 1" then                            &
-  "fix		    granwalls all wall/gran/omp model hertz tangential history rolling_friction ${rolfrtyp} mesh n_meshes 2 meshes cad1 cad2"  &
-else &
-  "fix		    granwalls all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} mesh n_meshes 2 meshes cad1 cad2" 
-
-
-
-#pippo
+fix		    granwalls all wall/gran model hertz tangential history rolling_friction ${rolfrtyp} mesh n_meshes 2 meshes cad1 cad2 
 
 # get mass of particle column
 variable mPartBox   equal mass(all,bc)
@@ -362,28 +232,17 @@ run		${nstep} upto every ${deletefreq} "delete_atoms region lower"
 
 write_restart	restart/repose_loop_${fileID}.restart
 
-# evaluate convex hull
-#variable	n_cuts equal 2.*${G_D_RATIO}
-#variable	cut_thickness equal ${maxdiam}/2.
-#compute		chull all crosssection skin ${skin} dim z min ${r0} max ${dcyl}  n_cuts ${n_cuts}  cut_thickness ${cut_thickness} file ./results/area_fid${fileID}.txt
-
-# measure angle
-#variable	i equal ${n_cuts}+1
-#variable	c equal c_chull[$i]
-#fix		pr all print 1 "$c" screen no file ./results/angle_fid${fileID}.txt title ${rf}
-#run		1
-
 variable fileID equal ${fileID}+1
 
 # loop
 clear
 next     fric rf
 jump     SELF loopiteration
-#variable fric delete
+variable fric delete
 
-#next     rf
-#jump     SELF loopiteration
-#variable rf delete
+next     rf
+jump     SELF loopiteration
+variable rf delete
 
-#next     rest
-#jump     SELF loopiteration
+next     rest
+jump     SELF loopiteration
