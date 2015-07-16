@@ -8,7 +8,7 @@ variable    	rolfrtyp string	epsd2
 variable	runTime 	equal 100.0	# Total simulation time in (s)
 variable	saveInterval	equal 0.5 	# Save interval
 variable	saveRestart	equal 5.0
-variable	dt		equal 5e-06 	# Time step
+variable	dt		equal 1e-06 	# Time step
 ###################
 
 ### SYSTEM variables
@@ -53,7 +53,7 @@ variable	rS4 equal 0.0250
 variable	rS5 equal 0.1000
 variable	rS6 equal 0.2500
 
-variable    skin            equal   0.5*${rS5}
+variable    skin            equal   0.5*${rS1}
 neighbor	${skin} bin
 neigh_modify	delay 0 binsize 0.08 one 3000
 
