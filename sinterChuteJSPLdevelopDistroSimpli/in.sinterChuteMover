@@ -5,7 +5,7 @@ echo		both
 variable    	rolfrtyp string	epsd2
 
 #### USER input variables
-variable	runTime 	equal 226	# Total simulation time in (s)
+variable	runTime 	equal 326	# Total simulation time in (s)
 variable	saveInterval	equal 0.5 	# Save interval
 variable	saveRestart	equal 5.0
 variable	dt		equal 0.00002 	# Time step
@@ -14,7 +14,7 @@ variable	dt		equal 0.00002 	# Time step
 
 ### SYSTEM variables
 variable	runCompletInit	equal 1.0/${dt}
-variable	runSecondFill	equal 100.0/${dt}
+variable	runSecondFill	equal 200.0/${dt}
 variable	runMoveScrap	equal 25.0/${dt}
 variable	runTimeSteps	equal ${runTime}/${dt}
 variable	saveIntSteps	equal ${saveInterval}/${dt}
