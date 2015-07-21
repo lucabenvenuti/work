@@ -2,9 +2,20 @@ clear all
 close all
 clc
 
-load S:\Luca\testShearCellPoli20150428\testPolidispersityDensityBulkBoxSepties.mat
+if (isunix)
+    %load /mnt/scratchPFMDaten/Luca/testPolidispersityShearCellCokeCoarseCokeFineSinterFineLimestoneFineMatlab/inputRadSigma.mat
+    %load /mnt/scratchPFMDaten/Luca\testShearCellPoli20150428/testPolidispersityDensityBulkBoxSepties.mat
+    load 20150721shearCellPoliAllDensitiesANNsMultiple.mat
+    load /mnt/scratchPFMDaten/Luca\testShearCellPoli20150428/expRes5000.mat
+    addpath('/mnt/DATA/liggghts/work/shearCell/matlab/exportFig');
+else
+    %load S:\Luca\testShearCellPoli20150428\testPolidispersityDensityBulkBoxSepties.mat
+    load 20150721shearCellPoliAllDensitiesANNsMultiple.mat
+    load S:\Luca\testShearCellPoli20150428\expRes5000.mat
+    addpath('E:\liggghts\work\shearCell\matlab\exportFig');
+end
 
-load S:\Luca\testShearCellPoli20150428\expRes5000.mat
+
 
 clearvars newY3
 

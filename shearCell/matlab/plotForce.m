@@ -24,8 +24,14 @@ set(0,'DefaultTextFontSize',12);
 unitSysDefault = 'si';  % 'si' or 'cgs'
 
 % select files that should be postprocessed
-sim_dir = '/mnt/scratchPFMDaten/Luca/redoCheckShearCell/results'; % directory, where simulation files can be found
-%sim_dir = 'S:\Luca\testPolidispersityShearCellCokeCoarseCokeFineSinterFineLimestoneFine';
+
+if (isunix)
+    sim_dir = '/mnt/scratchPFMDaten/Luca/20150721Lise/resultsShearCellAllDensitiesAndOld'; % directory, where simulation files can be found
+else
+    sim_dir = 'S:\Luca\testPolidispersityShearCellCokeCoarseCokeFineSinterFineLimestoneFine';
+end
+
+%
 %sim_dir = '/mnt/transfer/to_Luca/test';
 filepattern = 'force.cad*_fid*.txt'; % e.g. 'force.*.txt' %Andi
 filepatterncsv = 'sim_par*_fid*.csv'; % e.g. 'force.*.txt' %Andi
@@ -61,7 +67,7 @@ col_numCol = 12;
 col_numBox = 13;
 
 % experimental data
-exp_flag = true; % enable the comparision to experimental data
+exp_flag = false; % enable the comparision to experimental data
 exp_dir = '.'; % directory, where the files can be found
 legendExpFlag = 'schulze'; % choose between jenike & schulze
 polidispersity_flag = true; %
@@ -108,7 +114,7 @@ fracColMass = 1.0; %0.12;
 
 manualPlateauFlag = false;
 %doImage
-imageFlag = true; %~manualPlateauFlag; % "~" gives the opposite of the boolean
+imageFlag = false; %~manualPlateauFlag; % "~" gives the opposite of the boolean
 
 startPlateauPreShearValue = .25;%.38;
 stopPlateauPreShearValue = .35;%.48;
