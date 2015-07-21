@@ -377,4 +377,4 @@ legend('avgMuR2mean [-]','avgMuR1mean [-]', 'rhoBShearMaxmean [-]', 'rhoBPreShea
 
 export_fig(['0',num2str(41+i),'simulationRadiusDistribution',num2str(i),date1],'-jpg', '-nocrop', h1);
 
-%save -v7.3 20150721shearCellPoliAllDensitiesANNsMultiple.mat
+%save -v7.3 20150721shearCellPoliAllDensitiesWithOldShearPerc1ANNsMultiple.mat
