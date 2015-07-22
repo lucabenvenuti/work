@@ -51,3 +51,5 @@ resAoR{9}.material = 'ironore coarse';
 for ijk = 1:9
 [ resAoR{ijk}.gloriaAugustaAorNN01, resAoR{ijk}.a01 ] = radarPrintAorVectorialPolidispersityFun(NNSave2, errorEstSumMaxIndex2, dataNN2, resAoR{ijk}.angleExp, ijk, resAoR{ijk}.material);
 end
+
+% save -v7.3 20150721AoRpolidispersityMultipleANNsTris.mat

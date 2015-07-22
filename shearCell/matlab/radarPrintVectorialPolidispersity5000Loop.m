@@ -58,4 +58,4 @@ for i = 1:3
     
 end
 
-save -v7.3 20150721shearCellPoliAllDensitiesWithOldShearPerc1ANNsMultipleRes.mat
+% save -v7.3 20150721shearCellPoliAllDensitiesWithOldShearPerc1ANNsMultipleRes.mat
