@@ -1,16 +1,22 @@
-function [ gloriaAugustaSchulzeNN, a2 ] = radarPrintAorVectorialPolidispersityFun(NNSave2, errorEstSumMaxIndex2, dataNN2, angleExp, numFig)
+function [ gloriaAugustaSchulzeNN, a2 ] = radarPrintAorVectorialPolidispersityFun(NNSave2, errorEstSumMaxIndex2, dataNN2, angleExp, numFig, material)
 %UNTITLED4 Summary of this function goes here
 %   Detailed explanation goes here
 
-jjj=1;
+if (isunix)
+    addpath('/mnt/DATA/liggghts/work/shearCell/matlab/exportFig');
+else
+    addpath('E:\liggghts\work\shearCell\matlab\exportFig');
+end
+
+%jjj=1;
 kkk=1;
-lll=1;
-i=1;
-ii=1;
+%lll=1;
+%i=1;
+%ii=1;
 
 coeffPirker = 1.0;
-densTolerance = 0.05;
-fricTolerance = 0.05;
+%densTolerance = 0.05;
+%fricTolerance = 0.05;
 
 newY2 = myNewInputPolidispersity(NNSave2, errorEstSumMaxIndex2, dataNN2);
 [nY2rows,nY2column] = size(newY2);
@@ -45,12 +51,12 @@ newY2(newY2rows+2,:) = abs(1- newY2(newY2rows+1,:));  %deltaRatioAORLi
 
 temp_v = newY2( (newY2rows+2), : );
 temp_i = find (temp_v < 0.05);
-ni = size(temp_i,2)
+ni = size(temp_i,2);
 gloriaAugustaAorNNLi = zeros( kkk+size(temp_i,2)-1, newY2rows+4 );
 gloriaAugustaAorNNLi( kkk:(kkk+ni-1), 1) = temp_i';
 gloriaAugustaAorNNLi( kkk:(kkk+ni-1), 2:(newY2rows+3) ) = newY2( :, temp_i )';
 gloriaAugustaAorNNLi( kkk:(kkk+ni-1), newY2rows+4) = 1;
-kkk = kkk + ni
+%kkk = kkk + ni;
 
 
 
@@ -116,13 +122,26 @@ if (ni>0)
     G(4,6)= maxZ;
     G(4,7)= 3463; %max(dataNN2.dens); %Z
     
-    figure(numFig)
-    a2 = radarPlot(G)
+    formatOut = 'yyyy-mm-dd-HH-MM-SS';
+    date1 = datestr(now,formatOut);
+    
+    h1 = figure(numFig);
+    a2 = radarPlot(G);
     legend('minInput','min', '\mu - \sigma', '\mu', '\mu + \sigma', 'max', 'maxInput'); %, 'FontSize',24)
-    title (['angleExp = ', num2str(angleExp), 'coeff. P. = ', num2str(coeffPirker)] ,'FontSize',24);
+    if (exist('material','var'))
+        title ([material, ', angleExp = ', num2str(angleExp), 'coeff. P. = ', num2str(coeffPirker)] ,'FontSize',24);
+        set(gca,'fontname','times new roman','FontSize',20);
+        set(h1, 'Position', [100 100 1500 800]);
+        export_fig([material, ', angleExp = ', num2str(angleExp), 'coeff. P. = ', num2str(coeffPirker),date1],'-jpg', '-nocrop', h1);
+    else
+        title (['angleExp = ', num2str(angleExp), 'coeff. P. = ', num2str(coeffPirker)] ,'FontSize',24);
+    end
     %title (['AOR, coeff. P. = ', num2str(coeffPirker)] ,'FontSize',24);
     %      set(gca,'fontname','times new roman','FontSize',24)  % Set it to times
     %      gca
+    
+    
+    
 else a2=0;
 end
 end
