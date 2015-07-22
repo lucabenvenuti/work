@@ -142,7 +142,7 @@ if (ni>0)
     
     
     
-else a2=0;
+else a2=0; gloriaAugustaSchulzeNN = 0;
 end
 end
 
