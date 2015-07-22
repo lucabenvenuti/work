@@ -1,6 +1,7 @@
 function [ gloriaAugustaSchulzeNN, a2 ] = radarPrintAorVectorialPolidispersityFun(NNSave2, errorEstSumMaxIndex2, dataNN2, angleExp, numFig, material)
-%UNTITLED4 Summary of this function goes here
-%   Detailed explanation goes here
+
+%RADARPRINTAORVECTORIALPOLIDISPERSITYFUN identify valid parameters and
+% plot them in a radar plot
 
 if (isunix)
     addpath('/mnt/DATA/liggghts/work/shearCell/matlab/exportFig');
@@ -8,41 +9,13 @@ else
     addpath('E:\liggghts\work\shearCell\matlab\exportFig');
 end
 
-%jjj=1;
 kkk=1;
-%lll=1;
-%i=1;
-%ii=1;
-
 coeffPirker = 1.0;
-%densTolerance = 0.05;
-%fricTolerance = 0.05;
 
 newY2 = myNewInputPolidispersity(NNSave2, errorEstSumMaxIndex2, dataNN2);
 [nY2rows,nY2column] = size(newY2);
 
 newY2rows =   nY2rows  ;
-%             if (exist('densityBulkBoxMean'))
-%                 nY2rowsBis = nY2rows+8;
-%                 nY2rowsTris = nY2rowsBis+5;
-%             else
-%                 nY2rowsBis = nY2rows+7;
-%                 nY2rowsTris = nY2rowsBis+2;
-%             end
-%
-%      coeffShear40 = coeffShear40*coeffPirker;
-%      expOut.coeffPreShear40 = expOut.coeffPreShear40*coeffPirker;
-%
-%      coeffShear60 = coeffShear60*coeffPirker;
-%      expOut.coeffPreShear60 = expOut.coeffPreShear60*coeffPirker;
-%
-%      coeffShear80 = coeffShear80*coeffPirker;
-%      expOut.coeffPreShear80 = expOut.coeffPreShear80*coeffPirker;
-%
-%      coeffShear100 = coeffShear100*coeffPirker;
-%      expOut.coeffPreShear100 = expOut.coeffPreShear100*coeffPirker;
-
-
 newY2(newY2rows+1,:) = newY2(newY2rows-1,:)/angleExp; %ratioAORLi
 %newY2(newY2rows+2,:) = newY2(newY2rows,:)/angleExp;   %ratioAORMa
 newY2(newY2rows+2,:) = abs(1- newY2(newY2rows+1,:));  %deltaRatioAORLi
@@ -56,9 +29,6 @@ gloriaAugustaAorNNLi = zeros( kkk+size(temp_i,2)-1, newY2rows+4 );
 gloriaAugustaAorNNLi( kkk:(kkk+ni-1), 1) = temp_i';
 gloriaAugustaAorNNLi( kkk:(kkk+ni-1), 2:(newY2rows+3) ) = newY2( :, temp_i )';
 gloriaAugustaAorNNLi( kkk:(kkk+ni-1), newY2rows+4) = 1;
-%kkk = kkk + ni;
-
-
 
 if (ni>0)
     
@@ -136,11 +106,6 @@ if (ni>0)
     else
         title (['angleExp = ', num2str(angleExp), 'coeff. P. = ', num2str(coeffPirker)] ,'FontSize',24);
     end
-    %title (['AOR, coeff. P. = ', num2str(coeffPirker)] ,'FontSize',24);
-    %      set(gca,'fontname','times new roman','FontSize',24)  % Set it to times
-    %      gca
-    
-    
     
 else a2=0; gloriaAugustaSchulzeNN = 0;
 end
