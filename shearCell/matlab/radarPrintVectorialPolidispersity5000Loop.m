@@ -10,7 +10,7 @@ if (isunix)
     addpath('/mnt/DATA/liggghts/work/shearCell/matlab/exportFig');
 else
     %load S:\Luca\testShearCellPoli20150428\testPolidispersityDensityBulkBoxSepties.mat
-    load 20150721shearCellPoliAllDensitiesWithOldShearPerc1ANNsMultiple.mat
+    load R:\simulations\shearCell\20150721shearCellPoliAllDensitiesWithOldShearPerc1ANNsMultiple\20150721shearCellPoliAllDensitiesWithOldShearPerc1ANNsMultiple.mat
     load S:\Luca\testShearCellPoli20150428\expRes5000.mat
     addpath('E:\liggghts\work\shearCell\matlab\exportFig');
 end
@@ -57,3 +57,5 @@ for i = 1:3
     end
     
 end
+
+save -v7.3 20150721shearCellPoliAllDensitiesWithOldShearPerc1ANNsMultipleRes.mat

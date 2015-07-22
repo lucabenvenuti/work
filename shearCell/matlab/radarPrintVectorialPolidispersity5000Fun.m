@@ -22,9 +22,9 @@ newY3(densityPrePos,:) = densityBulkBox2;
 
 [nY3rows,nY3column] = size(newY3);
 
-jjj=1;
+%jjj=1;
 kkk=1;
-ii=1;
+%ii=1;
 meanExpFtdRhoB = mean(expFtd.rhoB);
 maxExpFtdRhoB  = max(expFtd.rhoB);
 minExpFtdRhoB  = min(expFtd.rhoB);
@@ -61,9 +61,9 @@ newY3(nY3rowsBis+3,:) =  meanExpFtdRhoB;%mean(expFtd.rhoB);
 newY3(nY3rowsBis+4,:) =  maxExpFtdRhoB;%max(expFtd.rhoB);
 newY3(nY3rowsBis+5,:) =  minExpFtdRhoB;%min(expFtd.rhoB);
 
-ii=1;
+%ii=1;
 kkk=1;
-ni=1;
+%ni=1;
 
 temp_vi = newY3( (nY3rowsBis+1), : );
 temp_i = find (temp_vi < fricTolerance);
@@ -127,7 +127,7 @@ end
 %     [Ckl,akl,bkl] = intersect(temp_l,temp_n);
 % end
 % [Cijkl,aijkl,bijkl] = [Cij,aij,bij] ;
-ni = size(Cijkl,2)
+ni = size(Cijkl,2);
 
 if (ni > 0)
     
@@ -141,7 +141,7 @@ if (ni > 0)
     %
     gloriaAugustaSchulzeNNDens( kkk:ni, nY3rowsTris+2) =1;
     
-    kkk = kkk + ni
+    kkk = kkk + ni;
     
     clearvars gloriaAugustaSchulzeNN X Y Z S C G
     gloriaAugustaSchulzeNN = gloriaAugustaSchulzeNNDens';%(1:size(gloriaAugustaSchulzeNNDens,1)-1, :)';
@@ -205,7 +205,7 @@ if (ni > 0)
     
     clearvars h1
     
-    h1=figure(loopNumber)
+    h1=figure(loopNumber);
     a2 = radarPlot(G);
     legend('minInput','min', '\mu - \sigma', '\mu', '\mu + \sigma', 'max', 'maxInput'); %, 'FontSize',24)
     title ([exp_file_name, 'SRSCT: normal stress = ', num2str(dataNN2.ctrlStress), ' [Pa], coeff. P. = ', num2str(coeffPirker)] ,'FontSize',24);
@@ -221,7 +221,7 @@ if (ni > 0)
     export_fig([exp_file_name, 'SRSCTnormalstress', num2str(dataNN2.ctrlStress), 'PacoeffP', num2str(coeffPirker*10),'0',num2str(41+loopNumber),'radarPlot',num2str(loopNumber),date1],'-jpg', '-nocrop', h1);
     res.h1 = h1;
 else
-    
+    disp(['no valid: ',exp_file_name]);
     res.gloriaAugustaSchulzeNNDens = 0 ;
     res.h1 = 0;
     res.cond = 0 ;
