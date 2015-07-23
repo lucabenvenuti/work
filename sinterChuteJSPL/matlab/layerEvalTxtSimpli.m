@@ -15,7 +15,7 @@ clc
 %filename = '/mnt/scratchPFMDaten/Luca/20150714/workTest/sinterChuteJSPLdevelopDistroSimpli/postMass/countRate1.txt';
 
 if (isunix)
-    filename =  '/mnt/scratchPFMDaten/Luca/20150717Lise/workTest/sinterChuteJSPLdevelopDistroSimpli/postMass/countRate2.txt';
+    filename =  '/mnt/scratchPFMDaten/Luca/20150723Lise/workTest/sinterChuteJSPLdevelopDistroSimpli/postMass/countRate2.txt';
     addpath('/mnt/DATA/liggghts/work/shearCell/matlab/exportFig');
 else
     filename = 'S:\Luca\20150714\workTest\sinterChuteJSPLdevelopDistroSimpli\postMass\countRateLayer1.txt';
