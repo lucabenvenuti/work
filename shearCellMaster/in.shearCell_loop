@@ -147,7 +147,7 @@ newton      off
 communicate	single vel yes
 
 # load simulation domain, particles, ...
-read_restart	./restart/restart.shearCell_rad${rad}_dcyldp${dCylDp}_${OMPON}
+read_restart	./restart/restart.shearCell_rad${rad}_dcyldp${dCylDp}
 
 neighbor	    ${skin} bin
 neigh_modify	delay 0
@@ -203,10 +203,10 @@ fix   meshWall all wall/gran model hertz tangential history rolling_friction ${r
 ### print a csv file with all the parameteres #2gauss
 fix csv all print 1 "${rad}, ${dens}, ${ym}, ${pr}, ${rest}, ${fric}, ${rf}, ${dt}, ${dCylDp}, ${ctrlStress}, ${expDiam}, ${expMass}, ${shearperc}, ${totaltime}, ${fileID}, &
 		${rolfrtypnum}, ${nStepsSettle}, ${uniSys}, ${shearCellType}, ${radDist}, ${radmu}, ${radsigma}, ${radR1}, ${radPerc1}, ${radR2}, ${radPerc2}, ${radR3}, ${radPerc3}, &
-        ${radR4}, ${radPerc4}, ${radR5}, ${radPerc5}, ${radR6}, ${radPerc6}, ${numProc}, ${XPROCS}, ${YPROCS}, ${ZPROCS}, ${NTHREADS}, ${OMPON}, ${nStepsRun}" &
+        ${radR4}, ${radPerc4}, ${radR5}, ${radPerc5}, ${radR6}, ${radPerc6}, ${numProc}, ${XPROCS}, ${YPROCS}, ${ZPROCS}, ${NTHREADS}, ${nStepsRun}" &
 		file ./results/sim_par_fid${fileID}.csv &
 		title "rad, dens, ym, pr, rest, fric, rf, dt, dCylDp, ctrlStress, expDiam, expMass, shearperc, totaltime, fileID, rolfrtypnum, nStepsSettle, uniSys, shearCellType, radDist, radmu, radsigma, &
-        radR1, radPerc1, radR2, radPerc2, radR3, radPerc3, radR4, radPerc4, radR5, radPerc5, radR6, radPerc6, numProc, xProcs, yProcs, zProcs, nThreads, OMPON, nStepsRun"
+        radR1, radPerc1, radR2, radPerc2, radR3, radPerc3, radR4, radPerc4, radR5, radPerc5, radR6, radPerc6, numProc, xProcs, yProcs, zProcs, nThreads, nStepsRun"
 
 #insert the first particles so that dump is not empty
 run		  1

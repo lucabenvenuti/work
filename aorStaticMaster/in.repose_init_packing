@@ -238,4 +238,4 @@ fix		    shrink all adapt 1 atom diameter v_d_shrunk
 run		    1
 unfix		  shrink
 
-write_restart	./restart/restart.repose_rad${rad}_dcyldp${dCylDp}_${OMPON}
+write_restart	./restart/restart.repose_rad${rad}_dcyldp${dCylDp}
