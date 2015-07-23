@@ -18,7 +18,7 @@ if (isunix)
     filename =  '/mnt/scratchPFMDaten/Luca/20150723Lise/workTest/sinterChuteJSPLdevelopDistroSimpli/postMass/countRate2.txt';
     addpath('/mnt/DATA/liggghts/work/shearCell/matlab/exportFig');
 else
-    filename = 'S:\Luca\20150714\workTest\sinterChuteJSPLdevelopDistroSimpli\postMass\countRateLayer1.txt';
+    filename = 'S:\Luca\20150723Lise\workTest\sinterChuteJSPLdevelopDistroSimpli\postMass\countRate2.txt';
     addpath('E:\liggghts\work\shearCell\matlab\exportFig');
 end
 
@@ -463,8 +463,9 @@ title(['rS6: radius = ', num2str(rS6),' m'],'FontSize',20)
 xlabel('time (s)','FontSize',20)
 ylabel('volume (m^3)','FontSize',20)
 set(gca,'fontname','times new roman','FontSize',20)
+set(h6, 'Position', [100 100 1500 800])
 hold off;
-%export_fig(['rS6',date1],'-jpg', '-nocrop', h6);
+export_fig(['rS6',date1],'-jpg', '-nocrop', h6);
 
 h7 = figure(7);
 plot(asimulatedTime,rS5percLay6,'DisplayName','rS5percLay6');hold all;plot(asimulatedTime,rS5percLay7,'DisplayName','rS5percLay7');plot(asimulatedTime,rS5percLay8,'DisplayName','rS5percLay8');
@@ -473,8 +474,9 @@ title(['rS5: radius = ', num2str(rS5),' m'],'FontSize',20)
 xlabel('time (s)','FontSize',20)
 ylabel('volume (m^3)','FontSize',20)
 set(gca,'fontname','times new roman','FontSize',20)
+set(h7, 'Position', [100 100 1500 800])
 hold off;
-%export_fig(['rS5',date1],'-jpg', '-nocrop', h7);
+export_fig(['rS5',date1],'-jpg', '-nocrop', h7);
 
 
 h8 = figure(8);
@@ -484,8 +486,9 @@ title(['rS4: radius = ', num2str(rS4),' m'],'FontSize',20)
 xlabel('time (s)','FontSize',20)
 ylabel('volume (m^3)','FontSize',20)
 set(gca,'fontname','times new roman','FontSize',20)
+set(h8, 'Position', [100 100 1500 800])
 hold off;
-%export_fig(['rS4',date1],'-jpg', '-nocrop', h8);
+export_fig(['rS4',date1],'-jpg', '-nocrop', h8);
 
 
 h9 = figure(9);
@@ -495,8 +498,9 @@ title(['rS3: radius = ', num2str(rS3),' m'],'FontSize',20)
 xlabel('time (s)','FontSize',20)
 ylabel('volume (m^3)','FontSize',20)
 set(gca,'fontname','times new roman','FontSize',20)
+set(h9, 'Position', [100 100 1500 800])
 hold off;
-%export_fig(['rS3',date1],'-jpg', '-nocrop', h9);
+export_fig(['rS3',date1],'-jpg', '-nocrop', h9);
 
 h10 = figure(10);
 plot(asimulatedTime,rS2percLay6,'DisplayName','rS2percLay6');hold all;plot(asimulatedTime,rS2percLay7,'DisplayName','rS2percLay7');plot(asimulatedTime,rS2percLay8,'DisplayName','rS2percLay8');
@@ -505,8 +509,9 @@ title(['rS2: radius = ', num2str(rS2),' m'],'FontSize',20)
 xlabel('time (s)','FontSize',20)
 ylabel('volume (m^3)','FontSize',20)
 set(gca,'fontname','times new roman','FontSize',20)
+set(h10, 'Position', [100 100 1500 800])
 hold off;
-%export_fig(['rS2',date1],'-jpg', '-nocrop', h10);
+export_fig(['rS2',date1],'-jpg', '-nocrop', h10);
 
 
 h11 = figure(11);
@@ -516,8 +521,9 @@ title(['rS1: radius = ', num2str(rS1),' m'],'FontSize',20)
 xlabel('time (s)','FontSize',20)
 ylabel('volume (m^3)','FontSize',20)
 set(gca,'fontname','times new roman','FontSize',20)
+set(h11, 'Position', [100 100 1500 800])
 hold off;
-%export_fig(['rS1',date1],'-jpg', '-nocrop', h11);
+export_fig(['rS1',date1],'-jpg', '-nocrop', h11);
 
 
 h12 = figure(12);
@@ -527,8 +533,9 @@ title(['rS0: radius = ', num2str(rS0),' m'],'FontSize',20)
 xlabel('time (s)','FontSize',20)
 ylabel('volume (m^3)','FontSize',20)
 set(gca,'fontname','times new roman','FontSize',20)
+set(h12, 'Position', [100 100 1500 800])
 hold off;
-%export_fig(['rS0',date1],'-jpg', '-nocrop', h12);
+export_fig(['rS0',date1],'-jpg', '-nocrop', h12);
 
 %%
 h13 = figure(13);
@@ -542,8 +549,9 @@ title(['rS6: radius = ', num2str(rS6),' m'],'FontSize',20)
 xlabel('time (s)','FontSize',20)
 ylabel('volume (m^3)','FontSize',20)
 set(gca,'fontname','times new roman','FontSize',20)
+set(h13, 'Position', [100 100 1500 800])
 hold off;
-%export_fig(['rS6',date1],'-jpg', '-nocrop', h6);
+export_fig(['rS6',date1],'-jpg', '-nocrop', h6);
 
 h14 = figure(14);
 plot(asimulatedTime,rS5percLay1,'DisplayName','rS5percLay1');hold all;
@@ -556,8 +564,9 @@ title(['rS5: radius = ', num2str(rS5),' m'],'FontSize',20)
 xlabel('time (s)','FontSize',20)
 ylabel('volume (m^3)','FontSize',20)
 set(gca,'fontname','times new roman','FontSize',20)
+set(h14, 'Position', [100 100 1500 800])
 hold off;
-%export_fig(['rS5',date1],'-jpg', '-nocrop', h7);
+export_fig(['rS5',date1],'-jpg', '-nocrop', h7);
 
 
 h15 = figure(15);
@@ -571,8 +580,9 @@ title(['rS4: radius = ', num2str(rS4),' m'],'FontSize',20)
 xlabel('time (s)','FontSize',20)
 ylabel('volume (m^3)','FontSize',20)
 set(gca,'fontname','times new roman','FontSize',20)
+set(h15, 'Position', [100 100 1500 800])
 hold off;
-%export_fig(['rS4',date1],'-jpg', '-nocrop', h8);
+export_fig(['rS4',date1],'-jpg', '-nocrop', h8);
 
 
 h16 = figure(16);
@@ -586,8 +596,9 @@ title(['rS3: radius = ', num2str(rS3),' m'],'FontSize',20)
 xlabel('time (s)','FontSize',20)
 ylabel('volume (m^3)','FontSize',20)
 set(gca,'fontname','times new roman','FontSize',20)
+set(h16, 'Position', [100 100 1500 800])
 hold off;
-%export_fig(['rS3',date1],'-jpg', '-nocrop', h9);
+export_fig(['rS3',date1],'-jpg', '-nocrop', h9);
 
 h17 = figure(17);
 plot(asimulatedTime,rS2percLay1,'DisplayName','rS2percLay1');hold all;
@@ -600,8 +611,9 @@ title(['rS2: radius = ', num2str(rS2),' m'],'FontSize',20)
 xlabel('time (s)','FontSize',20)
 ylabel('volume (m^3)','FontSize',20)
 set(gca,'fontname','times new roman','FontSize',20)
+set(h17, 'Position', [100 100 1500 800])
 hold off;
-%export_fig(['rS2',date1],'-jpg', '-nocrop', h10);
+export_fig(['rS2',date1],'-jpg', '-nocrop', h10);
 
 
 h18 = figure(18);
@@ -615,8 +627,9 @@ title(['rS1: radius = ', num2str(rS1),' m'],'FontSize',20)
 xlabel('time (s)','FontSize',20)
 ylabel('volume (m^3)','FontSize',20)
 set(gca,'fontname','times new roman','FontSize',20)
+set(h18, 'Position', [100 100 1500 800])
 hold off;
-%export_fig(['rS1',date1],'-jpg', '-nocrop', h11);
+export_fig(['rS1',date1],'-jpg', '-nocrop', h11);
 
 
 h19 = figure(19);
@@ -630,8 +643,9 @@ title(['rS0: radius = ', num2str(rS0),' m'],'FontSize',20)
 xlabel('time (s)','FontSize',20)
 ylabel('volume (m^3)','FontSize',20)
 set(gca,'fontname','times new roman','FontSize',20)
+set(h19, 'Position', [100 100 1500 800])
 hold off;
-%export_fig(['rS0',date1],'-jpg', '-nocrop', h12);
+export_fig(['rS0',date1],'-jpg', '-nocrop', h12);
 
 
 
