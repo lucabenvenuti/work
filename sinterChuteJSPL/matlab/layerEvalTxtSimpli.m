@@ -22,90 +22,16 @@ else
     addpath('E:\liggghts\work\shearCell\matlab\exportFig');
 end
 
+imageFlagAll = false;
+imageFlagShort = true;
+
+if (imageFlagAll)
+    imageFlagShort = true;
+end
+
 delimiter = ' ';
 startRow = 2;
 
-%% Format string for each line of text:
-%   column1: double (%f)
-%	column2: double (%f)
-%   column3: double (%f)
-%	column4: double (%f)
-%   column5: double (%f)
-%	column10: double (%f)
-%   column11: double (%f)
-%	column12: double (%f)
-%   column13: double (%f)
-%	column25: double (%f)
-%   column26: double (%f)
-%	column27: double (%f)
-%   column28: double (%f)
-%	column33: double (%f)
-%   column34: double (%f)
-%	column35: double (%f)
-%   column40: double (%f)
-%	column41: double (%f)
-%   column42: double (%f)
-%	column43: double (%f)
-%   column47: double (%f)
-%	column48: double (%f)
-%   column49: double (%f)
-%	column74: double (%f)
-%   column75: double (%f)
-%	column76: double (%f)
-%   column77: double (%f)
-%	column81: double (%f)
-%   column82: double (%f)
-%	column83: double (%f)
-%   column95: double (%f)
-%	column96: double (%f)
-%   column97: double (%f)
-%	column98: double (%f)
-%   column102: double (%f)
-%	column103: double (%f)
-%   column104: double (%f)
-%	column110: double (%f)
-%   column111: double (%f)
-%	column112: double (%f)
-%   column113: double (%f)
-%	column117: double (%f)
-%   column118: double (%f)
-%	column119: double (%f)
-%   column126: double (%f)
-%	column127: double (%f)
-%   column128: double (%f)
-%	column129: double (%f)
-%   column133: double (%f)
-%	column134: double (%f)
-%   column135: double (%f)
-%	column142: double (%f)
-%   column143: double (%f)
-%	column144: double (%f)
-%   column145: double (%f)
-%	column149: double (%f)
-%   column150: double (%f)
-%	column151: double (%f)
-%   column158: double (%f)
-%	column159: double (%f)
-%   column160: double (%f)
-%	column161: double (%f)
-%   column165: double (%f)
-%	column166: double (%f)
-%   column167: double (%f)
-%	column174: double (%f)
-%   column175: double (%f)
-%	column176: double (%f)
-%   column177: double (%f)
-%	column181: double (%f)
-%   column182: double (%f)
-%	column183: double (%f)
-%   column190: double (%f)
-%	column191: double (%f)
-%   column192: double (%f)
-%	column193: double (%f)
-%   column197: double (%f)
-%	column198: double (%f)
-%   column199: double (%f)
-% For more information, see the TEXTSCAN documentation.
 formatSpec = '%f%f%f%f%f%*s%*s%*s%*s%f%f%f%f%*s%*s%*s%*s%*s%*s%*s%*s%*s%*s%*s%f%f%f%f%*s%*s%*s%*s%f%f%f%*s%*s%*s%*s%f%f%f%f%*s%*s%*s%f%f%f%*s%*s%*s%*s%*s%*s%*s%*s%*s%*s%*s%*s%*s%*s%*s%*s%*s%*s%*s%*s%*s%*s%*s%*s%f%f%f%f%*s%*s%*s%f%f%f%*s%*s%*s%*s%*s%*s%*s%*s%*s%*s%*s%f%f%f%f%*s%*s%*s%f%f%f%*s%*s%*s%*s%*s%f%f%f%f%*s%*s%*s%f%f%f%*s%*s%*s%*s%*s%*s%f%f%f%f%*s%*s%*s%f%f%f%*s%*s%*s%*s%*s%*s%f%f%f%f%*s%*s%*s%f%f%f%*s%*s%*s%*s%*s%*s%f%f%f%f%*s%*s%*s%f%f%f%*s%*s%*s%*s%*s%*s%f%f%f%f%*s%*s%*s%f%f%f%*s%*s%*s%*s%*s%*s%f%f%f%f%*s%*s%*s%f%f%f%*s%*s%*s%*s%[^\n\r]';
 
 %% Open the text file.
@@ -375,7 +301,7 @@ clearvars data raw cellVectors;
 % plot(asimulatedTime,rS5percLay6,'DisplayName','rS5percLay6');
 % plot(asimulatedTime,rS6percLay6,'DisplayName','rS6percLay6');
 % hold off;
-% 
+%
 % figure(2)
 % plot(asimulatedTime,rS0percLay8,'DisplayName','rS0percLay8');
 % hold all;
@@ -386,7 +312,7 @@ clearvars data raw cellVectors;
 % plot(asimulatedTime,rS5percLay8,'DisplayName','rS5percLay8');
 % plot(asimulatedTime,rS6percLay8,'DisplayName','rS6percLay8');
 % hold off;
-% 
+%
 % figure(3)
 % plot(asimulatedTime,rS0percLay7,'DisplayName','rS0percLay7');
 % hold all;
@@ -397,8 +323,8 @@ clearvars data raw cellVectors;
 % plot(asimulatedTime,rS5percLay7,'DisplayName','rS5percLay7');
 % plot(asimulatedTime,rS6percLay7,'DisplayName','rS6percLay7');
 % hold off;
-% 
-% 
+%
+%
 % % figure(4)
 % % h01 = plot(asimulatedTime(1185:1215),rS0percLay8(1185:1215),'b','LineWidth',2,'DisplayName','r =  2.5 mm, bottom layer');
 % % hold all;
@@ -408,7 +334,7 @@ clearvars data raw cellVectors;
 % % h05 = plot(asimulatedTime(1185:1215),rS4percLay8(1185:1215),'c','LineWidth',2,'DisplayName','r = 12.5 mm, bottom layer');
 % % h06 = plot(asimulatedTime(1185:1215),rS5percLay8(1185:1215),'y','LineWidth',2,'DisplayName','r = 20.0 mm, bottom layer');
 % % h07 = plot(asimulatedTime(1185:1215),rS6percLay8(1185:1215),'k','LineWidth',2,'DisplayName','r = 25.0 mm, bottom layer');
-% % 
+% %
 % % h08 = plot(asimulatedTime(1185:1215),rS0percLay7(1185:1215),'b','LineWidth',2,'DisplayName','r =  2.5 mm, central layer');
 % % h09 = plot(asimulatedTime(1185:1215),rS1percLay7(1185:1215),'m','LineWidth',2,'DisplayName','r =  3.0 mm, central layer');
 % % h10 = plot(asimulatedTime(1185:1215),rS2percLay7(1185:1215),'g','LineWidth',2,'DisplayName','r =  5.0 mm, central layer');
@@ -416,18 +342,18 @@ clearvars data raw cellVectors;
 % % %  plot(asimulatedTime(1185:1215),rS4percLay7(1185:1215),'c','DisplayName','rS4percLay7');
 % % %  plot(asimulatedTime(1185:1215),rS5percLay7(1185:1215),'y','DisplayName','rS5percLay7');
 % % %  plot(asimulatedTime(1185:1215),rS6percLay7(1185:1215),'k','DisplayName','rS6percLay7');
-% % 
+% %
 % % h11 = plot(asimulatedTime(1185:3:1215),rS0percLay8(1185:3:1215),'b*','markers',18,'DisplayName','r =  2.5 mm, bottom layer');
-% % 
+% %
 % % h12 = plot(asimulatedTime(1185:3:1215),rS1percLay8(1185:3:1215),'m*','markers',18,'DisplayName','r =  3.0 mm, bottom layer');
 % % h13 = plot(asimulatedTime(1185:3:1215),rS2percLay8(1185:3:1215),'g*','markers',18,'DisplayName','r =  5.0 mm, bottom layer');
 % % h14 = plot(asimulatedTime(1185:3:1215),rS3percLay8(1185:3:1215),'r*','markers',18,'DisplayName','r =  8.0 mm, bottom layer');
 % % h15 = plot(asimulatedTime(1185:3:1215),rS4percLay8(1185:3:1215),'c*','markers',18,'DisplayName','r = 12.5 mm, bottom layer');
 % % %  h16 = plot(asimulatedTime(1185:3:1215),rS5percLay8(1185:3:1215),'y*','DisplayName','r = 20.0 mm, bottom layer');
 % % h17 = plot(asimulatedTime(1185:3:1215),rS6percLay8(1185:3:1215),'k*','markers',18,'DisplayName','r = 25.0 mm, bottom layer');
-% % 
+% %
 % % h18 = plot(asimulatedTime(1185:3:1215),rS0percLay7(1185:3:1215),'bo','markers',18,'DisplayName','r =  2.5 mm, central layer');
-% % 
+% %
 % % h19 = plot(asimulatedTime(1185:3:1215),rS1percLay7(1185:3:1215),'mo','markers',18,'DisplayName','r =  3.0 mm, central layer');
 % % h20 = plot(asimulatedTime(1185:3:1215),rS2percLay7(1185:3:1215),'go','markers',18,'DisplayName','r =  5.0 mm, central layer');
 % % %  plot(asimulatedTime(1185:3:1215),rS3percLay7(1185:3:1215),'ro','DisplayName','rS3percLay7');
@@ -442,210 +368,266 @@ clearvars data raw cellVectors;
 % % xlim([-0.01 0.31])
 % % hold off;
 
-h5 = figure(5);
-plot(asimulatedTime,rS8totalVolume,'DisplayName','rS0percLay8');
-hold all;
-plot(asimulatedTime,rS7totalVolume,'DisplayName','rS1percLay8');
-legend('Location','SouthWest' )
-xlabel('time (s)','FontSize',20)
-ylabel('volume (m^3)','FontSize',20)
-set(gca,'fontname','times new roman','FontSize',20)  % Set it to times
-hold off;
+
 
 formatOut = 'yyyy-mm-dd-HH-MM-SS';
 date1 = datestr(now,formatOut);
 
-
-h6 = figure(6);
-plot(asimulatedTime,rS6percLay6,'DisplayName','rS6percLay6');hold all;plot(asimulatedTime,rS6percLay7,'DisplayName','rS6percLay7');plot(asimulatedTime,rS6percLay8,'DisplayName','rS6percLay8');
-legend('Location','SouthWest' )
-title(['rS6: radius = ', num2str(rS6),' m'],'FontSize',20)
-xlabel('time (s)','FontSize',20)
-ylabel('volume (m^3)','FontSize',20)
-set(gca,'fontname','times new roman','FontSize',20)
-set(h6, 'Position', [100 100 1500 800])
-hold off;
-export_fig(['rS6',date1],'-jpg', '-nocrop', h6);
-
-h7 = figure(7);
-plot(asimulatedTime,rS5percLay6,'DisplayName','rS5percLay6');hold all;plot(asimulatedTime,rS5percLay7,'DisplayName','rS5percLay7');plot(asimulatedTime,rS5percLay8,'DisplayName','rS5percLay8');
-legend('Location','SouthWest' )
-title(['rS5: radius = ', num2str(rS5),' m'],'FontSize',20)
-xlabel('time (s)','FontSize',20)
-ylabel('volume (m^3)','FontSize',20)
-set(gca,'fontname','times new roman','FontSize',20)
-set(h7, 'Position', [100 100 1500 800])
-hold off;
-export_fig(['rS5',date1],'-jpg', '-nocrop', h7);
-
-
-h8 = figure(8);
-plot(asimulatedTime,rS4percLay6,'DisplayName','rS4percLay6');hold all;plot(asimulatedTime,rS4percLay7,'DisplayName','rS4percLay7');plot(asimulatedTime,rS4percLay8,'DisplayName','rS4percLay8');
-legend('Location','SouthWest' )
-title(['rS4: radius = ', num2str(rS4),' m'],'FontSize',20)
-xlabel('time (s)','FontSize',20)
-ylabel('volume (m^3)','FontSize',20)
-set(gca,'fontname','times new roman','FontSize',20)
-set(h8, 'Position', [100 100 1500 800])
-hold off;
-export_fig(['rS4',date1],'-jpg', '-nocrop', h8);
-
-
-h9 = figure(9);
-plot(asimulatedTime,rS3percLay6,'DisplayName','rS3percLay6');hold all;plot(asimulatedTime,rS3percLay7,'DisplayName','rS3percLay7');plot(asimulatedTime,rS3percLay8,'DisplayName','rS3percLay8');
-legend('Location','SouthWest' )
-title(['rS3: radius = ', num2str(rS3),' m'],'FontSize',20)
-xlabel('time (s)','FontSize',20)
-ylabel('volume (m^3)','FontSize',20)
-set(gca,'fontname','times new roman','FontSize',20)
-set(h9, 'Position', [100 100 1500 800])
-hold off;
-export_fig(['rS3',date1],'-jpg', '-nocrop', h9);
-
-h10 = figure(10);
-plot(asimulatedTime,rS2percLay6,'DisplayName','rS2percLay6');hold all;plot(asimulatedTime,rS2percLay7,'DisplayName','rS2percLay7');plot(asimulatedTime,rS2percLay8,'DisplayName','rS2percLay8');
-legend('Location','SouthWest' )
-title(['rS2: radius = ', num2str(rS2),' m'],'FontSize',20)
-xlabel('time (s)','FontSize',20)
-ylabel('volume (m^3)','FontSize',20)
-set(gca,'fontname','times new roman','FontSize',20)
-set(h10, 'Position', [100 100 1500 800])
-hold off;
-export_fig(['rS2',date1],'-jpg', '-nocrop', h10);
-
-
-h11 = figure(11);
-plot(asimulatedTime,rS1percLay6,'DisplayName','rS1percLay6');hold all;plot(asimulatedTime,rS1percLay7,'DisplayName','rS1percLay7');plot(asimulatedTime,rS1percLay8,'DisplayName','rS1percLay8');
-legend('Location','SouthWest' )
-title(['rS1: radius = ', num2str(rS1),' m'],'FontSize',20)
-xlabel('time (s)','FontSize',20)
-ylabel('volume (m^3)','FontSize',20)
-set(gca,'fontname','times new roman','FontSize',20)
-set(h11, 'Position', [100 100 1500 800])
-hold off;
-export_fig(['rS1',date1],'-jpg', '-nocrop', h11);
-
-
-h12 = figure(12);
-plot(asimulatedTime,rS0percLay6,'DisplayName','rS0percLay6');hold all;plot(asimulatedTime,rS0percLay7,'DisplayName','rS0percLay7');plot(asimulatedTime,rS0percLay8,'DisplayName','rS0percLay8');
-legend('Location','SouthWest' )
-title(['rS0: radius = ', num2str(rS0),' m'],'FontSize',20)
-xlabel('time (s)','FontSize',20)
-ylabel('volume (m^3)','FontSize',20)
-set(gca,'fontname','times new roman','FontSize',20)
-set(h12, 'Position', [100 100 1500 800])
-hold off;
-export_fig(['rS0',date1],'-jpg', '-nocrop', h12);
-
 %%
-h13 = figure(13);
-plot(asimulatedTime,rS6percLay1,'DisplayName','rS6percLay1');hold all;
-plot(asimulatedTime,rS6percLay2,'DisplayName','rS6percLay2');plot(asimulatedTime,rS6percLay3,'DisplayName','rS6percLay3');
-plot(asimulatedTime,rS6percLay4,'DisplayName','rS6percLay4');plot(asimulatedTime,rS6percLay5,'DisplayName','rS6percLay5');
-plot(asimulatedTime,rS6percLay7,'DisplayName','rS6percLay7');
-plot(asimulatedTime,rS6percLay7,'DisplayName','rS6percLay7');plot(asimulatedTime,rS6percLay8,'DisplayName','rS6percLay8');
-legend('Location','SouthWest' )
-title(['rS6: radius = ', num2str(rS6),' m'],'FontSize',20)
-xlabel('time (s)','FontSize',20)
-ylabel('volume (m^3)','FontSize',20)
-set(gca,'fontname','times new roman','FontSize',20)
-set(h13, 'Position', [100 100 1500 800])
-hold off;
-export_fig(['rS6',date1],'-jpg', '-nocrop', h6);
 
-h14 = figure(14);
-plot(asimulatedTime,rS5percLay1,'DisplayName','rS5percLay1');hold all;
-plot(asimulatedTime,rS5percLay2,'DisplayName','rS5percLay2');plot(asimulatedTime,rS5percLay3,'DisplayName','rS5percLay3');
-plot(asimulatedTime,rS5percLay4,'DisplayName','rS5percLay4');plot(asimulatedTime,rS5percLay5,'DisplayName','rS5percLay5');
-plot(asimulatedTime,rS5percLay7,'DisplayName','rS5percLay7');
-plot(asimulatedTime,rS5percLay7,'DisplayName','rS5percLay7');plot(asimulatedTime,rS5percLay8,'DisplayName','rS5percLay8');
-legend('Location','SouthWest' )
-title(['rS5: radius = ', num2str(rS5),' m'],'FontSize',20)
-xlabel('time (s)','FontSize',20)
-ylabel('volume (m^3)','FontSize',20)
-set(gca,'fontname','times new roman','FontSize',20)
-set(h14, 'Position', [100 100 1500 800])
-hold off;
-export_fig(['rS5',date1],'-jpg', '-nocrop', h7);
+if (imageFlagShort)
+    
+    
+    h6 = figure(6);
+    plot(asimulatedTime,rS6percLay6,'DisplayName','rS6percLay6');hold all;plot(asimulatedTime,rS6percLay7,'DisplayName','rS6percLay7');plot(asimulatedTime,rS6percLay8,'DisplayName','rS6percLay8');
+    legend('Location','SouthWest' )
+    title(['rS6: radius = ', num2str(rS6),' m'],'FontSize',20)
+    xlabel('time (s)','FontSize',20)
+    ylabel('volume (m^3)','FontSize',20)
+    set(gca,'fontname','times new roman','FontSize',20)
+    set(h6, 'Position', [100 100 1500 800])
+    hold off;
+    export_fig(['rS6',date1],'-jpg', '-nocrop', h6);
+    
+    h8 = figure(8);
+    plot(asimulatedTime,rS4percLay6,'DisplayName','rS4percLay6');hold all;plot(asimulatedTime,rS4percLay7,'DisplayName','rS4percLay7');plot(asimulatedTime,rS4percLay8,'DisplayName','rS4percLay8');
+    legend('Location','SouthWest' )
+    title(['rS4: radius = ', num2str(rS4),' m'],'FontSize',20)
+    xlabel('time (s)','FontSize',20)
+    ylabel('volume (m^3)','FontSize',20)
+    set(gca,'fontname','times new roman','FontSize',20)
+    set(h8, 'Position', [100 100 1500 800])
+    hold off;
+    export_fig(['rS4',date1],'-jpg', '-nocrop', h8);
+    
+    h10 = figure(10);
+    plot(asimulatedTime,rS2percLay6,'DisplayName','rS2percLay6');hold all;plot(asimulatedTime,rS2percLay7,'DisplayName','rS2percLay7');plot(asimulatedTime,rS2percLay8,'DisplayName','rS2percLay8');
+    legend('Location','SouthWest' )
+    title(['rS2: radius = ', num2str(rS2),' m'],'FontSize',20)
+    xlabel('time (s)','FontSize',20)
+    ylabel('volume (m^3)','FontSize',20)
+    set(gca,'fontname','times new roman','FontSize',20)
+    set(h10, 'Position', [100 100 1500 800])
+    hold off;
+    export_fig(['rS2',date1],'-jpg', '-nocrop', h10);
+    
+    
+    h11 = figure(11);
+    plot(asimulatedTime,rS1percLay6,'DisplayName','rS1percLay6');hold all;plot(asimulatedTime,rS1percLay7,'DisplayName','rS1percLay7');plot(asimulatedTime,rS1percLay8,'DisplayName','rS1percLay8');
+    legend('Location','SouthWest' )
+    title(['rS1: radius = ', num2str(rS1),' m'],'FontSize',20)
+    xlabel('time (s)','FontSize',20)
+    ylabel('volume (m^3)','FontSize',20)
+    set(gca,'fontname','times new roman','FontSize',20)
+    set(h11, 'Position', [100 100 1500 800])
+    hold off;
+    export_fig(['rS1',date1],'-jpg', '-nocrop', h11);
+    
+end
+%%
+if (imageFlagAll)
+    
+    h5 = figure(5);
+    plot(asimulatedTime,rS8totalVolume,'DisplayName','rS0percLay8');
+    hold all;
+    plot(asimulatedTime,rS7totalVolume,'DisplayName','rS1percLay8');
+    legend('Location','SouthWest' )
+    xlabel('time (s)','FontSize',20)
+    ylabel('volume (m^3)','FontSize',20)
+    set(gca,'fontname','times new roman','FontSize',20)  % Set it to times
+    hold off;
+    
+    h7 = figure(7);
+    plot(asimulatedTime,rS5percLay6,'DisplayName','rS5percLay6');hold all;plot(asimulatedTime,rS5percLay7,'DisplayName','rS5percLay7');plot(asimulatedTime,rS5percLay8,'DisplayName','rS5percLay8');
+    legend('Location','SouthWest' )
+    title(['rS5: radius = ', num2str(rS5),' m'],'FontSize',20)
+    xlabel('time (s)','FontSize',20)
+    ylabel('volume (m^3)','FontSize',20)
+    set(gca,'fontname','times new roman','FontSize',20)
+    set(h7, 'Position', [100 100 1500 800])
+    hold off;
+    export_fig(['rS5',date1],'-jpg', '-nocrop', h7);
+    
+    
+    
+    
+    
+    h9 = figure(9);
+    plot(asimulatedTime,rS3percLay6,'DisplayName','rS3percLay6');hold all;plot(asimulatedTime,rS3percLay7,'DisplayName','rS3percLay7');plot(asimulatedTime,rS3percLay8,'DisplayName','rS3percLay8');
+    legend('Location','SouthWest' )
+    title(['rS3: radius = ', num2str(rS3),' m'],'FontSize',20)
+    xlabel('time (s)','FontSize',20)
+    ylabel('volume (m^3)','FontSize',20)
+    set(gca,'fontname','times new roman','FontSize',20)
+    set(h9, 'Position', [100 100 1500 800])
+    hold off;
+    export_fig(['rS3',date1],'-jpg', '-nocrop', h9);
+    
+    
+    
+    
+    h12 = figure(12);
+    plot(asimulatedTime,rS0percLay6,'DisplayName','rS0percLay6');hold all;plot(asimulatedTime,rS0percLay7,'DisplayName','rS0percLay7');plot(asimulatedTime,rS0percLay8,'DisplayName','rS0percLay8');
+    legend('Location','SouthWest' )
+    title(['rS0: radius = ', num2str(rS0),' m'],'FontSize',20)
+    xlabel('time (s)','FontSize',20)
+    ylabel('volume (m^3)','FontSize',20)
+    set(gca,'fontname','times new roman','FontSize',20)
+    set(h12, 'Position', [100 100 1500 800])
+    hold off;
+    export_fig(['rS0',date1],'-jpg', '-nocrop', h12);
+    
+    %%
+    h13 = figure(13);
+    plot(asimulatedTime,rS6percLay1,'DisplayName','rS6percLay1');hold all;
+    plot(asimulatedTime,rS6percLay2,'DisplayName','rS6percLay2');plot(asimulatedTime,rS6percLay3,'DisplayName','rS6percLay3');
+    plot(asimulatedTime,rS6percLay4,'DisplayName','rS6percLay4');plot(asimulatedTime,rS6percLay5,'DisplayName','rS6percLay5');
+    plot(asimulatedTime,rS6percLay7,'DisplayName','rS6percLay7');
+    plot(asimulatedTime,rS6percLay7,'DisplayName','rS6percLay7');plot(asimulatedTime,rS6percLay8,'DisplayName','rS6percLay8');
+    legend('Location','SouthWest' )
+    title(['rS6: radius = ', num2str(rS6),' m'],'FontSize',20)
+    xlabel('time (s)','FontSize',20)
+    ylabel('volume (m^3)','FontSize',20)
+    set(gca,'fontname','times new roman','FontSize',20)
+    set(h13, 'Position', [100 100 1500 800])
+    hold off;
+    export_fig(['rS6',date1],'-jpg', '-nocrop', h6);
+    
+    h14 = figure(14);
+    plot(asimulatedTime,rS5percLay1,'DisplayName','rS5percLay1');hold all;
+    plot(asimulatedTime,rS5percLay2,'DisplayName','rS5percLay2');plot(asimulatedTime,rS5percLay3,'DisplayName','rS5percLay3');
+    plot(asimulatedTime,rS5percLay4,'DisplayName','rS5percLay4');plot(asimulatedTime,rS5percLay5,'DisplayName','rS5percLay5');
+    plot(asimulatedTime,rS5percLay7,'DisplayName','rS5percLay7');
+    plot(asimulatedTime,rS5percLay7,'DisplayName','rS5percLay7');plot(asimulatedTime,rS5percLay8,'DisplayName','rS5percLay8');
+    legend('Location','SouthWest' )
+    title(['rS5: radius = ', num2str(rS5),' m'],'FontSize',20)
+    xlabel('time (s)','FontSize',20)
+    ylabel('volume (m^3)','FontSize',20)
+    set(gca,'fontname','times new roman','FontSize',20)
+    set(h14, 'Position', [100 100 1500 800])
+    hold off;
+    export_fig(['rS5',date1],'-jpg', '-nocrop', h7);
+    
+    
+    h15 = figure(15);
+    plot(asimulatedTime,rS4percLay1,'DisplayName','rS4percLay1');hold all;
+    plot(asimulatedTime,rS4percLay2,'DisplayName','rS4percLay2');plot(asimulatedTime,rS4percLay3,'DisplayName','rS4percLay3');
+    plot(asimulatedTime,rS4percLay4,'DisplayName','rS4percLay4');plot(asimulatedTime,rS4percLay5,'DisplayName','rS4percLay5');
+    plot(asimulatedTime,rS4percLay7,'DisplayName','rS4percLay7');
+    plot(asimulatedTime,rS4percLay7,'DisplayName','rS4percLay7');plot(asimulatedTime,rS4percLay8,'DisplayName','rS4percLay8');
+    legend('Location','SouthWest' )
+    title(['rS4: radius = ', num2str(rS4),' m'],'FontSize',20)
+    xlabel('time (s)','FontSize',20)
+    ylabel('volume (m^3)','FontSize',20)
+    set(gca,'fontname','times new roman','FontSize',20)
+    set(h15, 'Position', [100 100 1500 800])
+    hold off;
+    export_fig(['rS4',date1],'-jpg', '-nocrop', h8);
+    
+    
+    h16 = figure(16);
+    plot(asimulatedTime,rS3percLay1,'DisplayName','rS3percLay1');hold all;
+    plot(asimulatedTime,rS3percLay2,'DisplayName','rS3percLay2');plot(asimulatedTime,rS3percLay3,'DisplayName','rS3percLay3');
+    plot(asimulatedTime,rS3percLay4,'DisplayName','rS3percLay4');plot(asimulatedTime,rS3percLay5,'DisplayName','rS3percLay5');
+    plot(asimulatedTime,rS3percLay7,'DisplayName','rS3percLay7');
+    plot(asimulatedTime,rS3percLay7,'DisplayName','rS3percLay7');plot(asimulatedTime,rS3percLay8,'DisplayName','rS3percLay8');
+    legend('Location','SouthWest' )
+    title(['rS3: radius = ', num2str(rS3),' m'],'FontSize',20)
+    xlabel('time (s)','FontSize',20)
+    ylabel('volume (m^3)','FontSize',20)
+    set(gca,'fontname','times new roman','FontSize',20)
+    set(h16, 'Position', [100 100 1500 800])
+    hold off;
+    export_fig(['rS3',date1],'-jpg', '-nocrop', h9);
+    
+    h17 = figure(17);
+    plot(asimulatedTime,rS2percLay1,'DisplayName','rS2percLay1');hold all;
+    plot(asimulatedTime,rS2percLay2,'DisplayName','rS2percLay2');plot(asimulatedTime,rS2percLay3,'DisplayName','rS2percLay3');
+    plot(asimulatedTime,rS2percLay4,'DisplayName','rS2percLay4');plot(asimulatedTime,rS2percLay5,'DisplayName','rS2percLay5');
+    plot(asimulatedTime,rS2percLay7,'DisplayName','rS2percLay7');
+    plot(asimulatedTime,rS2percLay7,'DisplayName','rS2percLay7');plot(asimulatedTime,rS2percLay8,'DisplayName','rS2percLay8');
+    legend('Location','SouthWest' )
+    title(['rS2: radius = ', num2str(rS2),' m'],'FontSize',20)
+    xlabel('time (s)','FontSize',20)
+    ylabel('volume (m^3)','FontSize',20)
+    set(gca,'fontname','times new roman','FontSize',20)
+    set(h17, 'Position', [100 100 1500 800])
+    hold off;
+    export_fig(['rS2',date1],'-jpg', '-nocrop', h10);
+    
+    
+    h18 = figure(18);
+    plot(asimulatedTime,rS1percLay1,'DisplayName','rS1percLay1');hold all;
+    plot(asimulatedTime,rS1percLay2,'DisplayName','rS1percLay2');plot(asimulatedTime,rS1percLay3,'DisplayName','rS1percLay3');
+    plot(asimulatedTime,rS1percLay4,'DisplayName','rS1percLay4');plot(asimulatedTime,rS1percLay5,'DisplayName','rS1percLay5');
+    plot(asimulatedTime,rS1percLay7,'DisplayName','rS1percLay7');
+    plot(asimulatedTime,rS1percLay7,'DisplayName','rS1percLay7');plot(asimulatedTime,rS1percLay8,'DisplayName','rS1percLay8');
+    legend('Location','SouthWest' )
+    title(['rS1: radius = ', num2str(rS1),' m'],'FontSize',20)
+    xlabel('time (s)','FontSize',20)
+    ylabel('volume (m^3)','FontSize',20)
+    set(gca,'fontname','times new roman','FontSize',20)
+    set(h18, 'Position', [100 100 1500 800])
+    hold off;
+    export_fig(['rS1',date1],'-jpg', '-nocrop', h11);
+    
+    
+    h19 = figure(19);
+    plot(asimulatedTime,rS0percLay1,'DisplayName','rS0percLay1');hold all;
+    plot(asimulatedTime,rS0percLay2,'DisplayName','rS0percLay2');plot(asimulatedTime,rS0percLay3,'DisplayName','rS0percLay3');
+    plot(asimulatedTime,rS0percLay4,'DisplayName','rS0percLay4');plot(asimulatedTime,rS0percLay5,'DisplayName','rS0percLay5');
+    plot(asimulatedTime,rS0percLay7,'DisplayName','rS0percLay7');
+    plot(asimulatedTime,rS0percLay7,'DisplayName','rS0percLay7');plot(asimulatedTime,rS0percLay8,'DisplayName','rS0percLay8');
+    legend('Location','SouthWest' )
+    title(['rS0: radius = ', num2str(rS0),' m'],'FontSize',20)
+    xlabel('time (s)','FontSize',20)
+    ylabel('volume (m^3)','FontSize',20)
+    set(gca,'fontname','times new roman','FontSize',20)
+    set(h19, 'Position', [100 100 1500 800])
+    hold off;
+    export_fig(['rS0',date1],'-jpg', '-nocrop', h12);
+    
+end
+%%
 
+totEndPercLay6 = rS1percLay6(end) + rS2percLay6(end) + rS4percLay6(end) + rS6percLay6(end);
 
-h15 = figure(15);
-plot(asimulatedTime,rS4percLay1,'DisplayName','rS4percLay1');hold all;
-plot(asimulatedTime,rS4percLay2,'DisplayName','rS4percLay2');plot(asimulatedTime,rS4percLay3,'DisplayName','rS4percLay3');
-plot(asimulatedTime,rS4percLay4,'DisplayName','rS4percLay4');plot(asimulatedTime,rS4percLay5,'DisplayName','rS4percLay5');
-plot(asimulatedTime,rS4percLay7,'DisplayName','rS4percLay7');
-plot(asimulatedTime,rS4percLay7,'DisplayName','rS4percLay7');plot(asimulatedTime,rS4percLay8,'DisplayName','rS4percLay8');
-legend('Location','SouthWest' )
-title(['rS4: radius = ', num2str(rS4),' m'],'FontSize',20)
-xlabel('time (s)','FontSize',20)
-ylabel('volume (m^3)','FontSize',20)
-set(gca,'fontname','times new roman','FontSize',20)
-set(h15, 'Position', [100 100 1500 800])
-hold off;
-export_fig(['rS4',date1],'-jpg', '-nocrop', h8);
+rS1percLay6EndPerc = rS1percLay6(end) / totEndPercLay6;
+comp(1,1) = rS1percLay6EndPerc;
 
+rS2percLay6EndPerc = rS2percLay6(end) / totEndPercLay6;
+comp(2,1) = rS2percLay6EndPerc;
 
-h16 = figure(16);
-plot(asimulatedTime,rS3percLay1,'DisplayName','rS3percLay1');hold all;
-plot(asimulatedTime,rS3percLay2,'DisplayName','rS3percLay2');plot(asimulatedTime,rS3percLay3,'DisplayName','rS3percLay3');
-plot(asimulatedTime,rS3percLay4,'DisplayName','rS3percLay4');plot(asimulatedTime,rS3percLay5,'DisplayName','rS3percLay5');
-plot(asimulatedTime,rS3percLay7,'DisplayName','rS3percLay7');
-plot(asimulatedTime,rS3percLay7,'DisplayName','rS3percLay7');plot(asimulatedTime,rS3percLay8,'DisplayName','rS3percLay8');
-legend('Location','SouthWest' )
-title(['rS3: radius = ', num2str(rS3),' m'],'FontSize',20)
-xlabel('time (s)','FontSize',20)
-ylabel('volume (m^3)','FontSize',20)
-set(gca,'fontname','times new roman','FontSize',20)
-set(h16, 'Position', [100 100 1500 800])
-hold off;
-export_fig(['rS3',date1],'-jpg', '-nocrop', h9);
+rS4percLay6EndPerc = rS4percLay6(end) / totEndPercLay6;
+comp(3,1) = rS4percLay6EndPerc;
 
-h17 = figure(17);
-plot(asimulatedTime,rS2percLay1,'DisplayName','rS2percLay1');hold all;
-plot(asimulatedTime,rS2percLay2,'DisplayName','rS2percLay2');plot(asimulatedTime,rS2percLay3,'DisplayName','rS2percLay3');
-plot(asimulatedTime,rS2percLay4,'DisplayName','rS2percLay4');plot(asimulatedTime,rS2percLay5,'DisplayName','rS2percLay5');
-plot(asimulatedTime,rS2percLay7,'DisplayName','rS2percLay7');
-plot(asimulatedTime,rS2percLay7,'DisplayName','rS2percLay7');plot(asimulatedTime,rS2percLay8,'DisplayName','rS2percLay8');
-legend('Location','SouthWest' )
-title(['rS2: radius = ', num2str(rS2),' m'],'FontSize',20)
-xlabel('time (s)','FontSize',20)
-ylabel('volume (m^3)','FontSize',20)
-set(gca,'fontname','times new roman','FontSize',20)
-set(h17, 'Position', [100 100 1500 800])
-hold off;
-export_fig(['rS2',date1],'-jpg', '-nocrop', h10);
+rS6percLay6EndPerc = rS6percLay6(end) / totEndPercLay6;
+comp(4,1) = rS6percLay6EndPerc;
 
+totEndPercLay7 = rS1percLay7(end) + rS2percLay7(end) + rS4percLay7(end) + rS6percLay7(end);
 
-h18 = figure(18);
-plot(asimulatedTime,rS1percLay1,'DisplayName','rS1percLay1');hold all;
-plot(asimulatedTime,rS1percLay2,'DisplayName','rS1percLay2');plot(asimulatedTime,rS1percLay3,'DisplayName','rS1percLay3');
-plot(asimulatedTime,rS1percLay4,'DisplayName','rS1percLay4');plot(asimulatedTime,rS1percLay5,'DisplayName','rS1percLay5');
-plot(asimulatedTime,rS1percLay7,'DisplayName','rS1percLay7');
-plot(asimulatedTime,rS1percLay7,'DisplayName','rS1percLay7');plot(asimulatedTime,rS1percLay8,'DisplayName','rS1percLay8');
-legend('Location','SouthWest' )
-title(['rS1: radius = ', num2str(rS1),' m'],'FontSize',20)
-xlabel('time (s)','FontSize',20)
-ylabel('volume (m^3)','FontSize',20)
-set(gca,'fontname','times new roman','FontSize',20)
-set(h18, 'Position', [100 100 1500 800])
-hold off;
-export_fig(['rS1',date1],'-jpg', '-nocrop', h11);
+rS1percLay7EndPerc = rS1percLay7(end) / totEndPercLay7;
+comp(1,2) = rS1percLay7EndPerc;
 
+rS2percLay7EndPerc = rS2percLay7(end) / totEndPercLay7;
+comp(2,2) = rS2percLay7EndPerc;
 
-h19 = figure(19);
-plot(asimulatedTime,rS0percLay1,'DisplayName','rS0percLay1');hold all;
-plot(asimulatedTime,rS0percLay2,'DisplayName','rS0percLay2');plot(asimulatedTime,rS0percLay3,'DisplayName','rS0percLay3');
-plot(asimulatedTime,rS0percLay4,'DisplayName','rS0percLay4');plot(asimulatedTime,rS0percLay5,'DisplayName','rS0percLay5');
-plot(asimulatedTime,rS0percLay7,'DisplayName','rS0percLay7');
-plot(asimulatedTime,rS0percLay7,'DisplayName','rS0percLay7');plot(asimulatedTime,rS0percLay8,'DisplayName','rS0percLay8');
-legend('Location','SouthWest' )
-title(['rS0: radius = ', num2str(rS0),' m'],'FontSize',20)
-xlabel('time (s)','FontSize',20)
-ylabel('volume (m^3)','FontSize',20)
-set(gca,'fontname','times new roman','FontSize',20)
-set(h19, 'Position', [100 100 1500 800])
-hold off;
-export_fig(['rS0',date1],'-jpg', '-nocrop', h12);
+rS4percLay7EndPerc = rS4percLay7(end) / totEndPercLay7;
+comp(3,2) = rS4percLay7EndPerc;
 
+rS6percLay7EndPerc = rS6percLay7(end) / totEndPercLay7;
+comp(4,2) = rS6percLay7EndPerc;
 
+totEndPercLay8 = rS1percLay8(end) + rS2percLay8(end) + rS4percLay8(end) + rS6percLay8(end);
 
+rS1percLay8EndPerc = rS1percLay8(end) / totEndPercLay8;
+comp(1,3) = rS1percLay8EndPerc;
+
+rS2percLay8EndPerc = rS2percLay8(end) / totEndPercLay8;
+comp(2,3) = rS2percLay8EndPerc;
+
+rS4percLay8EndPerc = rS4percLay8(end) / totEndPercLay8;
+comp(3,3) = rS4percLay8EndPerc;
+
+rS6percLay8EndPerc = rS6percLay8(end) / totEndPercLay8;
+comp(4,3) = rS6percLay8EndPerc;
