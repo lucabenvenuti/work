@@ -81,7 +81,7 @@ variable	mS6 equal 0.350 #new
 
 #*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=
 
-fix 		m1 all property/global youngsModulus peratomtype 300.e6 200.e6
+fix 		m1 all property/global youngsModulus peratomtype 10.e6 10.e6
 fix 		m2 all property/global poissonsRatio peratomtype 0.4 0.4
 fix 		m3 all property/global coefficientRestitution peratomtypepair 2 &
                 ${rest} ${rest} & 
