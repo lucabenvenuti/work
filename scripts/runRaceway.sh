@@ -6,8 +6,6 @@
 
 #PBS -N racewayCFDEM
 #PBS -o ${PBS_JOBID}__racewayCFDEM__${PBS_JOBID}.out
-#PBS -V
-#PBS -k oe
 #PBS -j oe
 #PBS -l nodes=4:ppn=8
 #PBS -l walltime=48:00:00
@@ -37,8 +35,8 @@ TOOLKIT_DIR=$HOME/workspace/src/ParticulateFlow/toolkit
 CASE_DIR=$PBS_O_WORKDIR/../raceway
 
 cd $TOOLKIT_DIR
-module unload openmpi
-module load icc gcc mvapich2
+module unload mvapich2
+module load icc gcc opempi
 
 source bashrc
 cd $CASE_DIR/CFD
