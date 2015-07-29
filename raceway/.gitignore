@@ -19,3 +19,11 @@ stats/
 matlab/*.*~
 results*/
 restart*/
+*.vtk
+*.o
+*.d
+*.a
+*.dep
+log_*
+log.*
+*~
