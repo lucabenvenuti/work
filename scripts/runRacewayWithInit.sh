@@ -32,12 +32,30 @@ if [ ! -f $SCRIPT_NAME  ]
     exit -1
 fi
 
+XPROCS=2
+YPROCS=4
+ZPROCS=4
+PROCS=$(($XPROCS*$YPROCS*$ZPROCS))
+MPI_OPTIONS="-np $PROCS"
+
 TOOLKIT_DIR=$HOME/workspace/src/ParticulateFlow/toolkit
 
-CASE_DIR=$PBS_O_WORKDIR/../raceway
+CASE_DIR=$PBS_O_WORKDIR/../raceway2
+
+RESTART_FILE_NAME=$CASE_DIR/DEM/liggghts.restart
+
+if [ ! -f $RESTART_FILE_NAME  ]
+  then
+    echo "running liggghts init"
+    module use $HOME/modules
+    module load liggghts/PFM/develop
+    cd $CASE_DIR/DEM
+    VARS="-var XPROCS $XPROCS -var YPROCS $YPROCS -var ZPROCS $ZPROCS"
+    mpirun $MPI_OPTIONS liggghts -in in.liggghts_init $VARS
+    module unload liggghts/PFM/develop
+fi
 
 cd $TOOLKIT_DIR
-
 
 source bashrc
 cd $CASE_DIR/CFD
@@ -45,5 +63,5 @@ cd $CASE_DIR/CFD
 date
 decomposePar
 date
-mpirun -np 32 cfdemSolverPiso -parallel
+mpirun $MPI_OPTIONS cfdemSolverPiso -parallel
 date
