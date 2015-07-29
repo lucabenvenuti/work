@@ -32,6 +32,8 @@ variable    ctrlKd          equal   0.0
 variable vthre equal 0.01
 ###############################################
 
+shell   mkdir post
+
 atom_style		granular
 atom_modify		map array
 communicate	single vel yes
@@ -39,7 +41,9 @@ communicate	single vel yes
 boundary		f f f
 newton			off
 units			si
-processors      1 3 4
+processors  ${XPROCS} ${YPROCS} ${ZPROCS}
+
+variable    numProc equal       ${XPROCS}*${YPROCS}*${ZPROCS}
 
 region		reg block -0.40 1.59 -1.23 1.23 -1.0 10.0 units box
 create_box	2 reg
@@ -114,12 +118,12 @@ dump	    dmp2 all custom 100000 ../DEM/post/dump*.liggghts_init id type type x y
 
 label loop
   print "-----> Checking Velocity..."
-  if "${vave}<${vthre}" then "jump in.liggghts_init endloop"
+  if "${vave}<${vthre}" then "jump SELF endloop"
   print "-----> v ave ${vave}, v threshold ${vthre}, continuing run"  
 
   run 10000
   write_restart  	liggghts.restart_prelim
-jump in.liggghts_init loop
+jump SELF loop
 
 label endloop
 #======================================================================

@@ -32,6 +32,8 @@ variable    ctrlKd          equal   0.0
 variable massPerSec equal 3.75 # deleted pass per second (kg)
 variable CentermassPerSec equal 5.75 # deleted pass per second (kg) in center, also accounts for fines insertion
 
+shell   mkdir post
+
 atom_style		granular
 atom_modify		map array
 communicate	single vel yes
