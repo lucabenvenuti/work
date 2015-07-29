@@ -52,7 +52,7 @@ if [ ! -f $RESTART_FILE_NAME  ]
     module load mvapich2 liggghts/PFM/develop
     cd $CASE_DIR/DEM
     VARS="-var XPROCS $XPROCS -var YPROCS $YPROCS -var ZPROCS $ZPROCS"
-    mpirun $MPI_OPTIONS liggghts -in in.liggghts_init $VARS
+    mpiexec $MPI_OPTIONS liggghts -in in.liggghts_init $VARS
     module unload mvapich2 liggghts/PFM/develop
     module load openmpi
 fi
