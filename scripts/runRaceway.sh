@@ -36,8 +36,9 @@ TOOLKIT_DIR=$HOME/workspace/src/ParticulateFlow/toolkit
 
 CASE_DIR=$PBS_O_WORKDIR/../raceway
 
-cd $TOOLKIT_DIR
+mkdir -p $CASE_DIR/DEM/post
 
+cd $TOOLKIT_DIR
 
 source bashrc
 cd $CASE_DIR/CFD

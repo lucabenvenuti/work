@@ -42,6 +42,8 @@ TOOLKIT_DIR=$HOME/workspace/src/ParticulateFlow/toolkit
 
 CASE_DIR=$PBS_O_WORKDIR/../raceway2
 
+mkdir -p $CASE_DIR/DEM/post
+
 RESTART_FILE_NAME=$CASE_DIR/DEM/liggghts.restart
 
 if [ ! -f $RESTART_FILE_NAME  ]
