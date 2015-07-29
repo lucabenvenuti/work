@@ -55,10 +55,10 @@ neigh_modify	delay 0 binsize 0.08 one 1000
 #Material properties for material 1 = coal,  material 2 = dri material 3 = wall
 #friction angle of 25 deg with wall
 
-variable    rest    equal   0.590 #new
-variable	cof1	equal 	0.664 #new
+variable    rest    equal   0.200
+variable	cof1	equal 	0.910
 variable	cof2 	equal 	0.650
-variable	corf1 	equal 	0.916 #new
+variable	corf1 	equal 	0.350
 variable	corf2 	equal 	0.250
 
 #densities
@@ -81,7 +81,7 @@ variable	mS6 equal 0.350 #new
 
 #*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=
 
-fix 		m1 all property/global youngsModulus peratomtype 10.e6 10.e6
+fix 		m1 all property/global youngsModulus peratomtype 300.e6 200.e6
 fix 		m2 all property/global poissonsRatio peratomtype 0.4 0.4
 fix 		m3 all property/global coefficientRestitution peratomtypepair 2 &
                 ${rest} ${rest} & 
