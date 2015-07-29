@@ -48,11 +48,13 @@ if [ ! -f $RESTART_FILE_NAME  ]
   then
     echo "running liggghts init"
     module use $HOME/modules
-    module load liggghts/PFM/develop
+    module unload openmpi
+    module load mvapich2 liggghts/PFM/develop
     cd $CASE_DIR/DEM
     VARS="-var XPROCS $XPROCS -var YPROCS $YPROCS -var ZPROCS $ZPROCS"
     mpirun $MPI_OPTIONS liggghts -in in.liggghts_init $VARS
-    module unload liggghts/PFM/develop
+    module unload mvapich2 liggghts/PFM/develop
+    module load openmpi
 fi
 
 cd $TOOLKIT_DIR
