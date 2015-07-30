@@ -49,6 +49,7 @@ RESTART_FILE_NAME=$CASE_DIR/DEM/liggghts.restart
 if [ ! -f $RESTART_FILE_NAME  ]
   then
     echo "running liggghts init"
+    date
     module use $HOME/modules
     module unload openmpi
     module load mvapich2 liggghts/PFM/develop
