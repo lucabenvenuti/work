@@ -102,6 +102,9 @@ q = tapas_vblm(y2', X');
 X2 = chemicalInputs(:,tr.testInd);
 [m_new, y2_new] = tapas_vblm_predict(X2', q);
 ys3 = ys4';
+[q.r2 q.rmse] = rsquare(ys3, m_new);
+q.mae = mae(ys3, m_new);
+q.mse = mse(ys3, m_new);
 h6 = figure(6); plotregression(ys3, m_new,'Bayesian linear regressor (tapas)');
 set(gca,'fontname','times new roman','FontSize',20)  % Set it to times
 set(h6, 'Position', [100 100 1500 800])
@@ -111,8 +114,9 @@ export_fig('BayesianLinearRegression','-jpg', '-nocrop', h6);
 
 x3 = chemicalInputs(:,tr.trainInd)';
 y3 = chemicalTargets(:,tr.trainInd)';
-covfunc = { 'covSum', { 'covSEiso' } };
-likfunc = @likGauss; sn = 0.1; hyp.lik = log(sn);
+covfunc = @covSEiso ;% { 'covSum', { 'covSEiso' } };
+likfunc = @likGauss; 
+%sn = 0.1; hyp.lik = log(sn);
 hyp2.cov = [0 ; 0];
 hyp2.lik = log(0.1);
 hyp2 = minimize(hyp2, @gp, -100, @infExact, [], covfunc, likfunc, x3, y3);
@@ -121,7 +125,12 @@ nlml2 = gp(hyp2, @infExact, [], covfunc, likfunc, x3, y3);
 %[m s2] = gp(hyp2, @infExact, [], covfunc, likfunc, x3, y3, x3);
 xs = chemicalInputs(:,tr.testInd)';
 % ys = chemicalTargets(:,tr.testInd)';
-[ymu ys2 fmu fs2] = gp(hyp2, @infExact, [], covfunc, likfunc, x3, y3, xs);
+[g.nlZ g.dnlZ] = gp(hyp2, @infExact, [], covfunc, likfunc, x3, y3);
+[ymu g.ys2 g.fmu g.fs2 g.lp] = gp(hyp2, @infExact, [], covfunc, likfunc, x3, y3, xs);
+g.ymu = ymu;
+[g.r2 g.rmse] = rsquare(ys3, ymu);
+g.mae = mae(ys3, ymu);
+g.mse = mse(ys3, ymu);
 h7 = figure(7); plotregression(ys3, ymu,'Gaussian process (a non-parametric probabilistic regressor)');
 set(gca,'fontname','times new roman','FontSize',20)  % Set it to times
 set(h7, 'Position', [100 100 1500 800])
@@ -134,7 +143,7 @@ export_fig('GaussianNonLinearRegression','-jpg', '-nocrop', h7);
 %     inputNN3(iijj,3)=data(iijj).rest;
 %     inputNN3(iijj,1)=data(iijj).fric;
 %     inputNN3(iijj,2)=data(iijj).rf;
-%     aa
+%     
 % 
 %         inputNN3(iijj,4)=data(iijj).dt;
 % 
@@ -160,9 +169,34 @@ net2=NNSave2{errorEstSumMaxIndex2(2),2}.net;
 
 yy = net2(x);
 
+[n.r2 n.rmse] = rsquare(ys4,yy(tr.testInd));
+n.mae = mae(ys4,yy(tr.testInd));
+n.mse = mse(ys4,yy(tr.testInd));
+
 h9 = figure(9);
 % plotregression(z(tr.testInd),yy(tr.testInd),'ANNs Regression');
 plotregression(ys4,yy(tr.testInd),'ANNs Regression');
 set(gca,'fontname','times new roman','FontSize',20)  % Set it to times
 set(h9, 'Position', [100 100 1500 800])
 export_fig('ANNsRegression','-jpg', '-nocrop', h9);
+
+%% Statistics on test samples errors
+
+qNames = fieldnames(q);
+i = 1;
+for loopIndex = 9:numel(qNames) 
+    StatMatrix(i,1) = q.(qNames{loopIndex});
+    i = i + 1;
+end
+
+i = 1;
+gNames = fieldnames(g); 
+for loopIndex = 8:numel(gNames) 
+    StatMatrix(i,2) = g.(gNames{loopIndex});
+    i = i + 1;
+end
+
+nNames = fieldnames(n); 
+for loopIndex = 1:numel(nNames) 
+    StatMatrix(loopIndex,3) = n.(nNames{loopIndex});
+end
