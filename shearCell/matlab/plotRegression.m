@@ -27,11 +27,12 @@ end
 inputNN4 = inputNN3';
 
 net2=NNSave2{errorEstSumMaxIndex2(2),2}.net;
+tr2=NNSave2{errorEstSumMaxIndex2(2),2}.tr;
 
 yy = net2(inputNN4);
 
-figure(1)
-plotregression(z,yy,'Regression');
+h9 = figure(9);
+plotregression(z(tr.testInd),yy(tr.testInd),'Regression');
 
 %title('Regression: R=0.98044','Interpreter','none','FontSize',24);
 %xlabel('Target','FontSize',24);
