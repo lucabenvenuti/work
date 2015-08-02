@@ -11,16 +11,18 @@ clear all
 close all
 clc
 if (isunix)
-    addpath('/mnt/DATA/liggghts/work/shearCell/matlab/exportFig');
-    addpath(genpath('/mnt/DATA/liggghts/work/shearCell/matlab/tapas'));
-    addpath(genpath('/mnt/DATA/liggghts/work/shearCell/matlab/gpml'));
+   % addpath('/mnt/DATA/liggghts/work/shearCell/matlab/exportFig');
+    addpath(genpath('/mnt/DATA/liggghts/work/shearCell/matlab'));
+    %addpath(genpath('/mnt/DATA/liggghts/work/shearCell/matlab/gpml'));
+    load /mnt/benvenutiPFMDaten/simulations/aor/matlab/radarPlotAORSinterfine0_1rangePirker1dot0EntireRange2Plot.mat
 else
-    addpath('E:\liggghts\work\shearCell\matlab\exportFig');
-    addpath(genpath('E:\liggghts\work\shearCell\matlab\tapas'));
-    addpath(genpath('E:\liggghts\work\shearCell\matlab\gpml'));
+    %addpath('E:\liggghts\work\shearCell\matlab\exportFig');
+    addpath(genpath('E:\liggghts\work\shearCell\matlab'));
+    %addpath(genpath('E:\liggghts\work\shearCell\matlab\gpml'));
+    load R:\simulations\aor\matlab\radarPlotAORSinterfine0_1rangePirker1dot0EntireRange2Plot.mat
 end
 
-load R:\simulations\shearCell\sinterFineMatlabData\radarPlot10070sinterfine0_1range.mat
+
 tr2=NNSave2{errorEstSumMaxIndex2(2),2}.tr;
 tr = tr2;
 
@@ -200,3 +202,5 @@ nNames = fieldnames(n);
 for loopIndex = 1:numel(nNames) 
     StatMatrix(loopIndex,3) = n.(nNames{loopIndex});
 end
+
+% save -v7.3 radarPlotAORSinterfine0_1rangePirker1dot0EntireRange2PlotMultipleRegressions.mat
