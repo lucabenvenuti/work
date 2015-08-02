@@ -107,10 +107,27 @@ ys3 = ys4';
 [q.r2 q.rmse] = rsquare(ys3, m_new);
 q.mae = mae(ys3, m_new);
 q.mse = mse(ys3, m_new);
-h6 = figure(6); plotregression(ys3, m_new,'SCT Bayesian linear regressor (tapas)');
+h6 = figure(6); 
+%plotregression(ys3, m_new,'SCT Bayesian linear regressor (tapas)');
+titleName = 'BayesianLinearRegressor';
+[ m_new_reg, h6 ] = plotRegressionFun( numFig, titleName, ys3, m_new, 0.92, 0.093 );
+if (false)
+
+m_new_reg = ys3*0.92 + 0.093;
+
+plot(ys3, m_new,'ok', ys3, m_new_reg,'b');
+xlim([min(ys3),max(ys3)]);
+ylim([min(m_new),max(m_new)]);
+legend('training values','regression line','Location', 'NorthWest');
+xlabel('\mu_{psh, DEM} [-]','fontname','times new roman','FontSize',20);
+ylabel(['\mu_{psh, ', titleName, '} [-]'],'fontname','times new roman','FontSize',20);
 set(gca,'fontname','times new roman','FontSize',20)  % Set it to times
 set(h6, 'Position', [100 100 1500 800],'color','w');
 export_fig('SCTBayesianLinearRegression','-png', '-nocrop', '-painters', h6);
+
+
+
+
 
 %% Gaussian process (a non-parametric probabilistic regressor)
 
@@ -201,4 +218,6 @@ end
 nNames = fieldnames(n); 
 for loopIndex = 1:numel(nNames) 
     StatMatrix(loopIndex,3) = n.(nNames{loopIndex});
+end
+
 end
