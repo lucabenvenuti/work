@@ -107,23 +107,23 @@ ys3 = ys4';
 [q.r2 q.rmse] = rsquare(ys3, m_new);
 q.mae = mae(ys3, m_new);
 q.mse = mse(ys3, m_new);
-h6 = figure(6); 
+% h6 = figure(6); 
 %plotregression(ys3, m_new,'SCT Bayesian linear regressor (tapas)');
 titleName = 'BayesianLinearRegressor';
-[ m_new_reg, h6 ] = plotRegressionFun( numFig, titleName, ys3, m_new, 0.92, 0.093 );
-if (false)
+[ m_new_reg, h6 ] = plotRegressionFun( 6, titleName, ys3, m_new, 0.92, 0.093 );
 
-m_new_reg = ys3*0.92 + 0.093;
 
-plot(ys3, m_new,'ok', ys3, m_new_reg,'b');
-xlim([min(ys3),max(ys3)]);
-ylim([min(m_new),max(m_new)]);
-legend('training values','regression line','Location', 'NorthWest');
-xlabel('\mu_{psh, DEM} [-]','fontname','times new roman','FontSize',20);
-ylabel(['\mu_{psh, ', titleName, '} [-]'],'fontname','times new roman','FontSize',20);
-set(gca,'fontname','times new roman','FontSize',20)  % Set it to times
-set(h6, 'Position', [100 100 1500 800],'color','w');
-export_fig('SCTBayesianLinearRegression','-png', '-nocrop', '-painters', h6);
+% m_new_reg = ys3*0.92 + 0.093;
+% 
+% plot(ys3, m_new,'ok', ys3, m_new_reg,'b');
+% xlim([min(ys3),max(ys3)]);
+% ylim([min(m_new),max(m_new)]);
+% legend('training values','regression line','Location', 'NorthWest');
+% xlabel('\mu_{psh, DEM} [-]','fontname','times new roman','FontSize',20);
+% ylabel(['\mu_{psh, ', titleName, '} [-]'],'fontname','times new roman','FontSize',20);
+% set(gca,'fontname','times new roman','FontSize',20)  % Set it to times
+% set(h6, 'Position', [100 100 1500 800],'color','w');
+% export_fig('SCTBayesianLinearRegression','-png', '-nocrop', '-painters', h6);
 
 
 
@@ -150,10 +150,15 @@ g.ymu = ymu;
 [g.r2 g.rmse] = rsquare(ys3, ymu);
 g.mae = mae(ys3, ymu);
 g.mse = mse(ys3, ymu);
-h7 = figure(7); plotregression(ys3, ymu,'SCT Gaussian process (a non-parametric probabilistic regressor)');
-set(gca,'fontname','times new roman','FontSize',20)  % Set it to times
-set(h7, 'Position', [100 100 1500 800],'color','w');
-export_fig('SCTGaussianNonLinearRegression','-png', '-nocrop', '-painters', h7);
+
+titleName = 'GaussianNonLinearRegressor';
+[ ymu_new, h7 ] = plotRegressionFun( 7, titleName, ys3, ymu, 0.91, 0.1 );
+
+
+% h7 = figure(7); plotregression(ys3, ymu,'SCT Gaussian process (a non-parametric probabilistic regressor)');
+% set(gca,'fontname','times new roman','FontSize',20)  % Set it to times
+% set(h7, 'Position', [100 100 1500 800],'color','w');
+% export_fig('SCTGaussianNonLinearRegression','-png', '-nocrop', '-painters', h7);
 
 %% ANNs
 % z = avgMuR1';
@@ -192,12 +197,15 @@ yy = net2(x);
 n.mae = mae(ys4,yy(tr.testInd));
 n.mse = mse(ys4,yy(tr.testInd));
 
-h9 = figure(9);
-% plotregression(z(tr.testInd),yy(tr.testInd),'ANNs Regression');
-plotregression(ys4,yy(tr.testInd),'SCT ANNs Regression');
-set(gca,'fontname','times new roman','FontSize',20)  % Set it to times
-set(h9, 'Position', [100 100 1500 800],'color','w');
-export_fig('SCTANNsRegression','-png', '-nocrop', '-painters', h9);
+titleName = 'ANNNonLinearRegressor';
+[ yy_new, h9 ] = plotRegressionFun( 9, titleName, ys4, yy(tr.testInd), 1.0, 0.017 );
+
+% h9 = figure(9);
+% % plotregression(z(tr.testInd),yy(tr.testInd),'ANNs Regression');
+% plotregression(ys4,yy(tr.testInd),'SCT ANNs Regression');
+% set(gca,'fontname','times new roman','FontSize',20)  % Set it to times
+% set(h9, 'Position', [100 100 1500 800],'color','w');
+% export_fig('SCTANNsRegression','-png', '-nocrop', '-painters', h9);
 
 %% Statistics on test samples errors
 
@@ -220,4 +228,4 @@ for loopIndex = 1:numel(nNames)
     StatMatrix(loopIndex,3) = n.(nNames{loopIndex});
 end
 
-end
+
