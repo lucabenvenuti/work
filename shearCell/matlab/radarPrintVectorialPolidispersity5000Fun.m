@@ -210,7 +210,7 @@ if (ni > 0)
     legend('minInput','min', '\mu - \sigma', '\mu', '\mu + \sigma', 'max', 'maxInput'); %, 'FontSize',24)
     title ([exp_file_name, 'SRSCT: normal stress = ', num2str(dataNN2.ctrlStress), ' [Pa], coeff. P. = ', num2str(coeffPirker)] ,'FontSize',24);
     set(gca,'fontname','times new roman','FontSize',20)  % Set it to times
-    set(h1, 'Position', [100 100 1500 800])
+    set(h1, 'Position', [100 100 1500 800],'color','w');
 %     print(h1,'-djpeg','-r300',[exp_file_name, 'SRSCTnormalstress', num2str(dataNN2.ctrlStress), 'PacoeffP', num2str(coeffPirker*10),'0',num2str(41+i),'radarPlot',num2str(i),date1])
     %export_fig [exp_file_name, 'SRSCTnormalstress', num2str(dataNN2.ctrlStress), 'PacoeffP', num2str(coeffPirker*10),'0',num2str(41+i),'radarPlot',num2str(i),date1,.jpg]
     if (isunix)

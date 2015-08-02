@@ -107,10 +107,10 @@ ys3 = ys4';
 [q.r2 q.rmse] = rsquare(ys3, m_new);
 q.mae = mae(ys3, m_new);
 q.mse = mse(ys3, m_new);
-h6 = figure(6); plotregression(ys3, m_new,'Bayesian linear regressor (tapas)');
+h6 = figure(6); plotregression(ys3, m_new,'AOR Bayesian linear regressor (tapas)');
 set(gca,'fontname','times new roman','FontSize',20)  % Set it to times
-set(h6, 'Position', [100 100 1500 800])
-export_fig('BayesianLinearRegression','-jpg', '-nocrop', h6);
+set(h6, 'Position', [100 100 1500 800],'color','w');
+export_fig('AORBayesianLinearRegression','-png', '-nocrop', '-painters', h6);
 
 %% Gaussian process (a non-parametric probabilistic regressor)
 
@@ -133,10 +133,10 @@ g.ymu = ymu;
 [g.r2 g.rmse] = rsquare(ys3, ymu);
 g.mae = mae(ys3, ymu);
 g.mse = mse(ys3, ymu);
-h7 = figure(7); plotregression(ys3, ymu,'Gaussian process (a non-parametric probabilistic regressor)');
+h7 = figure(7); plotregression(ys3, ymu,'AOR Gaussian process (a non-parametric probabilistic regressor)');
 set(gca,'fontname','times new roman','FontSize',20)  % Set it to times
-set(h7, 'Position', [100 100 1500 800])
-export_fig('GaussianNonLinearRegression','-jpg', '-nocrop', h7);
+set(h7, 'Position', [100 100 1500 800],'color','w');
+export_fig('AORGaussianNonLinearRegression','-png', '-nocrop', '-painters', h7);
 
 %% ANNs
 % z = avgMuR1';
@@ -177,10 +177,10 @@ n.mse = mse(ys4,yy(tr.testInd));
 
 h9 = figure(9);
 % plotregression(z(tr.testInd),yy(tr.testInd),'ANNs Regression');
-plotregression(ys4,yy(tr.testInd),'ANNs Regression');
+plotregression(ys4,yy(tr.testInd),'AOR ANNs Regression');
 set(gca,'fontname','times new roman','FontSize',20)  % Set it to times
-set(h9, 'Position', [100 100 1500 800])
-export_fig('ANNsRegression','-jpg', '-nocrop', h9);
+set(h9, 'Position', [100 100 1500 800],'color','w');
+export_fig('AORANNsRegression','-png', '-nocrop', '-painters', h9);
 
 %% Statistics on test samples errors
 
@@ -203,4 +203,4 @@ for loopIndex = 1:numel(nNames)
     StatMatrix(loopIndex,3) = n.(nNames{loopIndex});
 end
 
-% save -v7.3 radarPlotAORSinterfine0_1rangePirker1dot0EntireRange2PlotMultipleRegressions.mat
+% save -v7.3 % radarPlotAORSinterfine0_1rangePirker1dot0EntireRange2PlotMultipleRegressions.mat

@@ -64,7 +64,7 @@ a2 = radarPlot(G);
 legend('minInput','min', '\mu - \sigma', '\mu', '\mu + \sigma', 'max', 'maxInput'); %, 'FontSize',24)
 title ([res.material, ', intersection Shear Cell 5000 Pa and coeff. P. = 1 and AoR '] ,'FontSize',24);
 set(gca,'fontname','times new roman','FontSize',20)  % Set it to times
-set(h1, 'Position', [100 100 1500 800])
+set(h1, 'Position', [100 100 1500 800],'color','w');
 
 if (isunix)
     addpath('/mnt/DATA/liggghts/work/shearCell/matlab/exportFig');

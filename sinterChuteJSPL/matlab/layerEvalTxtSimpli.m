@@ -386,7 +386,7 @@ if (imageFlagShort)
     xlabel('time (s)','FontSize',20)
     ylabel('volume (m^3)','FontSize',20)
     set(gca,'fontname','times new roman','FontSize',20)
-    set(h6, 'Position', [100 100 1500 800])
+    set(h6, 'Position', [100 100 1500 800],'color','w');
     hold off;
     if (~isunix)
         export_fig(['rS6',date1],'-jpg', '-nocrop', h6);
@@ -399,7 +399,7 @@ if (imageFlagShort)
     xlabel('time (s)','FontSize',20)
     ylabel('volume (m^3)','FontSize',20)
     set(gca,'fontname','times new roman','FontSize',20)
-    set(h8, 'Position', [100 100 1500 800])
+    set(h8, 'Position', [100 100 1500 800],'color','w');
     hold off;
     if (~isunix)
         export_fig(['rS4',date1],'-jpg', '-nocrop', h8);
@@ -412,7 +412,7 @@ if (imageFlagShort)
     xlabel('time (s)','FontSize',20)
     ylabel('volume (m^3)','FontSize',20)
     set(gca,'fontname','times new roman','FontSize',20)
-    set(h10, 'Position', [100 100 1500 800])
+    set(h10, 'Position', [100 100 1500 800],'color','w');
     hold off;
     if (~isunix)
         export_fig(['rS2',date1],'-jpg', '-nocrop', h10);
@@ -425,7 +425,7 @@ if (imageFlagShort)
     xlabel('time (s)','FontSize',20)
     ylabel('volume (m^3)','FontSize',20)
     set(gca,'fontname','times new roman','FontSize',20)
-    set(h11, 'Position', [100 100 1500 800])
+    set(h11, 'Position', [100 100 1500 800],'color','w');
     hold off;
     if (~isunix)
         export_fig(['rS1',date1],'-jpg', '-nocrop', h11);
@@ -451,7 +451,7 @@ if (imageFlagAll)
     xlabel('time (s)','FontSize',20)
     ylabel('volume (m^3)','FontSize',20)
     set(gca,'fontname','times new roman','FontSize',20)
-    set(h7, 'Position', [100 100 1500 800])
+    set(h7, 'Position', [100 100 1500 800],'color','w');
     hold off;
     export_fig(['rS5',date1],'-jpg', '-nocrop', h7);
     
@@ -466,7 +466,7 @@ if (imageFlagAll)
     xlabel('time (s)','FontSize',20)
     ylabel('volume (m^3)','FontSize',20)
     set(gca,'fontname','times new roman','FontSize',20)
-    set(h9, 'Position', [100 100 1500 800])
+    set(h9, 'Position', [100 100 1500 800],'color','w');
     hold off;
     export_fig(['rS3',date1],'-jpg', '-nocrop', h9);
     
@@ -480,7 +480,7 @@ if (imageFlagAll)
     xlabel('time (s)','FontSize',20)
     ylabel('volume (m^3)','FontSize',20)
     set(gca,'fontname','times new roman','FontSize',20)
-    set(h12, 'Position', [100 100 1500 800])
+    set(h12, 'Position', [100 100 1500 800],'color','w');
     hold off;
     export_fig(['rS0',date1],'-jpg', '-nocrop', h12);
     
@@ -496,7 +496,7 @@ if (imageFlagAll)
     xlabel('time (s)','FontSize',20)
     ylabel('volume (m^3)','FontSize',20)
     set(gca,'fontname','times new roman','FontSize',20)
-    set(h13, 'Position', [100 100 1500 800])
+    set(h13, 'Position', [100 100 1500 800],'color','w');
     hold off;
     export_fig(['rS6',date1],'-jpg', '-nocrop', h6);
     
@@ -511,7 +511,7 @@ if (imageFlagAll)
     xlabel('time (s)','FontSize',20)
     ylabel('volume (m^3)','FontSize',20)
     set(gca,'fontname','times new roman','FontSize',20)
-    set(h14, 'Position', [100 100 1500 800])
+    set(h14, 'Position', [100 100 1500 800],'color','w');
     hold off;
     export_fig(['rS5',date1],'-jpg', '-nocrop', h7);
     
@@ -527,7 +527,7 @@ if (imageFlagAll)
     xlabel('time (s)','FontSize',20)
     ylabel('volume (m^3)','FontSize',20)
     set(gca,'fontname','times new roman','FontSize',20)
-    set(h15, 'Position', [100 100 1500 800])
+    set(h15, 'Position', [100 100 1500 800],'color','w');
     hold off;
     export_fig(['rS4',date1],'-jpg', '-nocrop', h8);
     
@@ -543,7 +543,7 @@ if (imageFlagAll)
     xlabel('time (s)','FontSize',20)
     ylabel('volume (m^3)','FontSize',20)
     set(gca,'fontname','times new roman','FontSize',20)
-    set(h16, 'Position', [100 100 1500 800])
+    set(h16, 'Position', [100 100 1500 800],'color','w');
     hold off;
     export_fig(['rS3',date1],'-jpg', '-nocrop', h9);
     
@@ -558,7 +558,7 @@ if (imageFlagAll)
     xlabel('time (s)','FontSize',20)
     ylabel('volume (m^3)','FontSize',20)
     set(gca,'fontname','times new roman','FontSize',20)
-    set(h17, 'Position', [100 100 1500 800])
+    set(h17, 'Position', [100 100 1500 800],'color','w');
     hold off;
     export_fig(['rS2',date1],'-jpg', '-nocrop', h10);
     
@@ -574,7 +574,7 @@ if (imageFlagAll)
     xlabel('time (s)','FontSize',20)
     ylabel('volume (m^3)','FontSize',20)
     set(gca,'fontname','times new roman','FontSize',20)
-    set(h18, 'Position', [100 100 1500 800])
+    set(h18, 'Position', [100 100 1500 800],'color','w');
     hold off;
     export_fig(['rS1',date1],'-jpg', '-nocrop', h11);
     
@@ -590,7 +590,7 @@ if (imageFlagAll)
     xlabel('time (s)','FontSize',20)
     ylabel('volume (m^3)','FontSize',20)
     set(gca,'fontname','times new roman','FontSize',20)
-    set(h19, 'Position', [100 100 1500 800])
+    set(h19, 'Position', [100 100 1500 800],'color','w');
     hold off;
     export_fig(['rS0',date1],'-jpg', '-nocrop', h12);
     

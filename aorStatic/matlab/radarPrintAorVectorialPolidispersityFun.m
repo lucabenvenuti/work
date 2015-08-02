@@ -101,7 +101,7 @@ if (ni>0)
     if (exist('material','var'))
         title ([material, ', angleExp = ', num2str(angleExp), 'coeff. P. = ', num2str(coeffPirker)] ,'FontSize',24);
         set(gca,'fontname','times new roman','FontSize',20);
-        set(h1, 'Position', [100 100 1500 800]);
+        set(h1, 'Position', [100 100 1500 800],'color','w');;
         export_fig([material, ', angleExp = ', num2str(angleExp), 'coeff. P. = ', num2str(coeffPirker),date1],'-jpg', '-nocrop', h1);
     else
         title (['angleExp = ', num2str(angleExp), 'coeff. P. = ', num2str(coeffPirker)] ,'FontSize',24);

@@ -372,7 +372,7 @@ h1=figure(6);
 plot(dataNN2.radsigma',avgMuR2mean(:,startMinAvgMuR2Index),dataNN2.radsigma',avgMuR1mean(:, startMinAvgMuR1Index),dataNN2.radsigma',rhoBShearMaxmean(:,startMinRhoPostIndex ),dataNN2.radsigma',rhoBPreShearMaxmean(:, startMinRhoPreIndex))
 xlabel('std dev radius [m]', 'FontSize', 20);
 set(gca,'fontname','times new roman','FontSize',20)  % Set it to times
-set(h1, 'Position', [100 100 1500 800])
+set(h1, 'Position', [100 100 1500 800],'color','w');
 legend('avgMuR2mean [-]','avgMuR1mean [-]', 'rhoBShearMaxmean [-]', 'rhoBPreShearMaxmean [-]','Location', 'SouthEast' );
 
 export_fig(['0',num2str(41+i),'simulationRadiusDistribution',num2str(i),date1],'-jpg', '-nocrop', h1);

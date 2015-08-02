@@ -831,7 +831,7 @@ function [fig, options] = parse_args(nout, fig, varargin)
                     case {'gray', 'grey'}
                         options.colourspace = 2;
                     case {'a1', 'a2', 'a3', 'a4'}
-                        options.aa_factor = str2double(varargin{a}(3));
+                        options.aa_factor = str2double(varargin{a}(3))
                     case 'append'
                         options.append = true;
                     case 'bookmark'

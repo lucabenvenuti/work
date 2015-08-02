@@ -15,5 +15,5 @@ title('Box plot, normalized over the maximum value: radarPlot10070sinterfine0_1r
 set(gca,'fontname','times new roman','FontSize',20)  % Set it to times
 set(findobj(gca,'Type','text'),'fontname','times new roman','FontSize',20,'VerticalAlignment', 'Middle')
 %set(text(3:end),'VerticalAlignment', 'Middle');
-set(h11, 'Position', [100 100 1500 800])
+set(h11, 'Position', [100 100 1500 800],'color','w');
 export_fig('BoxPlot','-jpg', '-nocrop', h11);

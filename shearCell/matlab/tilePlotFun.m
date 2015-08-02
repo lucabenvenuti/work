@@ -148,7 +148,7 @@ title ([exp_file_name, 'SRSCT: normal stress = ', num2str(dataNN2.ctrlStress), '
 % legend([h2 h3 h4 ],{'0.5<COR<0.6','0.6<COR<0.7', '0.7<COR<0.8'},'Location','SouthWest');
 % legend([h4 h5],{'0.7<COR<0.8', '0.8<COR<0.9'},'Location','SouthWest');
 set(gca,'fontname','times new roman','FontSize',20)  % Set it to times
-set(h7, 'Position', [100 100 1500 800])
+set(h7, 'Position', [100 100 1500 800],'color','w');
 %set(gca, 'Position', [0 0 8 ])
 % set(ah,'PaperPositionMode', 'manual', ...
 % 'PaperUnits','centimeters', ...
