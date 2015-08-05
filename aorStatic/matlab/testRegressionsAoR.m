@@ -10,8 +10,13 @@
 clear all
 close all
 clc
+
+imageFlag = false;
+maxEval = true;
+
+
 if (isunix)
-   % addpath('/mnt/DATA/liggghts/work/shearCell/matlab/exportFig');
+    % addpath('/mnt/DATA/liggghts/work/shearCell/matlab/exportFig');
     addpath(genpath('/mnt/DATA/liggghts/work/shearCell/matlab'));
     %addpath(genpath('/mnt/DATA/liggghts/work/shearCell/matlab/gpml'));
     load /mnt/benvenutiPFMDaten/simulations/aor/matlab/radarPlotAORSinterfine0_1rangePirker1dot0EntireRange2Plot.mat
@@ -20,6 +25,9 @@ else
     addpath(genpath('E:\liggghts\work\shearCell\matlab'));
     %addpath(genpath('E:\liggghts\work\shearCell\matlab\gpml'));
     load R:\simulations\aor\matlab\radarPlotAORSinterfine0_1rangePirker1dot0EntireRange2Plot.mat
+    if (maxEval)
+        load R:\simulations\shearCell\20150721shearCellPoliAllDensitiesWithOldShearPerc1ANNsMultiple\maxEval.mat
+    end
 end
 
 
@@ -32,8 +40,11 @@ x = chemicalInputs;
 t = chemicalTargets;
 ys4 = t(tr.testInd);
 
+
+
 clearvars x2 zz2
 
+%%
 if (false)
     % Choose a Training Function
     % For a list of all training functions type: help nntrain
@@ -107,17 +118,18 @@ ys3 = ys4';
 [q.r2 q.rmse] = rsquare(ys3, m_new);
 q.mae = mae(ys3, m_new);
 q.mse = mse(ys3, m_new);
-h6 = figure(6); plotregression(ys3, m_new,'AOR Bayesian linear regressor (tapas)');
-set(gca,'fontname','times new roman','FontSize',20)  % Set it to times
-set(h6, 'Position', [100 100 1500 800],'color','w');
-export_fig('AORBayesianLinearRegression','-png', '-nocrop', '-painters', h6);
-
+if (imageFlag)
+    h6 = figure(6); plotregression(ys3, m_new,'AOR Bayesian linear regressor (tapas)');
+    set(gca,'fontname','times new roman','FontSize',20)  % Set it to times
+    set(h6, 'Position', [100 100 1500 800],'color','w');
+    export_fig('AORBayesianLinearRegression','-png', '-nocrop', '-painters', h6);
+end
 %% Gaussian process (a non-parametric probabilistic regressor)
 
 x3 = chemicalInputs(:,tr.trainInd)';
 y3 = chemicalTargets(:,tr.trainInd)';
 covfunc = @covSEiso ;% { 'covSum', { 'covSEiso' } };
-likfunc = @likGauss; 
+likfunc = @likGauss;
 %sn = 0.1; hyp.lik = log(sn);
 hyp2.cov = [0 ; 0];
 hyp2.lik = log(0.1);
@@ -133,11 +145,12 @@ g.ymu = ymu;
 [g.r2 g.rmse] = rsquare(ys3, ymu);
 g.mae = mae(ys3, ymu);
 g.mse = mse(ys3, ymu);
-h7 = figure(7); plotregression(ys3, ymu,'AOR Gaussian process (a non-parametric probabilistic regressor)');
-set(gca,'fontname','times new roman','FontSize',20)  % Set it to times
-set(h7, 'Position', [100 100 1500 800],'color','w');
-export_fig('AORGaussianNonLinearRegression','-png', '-nocrop', '-painters', h7);
-
+if (imageFlag)
+    h7 = figure(7); plotregression(ys3, ymu,'AOR Gaussian process (a non-parametric probabilistic regressor)');
+    set(gca,'fontname','times new roman','FontSize',20)  % Set it to times
+    set(h7, 'Position', [100 100 1500 800],'color','w');
+    export_fig('AORGaussianNonLinearRegression','-png', '-nocrop', '-painters', h7);
+end
 %% ANNs
 % z = avgMuR1';
 % iijj=1;
@@ -145,27 +158,27 @@ export_fig('AORGaussianNonLinearRegression','-png', '-nocrop', '-painters', h7);
 %     inputNN3(iijj,3)=data(iijj).rest;
 %     inputNN3(iijj,1)=data(iijj).fric;
 %     inputNN3(iijj,2)=data(iijj).rf;
-%     
-% 
+%
+%
 %         inputNN3(iijj,4)=data(iijj).dt;
-% 
-%     
-% 
+%
+%
+%
 %         inputNN3(iijj,5)=data(iijj).dCylDp;
-% 
-% 
+%
+%
 %         inputNN3(iijj,6)=data(iijj).ctrlStress;
-% 
-% 
-%  
+%
+%
+%
 %         inputNN3(iijj,7)=data(iijj).shearperc;
-% 
+%
 %         inputNN3(iijj,8)=data(iijj).dens;
-% 
-% end   
-% 
+%
+% end
+%
 % inputNN4 = inputNN3';
-% 
+%
 net2=NNSave2{errorEstSumMaxIndex2(2),2}.net;
 % tr2=NNSave2{errorEstSumMaxIndex2(2),2}.tr;
 
@@ -175,32 +188,47 @@ yy = net2(x);
 n.mae = mae(ys4,yy(tr.testInd));
 n.mse = mse(ys4,yy(tr.testInd));
 
-h9 = figure(9);
-% plotregression(z(tr.testInd),yy(tr.testInd),'ANNs Regression');
-plotregression(ys4,yy(tr.testInd),'AOR ANNs Regression');
-set(gca,'fontname','times new roman','FontSize',20)  % Set it to times
-set(h9, 'Position', [100 100 1500 800],'color','w');
-export_fig('AORANNsRegression','-png', '-nocrop', '-painters', h9);
-
+if (imageFlag)
+    h9 = figure(9);
+    % plotregression(z(tr.testInd),yy(tr.testInd),'ANNs Regression');
+    plotregression(ys4,yy(tr.testInd),'AOR ANNs Regression');
+    set(gca,'fontname','times new roman','FontSize',20)  % Set it to times
+    set(h9, 'Position', [100 100 1500 800],'color','w');
+    export_fig('AORANNsRegression','-png', '-nocrop', '-painters', h9);
+end
 %% Statistics on test samples errors
 
 qNames = fieldnames(q);
 i = 1;
-for loopIndex = 9:numel(qNames) 
+for loopIndex = 9:numel(qNames)
     StatMatrix(i,1) = q.(qNames{loopIndex});
     i = i + 1;
 end
 
 i = 1;
-gNames = fieldnames(g); 
-for loopIndex = 8:numel(gNames) 
+gNames = fieldnames(g);
+for loopIndex = 8:numel(gNames)
     StatMatrix(i,2) = g.(gNames{loopIndex});
     i = i + 1;
 end
 
-nNames = fieldnames(n); 
-for loopIndex = 1:numel(nNames) 
+nNames = fieldnames(n);
+for loopIndex = 1:numel(nNames)
     StatMatrix(loopIndex,3) = n.(nNames{loopIndex});
 end
 
 % save -v7.3 % radarPlotAORSinterfine0_1rangePirker1dot0EntireRange2PlotMultipleRegressions.mat
+
+if (maxEval)
+    data2 = gloriaAugustaSchulzeNN([2,3,4,7],:)';
+    
+    Max(1,2) = max(data2(:,1));
+    
+    Max(2,2) = max(data2(:,2));
+    
+    Max(3,2) = max(data2(:,3));
+    
+    Max(4,2) = max(data2(:,4));
+    
+    save maxEval2.mat Max
+end

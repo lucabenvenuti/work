@@ -11,7 +11,7 @@ clear all
 close all
 clc
 if (isunix)
-   % addpath('/mnt/DATA/liggghts/work/shearCell/matlab/exportFig');
+    % addpath('/mnt/DATA/liggghts/work/shearCell/matlab/exportFig');
     addpath(genpath('/mnt/DATA/liggghts/work/shearCell/matlab'));
     %addpath(genpath('/mnt/DATA/liggghts/work/shearCell/matlab/gpml'));
     load /mnt/benvenutiPFMDaten/simulations/shearCell/sinterFineMatlabData/radarPlot10070sinterfine0_1range.mat
@@ -34,6 +34,11 @@ ys4 = t(tr.testInd);
 
 clearvars x2 zz2
 
+imageFlag = false;
+
+maxEval = true;
+
+%%
 if (false)
     % Choose a Training Function
     % For a list of all training functions type: help nntrain
@@ -107,14 +112,15 @@ ys3 = ys4';
 [q.r2 q.rmse] = rsquare(ys3, m_new);
 q.mae = mae(ys3, m_new);
 q.mse = mse(ys3, m_new);
-% h6 = figure(6); 
+% h6 = figure(6);
 %plotregression(ys3, m_new,'SCT Bayesian linear regressor (tapas)');
-titleName = 'BayesianLinearRegressor';
-[ m_new_reg, h6 ] = plotRegressionFun( 6, titleName, ys3, m_new, 0.92, 0.093 );
-
+if (imageFlag)
+    titleName = 'BayesianLinearRegressor';
+    [ m_new_reg, h6 ] = plotRegressionFun( 6, titleName, ys3, m_new, 0.92, 0.093 );
+end
 
 % m_new_reg = ys3*0.92 + 0.093;
-% 
+%
 % plot(ys3, m_new,'ok', ys3, m_new_reg,'b');
 % xlim([min(ys3),max(ys3)]);
 % ylim([min(m_new),max(m_new)]);
@@ -134,7 +140,7 @@ titleName = 'BayesianLinearRegressor';
 x3 = chemicalInputs(:,tr.trainInd)';
 y3 = chemicalTargets(:,tr.trainInd)';
 covfunc = @covSEiso ;% { 'covSum', { 'covSEiso' } };
-likfunc = @likGauss; 
+likfunc = @likGauss;
 %sn = 0.1; hyp.lik = log(sn);
 hyp2.cov = [0 ; 0];
 hyp2.lik = log(0.1);
@@ -150,10 +156,10 @@ g.ymu = ymu;
 [g.r2 g.rmse] = rsquare(ys3, ymu);
 g.mae = mae(ys3, ymu);
 g.mse = mse(ys3, ymu);
-
-titleName = 'GaussianNonLinearRegressor';
-[ ymu_new, h7 ] = plotRegressionFun( 7, titleName, ys3, ymu, 0.91, 0.1 );
-
+if (imageFlag)
+    titleName = 'GaussianNonLinearRegressor';
+    [ ymu_new, h7 ] = plotRegressionFun( 7, titleName, ys3, ymu, 0.91, 0.1 );
+end
 
 % h7 = figure(7); plotregression(ys3, ymu,'SCT Gaussian process (a non-parametric probabilistic regressor)');
 % set(gca,'fontname','times new roman','FontSize',20)  % Set it to times
@@ -167,27 +173,27 @@ titleName = 'GaussianNonLinearRegressor';
 %     inputNN3(iijj,3)=data(iijj).rest;
 %     inputNN3(iijj,1)=data(iijj).fric;
 %     inputNN3(iijj,2)=data(iijj).rf;
-%     
-% 
+%
+%
 %         inputNN3(iijj,4)=data(iijj).dt;
-% 
-%     
-% 
+%
+%
+%
 %         inputNN3(iijj,5)=data(iijj).dCylDp;
-% 
-% 
+%
+%
 %         inputNN3(iijj,6)=data(iijj).ctrlStress;
-% 
-% 
-%  
+%
+%
+%
 %         inputNN3(iijj,7)=data(iijj).shearperc;
-% 
+%
 %         inputNN3(iijj,8)=data(iijj).dens;
-% 
-% end   
-% 
+%
+% end
+%
 % inputNN4 = inputNN3';
-% 
+%
 net2=NNSave2{errorEstSumMaxIndex2(2),2}.net;
 % tr2=NNSave2{errorEstSumMaxIndex2(2),2}.tr;
 
@@ -196,10 +202,10 @@ yy = net2(x);
 [n.r2 n.rmse] = rsquare(ys4,yy(tr.testInd));
 n.mae = mae(ys4,yy(tr.testInd));
 n.mse = mse(ys4,yy(tr.testInd));
-
-titleName = 'ANNNonLinearRegressor';
-[ yy_new, h9 ] = plotRegressionFun( 9, titleName, ys4, yy(tr.testInd), 1.0, 0.017 );
-
+if (imageFlag)
+    titleName = 'ANNNonLinearRegressor';
+    [ yy_new, h9 ] = plotRegressionFun( 9, titleName, ys4, yy(tr.testInd), 1.0, 0.017 );
+end
 % h9 = figure(9);
 % % plotregression(z(tr.testInd),yy(tr.testInd),'ANNs Regression');
 % plotregression(ys4,yy(tr.testInd),'SCT ANNs Regression');
@@ -211,21 +217,34 @@ titleName = 'ANNNonLinearRegressor';
 
 qNames = fieldnames(q);
 i = 1;
-for loopIndex = 9:numel(qNames) 
+for loopIndex = 9:numel(qNames)
     StatMatrix(i,1) = q.(qNames{loopIndex});
     i = i + 1;
 end
 
 i = 1;
-gNames = fieldnames(g); 
-for loopIndex = 8:numel(gNames) 
+gNames = fieldnames(g);
+for loopIndex = 8:numel(gNames)
     StatMatrix(i,2) = g.(gNames{loopIndex});
     i = i + 1;
 end
 
-nNames = fieldnames(n); 
-for loopIndex = 1:numel(nNames) 
+nNames = fieldnames(n);
+for loopIndex = 1:numel(nNames)
     StatMatrix(loopIndex,3) = n.(nNames{loopIndex});
 end
 
-
+%%
+if (maxEval)
+    data2 = gloriaAugustaSchulzeNN([2,3,4,9],:)';
+    
+    Max(1,1) = max(data2(:,1));
+    
+    Max(2,1) = max(data2(:,2));
+    
+    Max(3,1) = max(data2(:,3));
+    
+    Max(4,1) = max(data2(:,4));
+    
+    save maxEval.mat Max
+end

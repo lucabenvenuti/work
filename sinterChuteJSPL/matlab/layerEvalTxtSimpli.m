@@ -638,3 +638,11 @@ comp(3,3) = rS4percLay8EndPerc;
 
 rS6percLay8EndPerc = rS6percLay8(end) / totEndPercLay8;
 comp(4,3) = rS6percLay8EndPerc;
+
+h20 = figure(20);
+H = bar([6, 7, 8], comp','stacked','DisplayName','comp');
+xlabel('Layer','fontname','times new roman','FontSize',20);
+legend('rS1 = 0.015 m','rS2 = 0.025 m','rS4 = 0.050 m','rS6 = 0.125 m','Location', 'NorthEast');
+set(gca,'fontname','times new roman','FontSize',20);
+set(h20, 'Position', [100 100 1500 800],'color','w');
+export_fig('SinterBarPlot','-png', '-nocrop', '-painters', h20);
