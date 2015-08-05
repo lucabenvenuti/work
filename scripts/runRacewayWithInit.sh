@@ -40,7 +40,7 @@ MPI_OPTIONS="-np $PROCS"
 
 TOOLKIT_DIR=$HOME/workspace/src/ParticulateFlow/toolkit
 
-CASE_DIR=$PBS_O_WORKDIR/../raceway2
+CASE_DIR=$PBS_O_WORKDIR/../raceway
 
 mkdir -p $CASE_DIR/DEM/post
 
