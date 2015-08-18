@@ -11,7 +11,7 @@ unitSysDefault = 'si';  % 'si' or 'cgs'
 if (isunix)
     sim_dir = '/mnt/scratchPFMDaten/Luca/testPolidispersityAorCokeCoarseCokeFineSinterFine';
 else
-    sim_dir = 'S:\Luca\20150721resultsAoR';
+    sim_dir = 'R:\simulations\aor\resultsAorStatic01sinterfine_reducedPolydispersity\sim002_sinterfine_reducedPolydispersity';
 end
 
 filepattern = 'area_*.txt'; % e.g. 'force.*.txt' %Andi
@@ -45,7 +45,7 @@ end
 
 %doNN
 NNFlag = false;
-polidispersity_flag = true; %
+polidispersity_flag = false; %
 hiddenLayerSizeVector = 5:40;
 
 % save images
