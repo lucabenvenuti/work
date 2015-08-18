@@ -7,8 +7,8 @@
 #PBS -N racewayCFDEM
 #PBS -o ${PBS_JOBID}__racewayCFDEM__${PBS_JOBID}.out
 #PBS -j oe
-#PBS -l nodes=4:ppn=8
-#PBS -l walltime=48:00:00
+#PBS -l nodes=1:ppn=1
+#PBS -l walltime=1:00:00
 #PBS -M luca.benvenuti@jku.at
 #PBS -m bea
 
@@ -32,9 +32,9 @@ if [ ! -f $SCRIPT_NAME  ]
     exit -1
 fi
 
-XPROCS=2
-YPROCS=4
-ZPROCS=4
+XPROCS=1
+YPROCS=1
+ZPROCS=1
 PROCS=$(($XPROCS*$YPROCS*$ZPROCS))
 MPI_OPTIONS="-np $PROCS"
 
@@ -55,7 +55,7 @@ if [ ! -f $RESTART_FILE_NAME  ]
     module load mvapich2 liggghts/PFM/develop
     cd $CASE_DIR/DEM
     VARS="-var XPROCS $XPROCS -var YPROCS $YPROCS -var ZPROCS $ZPROCS"
-    mpiexec $MPI_OPTIONS liggghts -in in.liggghts_init $VARS
+    #mpiexec $MPI_OPTIONS liggghts -in in.liggghts_init $VARS
     module unload mvapich2 liggghts/PFM/develop
     module load openmpi
 fi
