@@ -7,8 +7,8 @@
 #PBS -N racewayCFDEM
 #PBS -o ${PBS_JOBID}__racewayCFDEM__${PBS_JOBID}.out
 #PBS -j oe
-#PBS -l nodes=1:ppn=1
-#PBS -l walltime=1:00:00
+#PBS -l nodes=4:ppn=8
+#PBS -l walltime=72:00:00
 #PBS -M luca.benvenuti@jku.at
 #PBS -m bea
 
@@ -32,13 +32,13 @@ if [ ! -f $SCRIPT_NAME  ]
     exit -1
 fi
 
-XPROCS=1
-YPROCS=1
-ZPROCS=1
+XPROCS=4
+YPROCS=4
+ZPROCS=2
 PROCS=$(($XPROCS*$YPROCS*$ZPROCS))
 MPI_OPTIONS="-np $PROCS"
 
-TOOLKIT_DIR=$HOME/workspace/src/ParticulateFlow/toolkit
+TOOLKIT_DIR=$HOME/lise_workspace/src/ParticulateFlow/toolkit
 
 CASE_DIR=$PBS_O_WORKDIR/../raceway
 
@@ -55,7 +55,7 @@ if [ ! -f $RESTART_FILE_NAME  ]
     module load mvapich2 liggghts/PFM/develop
     cd $CASE_DIR/DEM
     VARS="-var XPROCS $XPROCS -var YPROCS $YPROCS -var ZPROCS $ZPROCS"
-    #mpiexec $MPI_OPTIONS liggghts -in in.liggghts_init $VARS
+    mpiexec $MPI_OPTIONS liggghts -in in.liggghts_init $VARS
     module unload mvapich2 liggghts/PFM/develop
     module load openmpi
 fi
@@ -66,9 +66,9 @@ source bashrc
 cd $CASE_DIR/CFD
 
 date
-#decomposePar
+decomposePar
 date
-#mpirun $MPI_OPTIONS cfdemSolverPiso -parallel
-#date
+mpirun $MPI_OPTIONS cfdemSolverPiso -parallel
+date
 reconstructPar
 date
