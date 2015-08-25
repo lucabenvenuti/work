@@ -16,10 +16,10 @@ clc
 
 if (isunix)
     %filename =  '/mnt/scratchPFMDaten/Luca/20150729Lise/workTest/sinterChuteJSPL/postMass/countRate2.txt';
-    filename = '/mnt/scratchPFMDaten/Luca/20150723Lise/workTest/sinterChuteJSPLdevelopDistroSimpli/postMass/countRate2.txt';
+    filename = '/mnt/scratchPFMDaten/Luca/20150803Lise/workTest/sinterChuteJSPL/postMass/countRate2.txt';
     addpath('/mnt/DATA/liggghts/work/shearCell/matlab/exportFig');
 else
-    filename = 'S:\Luca\20150723Lise\workTest\sinterChuteJSPLdevelopDistroSimpli\postMass\countRate2.txt';
+    filename = 'S:\Luca\20150803Lise\workTest\sinterChuteJSPL\postMass\countRate2.txt';
     addpath('E:\liggghts\work\shearCell\matlab\exportFig');
 end
 
@@ -371,7 +371,7 @@ clearvars data raw cellVectors;
 
 
 
-formatOut = 'yyyy-mm-dd-HH-MM-SS';
+formatOut = 'yyyymmddHHMMSS';
 date1 = datestr(now,formatOut);
 
 %%
@@ -389,7 +389,7 @@ if (imageFlagShort)
     set(h6, 'Position', [100 100 1500 800],'color','w');
     hold off;
     if (~isunix)
-        export_fig(['rS6',date1],'-jpg', '-nocrop', h6);
+        export_fig(['094rS6',date1],'-jpg', '-nocrop', h6);
     end
     
     h8 = figure(8);
@@ -402,7 +402,7 @@ if (imageFlagShort)
     set(h8, 'Position', [100 100 1500 800],'color','w');
     hold off;
     if (~isunix)
-        export_fig(['rS4',date1],'-jpg', '-nocrop', h8);
+        export_fig(['093rS4',date1],'-jpg', '-nocrop', h8);
     end
     
     h10 = figure(10);
@@ -415,7 +415,7 @@ if (imageFlagShort)
     set(h10, 'Position', [100 100 1500 800],'color','w');
     hold off;
     if (~isunix)
-        export_fig(['rS2',date1],'-jpg', '-nocrop', h10);
+        export_fig(['092rS2',date1],'-jpg', '-nocrop', h10);
     end
     
     h11 = figure(11);
@@ -428,7 +428,7 @@ if (imageFlagShort)
     set(h11, 'Position', [100 100 1500 800],'color','w');
     hold off;
     if (~isunix)
-        export_fig(['rS1',date1],'-jpg', '-nocrop', h11);
+        export_fig(['091rS1',date1],'-jpg', '-nocrop', h11);
     end
 end
 %%
@@ -645,4 +645,4 @@ xlabel('Layer','fontname','times new roman','FontSize',20);
 legend('rS1 = 0.015 m','rS2 = 0.025 m','rS4 = 0.050 m','rS6 = 0.125 m','Location', 'NorthEast');
 set(gca,'fontname','times new roman','FontSize',20);
 set(h20, 'Position', [100 100 1500 800],'color','w');
-export_fig('SinterBarPlot','-png', '-nocrop', '-painters', h20);
+export_fig(['095SinterBarPlot',date1],'-png', '-nocrop', '-painters', h20);
