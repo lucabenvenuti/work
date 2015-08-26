@@ -71,10 +71,10 @@ variable	rS5 equal 0.1000
 variable	rS6 equal 0.1250
 
 #mass % for diameter fractions
-variable	mS1 equal 0.150 #new
-variable	mS2 equal 0.250 #new
-variable	mS4 equal 0.250 #new
-variable	mS6 equal 0.350 #new
+variable	mS1 equal 0.300 #new 26 aug. 2015
+variable	mS2 equal 0.250 #new 26 aug. 2015
+variable	mS4 equal 0.250 #new 26 aug. 2015
+variable	mS6 equal 0.200 #new 26 aug. 2015
 
 #*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=
 
