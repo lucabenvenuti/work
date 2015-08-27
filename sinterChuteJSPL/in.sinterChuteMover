@@ -25,7 +25,7 @@ shell   	mkdir post_main
 shell		mkdir postMass
 shell   	mkdir logs
 shell		mkdir postMassRem
-#shell		mkdir post_secondBatch
+shell		mkdir post_mover
 # writing log file to post folder
 log     logs/log_omp${OMPON}_runTime${runTime}.txt
 
@@ -185,10 +185,8 @@ compute_modify	thermo_temp dynamic yes
 #write restart files
 restart		${saveRestSteps} ./restart_mover/sinterChuteRunMover_${OMPON}*.restart
 run		1
-dump		dmp all custom ${saveIntSteps} ./post_main/dump*.sinterChuteMover id type x y z vx vy vz fx fy fz omegax omegay omegaz radius 
-#dump 		dmp all custom/vtk ${saveIntSteps} post_main/sinterChute*.vtu id type x y z vx vy vz fx fy fz omegax omegay omegaz radius 
-#dump		dmp2 all custom ${saveIntSteps} post_main/dump*.evalout id type x y z vx vy vz radius # I think you could comment this dump?! I don't think you need it.
-dump 		dumpstress all mesh/gran/VTK ${saveIntSteps} post_main/dumpMover*.vtk stress cad1 cad2 &
+dump		dmp all custom ${saveIntSteps} ./post_mover/dump*.sinterChuteMover id type x y z vx vy vz fx fy fz omegax omegay omegaz radius 
+dump 		dumpstress all mesh/gran/VTK ${saveIntSteps} post_mover/dumpMover*.vtk stress cad1 cad2 &
 cad3 cad4 cad12 cad20 cad21 cad22 cad23 cad24 cad25 cad26 cad27
 
 ####### Output Mass #########
