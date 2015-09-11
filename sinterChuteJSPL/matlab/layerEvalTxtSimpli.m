@@ -16,7 +16,7 @@ clc
 
 if (isunix)
     %filename =  '/mnt/scratchPFMDaten/Luca/20150729Lise/workTest/sinterChuteJSPL/postMass/countRate2.txt';
-    filename = '/mnt/scratchPFMDaten/Luca/20150803Lise/workTest/sinterChuteJSPL/postMass/countRate2.txt';
+    filename = '/mnt/scratchPFMDaten/Luca/20150909Lise/workTest/sinterChuteJSPL2/postMass/countRate2.txt';
     addpath('/mnt/DATA/liggghts/work/shearCell/matlab/exportFig');
 else
     filename = 'S:\Luca\20150803Lise\workTest\sinterChuteJSPL\postMass\countRate2.txt';
@@ -388,9 +388,9 @@ if (imageFlagShort)
     set(gca,'fontname','times new roman','FontSize',20)
     set(h6, 'Position', [100 100 1500 800],'color','w');
     hold off;
-    if (~isunix)
-        export_fig(['094rS6',date1],'-jpg', '-nocrop', h6);
-    end
+    %if (~isunix)
+        export_fig(['094rS6',date1],'-png', '-nocrop', '-painters', h6);
+    %end
     
     h8 = figure(8);
     plot(asimulatedTime,rS4percLay6,'DisplayName','rS4percLay6');hold all;plot(asimulatedTime,rS4percLay7,'DisplayName','rS4percLay7');plot(asimulatedTime,rS4percLay8,'DisplayName','rS4percLay8');
@@ -401,9 +401,9 @@ if (imageFlagShort)
     set(gca,'fontname','times new roman','FontSize',20)
     set(h8, 'Position', [100 100 1500 800],'color','w');
     hold off;
-    if (~isunix)
-        export_fig(['093rS4',date1],'-jpg', '-nocrop', h8);
-    end
+    %if (~isunix)
+        export_fig(['093rS4',date1],'-png', '-nocrop', '-painters', h8);
+    %end
     
     h10 = figure(10);
     plot(asimulatedTime,rS2percLay6,'DisplayName','rS2percLay6');hold all;plot(asimulatedTime,rS2percLay7,'DisplayName','rS2percLay7');plot(asimulatedTime,rS2percLay8,'DisplayName','rS2percLay8');
@@ -414,9 +414,9 @@ if (imageFlagShort)
     set(gca,'fontname','times new roman','FontSize',20)
     set(h10, 'Position', [100 100 1500 800],'color','w');
     hold off;
-    if (~isunix)
-        export_fig(['092rS2',date1],'-jpg', '-nocrop', h10);
-    end
+    %if (~isunix)
+        export_fig(['092rS2',date1],'-png', '-nocrop', '-painters', h10);
+    %end
     
     h11 = figure(11);
     plot(asimulatedTime,rS1percLay6,'DisplayName','rS1percLay6');hold all;plot(asimulatedTime,rS1percLay7,'DisplayName','rS1percLay7');plot(asimulatedTime,rS1percLay8,'DisplayName','rS1percLay8');
@@ -427,9 +427,9 @@ if (imageFlagShort)
     set(gca,'fontname','times new roman','FontSize',20)
     set(h11, 'Position', [100 100 1500 800],'color','w');
     hold off;
-    if (~isunix)
-        export_fig(['091rS1',date1],'-jpg', '-nocrop', h11);
-    end
+   % if (~isunix)
+        export_fig(['091rS1',date1],'-png', '-nocrop', '-painters', h11);
+   % end
 end
 %%
 if (imageFlagAll)
@@ -639,8 +639,22 @@ comp(3,3) = rS4percLay8EndPerc;
 rS6percLay8EndPerc = rS6percLay8(end) / totEndPercLay8;
 comp(4,3) = rS6percLay8EndPerc;
 
+totEndPercLay1 = rS1percLay1(end) + rS2percLay1(end) + rS4percLay1(end) + rS6percLay1(end);
+
+rS1percLay1EndPerc = rS1percLay1(end) / totEndPercLay1;
+comp(1,4) = rS1percLay1EndPerc;
+
+rS2percLay1EndPerc = rS2percLay1(end) / totEndPercLay1;
+comp(2,4) = rS2percLay1EndPerc;
+
+rS4percLay1EndPerc = rS4percLay1(end) / totEndPercLay1;
+comp(3,4) = rS4percLay1EndPerc;
+
+rS6percLay1EndPerc = rS6percLay1(end) / totEndPercLay1;
+comp(4,4) = rS6percLay1EndPerc;
+
 h20 = figure(20);
-H = bar([6, 7, 8], comp','stacked','DisplayName','comp');
+H = bar([6, 7, 8, 9], comp','stacked','DisplayName','comp');
 xlabel('Layer','fontname','times new roman','FontSize',20);
 legend('rS1 = 0.015 m','rS2 = 0.025 m','rS4 = 0.050 m','rS6 = 0.125 m','Location', 'NorthEast');
 set(gca,'fontname','times new roman','FontSize',20);
