@@ -6,7 +6,7 @@
 #PBS -o ${PBS_JOBID}__outSinterChuteJSPL__${PBS_JOBID}.out
 #PBS -j oe
 #PBS -l nodes=8:ppn=8
-#PBS -l walltime=72:00:00
+#PBS -l walltime=240:00:00
 #PBS -M luca.benvenuti@jku.at
 #PBS -m bea
 
