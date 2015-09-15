@@ -1,0 +1,85 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  1.6                                   |
+|   \\  /    A nd           | Web:      http://www.OpenFOAM.org               |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volVectorField;
+    object      U;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 1 -1 0 0 0 0];
+
+internalField   uniform (0 0 0);
+
+boundaryField
+{
+    top
+    {
+        type            zeroGradient;
+    }
+
+    bottom
+    {
+        type           fixedValue;
+        value          uniform (0 0 0);
+    }
+
+    fixedWalls
+    {
+        type           fixedValue;
+        value          uniform (0 0 0);
+    }
+    inlet
+    {
+        /*type            fixedValue;
+        value           uniform (0 0 0);*/
+        /*type            groovyBC;
+        variables       "Uin=vector(steps,0,0);";
+        valueExpression "(Uin/voidfraction)";
+        value           uniform (0 0 0);
+        timelines (
+        {
+           name steps;
+           outOfBounds clamp;
+           fileName "$FOAM_CASE/steps.data";
+        }
+        );*/
+        type            uniformFixedValue;
+        uniformValue     table
+        (
+            (0.000  (0 0 0))
+            (0.01   (0 0 0))
+            (0.15   (20 0 0))
+            (0.25   (40 0 0))
+            (0.35   (60 0 0))
+            (0.45   (80 0 0))
+            (0.55   (100 0 0))
+        );
+    }
+    internal
+    {
+        type            slip;
+    }
+
+    sides
+    {
+        //type            zeroGradient;
+        
+        type             slip;//fixedValue;//symmetryPlane;//
+        //value           uniform (0 0 0);
+    }
+    sink
+    {
+        type           fixedValue;
+        value          uniform (0 0 0);
+    }
+}
+
+// ************************************************************************* //

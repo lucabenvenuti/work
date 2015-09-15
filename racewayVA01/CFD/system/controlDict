@@ -1,0 +1,81 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  1.6                                   |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      controlDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+application     interDyMFoam;
+
+startFrom       startTime;
+
+startTime       0;
+
+stopAt          endTime;
+
+endTime         20.0;
+
+deltaT        	0.0001;
+
+writeControl    adjustableRunTime;
+
+writeInterval   0.5;
+
+purgeWrite      0;
+
+writeFormat     binary;
+
+writePrecision  6;
+
+writeCompression uncompressed;
+
+timeFormat      general;
+
+timePrecision   6;
+
+runTimeModifiable yes;
+
+adjustTimeStep  no;
+
+maxCo           1;
+
+maxDeltaT       1;
+
+//libs ( "libgroovyBC.so" "libfiniteVolumeCFDEM.so");
+
+// ***************************** take probes ********************************//
+
+functions
+{
+    probes
+    {
+        type        probes;
+        // Where to load it from
+        functionObjectLibs ( "libsampling.so" );
+        // Name of the directory for probe data
+        name        probes;
+        probeLocations
+        (
+            (0.00 0.00 0.00)
+            (0.3 0.00 0.00)
+            (0.3 0.00 0.5)
+            (0.3 0.00 1.0)
+        );
+
+        // Fields to be probed
+        fields ( p );
+
+        outputControl   timeStep; //outputTime;
+        outputInterval  1;
+    }
+}
