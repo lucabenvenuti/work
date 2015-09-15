@@ -67,7 +67,7 @@ fix		gravi all gravity 9.81 vector 0.0 0.0 -1.0
 
 fix         bottom all mesh/surface file ../DEM/stl_files/bottom.stl type 1
 fix         wall all mesh/surface file ../DEM/stl_files/wall.stl type 1
-fix         frictionless all mesh/surface file ../DEM/stl_files/frictionless.stl type 2    
+#fix         frictionless all mesh/surface file ../DEM/stl_files/frictionless.stl type 2    
 fix         inlet all mesh/surface file ../DEM/stl_files/inlet.stl type 1 
 
 
@@ -75,7 +75,7 @@ fix         inlet all mesh/surface file ../DEM/stl_files/inlet.stl type 1
 fix servoTop all mesh/surface/stress/servo file ../DEM/stl_files/top.stl type 2 scale 1.0 move 0.0 0.01 -0.01 com 0.14 0.0 2.2 ctrlPV force axis 0. 0. 1. target_val ${ctrlForce1} vel_max ${maxVel} kp ${ctrlKp} ki ${ctrlKi} kd ${ctrlKd} #verbose no
 
 #fix             granwalls all wall/gran/hooke/history mesh n_meshes 4 meshes bottom wall frictionless servoTop  
-fix granwalls all wall/gran model hooke tangential history mesh n_meshes 5 meshes bottom wall frictionless inlet servoTop
+#fix granwalls all wall/gran model hooke tangential history mesh n_meshes 5 meshes bottom wall frictionless inlet servoTop
 
 
 # change the particles density
