@@ -19,7 +19,7 @@ if (isunix)
     filename = '/mnt/scratchPFMDaten/Luca/20150909Lise/workTest/sinterChuteJSPL2/postMass/countRate2.txt';
     addpath('/mnt/DATA/liggghts/work/shearCell/matlab/exportFig');
 else
-    filename = 'S:\Luca\20150803Lise\workTest\sinterChuteJSPL\postMass\countRate2.txt';
+    filename = 'S:\Luca\20150919Lise\workTest\sinterChuteJSPL\postMass\countRate2.txt';
     addpath('E:\liggghts\work\shearCell\matlab\exportFig');
 end
 
@@ -597,64 +597,125 @@ if (imageFlagAll)
 end
 %%
 
+totEndPercLay1 = rS1percLay1(end) + rS2percLay1(end) + rS4percLay1(end) + rS6percLay1(end);
+
+rS1percLay1EndPerc = rS1percLay1(end) / totEndPercLay1;
+comp(1,1) = rS1percLay1EndPerc;
+
+rS2percLay1EndPerc = rS2percLay1(end) / totEndPercLay1;
+comp(2,1) = rS2percLay1EndPerc;
+
+rS4percLay1EndPerc = rS4percLay1(end) / totEndPercLay1;
+comp(3,1) = rS4percLay1EndPerc;
+
+rS6percLay1EndPerc = rS6percLay1(end) / totEndPercLay1;
+comp(4,1) = rS6percLay1EndPerc;
+
+
+totEndpercLay2 = rS1percLay2(end) + rS2percLay2(end) + rS4percLay2(end) + rS6percLay2(end);
+
+rS1percLay2EndPerc = rS1percLay2(end) / totEndpercLay2;
+comp(1,2) = rS1percLay2EndPerc;
+
+rS2percLay2EndPerc = rS2percLay2(end) / totEndpercLay2;
+comp(2,2) = rS2percLay2EndPerc;
+
+rS4percLay2EndPerc = rS4percLay2(end) / totEndpercLay2;
+comp(3,2) = rS4percLay2EndPerc;
+
+rS6percLay2EndPerc = rS6percLay2(end) / totEndpercLay2;
+comp(4,2) = rS6percLay2EndPerc;
+
+
+totEndpercLay3 = rS1percLay3(end) + rS2percLay3(end) + rS4percLay3(end) + rS6percLay3(end);
+
+rS1percLay3EndPerc = rS1percLay3(end) / totEndpercLay3;
+comp(1,3) = rS1percLay3EndPerc;
+
+rS2percLay3EndPerc = rS2percLay3(end) / totEndpercLay3;
+comp(2,3) = rS2percLay3EndPerc;
+
+rS4percLay3EndPerc = rS4percLay3(end) / totEndpercLay3;
+comp(3,3) = rS4percLay3EndPerc;
+
+rS6percLay3EndPerc = rS6percLay3(end) / totEndpercLay3;
+comp(4,3) = rS6percLay3EndPerc;
+
+
+totEndpercLay4 = rS1percLay4(end) + rS2percLay4(end) + rS4percLay4(end) + rS6percLay4(end);
+
+rS1percLay4EndPerc = rS1percLay4(end) / totEndpercLay4;
+comp(1,4) = rS1percLay4EndPerc;
+
+rS2percLay4EndPerc = rS2percLay4(end) / totEndpercLay4;
+comp(2,4) = rS2percLay4EndPerc;
+
+rS4percLay4EndPerc = rS4percLay4(end) / totEndpercLay4;
+comp(3,4) = rS4percLay4EndPerc;
+
+rS6percLay4EndPerc = rS6percLay4(end) / totEndpercLay4;
+comp(4,4) = rS6percLay4EndPerc;
+
+
+comp(1,5) = 0;
+
+
+comp(2,5) = 0;
+
+
+comp(3,5) = 0;
+
+
+comp(4,5) = 0;
+
+
 totEndPercLay6 = rS1percLay6(end) + rS2percLay6(end) + rS4percLay6(end) + rS6percLay6(end);
 
 rS1percLay6EndPerc = rS1percLay6(end) / totEndPercLay6;
-comp(1,1) = rS1percLay6EndPerc;
+comp(1,6) = rS1percLay6EndPerc;
 
 rS2percLay6EndPerc = rS2percLay6(end) / totEndPercLay6;
-comp(2,1) = rS2percLay6EndPerc;
+comp(2,6) = rS2percLay6EndPerc;
 
 rS4percLay6EndPerc = rS4percLay6(end) / totEndPercLay6;
-comp(3,1) = rS4percLay6EndPerc;
+comp(3,6) = rS4percLay6EndPerc;
 
 rS6percLay6EndPerc = rS6percLay6(end) / totEndPercLay6;
-comp(4,1) = rS6percLay6EndPerc;
+comp(4,6) = rS6percLay6EndPerc;
 
 totEndPercLay7 = rS1percLay7(end) + rS2percLay7(end) + rS4percLay7(end) + rS6percLay7(end);
 
 rS1percLay7EndPerc = rS1percLay7(end) / totEndPercLay7;
-comp(1,2) = rS1percLay7EndPerc;
+comp(1,7) = rS1percLay7EndPerc;
 
 rS2percLay7EndPerc = rS2percLay7(end) / totEndPercLay7;
-comp(2,2) = rS2percLay7EndPerc;
+comp(2,7) = rS2percLay7EndPerc;
 
 rS4percLay7EndPerc = rS4percLay7(end) / totEndPercLay7;
-comp(3,2) = rS4percLay7EndPerc;
+comp(3,7) = rS4percLay7EndPerc;
 
 rS6percLay7EndPerc = rS6percLay7(end) / totEndPercLay7;
-comp(4,2) = rS6percLay7EndPerc;
+comp(4,7) = rS6percLay7EndPerc;
 
 totEndPercLay8 = rS1percLay8(end) + rS2percLay8(end) + rS4percLay8(end) + rS6percLay8(end);
 
 rS1percLay8EndPerc = rS1percLay8(end) / totEndPercLay8;
-comp(1,3) = rS1percLay8EndPerc;
+comp(1,8) = rS1percLay8EndPerc;
 
 rS2percLay8EndPerc = rS2percLay8(end) / totEndPercLay8;
-comp(2,3) = rS2percLay8EndPerc;
+comp(2,8) = rS2percLay8EndPerc;
 
 rS4percLay8EndPerc = rS4percLay8(end) / totEndPercLay8;
-comp(3,3) = rS4percLay8EndPerc;
+comp(3,8) = rS4percLay8EndPerc;
 
 rS6percLay8EndPerc = rS6percLay8(end) / totEndPercLay8;
-comp(4,3) = rS6percLay8EndPerc;
+comp(4,8) = rS6percLay8EndPerc;
 
-totEndPercLay1 = rS1percLay1(end) + rS2percLay1(end) + rS4percLay1(end) + rS6percLay1(end);
 
-rS1percLay1EndPerc = rS1percLay1(end) / totEndPercLay1;
-comp(1,4) = rS1percLay1EndPerc;
 
-rS2percLay1EndPerc = rS2percLay1(end) / totEndPercLay1;
-comp(2,4) = rS2percLay1EndPerc;
-
-rS4percLay1EndPerc = rS4percLay1(end) / totEndPercLay1;
-comp(3,4) = rS4percLay1EndPerc;
-
-rS6percLay1EndPerc = rS6percLay1(end) / totEndPercLay1;
-comp(4,4) = rS6percLay1EndPerc;
 
 h20 = figure(20);
-H = bar([6, 7, 8, 9], comp','stacked','DisplayName','comp');
+H = bar([1:8], comp','stacked','DisplayName','comp');
 xlabel('Layer','fontname','times new roman','FontSize',20);
 legend('rS1 = 0.015 m','rS2 = 0.025 m','rS4 = 0.050 m','rS6 = 0.125 m','Location', 'NorthEast');
 set(gca,'fontname','times new roman','FontSize',20);
