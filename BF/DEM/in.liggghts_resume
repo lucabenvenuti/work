@@ -82,15 +82,9 @@ fix servoTop all mesh/surface/stress/servo file ../DEM/stl_files/surface_top.stl
 
 # spherical removal area close to raceway: problem with mass rate
 
-region      delSphereCentre sphere 0.4 0.0 0.1 0.25 units box
-region      delSphereLeft sphere 0.49 0.72 0.1 0.25 units box
-region      delSphereRight sphere 0.49 -0.72 0.1 0.25 units box
+region      delSphereCentre sphere 0.55 0.0 0.0 0.25 units box
 fix         deleteCentre all remove nevery 500 massrate ${CentermassPerSec} style shrink &
 			delete_below 0.008 seed 10007143 region delSphereCentre atomtype 1
-fix         deleteLeft all remove nevery 500 massrate ${massPerSec} style delete seed 10007143 & 
-			region delSphereLeft atomtype 1
-fix         deleteRight all remove nevery 500 massrate ${massPerSec} style delete seed 10007143 &
-			region delSphereRight atomtype 1
 
 fix lb all balance 1000 xyz 10 1.05 out tmp.balance
 
