@@ -57,7 +57,8 @@ fix 		m1 all property/global youngsModulus peratomtype ${yM} ${yM}
 fix 		m2 all property/global poissonsRatio peratomtype ${pR} ${pR}
 fix 		m3 all property/global coefficientRestitution peratomtypepair 2 ${rest} ${noRest} ${noRest} ${noRest}
 fix 		m4 all property/global coefficientFriction peratomtypepair 2 ${fric} ${noFric} ${noFric} ${noFric}
-fix         m5 all property/global coefficientRollingFriction peratomtypepair 2 ${roll} ${noRoll} ${noRoll} ${noRoll}
+fix         m5 all property/global coefficientRollingFriction peratomtypepair 2 ${roll} & 
+			${noRoll} ${noRoll} ${noRoll}
 fix         m6 all property/global characteristicVelocity scalar ${cV}
 
 #pair style
@@ -74,7 +75,9 @@ fix         side      all mesh/surface file stl_files/surface_side.stl      type
 fix         top 	  all mesh/surface file stl_files/surface_top.stl 		type 1 
 
 # inserting servo wall on top of the particle bed
-fix servoTop all mesh/surface/stress/servo file ../DEM/stl_files/surface_top.stl type 2 scale 1. move 0.0 0.0 7.8 com 0.14 0.0 10.0 ctrlPV force axis 0. 0. 1. target_val ${ctrlForce1} vel_max ${maxVel} kp ${ctrlKp} ki ${ctrlKi} kd ${ctrlKd} #verbose no
+fix servoTop all mesh/surface/stress/servo file ../DEM/stl_files/surface_top.stl type 2 scale 1. & 
+				 move 0.0 0.0 7.8 com 0.14 0.0 10.0 ctrlPV force axis 0. 0. 1. &
+				 target_val ${ctrlForce1} vel_max ${maxVel} kp ${ctrlKp} ki ${ctrlKi} kd ${ctrlKd} #verbose no
 
 fix granwalls all wall/gran model hooke tangential history mesh n_meshes 4 meshes bottom inlet side servoTop
 
@@ -86,7 +89,8 @@ fix		    pdd1 all particledistribution/discrete 1.0 4 pts1 0.235 pts2 0.362 pts3
 
 region      insReg block -0.40 1.59 -1.23 1.23 -1.0 6. units box
 
-fix         ins all insert/stream seed 15485867 distributiontemplate pdd1 mass 5000 massrate 50000 vel constant 0. 0. -1. maxattempt 1000 insertion_face top extrude_length 7.7
+fix         ins all insert/stream seed 15485867 distributiontemplate pdd1 mass 5000 massrate 50000 & 
+			vel constant 0. 0. -1. maxattempt 1000 insertion_face top extrude_length 7.7
 
 fix             loadBalancing all balance 10000 z 10 1.05
 
@@ -136,7 +140,8 @@ write_restart  	liggghts.restart_init
 region      delReg block -0.40 1.59 -1.23 1.23 2.0 10.0  units box
 
 run         1 every 1 "delete_atoms region delReg"
-dump        dmp3 all custom 1 post/dump*.compressed_deleted id type type x y z ix iy iz vx vy vz fx fy fz omegax omegay omegaz radius
+dump        dmp3 all custom 1 post/dump*.compressed_deleted id type & 
+			type x y z ix iy iz vx vy vz fx fy fz omegax omegay omegaz radius
 run         1
 
 write_restart  	liggghts.restart_deleted
