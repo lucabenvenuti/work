@@ -73,8 +73,8 @@ fix         top 	  all mesh/surface file stl_files/surface_top.stl 		type 1
 
 
 # inserting servo wall on top of the particle bed
-fix servoTop all mesh/surface/stress/servo file ../DEM/stl_files/surface_top.stl type 2 &
-				 scale 1.0 move 0.0 0.01 -0.01 com 0.14 0.0 2.2 ctrlPV force axis 0. 0. 1. &
+fix servoTop all mesh/surface/stress/servo file ../DEM/stl_files/surface_top.stl type 2 scale 1. & 
+				 com 0.8 0.0 1.5 ctrlPV force axis 0. 0. 1. &
 				 target_val ${ctrlForce1} vel_max ${maxVel} kp ${ctrlKp} ki ${ctrlKi} kd ${ctrlKd} #verbose no
 
 # change the particles density
