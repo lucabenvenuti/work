@@ -1,7 +1,7 @@
 /*--------------------------------*- C++ -*----------------------------------*\
 | =========                 |                                                 |
 | \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
-|  \\    /   O peration     | Version:  2.3.d                                 |
+|  \\    /   O peration     | Version:  2.3.0                                 |
 |   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
 |    \\/     M anipulation  |                                                 |
 \*---------------------------------------------------------------------------*/
@@ -9,41 +9,46 @@ FoamFile
 {
     version     2.0;
     format      ascii;
-    class       polyBoundaryMesh;
-    location    "constant/polyMesh";
-    object      boundary;
+    class       volScalarField;
+    location    "0";
+    object      epsilon;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-4
-(
-    bottom
-    {
-        type            wall;
-        inGroups        1(wall);
-        nFaces          968;
-        startFace       35068;
-    }
+dimensions      [0 2 -3 0 0 0 0];
+
+internalField   uniform 0.000765;
+
+boundaryField
+{
     top
     {
-        type            wall;
-        inGroups        1(wall);
-        nFaces          360;
-        startFace       36036;
+        type            epsilonWallFunction;
+        value           uniform 0.000765;
+    }
+    bottom
+    {
+        type            epsilonWallFunction;
+        value           uniform 0.000765;
     }
     side
     {
-        type            wall;
-        inGroups        1(wall);
-        nFaces          1972;
-        startFace       36396;
+        type            epsilonWallFunction;
+        value           uniform 0.000765;
     }
     inlet
     {
-        type            patch;
-        nFaces          4;
-        startFace       38368;
+        type            empty;
     }
-)
+    outlet_up
+    {
+        type		zeroGradient;
+    }
+    outlet_down
+    {
+        type		zeroGradient;
+    }
+}
+
 
 // ************************************************************************* //
