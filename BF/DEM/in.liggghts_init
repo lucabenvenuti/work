@@ -45,7 +45,7 @@ processors  ${XPROCS} ${YPROCS} ${ZPROCS}
 
 variable    numProc equal       ${XPROCS}*${YPROCS}*${ZPROCS}
 
-region		reg block -0.5 2.1 -0.8 0.8 -1.1 3.1 units box
+region		reg block -0.5 2.1 -0.8 0.8 -1.1 4.6 units box
 create_box	2 reg
 
 neighbor	0.001 bin
@@ -76,7 +76,7 @@ fix         top 	  all mesh/surface file stl_files/surface_top.stl 		type 1
 
 # inserting servo wall on top of the particle bed
 fix servoTop all mesh/surface/stress/servo file ../DEM/stl_files/surface_top.stl type 2 scale 1. & 
-				 move 0.0 0.0 0.8 com 0.8 0.0 1.5 ctrlPV force axis 0. 0. 1. &
+				 move 0.0 0.0 3.0 com 0.8 0.0 1.5 ctrlPV force axis 0. 0. 1. &
 				 target_val ${ctrlForce1} vel_max ${maxVel} kp ${ctrlKp} ki ${ctrlKi} kd ${ctrlKd} #verbose no
 
 fix granwalls all wall/gran model hooke tangential history mesh n_meshes 4 meshes bottom inlet side servoTop
@@ -90,7 +90,7 @@ fix		    pdd1 all particledistribution/discrete 1.0 4 pts1 0.235 pts2 0.362 pts3
 region		insReg block -0.5 2.1 -0.8 0.8 -1.1 0.6 units box
 
 fix         ins all insert/stream seed 15485867 distributiontemplate pdd1 mass 5000 massrate 50000 & 
-			vel constant 0. 0. -1. maxattempt 1000 insertion_face top extrude_length 0.7
+			vel constant 0. 0. -1. maxattempt 1000 insertion_face top extrude_length 2.0
 
 fix             loadBalancing all balance 10000 z 10 1.05
 
