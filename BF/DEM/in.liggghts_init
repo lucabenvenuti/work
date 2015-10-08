@@ -45,7 +45,7 @@ processors  ${XPROCS} ${YPROCS} ${ZPROCS}
 
 variable    numProc equal       ${XPROCS}*${YPROCS}*${ZPROCS}
 
-region		reg block -0.5 2.1 -0.8 0.8 -1.1 2.6 units box
+region		reg block -1.0 3.0 -2.0 2.0 -2.0 4.0 units box
 create_box	2 reg
 
 neighbor	0.001 bin
