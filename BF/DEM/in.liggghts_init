@@ -72,7 +72,7 @@ fix         gravi all gravity 9.81 vector 0.0 0.0 -1.0
 fix         bottom	  all mesh/surface file stl_files/surface_bottom.stl    type 1
 fix         inlet	  all mesh/surface file stl_files/surface_inlet.stl     type 1
 fix         side      all mesh/surface file stl_files/surface_side.stl      type 1
-#fix         top 	  all mesh/surface file stl_files/surface_top.stl 		type 1 
+fix         top 	  all mesh/surface file stl_files/surface_top.stl 		type 1 
 
 # inserting servo wall on top of the particle bed
 fix servoTop all mesh/surface/stress/servo file ../DEM/stl_files/surface_top.stl type 2 scale 1. & 
