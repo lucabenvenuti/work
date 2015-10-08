@@ -1,0 +1,163 @@
+// Parametrized test case for a BF geometry
+
+
+//Run using:
+//m4 -P blockMeshDict.m4 > blockMeshDict
+
+//m4 definitions:
+
+
+
+
+
+//Mathematical constants:
+
+
+//Geometry
+// radii of blast furnace
+
+
+
+// number of tuyeres
+
+
+
+
+
+
+
+
+
+
+6.17380952380952
+
+
+
+
+
+
+
+
+//Grid points (integers!):
+
+
+
+
+
+
+
+
+/*---------------------------------------------------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  1.4.1                                 |
+|   \\  /    A nd           | Web:      http://www.openfoam.org               |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+
+FoamFile
+{
+    version         2.0;
+    format          ascii;
+
+    root            "";
+    case            "";
+    instance        "";
+    local           "";
+
+    class           dictionary;
+    object          blockMeshDict;
+}
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+convertToMeters 1;
+
+vertices
+(
+//Plane A:
+(0 -0.571250139473421 -1) // Vertex V0 = 0 
+(2 -0.374267332758448 -1) // Vertex V1 = 1 
+(2 0.571250139473421 -1) // Vertex V2 = 2 
+(0 0.571250139473421 -1) // Vertex V3 = 3 
+
+//Plane B:
+(0 -0.571250139473421 0.75) // Vertex V4 = 4 
+(2 -0.374267332758448 0.75) // Vertex V5 = 5 
+(2 0.571250139473421 0.75) // Vertex V6 = 6 
+(0 0.571250139473421 0.75) // Vertex V7 = 7 
+
+//Plane C:
+(-0.37380952380952 -0.608067164061814 1.5) // Vertex V8 = 8 
+(2 -0.374267332758448 1.5) // Vertex V9 = 9 
+(2 0.571250139473421 1.5) // Vertex V10 = 10 
+(-0.37380952380952 0.608067164061814 1.5) // Vertex V11 = 11 
+
+
+
+
+);
+
+// Defining blocks:
+blocks
+(
+    //Block between plane A and plane B:
+    hex ( 0 1 2 3 4 5 6 7 ) AB
+    (10 28 8)
+    simpleGrading (0.5 1 1)
+
+    //Block between plane B and plane C:
+    hex ( 4 5 6 7 8 9 10 11) BC
+    (10 28 8)
+    simpleGrading (0.5 1 1)
+
+);
+
+// Defining patches:
+boundary
+(
+    bottom
+    {
+        type wall;
+        faces
+        (
+         (0 1 2 3)
+         (0 4 7 3)
+         (4 8 11 7)
+        );
+    }
+    top
+    {
+        type wall;
+        faces
+        (
+         (8 9 10 11)
+        );
+    }
+    side
+    { 
+        type wall;
+        faces
+        (
+         (0 1 5 4)
+         (4 5 9 8)
+         (3 2 6 7)
+         (7 6 10 11)
+        );
+    }
+    inner
+    { 
+        type wall;
+        faces
+        (
+         (1 2 6 5)
+         (5 6 10 9)
+        );
+    }
+);
+
+mergePatchPairs 
+(
+);
+
+// ************************************************************************* //
