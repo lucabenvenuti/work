@@ -4,7 +4,7 @@
 
 # -------------- PBS Torque settings 
 
-#PBS -N bfCFDEM
+#PBS -N bfCFDEM2
 #PBS -o ${PBS_JOBID}__bfCFDEM2__${PBS_JOBID}.out
 #PBS -j oe
 #PBS -l nodes=4:ppn=8
