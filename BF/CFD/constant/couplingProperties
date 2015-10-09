@@ -28,7 +28,7 @@ FoamFile
 
 modelType "A"; // A or B
 
-couplingInterval 1;
+couplingInterval 10;
 
 voidFractionModel Gauss;
 
