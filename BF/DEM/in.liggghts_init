@@ -21,7 +21,7 @@ variable skin equal 0.25*0.005
 # variables for the servo wall
 variable topMass equal 4000 # imaginable mass of the weight (kg)
 variable ctrlForce1 equal -9.81*${topMass}   # target value of the force
-variable maxVel equal 0.025*${skin}/${dt}
+variable maxVel equal 0.25*${skin}/${dt}
 
 # controller parameter (servo wall)
 variable    ctrlKp          equal   1e-2
