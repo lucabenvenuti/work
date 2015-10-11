@@ -137,7 +137,7 @@ label endloop
 run                 1
 write_restart  	liggghts.restart_init
 
-region		delReg block -0.5 2.1 -0.8 0.8 -0.3 1.6 units box
+region		delReg block -0.5 2.1 -0.8 0.8 1.4 4.6 units box
 
 run         1 every 1 "delete_atoms region delReg"
 dump        dmp3 all custom 1 post/dump*.compressed_deleted id type & 
@@ -146,6 +146,7 @@ run         1
 
 write_restart  	liggghts.restart_deleted
 undump      dmp3
+fix_modify servoTop target_val 0.000000001
 
 run 100000
 write_restart  	liggghts.restart
