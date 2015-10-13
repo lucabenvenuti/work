@@ -16,7 +16,7 @@ clc
 
 if (isunix)
     %filename =  '/mnt/scratchPFMDaten/Luca/20150729Lise/workTest/sinterChuteJSPL/postMass/countRate2.txt';
-    filename = '/mnt/scratchPFMDaten/Luca/20150909Lise/workTest/sinterChuteJSPL2/postMass/countRate2.txt';
+    filename = '/mnt/scratchPFMDaten/Luca/20150919Lise/workTest/sinterChuteJSPL/postMass/countRate2.txt';
     addpath('/mnt/DATA/liggghts/work/shearCell/matlab/exportFig');
 else
     filename = 'S:\Luca\20150919Lise\workTest\sinterChuteJSPL\postMass\countRate2.txt';
