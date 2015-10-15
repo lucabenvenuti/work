@@ -113,14 +113,14 @@ variable vcmz equal vcm(all,z)
 variable vave equal sqrt(v_vcmx*v_vcmx+v_vcmy*v_vcmy+v_vcmz*v_vcmz)
 print ${vave}
 
-dump 		myStl1 all stl  10000 ../DEM/post/dump_filling_*.stl
-dump		dmp1 all custom 10000 ../DEM/post/dump*.liggghts_filling id type type x y z vx vy vz fx fy fz radius 
+dump 		myStl1 all stl  10000 post/dump_filling_*.stl
+dump		dmp1 all custom 10000 post/dump*.liggghts_filling id type type x y z vx vy vz fx fy fz radius 
 
 run     200000
 undump      myStl1
 undump      dmp1
-dump 		myStl2 all stl 100000 ../DEM/post/dump_init_*.stl
-dump	    dmp2 all custom 100000 ../DEM/post/dump*.liggghts_init id type type x y z vx vy vz fx fy fz radius 
+dump 		myStl2 all stl 100000 post/dump_init_*.stl
+dump	    dmp2 all custom 100000 post/dump*.liggghts_init id type type x y z vx vy vz fx fy fz radius 
 
 label loop
   print "-----> Checking Velocity..."
