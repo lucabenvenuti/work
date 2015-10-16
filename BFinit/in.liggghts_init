@@ -45,7 +45,7 @@ processors  ${XPROCS} ${YPROCS} ${ZPROCS}
 
 variable    numProc equal       ${XPROCS}*${YPROCS}*${ZPROCS}
 
-region		reg block -0.5 2.1 -0.8 0.8 -1.1 4.6 units box
+region		reg block -0.5 2.1 -0.8 0.8 -1.1 10.0 units box
 create_box	2 reg
 
 neighbor	0.001 bin
@@ -76,7 +76,7 @@ fix         top 	  all mesh/surface file stl_files/surface_top.stl 		type 1
 
 # inserting servo wall on top of the particle bed
 fix servoTop all mesh/surface/stress/servo file stl_files/surface_top.stl type 2 scale 1. & 
-				 move 0.0 0.0 3.0 com 0.8 0.0 1.5 ctrlPV force axis 0. 0. 1. &
+				 move 0.0 0.0 8.5 com 0.8 0.0 1.5 ctrlPV force axis 0. 0. 1. &
 				 target_val ${ctrlForce1} vel_max ${maxVel} kp ${ctrlKp} ki ${ctrlKi} kd ${ctrlKd} #verbose no
 
 fix granwalls all wall/gran model hooke tangential history mesh n_meshes 4 meshes bottom inlet side servoTop
@@ -87,7 +87,7 @@ fix         pts3 all particletemplate/sphere 1 atom_type 1 density constant ${pa
 fix         pts4 all particletemplate/sphere 1 atom_type 1 density constant ${partDens} radius constant 0.050
 fix		    pdd1 all particledistribution/discrete 1.0 4 pts1 0.235 pts2 0.362 pts3 0.283 pts4 0.120 
 
-region		insReg block -0.5 2.1 -0.8 0.8 -1.1 0.6 units box
+region		insReg block -0.5 2.1 -0.8 0.8 -1.1 6.0 units box
 
 fix         ins all insert/stream seed 15485867 distributiontemplate pdd1 mass 5000 massrate 50000 & 
 			vel constant 0. 0. -1. maxattempt 1000 insertion_face top extrude_length 2.0
@@ -137,7 +137,7 @@ label endloop
 run                 1
 write_restart  	liggghts.restart_init
 
-region		delReg block -0.5 2.1 -0.8 0.8 1.4 4.6 units box
+region		delReg block -0.5 2.1 -0.8 0.8 1.4 10.0 units box
 
 run         1 every 1 "delete_atoms region delReg"
 dump        dmp3 all custom 1 post/dump*.compressed_deleted id type & 
