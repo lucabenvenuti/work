@@ -81,11 +81,11 @@ fix servoTop all mesh/surface/stress/servo file stl_files/surface_top.stl type 2
 
 fix granwalls all wall/gran model hooke tangential history mesh n_meshes 4 meshes bottom inlet side servoTop
 
-fix         pts1 all particletemplate/sphere 1 atom_type 1 density constant ${partDens} radius constant 0.015
-fix         pts2 all particletemplate/sphere 1 atom_type 1 density constant ${partDens} radius constant 0.030
-fix         pts3 all particletemplate/sphere 1 atom_type 1 density constant ${partDens} radius constant 0.040
-fix         pts4 all particletemplate/sphere 1 atom_type 1 density constant ${partDens} radius constant 0.050
-fix		    pdd1 all particledistribution/discrete 1.0 4 pts1 0.235 pts2 0.362 pts3 0.283 pts4 0.120 
+fix         pts1 all particletemplate/sphere 1 atom_type 1 density constant ${partDens} radius constant 0.004
+fix         pts2 all particletemplate/sphere 1 atom_type 1 density constant ${partDens} radius constant 0.010
+fix         pts3 all particletemplate/sphere 1 atom_type 1 density constant ${partDens} radius constant 0.016
+fix         pts4 all particletemplate/sphere 1 atom_type 1 density constant ${partDens} radius constant 0.025
+fix		    pdd1 all particledistribution/discrete 1.0 4 pts1 0.137 pts2 0.306 pts3 0.406 pts4 0.151 
 
 region		insReg block -0.5 2.1 -0.8 0.8 -1.1 6.0 units box
 
