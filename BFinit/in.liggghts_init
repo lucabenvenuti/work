@@ -2,7 +2,7 @@
 
 ###############################################
 #variables
-variable partDens equal 760 # prev. 3000 # particle density
+variable partDens equal 1500 # prev. 3000 # particle density
 
 # DEM-parameters
 variable yM equal 5.e6          # Young's modulus
@@ -103,6 +103,7 @@ thermo		1000
 thermo_modify	lost ignore norm no
 compute_modify	thermo_temp dynamic yes
 
+variable mystep equal step
 #======================================================================
 #- settling
 
@@ -128,7 +129,7 @@ label loop
   print "-----> v ave ${vave}, v threshold ${vthre}, continuing run"  
 
   run 10000
-  write_restart  	liggghts.restart_prelim
+  write_restart  	liggghts${mystep}.restart_prelim
 jump SELF loop
 
 label endloop
