@@ -123,14 +123,21 @@ undump      dmp1
 dump 		myStl2 all stl 100000 post/dump_init_*.stl
 dump	    dmp2 all custom 100000 post/dump*.liggghts_init id type type x y z vx vy vz fx fy fz radius 
 
+label writeloop
+variable writecounter equal 0
 label loop
   print "-----> Checking Velocity..."
   if "${vave}<${vthre}" then "jump SELF endloop"
   print "-----> v ave ${vave}, v threshold ${vthre}, continuing run"  
 
   run 10000
-  write_restart  	liggghts${mystep}.restart_prelim
-jump SELF loop
+  variable writecounter equal ${writecounter}+10000
+  if "${writecounter} < 100000" then &
+    "jump SELF loop"
+
+   write_restart  	liggghts${mystep}.restart_prelim
+  
+jump SELF writeloop
 
 label endloop
 #======================================================================
