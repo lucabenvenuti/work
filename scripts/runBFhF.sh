@@ -1,5 +1,3 @@
-#!/bin/bash
-
 #!/bin/bash 
 
 # -------------- PBS Torque settings 

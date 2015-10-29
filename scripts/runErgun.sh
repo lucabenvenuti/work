@@ -2,11 +2,11 @@
 
 # -------------- PBS Torque settings 
 
-#PBS -N racewayCFDEM
-#PBS -o ${PBS_JOBID}__racewayCFDEM__${PBS_JOBID}.out
+#PBS -N Ergun
+#PBS -o ${PBS_JOBID}__Ergun__${PBS_JOBID}.out
 #PBS -j oe
-#PBS -l nodes=4:ppn=8
-#PBS -l walltime=48:00:00
+#PBS -l nodes=1:ppn=8
+#PBS -l walltime=2:00:00
 #PBS -M luca.benvenuti@jku.at
 #PBS -m bea
 
@@ -30,19 +30,16 @@ if [ ! -f $SCRIPT_NAME  ]
     exit -1
 fi
 
+ROOT_DIR=$home/workspace
+
 TOOLKIT_DIR=$HOME/workspace/src/ParticulateFlow/toolkit
-
-CASE_DIR=$PBS_O_WORKDIR/../raceway
-
-mkdir -p $CASE_DIR/DEM/post
+CASE_DIR=$PBS_O_WORKDIR/../ErgunTestMPI
 
 cd $TOOLKIT_DIR
 
 source bashrc
-cd $CASE_DIR/CFD
+cd $CASE_DIR
 
 date
-decomposePar
-date
-mpirun -np 32 cfdemSolverPiso -parallel
+./Allrun.sh
 date
