@@ -715,7 +715,7 @@ comp(4,8) = rS6percLay8EndPerc;
 
 
 h20 = figure(20);
-H = bar([1:8], comp','stacked','DisplayName','comp');
+H = bar([6:8], comp(:,6:8)','stacked','DisplayName','comp');
 xlabel('Layer','fontname','times new roman','FontSize',20);
 legend('rS1 = 0.015 m','rS2 = 0.025 m','rS4 = 0.050 m','rS6 = 0.125 m','Location', 'NorthEast');
 set(gca,'fontname','times new roman','FontSize',20);
