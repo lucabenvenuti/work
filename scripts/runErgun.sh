@@ -26,7 +26,7 @@ cd $PBS_O_WORKDIR
 
 if [ ! -f $SCRIPT_NAME  ]
   then
-    echo "ERROR: this script must be started from scripts folder!"
+    echo "ERROR: this script must be started from scripts folder!" 
     exit -1
 fi
 
