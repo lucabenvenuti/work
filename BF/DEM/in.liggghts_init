@@ -2,7 +2,7 @@
 
 ###############################################
 #variables
-variable partDens equal 760 # prev. 3000 # particle density
+variable partDens equal 1500 # prev. 3000 # particle density
 
 # DEM-parameters
 variable yM equal 5.e6          # Young's modulus
@@ -45,7 +45,7 @@ processors  ${XPROCS} ${YPROCS} ${ZPROCS}
 
 variable    numProc equal       ${XPROCS}*${YPROCS}*${ZPROCS}
 
-region		reg block -0.5 2.1 -0.8 0.8 -1.1 4.6 units box
+region		reg block -0.5 2.1 -0.8 0.8 -1.1 10.0 units box
 create_box	2 reg
 
 neighbor	0.001 bin
@@ -76,18 +76,18 @@ fix         top 	  all mesh/surface file stl_files/surface_top.stl 		type 1
 
 # inserting servo wall on top of the particle bed
 fix servoTop all mesh/surface/stress/servo file ../DEM/stl_files/surface_top.stl type 2 scale 1. & 
-				 move 0.0 0.0 3.0 com 0.8 0.0 1.5 ctrlPV force axis 0. 0. 1. &
+				 move 0.0 0.0 8.5 com 0.8 0.0 1.5 ctrlPV force axis 0. 0. 1. &
 				 target_val ${ctrlForce1} vel_max ${maxVel} kp ${ctrlKp} ki ${ctrlKi} kd ${ctrlKd} #verbose no
 
 fix granwalls all wall/gran model hooke tangential history mesh n_meshes 4 meshes bottom inlet side servoTop
 
-fix         pts1 all particletemplate/sphere 1 atom_type 1 density constant ${partDens} radius constant 0.015
-fix         pts2 all particletemplate/sphere 1 atom_type 1 density constant ${partDens} radius constant 0.030
-fix         pts3 all particletemplate/sphere 1 atom_type 1 density constant ${partDens} radius constant 0.040
-fix         pts4 all particletemplate/sphere 1 atom_type 1 density constant ${partDens} radius constant 0.050
-fix		    pdd1 all particledistribution/discrete 1.0 4 pts1 0.235 pts2 0.362 pts3 0.283 pts4 0.120 
+fix         pts1 all particletemplate/sphere 1 atom_type 1 density constant ${partDens} radius constant 0.004
+fix         pts2 all particletemplate/sphere 1 atom_type 1 density constant ${partDens} radius constant 0.010
+fix         pts3 all particletemplate/sphere 1 atom_type 1 density constant ${partDens} radius constant 0.016
+fix         pts4 all particletemplate/sphere 1 atom_type 1 density constant ${partDens} radius constant 0.025
+fix		    pdd1 all particledistribution/discrete 1.0 4 pts1 0.137 pts2 0.306 pts3 0.406 pts4 0.151 
 
-region		insReg block -0.5 2.1 -0.8 0.8 -1.1 0.6 units box
+region		insReg block -0.5 2.1 -0.8 0.8 -1.1 6.0 units box
 
 fix         ins all insert/stream seed 15485867 distributiontemplate pdd1 mass 5000 massrate 50000 & 
 			vel constant 0. 0. -1. maxattempt 1000 insertion_face top extrude_length 2.0
@@ -103,6 +103,7 @@ thermo		1000
 thermo_modify	lost ignore norm no
 compute_modify	thermo_temp dynamic yes
 
+variable mystep equal step
 #======================================================================
 #- settling
 
@@ -122,14 +123,21 @@ undump      dmp1
 dump 		myStl2 all stl 100000 ../DEM/post/dump_init_*.stl
 dump	    dmp2 all custom 100000 ../DEM/post/dump*.liggghts_init id type type x y z vx vy vz fx fy fz radius 
 
+label writeloop
+variable writecounter equal 0
 label loop
   print "-----> Checking Velocity..."
   if "${vave}<${vthre}" then "jump SELF endloop"
   print "-----> v ave ${vave}, v threshold ${vthre}, continuing run"  
 
   run 10000
-  write_restart  	liggghts.restart_prelim
-jump SELF loop
+  variable writecounter equal ${writecounter}+10000
+  if "${writecounter} < 100000" then &
+    "jump SELF loop"
+
+   write_restart  	liggghts${mystep}.restart_prelim
+  
+jump SELF writeloop
 
 label endloop
 #======================================================================
@@ -137,7 +145,7 @@ label endloop
 run                 1
 write_restart  	liggghts.restart_init
 
-region		delReg block -0.5 2.1 -0.8 0.8 1.4 4.6 units box
+region		delReg block -0.5 2.1 -0.8 0.8 1.4 10.0 units box
 
 run         1 every 1 "delete_atoms region delReg"
 dump        dmp3 all custom 1 post/dump*.compressed_deleted id type & 
