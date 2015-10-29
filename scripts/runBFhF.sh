@@ -4,11 +4,11 @@
 
 # -------------- PBS Torque settings 
 
-#PBS -N racewayCFDEM
-#PBS -o ${PBS_JOBID}__racewayCFDEM__${PBS_JOBID}.out
+#PBS -N BFhF
+#PBS -o ${PBS_JOBID}__BFhF__${PBS_JOBID}.out
 #PBS -j oe
 #PBS -l nodes=4:ppn=8
-#PBS -l walltime=72:00:00
+#PBS -l walltime=120:00:00
 #PBS -M luca.benvenuti@jku.at
 #PBS -m bea
 
@@ -32,15 +32,14 @@ if [ ! -f $SCRIPT_NAME  ]
     exit -1
 fi
 
-XPROCS=4
+XPROCS=2
 YPROCS=4
-ZPROCS=2
+ZPROCS=4
 PROCS=$(($XPROCS*$YPROCS*$ZPROCS))
 MPI_OPTIONS="-np $PROCS"
+TOOLKIT_DIR=$HOME/workspace/src/ParticulateFlow/toolkit
 
-TOOLKIT_DIR=$HOME/lise_workspace/src/ParticulateFlow/toolkit
-
-CASE_DIR=$PBS_O_WORKDIR/../raceway
+CASE_DIR=$PBS_O_WORKDIR/../BFhF
 
 mkdir -p $CASE_DIR/DEM/post
 

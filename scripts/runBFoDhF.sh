@@ -4,8 +4,8 @@
 
 # -------------- PBS Torque settings 
 
-#PBS -N BF
-#PBS -o ${PBS_JOBID}__BF__${PBS_JOBID}.out
+#PBS -N BFoDhF
+#PBS -o ${PBS_JOBID}__BFoDhF__${PBS_JOBID}.out
 #PBS -j oe
 #PBS -l nodes=4:ppn=8
 #PBS -l walltime=120:00:00
@@ -39,7 +39,7 @@ PROCS=$(($XPROCS*$YPROCS*$ZPROCS))
 MPI_OPTIONS="-np $PROCS"
 TOOLKIT_DIR=$HOME/workspace/src/ParticulateFlow/toolkit
 
-CASE_DIR=$PBS_O_WORKDIR/../BF
+CASE_DIR=$PBS_O_WORKDIR/../BFoDhF
 
 mkdir -p $CASE_DIR/DEM/post
 
