@@ -2,7 +2,7 @@
 
 ###############################################
 #variables
-variable partDens equal 1500 # prev. 3000 # particle density
+variable partDens equal 1000 # prev. 3000 # particle density
 
 # DEM-parameters
 variable yM equal 5.e6          # Young's modulus
