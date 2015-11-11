@@ -67,5 +67,3 @@ decomposePar
 date
 mpirun $MPI_OPTIONS cfdemSolverPiso -parallel
 date
-reconstructPar
-date
