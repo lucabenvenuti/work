@@ -148,13 +148,13 @@ rS4 = 0.0500;
 rS5 = 0.1000;
 rS6 = 0.1250;
 
-rS0Mass = 4*pi*rS0^3/3;
-rS1Mass = 4*pi*rS1^3/3;
-rS2Mass = 4*pi*rS2^3/3;
-rS3Mass = 4*pi*rS3^3/3;
-rS4Mass = 4*pi*rS4^3/3;
-rS5Mass = 4*pi*rS5^3/3;
-rS6Mass = 4*pi*rS6^3/3;
+rS0Mass = 1;%4*pi*rS0^3/3;
+rS1Mass = 1;%4*pi*rS1^3/3;
+rS2Mass = 1;%4*pi*rS2^3/3;
+rS3Mass = 1;%4*pi*rS3^3/3;
+rS4Mass = 1;%4*pi*rS4^3/3;
+rS5Mass = 1;%4*pi*rS5^3/3;
+rS6Mass = 1;%4*pi*rS6^3/3;
 
 %%
 
@@ -384,7 +384,11 @@ if (imageFlagShort)
     legend('Location','SouthWest' )
     title(['rS6: radius = ', num2str(rS6),' m'],'FontSize',20)
     xlabel('time (s)','FontSize',20)
-    ylabel('volume (m^3)','FontSize',20)
+    if rS0Mass == 1
+        ylabel('number of particles (-)','FontSize',20)
+    else
+        ylabel('volume (m^3)','FontSize',20)
+    end
     set(gca,'fontname','times new roman','FontSize',20)
     set(h6, 'Position', [100 100 1500 800],'color','w');
     hold off;
@@ -397,7 +401,11 @@ if (imageFlagShort)
     legend('Location','SouthWest' )
     title(['rS4: radius = ', num2str(rS4),' m'],'FontSize',20)
     xlabel('time (s)','FontSize',20)
-    ylabel('volume (m^3)','FontSize',20)
+    if rS0Mass == 1
+        ylabel('number of particles (-)','FontSize',20)
+    else
+        ylabel('volume (m^3)','FontSize',20)
+    end
     set(gca,'fontname','times new roman','FontSize',20)
     set(h8, 'Position', [100 100 1500 800],'color','w');
     hold off;
@@ -410,7 +418,11 @@ if (imageFlagShort)
     legend('Location','SouthWest' )
     title(['rS2: radius = ', num2str(rS2),' m'],'FontSize',20)
     xlabel('time (s)','FontSize',20)
-    ylabel('volume (m^3)','FontSize',20)
+    if rS0Mass == 1
+        ylabel('number of particles (-)','FontSize',20)
+    else
+        ylabel('volume (m^3)','FontSize',20)
+    end
     set(gca,'fontname','times new roman','FontSize',20)
     set(h10, 'Position', [100 100 1500 800],'color','w');
     hold off;
@@ -423,7 +435,11 @@ if (imageFlagShort)
     legend('Location','SouthWest' )
     title(['rS1: radius = ', num2str(rS1),' m'],'FontSize',20)
     xlabel('time (s)','FontSize',20)
-    ylabel('volume (m^3)','FontSize',20)
+    if rS0Mass == 1
+        ylabel('number of particles (-)','FontSize',20)
+    else
+        ylabel('volume (m^3)','FontSize',20)
+    end
     set(gca,'fontname','times new roman','FontSize',20)
     set(h11, 'Position', [100 100 1500 800],'color','w');
     hold off;
@@ -715,9 +731,10 @@ comp(4,8) = rS6percLay8EndPerc;
 
 
 h20 = figure(20);
-H = bar([6:8], comp(:,6:8)','stacked','DisplayName','comp');
+% H = bar([6:8], comp(:,6:8)','stacked','DisplayName','comp');
+H = bar([1:8], comp(:,1:8)','stacked','DisplayName','comp');
 xlabel('Layer','fontname','times new roman','FontSize',20);
-legend('rS1 = 0.015 m','rS2 = 0.025 m','rS4 = 0.050 m','rS6 = 0.125 m','Location', 'NorthEast');
+legend('rS1 = 0.015 m','rS2 = 0.025 m','rS4 = 0.050 m','rS6 = 0.125 m','Location', 'SouthEast');
 set(gca,'fontname','times new roman','FontSize',20);
 set(h20, 'Position', [100 100 1500 800],'color','w');
 export_fig(['095SinterBarPlot',date1],'-png', '-nocrop', '-painters', h20);
