@@ -88,7 +88,7 @@ fix		    pdd1 all particledistribution/discrete 1.0 3 pts1 0.443 pts2 0.406 pts3
 
 region		insReg block -0.5 2.1 -0.8 0.8 -1.1 6.0 units box
 
-fix         ins all insert/stream seed 15485867 distributiontemplate pdd1 mass 6000 massrate 50000 & 
+fix         ins all insert/stream seed 999653 distributiontemplate pdd1 mass 6000 massrate 50000 & 
 			vel constant 0. 0. -1. maxattempt 1000 insertion_face top extrude_length 2.0
 
 fix             loadBalancing all balance 10000 z 10 1.05
