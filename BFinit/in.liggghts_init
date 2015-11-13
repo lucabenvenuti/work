@@ -113,6 +113,14 @@ variable vcmz equal vcm(all,z)
 variable vave equal sqrt(v_vcmx*v_vcmx+v_vcmy*v_vcmy+v_vcmz*v_vcmz)
 print ${vave}
 
+dump 		myStl0 all stl  1 post/dump_filling_*.stl
+dump		dmp0 all custom 1 post/dump*.liggghts_filling id type type x y z vx vy vz fx fy fz radius 
+
+run 		1
+
+undump 		myStl0
+undump		dmp0
+
 dump 		myStl1 all stl  10000 post/dump_filling_*.stl
 dump		dmp1 all custom 10000 post/dump*.liggghts_filling id type type x y z vx vy vz fx fy fz radius 
 
