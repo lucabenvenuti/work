@@ -166,6 +166,33 @@ end
 % set(h7, 'Position', [100 100 1500 800],'color','w');
 % export_fig('SCTGaussianNonLinearRegression','-png', '-nocrop', '-painters', h7);
 
+%% Gaussian process with  Variational Bayes Approximation (a non-parametric probabilistic regressor)
+
+% x3 = chemicalInputs(:,tr.trainInd)';
+% y3 = chemicalTargets(:,tr.trainInd)';
+% covfunc = @covSEiso ;% { 'covSum', { 'covSEiso' } };
+% likfunc = @likGauss;
+% %sn = 0.1; hyp.lik = log(sn);
+% hyp2.cov = [0 ; 0];
+% hyp2.lik = log(0.1);
+infMethod = @infVB;
+hyp3 = minimize(hyp2, @gp, -100, infMethod, [], covfunc, likfunc, x3, y3);
+%exp(hyp2.lik);
+nlml3 = gp(hyp3, infMethod, [], covfunc, likfunc, x3, y3);
+%[m s2] = gp(hyp2, @infExact, [], covfunc, likfunc, x3, y3, x3);
+%xs = chemicalInputs(:,tr.testInd)';
+% ys = chemicalTargets(:,tr.testInd)';
+[g2.nlZ, g2.dnlZ] = gp(hyp2, infMethod, [], covfunc, likfunc, x3, y3);
+[ymu2, g2.ys2, g2.fmu, g2.fs2, g2.lp] = gp(hyp2, infMethod, [], covfunc, likfunc, x3, y3, xs);
+g2.ymu = ymu2;
+[g2.r2, g2.rmse] = rsquare(ys3, ymu2);
+g2.mae = mae(ys3, ymu2);
+g2.mse = mse(ys3, ymu2);
+if (imageFlag)
+    titleName = 'GaussianNonLinearRegressor';
+    [ ymu2_new2, h8 ] = plotRegressionFun( 7, titleName, ys3, ymu2, 0.91, 0.1 );
+end
+
 %% ANNs
 % z = avgMuR1';
 % iijj=1;
@@ -229,9 +256,17 @@ for loopIndex = 8:numel(gNames)
     i = i + 1;
 end
 
+i = 1;
 nNames = fieldnames(n);
 for loopIndex = 1:numel(nNames)
     StatMatrix(loopIndex,3) = n.(nNames{loopIndex});
+end
+
+i = 1;
+g2Names = fieldnames(g2);
+for loopIndex = 8:numel(g2Names)
+    StatMatrix(i,4) = g2.(g2Names{loopIndex});
+    i = i + 1;
 end
 
 %%

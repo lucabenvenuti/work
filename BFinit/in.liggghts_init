@@ -163,5 +163,7 @@ write_restart  	liggghts.restart_deleted
 undump      dmp3
 fix_modify servoTop target_val 0.000000001
 
+unfix 		ins
+
 run 100000
 write_restart  	liggghts.restart
