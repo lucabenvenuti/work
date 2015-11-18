@@ -159,12 +159,12 @@ unfix 		ins
 region		delReg block -0.5 2.1 -0.8 0.8 1.4 10.0 units box
 
 run         1 every 1 "delete_atoms region delReg"
-dump        dmp3 all custom 1 post/dump*.compressed_deleted id type & 
-			type x y z ix iy iz vx vy vz fx fy fz omegax omegay omegaz radius
+#dump        dmp3 all custom 1 post/dump*.compressed_deleted id type & 
+#			type x y z ix iy iz vx vy vz fx fy fz omegax omegay omegaz radius
 run         1
 
 write_restart  	liggghts.restart_deleted
-undump      dmp3
+#undump      dmp3
 fix_modify servoTop target_val 0.000000001
 
 run 100000
