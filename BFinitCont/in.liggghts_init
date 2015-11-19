@@ -156,27 +156,14 @@ run                 1
 
 unfix 		ins
 
-region		delReg1 block -0.5 2.1 -0.8 0.8 7.1 10.0 units box
+region		delReg block -0.5 2.1 -0.8 0.8 1.4 10.0 units box
 
-region		delReg2 block -0.5 2.1 -0.8 0.8 4.2 7.1 units box
+fix         deleteCentre all remove nevery 1 massrate 1000000 & 
+			style delete seed 10007143 region delReg atomtype 1
 
-region		delReg3 block -0.5 2.1 -0.8 0.8 1.4 4.2 units box
-
-run         1 every 1 "delete_atoms region delReg1"
-run			1
-
-run         1 every 1 "delete_atoms region delReg2"
-run			1
-
-run         1 every 1 "delete_atoms region delReg3"
-run			1
-
-#dump        dmp3 all custom 1 post/dump*.compressed_deleted id type & 
-#			type x y z ix iy iz vx vy vz fx fy fz omegax omegay omegaz radius
 run         1
 
 write_restart  	liggghts.restart_deleted
-#undump      dmp3
 fix_modify servoTop target_val 0.000000001
 
 run 100000
