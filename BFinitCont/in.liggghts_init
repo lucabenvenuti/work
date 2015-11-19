@@ -163,6 +163,10 @@ fix         deleteCentre all remove nevery 1 massrate 1000000 &
 
 run         1
 
+unfix 		deleteCentre
+
+run			1
+
 write_restart  	liggghts.restart_deleted
 fix_modify servoTop target_val 0.000000001
 
