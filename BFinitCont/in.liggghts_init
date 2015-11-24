@@ -160,6 +160,9 @@ region		delReg block -0.5 2.1 -0.8 0.8 1.4 10.0 units box
 
 fix         deleteCentre all remove nevery 1 massrate 1000000 & 
 			style delete seed 10007143 region delReg atomtype 1
+			
+dump 		myStl3 all stl 10000 post/dump_comp_*.stl
+dump	    dmp3 all custom 10000 post/dump*.liggghts_comp id type type x y z vx vy vz fx fy fz radius 
 
 run         1
 

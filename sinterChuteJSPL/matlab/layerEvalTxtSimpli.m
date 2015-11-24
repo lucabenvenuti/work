@@ -24,11 +24,13 @@ else
 end
 
 imageFlagAll = false;
-imageFlagShort = true;
+imageFlagShort = false;
 
 if (imageFlagAll)
     imageFlagShort = true;
 end
+
+excelDump = true;
 
 delimiter = ' ';
 startRow = 2;
@@ -148,13 +150,13 @@ rS4 = 0.0500;
 rS5 = 0.1000;
 rS6 = 0.1250;
 
-rS0Mass = 1;%4*pi*rS0^3/3;
-rS1Mass = 1;%4*pi*rS1^3/3;
-rS2Mass = 1;%4*pi*rS2^3/3;
-rS3Mass = 1;%4*pi*rS3^3/3;
-rS4Mass = 1;%4*pi*rS4^3/3;
-rS5Mass = 1;%4*pi*rS5^3/3;
-rS6Mass = 1;%4*pi*rS6^3/3;
+rS0Mass = 4*pi*rS0^3/3;
+rS1Mass = 4*pi*rS1^3/3;
+rS2Mass = 4*pi*rS2^3/3;
+rS3Mass = 4*pi*rS3^3/3;
+rS4Mass = 4*pi*rS4^3/3;
+rS5Mass = 4*pi*rS5^3/3;
+rS6Mass = 4*pi*rS6^3/3;
 
 %%
 
@@ -738,3 +740,19 @@ legend('rS1 = 0.015 m','rS2 = 0.025 m','rS4 = 0.050 m','rS6 = 0.125 m','Location
 set(gca,'fontname','times new roman','FontSize',20);
 set(h20, 'Position', [100 100 1500 800],'color','w');
 export_fig(['095SinterBarPlot',date1],'-png', '-nocrop', '-painters', h20);
+
+%% excel dump
+
+if (excelDump)
+    filename = 'sinterChuteVolume.xlsx';
+    rS1percLay = [asimulatedTime, rS1percLay1, rS1percLay2, rS1percLay3, rS1percLay4,rS1percLay5, rS1percLay6,rS1percLay7, rS1percLay8];
+    rS2percLay = [asimulatedTime, rS2percLay1, rS2percLay2, rS2percLay3, rS2percLay4,rS2percLay5, rS2percLay6,rS2percLay7, rS2percLay8];
+    rS4percLay = [asimulatedTime, rS4percLay1, rS4percLay2, rS4percLay3, rS4percLay4,rS4percLay5, rS4percLay6,rS4percLay7, rS4percLay8];
+    rS6percLay = [asimulatedTime, rS6percLay1, rS6percLay2, rS6percLay3, rS6percLay4,rS6percLay5, rS6percLay6,rS6percLay7, rS6percLay8];
+    
+    xlswrite(filename,rS1percLay,1)
+    xlswrite(filename,rS2percLay,2)
+    xlswrite(filename,rS4percLay,3)
+    xlswrite(filename,rS6percLay,4)
+    
+end
