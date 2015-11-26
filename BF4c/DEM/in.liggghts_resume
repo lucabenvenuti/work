@@ -41,7 +41,7 @@ communicate	single vel yes
 boundary		f f f
 newton			off
 units			si
-processors      2 4 4
+processors      1 2 2
 
 read_restart 		../DEM/liggghts.restart
 reset_timestep 0
