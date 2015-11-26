@@ -1,0 +1,181 @@
+LIGGGHTS (Version LIGGGHTS-PFM 3.1.0, compiled 2015-11-06-10:30:57 by lichtenegger, git commit de238d0d94d10916b53999858ffce53c29f01d96 based on LAMMPS 23 Nov 2013)
+# Pour granular particles into chute container, then induce flow
+
+###############################################
+#variables
+
+# DEM-parameters
+variable partDens equal 1500 # prev. 3000 # particle density
+
+# DEM-parameters
+variable yM equal 5.e6          # Young's modulus
+variable pR equal 0.45          # Poisson ratio
+variable rest equal 0.5         # coefficient of restitution
+variable noRest equal 0.051     # coefficient of restitution for frictionless
+variable fric equal 0.1         # coefficient of friction
+variable noFric equal 0         # dummy value for frictionless walls
+variable roll equal 0.4         # for particles and walls with friction
+variable noRoll equal 0         # for frictionless walls
+variable cV equal 0.1           # chracteristic velocity
+
+variable dt equal 0.000005
+variable skin equal 0.25*0.005
+
+# variables for the servo wall
+variable topMass equal 4000 # imaginable mass of the weight (kg)
+variable ctrlForce1 equal -9.81*${topMass}   # target value of the force
+variable ctrlForce1 equal -9.81*4000   
+variable maxVel equal 0.25*${skin}/${dt}
+variable maxVel equal 0.25*0.00125/${dt}
+variable maxVel equal 0.25*0.00125/5e-06
+
+# controller parameter (servo wall)
+variable    ctrlKp          equal   1e-2
+variable    ctrlKi          equal   0.0
+variable    ctrlKd          equal   0.0
+
+
+
+###############################################
+
+atom_style		granular
+atom_modify		map array
+communicate	single vel yes
+
+boundary		f f f
+newton			off
+units			si
+processors      1 2 2
+#processors      2 4 8
+
+read_restart            ../DEM/liggghts.restart
+WARNING: Restart file version does not match LIGGGHTS version (/home/lichtenegger/LIGGGHTS/src/read_restart.cpp:470)
+WARNING: Restart file used different # of processors (/home/lichtenegger/LIGGGHTS/src/read_restart.cpp:517)
+WARNING: Restart file used different 3d processor grid (/home/lichtenegger/LIGGGHTS/src/read_restart.cpp:530)
+  orthogonal box = (-0.5 -0.8 -1.1) to (2.1 0.8 10)
+  1 by 2 by 2 MPI processor grid
+  129433 atoms
+reset_timestep 0
+
+neighbor	${skin} bin
+neighbor	0.00125 bin
+neigh_modify	delay 0
+
+#Material properties required for new pair styles
+
+fix 		m1 all property/global youngsModulus peratomtype ${yM} ${yM}
+fix 		m1 all property/global youngsModulus peratomtype 5000000 ${yM}
+fix 		m1 all property/global youngsModulus peratomtype 5000000 5000000
+fix 		m2 all property/global poissonsRatio peratomtype ${pR} ${pR}
+fix 		m2 all property/global poissonsRatio peratomtype 0.45 ${pR}
+fix 		m2 all property/global poissonsRatio peratomtype 0.45 0.45
+fix 		m3 all property/global coefficientRestitution peratomtypepair 2 ${rest} ${noRest} ${noRest} ${noRest}
+fix 		m3 all property/global coefficientRestitution peratomtypepair 2 0.5 ${noRest} ${noRest} ${noRest}
+fix 		m3 all property/global coefficientRestitution peratomtypepair 2 0.5 0.051 ${noRest} ${noRest}
+fix 		m3 all property/global coefficientRestitution peratomtypepair 2 0.5 0.051 0.051 ${noRest}
+fix 		m3 all property/global coefficientRestitution peratomtypepair 2 0.5 0.051 0.051 0.051
+fix 		m4 all property/global coefficientFriction peratomtypepair 2 ${fric} ${noFric} ${noFric} ${noFric}
+fix 		m4 all property/global coefficientFriction peratomtypepair 2 0.1 ${noFric} ${noFric} ${noFric}
+fix 		m4 all property/global coefficientFriction peratomtypepair 2 0.1 0 ${noFric} ${noFric}
+fix 		m4 all property/global coefficientFriction peratomtypepair 2 0.1 0 0 ${noFric}
+fix 		m4 all property/global coefficientFriction peratomtypepair 2 0.1 0 0 0
+fix         m5 all property/global coefficientRollingFriction peratomtypepair 2 ${roll} 			${noRoll} ${noRoll} ${noRoll}
+fix         m5 all property/global coefficientRollingFriction peratomtypepair 2 0.4 			${noRoll} ${noRoll} ${noRoll}
+fix         m5 all property/global coefficientRollingFriction peratomtypepair 2 0.4 			0 ${noRoll} ${noRoll}
+fix         m5 all property/global coefficientRollingFriction peratomtypepair 2 0.4 			0 0 ${noRoll}
+fix         m5 all property/global coefficientRollingFriction peratomtypepair 2 0.4 			0 0 0
+fix         m6 all property/global characteristicVelocity scalar ${cV}
+fix         m6 all property/global characteristicVelocity scalar 0.1
+
+
+#pair style
+pair_style gran model hooke tangential history rolling_friction cdt
+pair_coeff  * *
+
+#timestep, gravity
+timestep    ${dt}
+timestep    5e-06
+fix         gravi all gravity 9.81 vector 0.0 0.0 -1.0
+
+fix         bottom	  all mesh/surface file stl_files/surface_bottom.stl    type 1
+Resetting global state of Fix bottom Style mesh/surface from restart file info
+fix         inlet	  all mesh/surface file stl_files/surface_inlet.stl     type 1
+Resetting global state of Fix inlet Style mesh/surface from restart file info
+fix         side      all mesh/surface file stl_files/surface_side.stl      type 1
+Resetting global state of Fix side Style mesh/surface from restart file info
+fix         top 	  all mesh/surface file stl_files/surface_top.stl 		type 1
+Resetting global state of Fix top Style mesh/surface from restart file info
+
+# inserting servo wall on top of the particle bed
+fix servoTop all mesh/surface/stress/servo file stl_files/surface_top.stl type 2 scale 1. 				 move 0.0 0.0 8.5 com 0.8 0.0 1.5 ctrlPV force axis 0. 0. 1. 				 target_val ${ctrlForce1} vel_max ${maxVel} kp ${ctrlKp} ki ${ctrlKi} kd ${ctrlKd} #verbose no
+fix servoTop all mesh/surface/stress/servo file stl_files/surface_top.stl type 2 scale 1. 				 move 0.0 0.0 8.5 com 0.8 0.0 1.5 ctrlPV force axis 0. 0. 1. 				 target_val -39240 vel_max ${maxVel} kp ${ctrlKp} ki ${ctrlKi} kd ${ctrlKd} 
+fix servoTop all mesh/surface/stress/servo file stl_files/surface_top.stl type 2 scale 1. 				 move 0.0 0.0 8.5 com 0.8 0.0 1.5 ctrlPV force axis 0. 0. 1. 				 target_val -39240 vel_max 62.5 kp ${ctrlKp} ki ${ctrlKi} kd ${ctrlKd} 
+fix servoTop all mesh/surface/stress/servo file stl_files/surface_top.stl type 2 scale 1. 				 move 0.0 0.0 8.5 com 0.8 0.0 1.5 ctrlPV force axis 0. 0. 1. 				 target_val -39240 vel_max 62.5 kp 0.01 ki ${ctrlKi} kd ${ctrlKd} 
+fix servoTop all mesh/surface/stress/servo file stl_files/surface_top.stl type 2 scale 1. 				 move 0.0 0.0 8.5 com 0.8 0.0 1.5 ctrlPV force axis 0. 0. 1. 				 target_val -39240 vel_max 62.5 kp 0.01 ki 0 kd ${ctrlKd} 
+fix servoTop all mesh/surface/stress/servo file stl_files/surface_top.stl type 2 scale 1. 				 move 0.0 0.0 8.5 com 0.8 0.0 1.5 ctrlPV force axis 0. 0. 1. 				 target_val -39240 vel_max 62.5 kp 0.01 ki 0 kd 0 
+Resetting global state of Fix servoTop Style mesh/surface/stress/servo from restart file info
+
+fix granwalls all wall/gran model hooke tangential history mesh n_meshes 4 meshes bottom inlet side servoTop
+Resetting global state of Fix n_neighs_mesh_bottom Style property/atom from restart file info
+Resetting per-atom state of Fix n_neighs_mesh_bottom Style property/atom from restart file info
+Resetting global state of Fix tracker_bottom Style contacthistory/mesh from restart file info
+Resetting per-atom state of Fix tracker_bottom Style contacthistory/mesh from restart file info
+Resetting global state of Fix n_neighs_mesh_inlet Style property/atom from restart file info
+Resetting per-atom state of Fix n_neighs_mesh_inlet Style property/atom from restart file info
+Resetting global state of Fix tracker_inlet Style contacthistory/mesh from restart file info
+Resetting per-atom state of Fix tracker_inlet Style contacthistory/mesh from restart file info
+Resetting global state of Fix n_neighs_mesh_side Style property/atom from restart file info
+Resetting per-atom state of Fix n_neighs_mesh_side Style property/atom from restart file info
+Resetting global state of Fix tracker_side Style contacthistory/mesh from restart file info
+Resetting per-atom state of Fix tracker_side Style contacthistory/mesh from restart file info
+Resetting global state of Fix n_neighs_mesh_servoTop Style property/atom from restart file info
+Resetting per-atom state of Fix n_neighs_mesh_servoTop Style property/atom from restart file info
+Resetting global state of Fix tracker_servoTop Style contacthistory/mesh from restart file info
+Resetting per-atom state of Fix tracker_servoTop Style contacthistory/mesh from restart file info
+
+
+
+fix		integr all nve/sphere
+
+fix ts_check all check/timestep/gran 10000 0.2 0.2
+
+#cfd coupling
+#fix		cfd all couple/cfd couple_every 1 mpi
+#fix		cfd2 all couple/cfd/force/implicit
+
+#screen output
+compute		1 all erotate/sphere
+thermo_style	custom step atoms ke c_1 vol
+thermo		10000
+thermo_modify	lost ignore norm no
+compute_modify	thermo_temp dynamic yes
+
+dump		dmp2 all custom/vtk 1 ../DEM/post/dump*.liggghts_run.vtk id type type x y z vx vy vz fx fy fz radius
+
+run 10
+Resetting global state of Fix contacthistory Style contacthistory from restart file info
+Resetting per-atom state of Fix contacthistory Style contacthistory from restart file info
+Memory usage per processor = 75.2443 Mbytes
+Step Atoms KinEng 1 Volume 
+       0   129433  0.072993229 0.00015068347       46.176 
+      10   129433  0.073104631 0.00027091032       46.176 
+Loop time of 9.49257 on 4 procs for 10 steps with 129433 atoms
+
+Pair  time (%) = 0.343451 (3.61811)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.00235468 (0.0248055)
+Outpt time (%) = 3.04251 (32.0515)
+Other time (%) = 6.10425 (64.3056)
+
+Nlocal:    32358.2 ave 64764 max 0 min
+Histogram: 2 0 0 0 0 0 0 0 0 2
+Nghost:    3210.75 ave 6456 max 0 min
+Histogram: 2 0 0 0 0 0 0 0 0 2
+Neighs:    139548 ave 279303 max 0 min
+Histogram: 2 0 0 0 0 0 0 0 0 2
+
+Total # of neighbors = 558194
+Ave neighs/atom = 4.31261
+Neighbor list builds = 0
+Dangerous builds = 0
+

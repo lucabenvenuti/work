@@ -1,0 +1,58 @@
+solid inlet
+  facet normal -1 0 0
+    outer loop
+       vertex 0 -0.0634722 -0.0576923
+       vertex 0 -0.0634722 0.00961538
+       vertex 0 0 0.00961538
+    endloop
+  endfacet
+  facet normal -1 0 0
+    outer loop
+       vertex 0 -0.0634722 -0.0576923
+       vertex 0 0 0.00961538
+       vertex 0 0 -0.0576923
+    endloop
+  endfacet
+  facet normal -1 0 0
+    outer loop
+       vertex 0 0 -0.0576923
+       vertex 0 0 0.00961538
+       vertex 0 0.0634722 0.00961538
+    endloop
+  endfacet
+  facet normal -1 0 0
+    outer loop
+       vertex 0 0 -0.0576923
+       vertex 0 0.0634722 0.00961538
+       vertex 0 0.0634722 -0.0576923
+    endloop
+  endfacet
+  facet normal -1 0 0
+    outer loop
+       vertex 0 -0.0634722 0.00961538
+       vertex 0 -0.0634722 0.0769231
+       vertex 0 0 0.0769231
+    endloop
+  endfacet
+  facet normal -1 0 0
+    outer loop
+       vertex 0 -0.0634722 0.00961538
+       vertex 0 0 0.0769231
+       vertex 0 0 0.00961538
+    endloop
+  endfacet
+  facet normal -1 0 0
+    outer loop
+       vertex 0 0 0.00961538
+       vertex 0 0 0.0769231
+       vertex 0 0.0634722 0.0769231
+    endloop
+  endfacet
+  facet normal -1 0 0
+    outer loop
+       vertex 0 0 0.00961538
+       vertex 0 0.0634722 0.0769231
+       vertex 0 0.0634722 0.00961538
+    endloop
+  endfacet
+endsolid inlet
