@@ -37,7 +37,7 @@ PROCS=$(($XPROCS*$YPROCS*$ZPROCS))
 MPI_OPTIONS="-np $PROCS"
 TOOLKIT_DIR=$HOME/workspace/src/ParticulateFlow/toolkit
 
-CASE_DIR=$PBS_O_WORKDIR/../BF
+CASE_DIR=$PBS_O_WORKDIR/../BF4
 
 mkdir -p $CASE_DIR/DEM/post
 
