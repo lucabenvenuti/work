@@ -5,7 +5,7 @@
 #PBS -N BF8c
 #PBS -o ${PBS_JOBID}__BF8c__${PBS_JOBID}.out
 #PBS -j oe
-#PBS -l nodes=1:ppn=4
+#PBS -l nodes=1:ppn=8
 #PBS -l walltime=10:00:00
 #PBS -M luca.benvenuti@jku.at
 #PBS -m bea
