@@ -39,29 +39,11 @@ TOOLKIT_DIR=$HOME/workspace/src/ParticulateFlow/toolkit
 
 CASE_DIR=$PBS_O_WORKDIR/../BF8cResume
 
-mkdir -p $CASE_DIR/DEM/post
+mkdir -p $CASE_DIR/post
 
-RESTART_FILE_NAME=$CASE_DIR/DEM/liggghts.restart
-
-if [ ! -f $RESTART_FILE_NAME  ]
-  then
-    echo "running liggghts init"
-    date
-    module use $HOME/modules
-    module unload openmpi
-    module load mvapich2 liggghts/PFM/develop
-    cd $CASE_DIR/DEM
-    VARS="-var XPROCS $XPROCS -var YPROCS $YPROCS -var ZPROCS $ZPROCS"
-    mpiexec $MPI_OPTIONS liggghts -in in.liggghts_init $VARS
-    module unload mvapich2 liggghts/PFM/develop
-    module load openmpi
-fi
-
-cd $TOOLKIT_DIR
-
-source bashrc
+module use $HOME/modules
+module unload openmpi
+module load mvapich2 liggghts/PFM/develop
 cd $CASE_DIR
-
-date
 mpiexec $MPI_OPTIONS liggghts -in in.liggghts_resume
 date
