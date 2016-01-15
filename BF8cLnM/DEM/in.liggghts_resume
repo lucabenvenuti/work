@@ -67,7 +67,7 @@ pair_coeff  * *
 timestep    ${dt}
 fix         gravi all gravity 9.81 vector 0.0 0.0 -1.0
 
-fix         shell	  all mesh/surface file stl_files/shell.stl    type 1
+fix         bottom	  all mesh/surface file stl_files/bottom.stl    type 1
 #fix         inlet	  all mesh/surface file stl_files/surface_inlet.stl     type 1
 #fix         side      all mesh/surface file stl_files/surface_side.stl      type 1
 fix         top 	  all mesh/surface file stl_files/top.stl 		type 1 
