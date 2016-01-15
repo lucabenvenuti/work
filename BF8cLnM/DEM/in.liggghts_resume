@@ -77,7 +77,7 @@ fix servoTop all mesh/surface/stress/servo file ../DEM/stl_files/top.stl type 2 
 				 com 0.8 0.0 1.5 ctrlPV force axis 0. 0. 1. &
 				 target_val ${ctrlForce1} vel_max ${maxVel} kp ${ctrlKp} ki ${ctrlKi} kd ${ctrlKd} #verbose no
 				 
-fix granwalls all wall/gran model hooke tangential history mesh n_meshes 2 meshes shell servoTop
+fix granwalls all wall/gran model hooke tangential history mesh n_meshes 2 meshes bottom servoTop
 
 # change the particles density
 # set             group all density ${partDens}
