@@ -43,7 +43,7 @@ newton			off
 units			si
 processors      2 2 2
 
-read_restart 		../DEM/liggghts.restart
+read_restart 		liggghts.restart
 reset_timestep 0
 
 neighbor	    0.01 bin
