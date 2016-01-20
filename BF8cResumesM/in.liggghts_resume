@@ -107,8 +107,8 @@ thermo_modify	lost ignore norm no
 compute_modify	thermo_temp dynamic yes
 
 #insert the first particles so that dump is not empty
-#dump 		myDump all stl 50000 ../DEM/post/dump_*.stl
-#dump		dmp all custom/vtk 50000 ../DEM/post/dump*.liggghts_coupled.vtk id & 
-#			type x y z vx vy vz fx fy fz radius
+dump 		myDump all stl 50000 post/dump_*.stl
+dump		dmp all custom/vtk 50000 post/dump*.liggghts_coupled.vtk id & 
+			type x y z vx vy vz fx fy fz radius
 
-run 1000
+run 1000000
