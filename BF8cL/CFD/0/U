@@ -29,8 +29,7 @@ boundaryField
    
     top
     {
-        type            uniformFixedValue;
-        uniformValue    constant (0 0 0);
+        type            zeroGradient;
     }
 
     side
