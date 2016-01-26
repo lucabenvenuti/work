@@ -131,6 +131,6 @@ exp.coeffPreShear60 = exp.tauAbPr60/exp.sigmaAb60;
 exp.coeffPreShear80 = exp.tauAbPr80/exp.sigmaAb80;
 exp.coeffPreShear100 = exp.tauAnM/exp.sigmaAnM;
 exp.coeffShear100 = exp.coeffPreShear100;
-
+exp.filename = filename;
 
 end

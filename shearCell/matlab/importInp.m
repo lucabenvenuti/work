@@ -53,16 +53,21 @@ fclose(fileID);
 
 %% Create output variable
  matrix2 = [dataArray{1:end-1}];
+ expForce.areaShearCell = 0.001494444071421;
  
  expForce.Sab40 = matrix2(1);
  expForce.Sab60 = matrix2(3);
- expForce.Sab80 = matrix2(5);
- 
- expForce.areaShearCell = 0.001494444071421;
- 
+ if length(matrix2) > 4
+    expForce.Sab80 = matrix2(5);
+    expForce.tauAb80 = expForce.Sab80/expForce.areaShearCell;
+ else
+     expForce.Sab80 = 0;
+     expForce.tauAb80 = 0 ;
+ end
+  
  expForce.tauAb40 = expForce.Sab40/expForce.areaShearCell;
  expForce.tauAb60 = expForce.Sab60/expForce.areaShearCell;
- expForce.tauAb80 = expForce.Sab80/expForce.areaShearCell;
+ expForce.filename = filename;
  
  %exp.coeffShear40 = exp.tauAn40/exp.sigmaAb40;
 %0.001494444071421
