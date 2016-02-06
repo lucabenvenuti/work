@@ -34,7 +34,7 @@ ys4 = t(tr.testInd);
 
 clearvars x2 zz2
 
-imageFlag = false;
+imageFlag = true;
 
 maxEval = true;
 

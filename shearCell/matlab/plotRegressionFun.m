@@ -13,6 +13,6 @@ ylabel(['\mu_{psh, ', titleName, '} [-]'],'fontname','times new roman','FontSize
 set(gca,'fontname','times new roman','FontSize',20)
 set(handler, 'Position', [100 100 1500 800],'color','w');
 export_fig(['SCT',titleName],'-png', '-nocrop', '-painters', handler);
-
+matlab2tikz( ['SCT',titleName, '.tikz'] );
 end
 

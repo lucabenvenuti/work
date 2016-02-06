@@ -11,7 +11,7 @@ clear all
 close all
 clc
 
-imageFlag = false;
+imageFlag = true;
 maxEval = true;
 
 
@@ -119,10 +119,13 @@ ys3 = ys4';
 q.mae = mae(ys3, m_new);
 q.mse = mse(ys3, m_new);
 if (imageFlag)
-    h6 = figure(6); plotregression(ys3, m_new,'AOR Bayesian linear regressor (tapas)');
-    set(gca,'fontname','times new roman','FontSize',20)  % Set it to times
-    set(h6, 'Position', [100 100 1500 800],'color','w');
-    export_fig('AORBayesianLinearRegression','-png', '-nocrop', '-painters', h6);
+    %h6 = figure(6); 
+    %plotregression(ys3, m_new,'AOR Bayesian linear regressor (tapas)');
+    titleName = 'BayesianLinearRegressor';
+    [ m_new_reg, h6 ] = plotRegressionAorFun( 6, titleName, ys3, m_new, 0.83, 7.3 );
+%     set(gca,'fontname','times new roman','FontSize',20)  % Set it to times
+%     set(h6, 'Position', [100 100 1500 800],'color','w');
+%     export_fig('AORBayesianLinearRegression','-png', '-nocrop', '-painters', h6);
 end
 %% Gaussian process (a non-parametric probabilistic regressor)
 
@@ -146,10 +149,13 @@ g.ymu = ymu;
 g.mae = mae(ys3, ymu);
 g.mse = mse(ys3, ymu);
 if (imageFlag)
-    h7 = figure(7); plotregression(ys3, ymu,'AOR Gaussian process (a non-parametric probabilistic regressor)');
-    set(gca,'fontname','times new roman','FontSize',20)  % Set it to times
-    set(h7, 'Position', [100 100 1500 800],'color','w');
-    export_fig('AORGaussianNonLinearRegression','-png', '-nocrop', '-painters', h7);
+    %h7 = figure(7); 
+    %plotregression(ys3, ymu,'AOR Gaussian process (a non-parametric probabilistic regressor)');
+    titleName = 'GaussianNonLinearRegressor';
+    [ m_new_reg, h7 ] = plotRegressionAorFun( 7, titleName, ys3, m_new, 0.81, 8.3 );
+%     set(gca,'fontname','times new roman','FontSize',20)  % Set it to times
+%     set(h7, 'Position', [100 100 1500 800],'color','w');
+%     export_fig('AORGaussianNonLinearRegression','-png', '-nocrop', '-painters', h7);
 end
 %% ANNs
 % z = avgMuR1';
@@ -189,12 +195,14 @@ n.mae = mae(ys4,yy(tr.testInd));
 n.mse = mse(ys4,yy(tr.testInd));
 
 if (imageFlag)
-    h9 = figure(9);
-    % plotregression(z(tr.testInd),yy(tr.testInd),'ANNs Regression');
-    plotregression(ys4,yy(tr.testInd),'AOR ANNs Regression');
-    set(gca,'fontname','times new roman','FontSize',20)  % Set it to times
-    set(h9, 'Position', [100 100 1500 800],'color','w');
-    export_fig('AORANNsRegression','-png', '-nocrop', '-painters', h9);
+%     h9 = figure(9);
+%     % plotregression(z(tr.testInd),yy(tr.testInd),'ANNs Regression');
+%     plotregression(ys4,yy(tr.testInd),'AOR ANNs Regression');
+%     set(gca,'fontname','times new roman','FontSize',20)  % Set it to times
+%     set(h9, 'Position', [100 100 1500 800],'color','w');
+%     export_fig('AORANNsRegression','-png', '-nocrop', '-painters', h9);
+    titleName = 'ANNNonLinearRegressor';
+    [ m_new_reg, h9 ] = plotRegressionAorFun( 9, titleName, ys3, m_new, 0.92, 3.4 );
 end
 %% Statistics on test samples errors
 

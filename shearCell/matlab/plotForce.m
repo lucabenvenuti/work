@@ -28,7 +28,7 @@ unitSysDefault = 'si';  % 'si' or 'cgs'
 if (isunix)
     sim_dir = '/mnt/scratchPFMDaten/Luca/20150721Lise/resultsShearCellAllDensitiesAndOld'; % directory, where simulation files can be found
 else
-    sim_dir = 'S:\Luca\testPolidispersityShearCellCokeCoarseCokeFineSinterFineLimestoneFine';
+    sim_dir = 'R:\simulations\shearCell\10\sim124_limestonefine_reducedPolydispersity_mach32';
 end
 
 %
@@ -44,12 +44,12 @@ filepatterncsv = 'sim_par*_fid*.csv'; % e.g. 'force.*.txt' %Andi
 searchCases = {...'fric' 0.6 %[0.4 0.8]
     ...'rf' 0.6 %[0.4 0.8]
     
-    ...'rest'   [0.5 0.9]
+    'rest'   0.5 %[0.5 0.9]
     ...'fid'   23141 %[	23168 23141 ]%	20026	20027	20028	20029	20030 20035		20201	20202	20203	20204 20205] %20101	20102	20103	20125	20126 20001	20002
     'shearperc' 1.0
     ... 'ctrlStress' -1.007001977856750e+04
-    ... 'expMass' 8.7452 %0.9275 %
-    ... 'dens' 3500 %[2500 3500]
+    'expMass' 8.7390 %0.9275 %
+     'dens' 3000 %[2500 3500]
     ...'dt' 1.0e-6
     ...'dCylDp' 20
     ...'radmu' 0.000551
@@ -70,7 +70,7 @@ col_numBox = 13;
 exp_flag = false; % enable the comparision to experimental data
 exp_dir = '.'; % directory, where the files can be found
 legendExpFlag = 'schulze'; % choose between jenike & schulze
-polidispersity_flag = true; %
+polidispersity_flag = false; %
 
 if (exp_flag)
     switch legendExpFlag
@@ -114,7 +114,7 @@ fracColMass = 1.0; %0.12;
 
 manualPlateauFlag = false;
 %doImage
-imageFlag = false; %~manualPlateauFlag; % "~" gives the opposite of the boolean
+imageFlag = true; %~manualPlateauFlag; % "~" gives the opposite of the boolean
 
 startPlateauPreShearValue = .25;%.38;
 stopPlateauPreShearValue = .35;%.48;
@@ -802,6 +802,7 @@ for ii=1:nSimCases
         %legend for force plots
         leg{5,iCnt(5)} = fname;
         iCnt(5) = iCnt(5)+1;
+        muRmatrix(ii,:) = data(ii).muR(1:10:end)';
     end
     if (dCylDpConfrontationFlag)
         % TEST: Plot weight of particle column (old and new)
@@ -812,6 +813,22 @@ for ii=1:nSimCases
     end
     
 end
+
+%%  Confront different values
+timesteps = data(1).timesteps(1:10:end);
+figure(7)
+plot(timesteps, muRmatrix);
+xlabel('time [s]');
+ylabel('\mu_{ie} [-]');
+legend(['\mu_{s} = ', num2str(data(1).fric), ', \mu_{r} = ', num2str(data(1).rf)],...
+       ['\mu_{s} = ', num2str(data(2).fric), ', \mu_{r} = ', num2str(data(2).rf)],...
+       ['\mu_{s} = ', num2str(data(3).fric), ', \mu_{r} = ', num2str(data(3).rf)],...
+       ['\mu_{s} = ', num2str(data(4).fric), ', \mu_{r} = ', num2str(data(4).rf)],...
+       ['\mu_{s} = ', num2str(data(5).fric), ', \mu_{r} = ', num2str(data(5).rf)],...
+       ['\mu_{s} = ', num2str(data(6).fric), ', \mu_{r} = ', num2str(data(6).rf)],...
+       ['\mu_{s} = ', num2str(data(7).fric), ', \mu_{r} = ', num2str(data(7).rf)],...
+       ['\mu_{s} = ', num2str(data(8).fric), ', \mu_{r} = ', num2str(data(8).rf)],...
+       ['\mu_{s} = ', num2str(data(9).fric), ', \mu_{r} = ', num2str(data(9).rf)],'Location', 'SouthEast');
 
 %%   Average Plateaux
 if (manualPlateauFlag)
