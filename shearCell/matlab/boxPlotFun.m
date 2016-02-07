@@ -32,10 +32,13 @@ date1 = datestr(now,formatOut);
 switch aorFlag
     case 1 %aor
         savefig(['BoxAOR', exp_file_name, date1, '.fig']);
+        export_fig(['BoxAOR', exp_file_name, date1],'-png', '-nocrop', '-painters', handler);
     case 2 %mix
         savefig(['BoxMix', date1, '.fig']);
+        export_fig(['BoxMix', date1],'-png', '-nocrop', '-painters', handler);
     otherwise %sct
         savefig(['BoxSCT', exp_file_name, 'coeffP', num2str(coeffPirker),date1, '.fig']);
+        export_fig(['BoxSCT', exp_file_name, 'coeffP', num2str(coeffPirker),date1],'-png', '-nocrop', '-painters', handler);
 end
 
 end

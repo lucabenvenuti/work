@@ -86,7 +86,7 @@ end
 clearvars h1 h2 h3 h4 h5 h6 h7
 
 a2 = figure(numFig);
-k=1;
+k = 1;
 hold on
 for i=app:app:1
     %%  Colours
@@ -94,18 +94,18 @@ for i=app:app:1
         % Draw tile (i,j)
         if g(k)==255
             % g(i)= 255;
-            h0=fill([i-app i i i-app i-app],[j-app j-app j j j-app], [g(k)/255 g(k)/255 g(k)/255]  , 'EdgeColor', 'none')   ; %
+            h0=fill([i-app i i i-app i-app],[j-app j-app j j j-app], [g(k)/255 g(k)/255 g(k)/255]  , 'EdgeColor', 'none')   ; %white
         elseif g(k)==192
-            h2=fill([i-app i i i-app i-app],[j-app j-app j j j-app], [255/255 0/255 0/255]);%, 'EdgeColor', 'none')   ;
+            h2=fill([i-app i i i-app i-app],[j-app j-app j j j-app], [255/255 0/255 0/255]);%, 'EdgeColor', 'none')   ; %red
         elseif g(k)==128
-            h3=fill([i-app i i i-app i-app],[j-app j-app j j j-app], [102/255 204/255 0/255]);%, 'EdgeColor', 'none')   ;
+            h3=fill([i-app i i i-app i-app],[j-app j-app j j j-app], [102/255 204/255 0/255]);%, 'EdgeColor', 'none')   ; %green
         elseif g(k)==96
-            h4=fill([i-app i i i-app i-app],[j-app j-app j j j-app], [0/255 128/255 255/255]);%, 'EdgeColor', 'none')   ;
+            h4=fill([i-app i i i-app i-app],[j-app j-app j j j-app], [0/255 128/255 255/255]);%, 'EdgeColor', 'none')   ; %blue
         elseif g(k)==0
             %g(i)= 0;
-            h5=fill([i-app i i i-app i-app],[j-app j-app j j j-app], [g(k)/255 g(k)/255 g(k)/255]);%, 'EdgeColor', 'none')   ;
+            h5=fill([i-app i i i-app i-app],[j-app j-app j j j-app], [g(k)/255 g(k)/255 g(k)/255]);%, 'EdgeColor', 'none')   ; %black
         end
-        k=k+1;
+        k = k + 1;
     end
     
     %%  B&W
@@ -140,6 +140,26 @@ date1 = datestr(now,formatOut);
 if (exist('h2') & exist('h3') & exist('h4') & exist('h5'))
     legend([h2 h3 h4 h5],{[num2str(minC, 3),' < ' ,legend1, ' < ', num2str(int1, 3)],[num2str(int1, 3),' < ' ,legend1, ' < ', ...
         num2str(int2, 3)], [num2str(int2, 3),' < ' ,legend1, ' < ', num2str(int3, 3)], [num2str(int3, 3),' < ' ,legend1, ' < ', num2str(maxC, 3)]},'Location','SouthEast');
+elseif (exist('h2') & exist('h3') & exist('h4'))
+    legend([h2 h3 h4],{[num2str(minC, 3),' < ' ,legend1, ' < ', num2str(int1, 3)],[num2str(int1, 3),' < ' ,legend1, ' < ', ...
+        num2str(int2, 3)], [num2str(int2, 3),' < ' ,legend1, ' < ', num2str(int3, 3)]},'Location','SouthEast');    
+elseif (exist('h2') & exist('h4') & exist('h5'))
+    legend([h2 h4 h5],{[num2str(minC, 3),' < ' ,legend1, ' < ', num2str(int1, 3)], ...
+        [num2str(int2, 3),' < ' ,legend1, ' < ', num2str(int3, 3)], [num2str(int3, 3),' < ' ,legend1, ' < ', num2str(maxC, 3)]},'Location','SouthEast');    
+elseif (exist('h2') & exist('h5'))
+    legend([h2 h5],{[num2str(minC, 3),' < ' ,legend1, ' < ', num2str(int1, 3)],...
+        [num2str(int3, 3),' < ' ,legend1, ' < ', num2str(maxC, 3)]},'Location','SouthEast');
+elseif exist('h2')
+    legend(h2,[num2str(minC, 3),' < ' ,legend1, ' < ', num2str(int1, 3)],'Location','SouthEast');
+elseif (exist('h4') & exist('h5'))
+    legend([h4 h5],{[num2str(int2, 3),' < ' ,legend1, ' < ', num2str(int3, 3)], [num2str(int3, 3),' < ' ,legend1, ' < ', num2str(maxC, 3)]},'Location','SouthEast');
+elseif ~exist('h3')    
+    legend([h2 h4 h5],{[num2str(minC, 3),' < ' ,legend1, ' < ', num2str(int1, 3)], ...
+        [num2str(int2, 3),' < ' ,legend1, ' < ', num2str(int3, 3)], [num2str(int3, 3),' < ' ,legend1, ' < ', num2str(maxC, 3)]},'Location','SouthEast');    
+else
+    a2 = 0;
+    return;
+end    
     xlabel('\mu_s [-]', 'FontSize', 20);
     ylabel('\mu_r [-]', 'FontSize', 20);
     set(gca,'fontname','times new roman','FontSize',20)  % Set it to times
@@ -150,10 +170,13 @@ if (exist('h2') & exist('h3') & exist('h4') & exist('h5'))
     switch aorFlag
         case 1 %aor
             savefig(['TileAOR', exp_file_name, date1, '.fig']);
+            export_fig(['TileAOR', exp_file_name, date1],'-png', '-nocrop', '-painters', a2);
         case 2 %mix
             savefig(['TileMix', date1, '.fig']);
+            export_fig(['TileMix', date1],'-png', '-nocrop', '-painters', a2);
         otherwise %sct
             savefig(['TileSCT', exp_file_name, 'coeffP', num2str(coeffPirker),date1, '.fig']);
+            export_fig(['TileSCT', exp_file_name, 'coeffP', num2str(coeffPirker),date1],'-png', '-nocrop', '-painters', a2);
     end
     
 end
