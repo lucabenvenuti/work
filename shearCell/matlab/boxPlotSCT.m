@@ -1,3 +1,10 @@
+
+if (isunix)
+    addpath(genpath('/mnt/DATA/liggghts/work/shearCell/matlab'));
+else
+    addpath(genpath('E:\liggghts\work\shearCell\matlab'));
+end
+
 data2 = gloriaAugustaSchulzeNN([2,3,4,9],:)';
 
 data2(:,1) = data2(:,1)/max(data2(:,1));
