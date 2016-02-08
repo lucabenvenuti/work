@@ -19,10 +19,10 @@ exp_file_name = exp_file;
 coeffPirker = 0.8;
 a{numFig} = radarPrintVectorialFun( gloriaAugustaSchulzeNN, aorFlag, numFig, dataNN2, exp_file_name, coeffPirker);
 numFig = numFig + 1;
-a{numFig} = boxPlotFun( gloriaAugustaSchulzeNN, aorFlag, numFig, exp_file_name, coeffPirker);
+%a{numFig} = boxPlotFun( gloriaAugustaSchulzeNN, aorFlag, numFig, exp_file_name, coeffPirker);
 numFig = numFig + 1;
 legend = 'CoR' ;
-a{numFig} = tilePlotFun2( gloriaAugustaSchulzeNN, aorFlag, numFig, exp_file_name, legend, coeffPirker);
+%a{numFig} = tilePlotFun2( gloriaAugustaSchulzeNN, aorFlag, numFig, exp_file_name, legend, coeffPirker);
 
 clearvars matFile gloriaAugustaSchulzeNN aorFlag dataNN2 exp_file_name coeffPirker
 
@@ -37,10 +37,10 @@ exp_file_name = exp_file;
 coeffPirker = 1;
 a{numFig} = radarPrintVectorialFun( gloriaAugustaSchulzeNN, aorFlag, numFig, dataNN2, exp_file_name, coeffPirker);
 numFig = numFig + 1;
-a{numFig} = boxPlotFun( gloriaAugustaSchulzeNN, aorFlag, numFig, exp_file_name, coeffPirker);
+%a{numFig} = boxPlotFun( gloriaAugustaSchulzeNN, aorFlag, numFig, exp_file_name, coeffPirker);
 numFig = numFig + 1;
 legend = 'CoR' ;
-a{numFig} = tilePlotFun2( gloriaAugustaSchulzeNN, aorFlag, numFig, exp_file_name, legend, coeffPirker);
+%a{numFig} = tilePlotFun2( gloriaAugustaSchulzeNN, aorFlag, numFig, exp_file_name, legend, coeffPirker);
 
 clearvars matFile gloriaAugustaSchulzeNN aorFlag dataNN2 exp_file_name coeffPirker
 
@@ -55,10 +55,10 @@ exp_file_name = exp_file;
 coeffPirker = 1.2;
 a{numFig} = radarPrintVectorialFun( gloriaAugustaSchulzeNN, aorFlag, numFig, dataNN2, exp_file_name, coeffPirker);
 numFig = numFig + 1;
-a{numFig} = boxPlotFun( gloriaAugustaSchulzeNN, aorFlag, numFig, exp_file_name, coeffPirker);
+%a{numFig} = boxPlotFun( gloriaAugustaSchulzeNN, aorFlag, numFig, exp_file_name, coeffPirker);
 numFig = numFig + 1;
 legend = 'CoR' ;
-a{numFig} = tilePlotFun2( gloriaAugustaSchulzeNN, aorFlag, numFig, exp_file_name, legend, coeffPirker);
+%a{numFig} = tilePlotFun2( gloriaAugustaSchulzeNN, aorFlag, numFig, exp_file_name, legend, coeffPirker);
 
 clearvars matFile gloriaAugustaSchulzeNN aorFlag dataNN2 exp_file_name coeffPirker
 
@@ -73,10 +73,10 @@ exp_file_name = exp_file;
 coeffPirker = 0.8;
 a{numFig} = radarPrintVectorialFun( gloriaAugustaSchulzeNN, aorFlag, numFig, dataNN2, exp_file_name, coeffPirker);
 numFig = numFig + 1;
-a{numFig} = boxPlotFun( gloriaAugustaSchulzeNN, aorFlag, numFig, exp_file_name, coeffPirker);
+%a{numFig} = boxPlotFun( gloriaAugustaSchulzeNN, aorFlag, numFig, exp_file_name, coeffPirker);
 numFig = numFig + 1;
 legend = 'CoR' ;
-a{numFig} = tilePlotFun2( gloriaAugustaSchulzeNN, aorFlag, numFig, exp_file_name, legend, coeffPirker);
+% a{numFig} = tilePlotFun2( gloriaAugustaSchulzeNN, aorFlag, numFig, exp_file_name, legend, coeffPirker);
 
 clearvars matFile gloriaAugustaSchulzeNN aorFlag dataNN2 exp_file_name coeffPirker
 
@@ -91,10 +91,10 @@ exp_file_name = exp_file;
 coeffPirker = 1;
 a{numFig} = radarPrintVectorialFun( gloriaAugustaSchulzeNN, aorFlag, numFig, dataNN2, exp_file_name, coeffPirker);
 numFig = numFig + 1;
-a{numFig} = boxPlotFun( gloriaAugustaSchulzeNN, aorFlag, numFig, exp_file_name, coeffPirker);
+% a{numFig} = boxPlotFun( gloriaAugustaSchulzeNN, aorFlag, numFig, exp_file_name, coeffPirker);
 numFig = numFig + 1;
 legend = 'CoR' ;
-a{numFig} = tilePlotFun2( gloriaAugustaSchulzeNN, aorFlag, numFig, exp_file_name, legend, coeffPirker);
+% a{numFig} = tilePlotFun2( gloriaAugustaSchulzeNN, aorFlag, numFig, exp_file_name, legend, coeffPirker);
 
 clearvars matFile gloriaAugustaSchulzeNN aorFlag dataNN2 exp_file_name coeffPirker
 
@@ -109,10 +109,10 @@ exp_file_name = exp_file;
 coeffPirker = 1.2;
 a{numFig} = radarPrintVectorialFun( gloriaAugustaSchulzeNN, aorFlag, numFig, dataNN2, exp_file_name, coeffPirker);
 numFig = numFig + 1;
-a{numFig} = boxPlotFun( gloriaAugustaSchulzeNN, aorFlag, numFig, exp_file_name, coeffPirker);
+% a{numFig} = boxPlotFun( gloriaAugustaSchulzeNN, aorFlag, numFig, exp_file_name, coeffPirker);
 numFig = numFig + 1;
 legend = 'CoR' ;
-a{numFig} = tilePlotFun2( gloriaAugustaSchulzeNN, aorFlag, numFig, exp_file_name, legend, coeffPirker);
+% a{numFig} = tilePlotFun2( gloriaAugustaSchulzeNN, aorFlag, numFig, exp_file_name, legend, coeffPirker);
 
 clearvars matFile gloriaAugustaSchulzeNN aorFlag dataNN2 exp_file_name coeffPirker
 
@@ -127,10 +127,10 @@ exp_file_name = 'AoRSinterFine';
 coeffPirker = 1.2;
 a{numFig} = radarPrintVectorialFun( gloriaAugustaSchulzeNN, aorFlag, numFig, dataNN2, exp_file_name, coeffPirker);
 numFig = numFig + 1;
-a{numFig} = boxPlotFun( gloriaAugustaSchulzeNN, aorFlag, numFig, exp_file_name, coeffPirker);
+% a{numFig} = boxPlotFun( gloriaAugustaSchulzeNN, aorFlag, numFig, exp_file_name, coeffPirker);
 numFig = numFig + 1;
 legend = 'CoR' ;
-a{numFig} = tilePlotFun2( gloriaAugustaSchulzeNN, aorFlag, numFig, exp_file_name, legend, coeffPirker);
+% a{numFig} = tilePlotFun2( gloriaAugustaSchulzeNN, aorFlag, numFig, exp_file_name, legend, coeffPirker);
 
 clearvars matFile gloriaAugustaSchulzeNN aorFlag dataNN2 exp_file_name coeffPirker
 
@@ -146,7 +146,7 @@ coeffPirker = 1.2;
 dataNN2 = 0;
 a{numFig} = radarPrintVectorialFun( gloriaAugustaSchulzeNN, aorFlag, numFig, dataNN2, exp_file_name, coeffPirker);
 numFig = numFig + 1;
-a{numFig} = boxPlotFun( gloriaAugustaSchulzeNN, aorFlag, numFig, exp_file_name, coeffPirker);
+% a{numFig} = boxPlotFun( gloriaAugustaSchulzeNN, aorFlag, numFig, exp_file_name, coeffPirker);
 numFig = numFig + 1;
 legend = 'CoR' ;
-a{numFig} = tilePlotFun2( gloriaAugustaSchulzeNN, aorFlag, numFig, exp_file_name, legend, coeffPirker);
+% a{numFig} = tilePlotFun2( gloriaAugustaSchulzeNN, aorFlag, numFig, exp_file_name, legend, coeffPirker);

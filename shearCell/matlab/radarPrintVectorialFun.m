@@ -112,11 +112,11 @@ date1 = datestr(now,formatOut);
 
 switch aorFlag
     case 1 %aor
-        savefig(['ParamSpaceAOR', exp_file_name, date1, '.fig']);
+        savefig([num2str(numFig),'ParamSpaceAOR', exp_file_name, date1, '.fig']);
     case 2 %mix
-        savefig(['ParamSpaceMix', date1, '.fig']);
+        savefig([num2str(numFig),'ParamSpaceMix', date1, '.fig']);
     otherwise %sct
-        savefig(['ParamSpaceSCT', exp_file_name, 'coeffP', num2str(coeffPirker),date1, '.fig']);
+        savefig([num2str(numFig),'ParamSpaceSCT', exp_file_name, 'coeffP', num2str(coeffPirker), '-', date1, '.fig']);
 end
 
 end

@@ -169,14 +169,14 @@ end
     
     switch aorFlag
         case 1 %aor
-            savefig(['TileAOR', exp_file_name, date1, '.fig']);
-            export_fig(['TileAOR', exp_file_name, date1],'-png', '-nocrop', '-painters', a2);
+            savefig([num2str(numFig), 'TileAOR', exp_file_name, date1, '.fig']);
+            export_fig([num2str(numFig), 'TileAOR', exp_file_name, date1],'-png', '-nocrop', '-painters', a2);
         case 2 %mix
-            savefig(['TileMix', date1, '.fig']);
-            export_fig(['TileMix', date1],'-png', '-nocrop', '-painters', a2);
+            savefig([num2str(numFig), 'TileMix', date1, '.fig']);
+            export_fig([num2str(numFig), 'TileMix', date1],'-png', '-nocrop', '-painters', a2);
         otherwise %sct
-            savefig(['TileSCT', exp_file_name, 'coeffP', num2str(coeffPirker),date1, '.fig']);
-            export_fig(['TileSCT', exp_file_name, 'coeffP', num2str(coeffPirker),date1],'-png', '-nocrop', '-painters', a2);
+            savefig([num2str(numFig), 'TileSCT', exp_file_name, 'coeffP', num2str(coeffPirker), '-', date1, '.fig']);
+            export_fig([num2str(numFig), 'TileSCT', exp_file_name, 'coeffP', num2str(coeffPirker), '-', date1],'-png', '-nocrop', '-painters', a2);
     end
     
 end
