@@ -1,4 +1,4 @@
-function [NNSave, errorNN, x, zz, errorEstSum, errorEstIndex, errorEstSumMaxIndex, yyy, corrMatPca] =   myNeuNetFunPolidispersity(nSimCases2,data2,trainFcn2,hiddenLayerSizeVector2, target1, target2, target3)
+function [NNSave, errorNN, x, zz, errorEstSum, errorEstIndex, errorEstSumMaxIndex, yyy, corrMatPca] =   myNeuNetFunPolidispersity(nSimCases2, data2, trainFcn2, hiddenLayerSizeVector2, target1, target2, target3)
         %[NNSave2, errorNN2, x2, zz2, errorEstSum2, errorEstIndex2, errorEstSumMaxIndex2, yy2, corrMat2]=myNeuNetFun(nSimCases,data,trainFcn,hiddenLayerSizeVector, avgMuR2,avgMuR1, densityBulkBoxMean);
 for iijj=1:nSimCases2
     inputNN(iijj,3)=data2(iijj).rest;
