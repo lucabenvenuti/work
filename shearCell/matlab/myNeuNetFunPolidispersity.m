@@ -1,4 +1,4 @@
-function [NNSave, errorNN, x, zz, errorEstSum, errorEstIndex, errorEstSumMaxIndex, yyy, corrMatPca] =   myNeuNetFunPolidispersity(nSimCases2, data2, trainFcn2, hiddenLayerSizeVector2, target1, target2, target3)
+function [NNSave, errorNN, x, zz, errorEstSum, errorEstIndex, errorEstSumMaxIndex, yyy, corrMatPca, numbersNeuronsWinner, NNSaveNeuronsWinner] =   myNeuNetFunPolidispersity(nSimCases2, data2, trainFcn2, hiddenLayerSizeVector2, target1, target2, target3)
         %[NNSave2, errorNN2, x2, zz2, errorEstSum2, errorEstIndex2, errorEstSumMaxIndex2, yy2, corrMat2]=myNeuNetFun(nSimCases,data,trainFcn,hiddenLayerSizeVector, avgMuR2,avgMuR1, densityBulkBoxMean);
 for iijj=1:nSimCases2
     inputNN(iijj,3)=data2(iijj).rest;
@@ -97,7 +97,7 @@ else
     parallel = 'no';
 end
 
-llmm=1; %targetSel, targets MUST be trained indipendently !
+llmm = 1; %targetSel, targets MUST be trained indipendently !
 for llmm=1:columnTargetNN
 
     
@@ -124,20 +124,12 @@ for llmm=1:columnTargetNN
         NNSave{kkll,llmm}.biasInput  = net.b{1};
         NNSave{kkll,llmm}.biasOutput  = net.b{2};
         NNSave{kkll,llmm}.divideParam = net.divideParam;
-        % Radial Basis Function Network
-        % eg = 0.02; % sum-squared error goal
-        % sc = 1;    % spread constant
-        % net = newrb(x,t,eg,sc);
 
         % Test the Network
         y = net(x);
         yy(kkll,:) = y;
         yyy(kkll,llmm,:) = y;
         e = gsubtract(z,y);
-        % performance = perform(net,t,y); %
-        % meanAbsoluteError = mae(t-y);
-
-        %perf = mse(net,t,y);n
         [NNSave{kkll,llmm}.r, NNSave{kkll,llmm}.m, NNSave{kkll,llmm}.b] = regression(z,y);
 
 
@@ -153,7 +145,6 @@ for llmm=1:columnTargetNN
 
         jjkk = 0;
         llkk = 1;
-        %llnn=1;
         for llkk = 1:4
             jjkk = 4*kkll + llkk-4;
            [errorNN(jjkk).r2(llmm) errorNN(jjkk).rmse(llmm)] = rsquare(z(:,[errorNN(jjkk).index]),y(:,[errorNN(jjkk).index]));
@@ -162,43 +153,14 @@ for llmm=1:columnTargetNN
             errorNN(jjkk).neuronNumber(llmm) = hiddenLayerSize;
             errorNN(jjkk).errorEst(llmm) = errorNN(jjkk).r2(llmm)/(errorNN(jjkk).mae(llmm)*errorNN(jjkk).mse(llmm));
             errorNN(jjkk).errorEstIn = errorNN(jjkk).errorEst(llmm);
-        %     for llnn=1:columnTargetNN
-        %            [errorNN(jjkk).r2(llmm) errorNN(jjkk).rmse(llmm)] = rsquare(z(llmm,[errorNN(jjkk).index]),y(llmm,[errorNN(jjkk).index]));
-        %             errorNN(jjkk).mae(llmm) = mae(z(llnn,[errorNN(jjkk).index]),y(llnn,[errorNN(jjkk).index]));
-        %             errorNN(jjkk).mse(llmm) = mse(z(llnn,[errorNN(jjkk).index]),y(llnn,[errorNN(jjkk).index]));
-        %     end
-
         end
-
-        % [tot.r2 tot.rmse] = rsquare(t,y)
-        % maeTot = mae(t,y)
-        % mseTot = mse(t,y);
-        % [r2Train rmseTrain] = rsquare(t(:,[tr.trainInd]),y(:,[tr.trainInd]))
-        % maeTrain = mae(t(:,[tr.trainInd]),y(:,[tr.trainInd]))
-        % mseTrain = mse(t(:,[tr.trainInd]),y(:,[tr.trainInd]))
-        % [r2Val rmseVal] = rsquare(t(:,[tr.valInd]),y(:,[tr.valInd]))
-        % [r2Test rmseTest] = rsquare(t(:,[tr.testInd]),y(:,[tr.testInd]))
-
-        %
-        %  y(:,[tr.trainInd])
-        %  y(:,[tr.valInd])
-        %  y(:,[tr.testInd])
-
-        %help nntrain
-
 
 end
 kkkk=1;
 kkjj=1;
-% for kkkk=1:4:(hiddenLayerSizeVectorLength*4)
-%     errorEstSumIn(kkjj) = sum([errorNN(kkkk:(kkkk+3)).errorEstIn]);
-%     %errorEstSum(kkjj)=sum(errorEst(i:i+3));
-%     kkjj=kkjj+1;
-% end
 
 for kkkk=4:4:(hiddenLayerSizeVectorLength*4)
     errorEstSumIn(kkjj) = errorNN(kkkk).r2(llmm);
-    %errorEstSum(kkjj)=sum(errorEst(i:i+3));
     kkjj=kkjj+1;
 end
 
@@ -213,245 +175,9 @@ disp(['#Neuron = ',num2str(errorNN(errorEstIndex(llmm)).neuronNumber(llmm)), ' ;
 ' ; meanAbsoluteErrorTot = ', num2str(errorNN(errorEstIndex(llmm)).mae(llmm)),...
 ' ; R2Regression = ', num2str(NNSave{errorEstSumMaxIndex(llmm),llmm}.r),  ' ; mRegression = ', num2str(NNSave{errorEstSumMaxIndex(llmm),llmm}.m), ...
 ' ; bRegression = ', num2str(NNSave{errorEstSumMaxIndex(llmm),llmm}.b)]);
-
-%NNSave{errorEstSumMaxIndex(llmm),llmm}.r, NNSave{errorEstSumMaxIndex(llmm),llmm}.m, NNSave{errorEstSumMaxIndex(llmm),llmm}.b
-%errorEstSumMaxIndex2 =
-
-     %8     3
-%NNSave2{3,l}.r, NNSave2{3,2}.m, NNSave2{3,2}.b
-
-figure(llmm)
+numbersNeuronsWinner(llmm) = errorNN(errorEstIndex(llmm)).neuronNumber(llmm);
+NNSaveNeuronsWinner(llmm) = NNSave{errorEstSumMaxIndex(llmm), llmm};
+figure(llmm);
 plotregression(z,yy(errorEstSumMaxIndex(llmm),:),'Regression');
 
 end
-
-
-%% NN new input
-
-%     rest = dataNN.rest;
-%     sf = dataNN.sf;
-%     rf = dataNN.rf;
-%     dt = dataNN.dt;
-%     dCylDp = dataNN.dCylDp;
-%     
-%     
-%     
-%     lengthRest = length(rest);
-%     lengthSf = length(sf);
-%     lengthRf = length(rf);
-%     lengthDt = length(dt);
-%     lengthDCylDp = length(dCylDp);
-%     
-%     if isfield (dataNN, 'ctrlStress')
-%         ctrlStress = dataNN.ctrlStress;
-%         lengthCtrlStress = length(ctrlStress);
-%     end
-% 
-%     if isfield (dataNN, 'shearperc')
-%         shearperc = dataNN.shearperc;
-%         lengthShearperc = length(shearperc);
-%     end
-%     
-%     
-%     
-% 
-%     
-%     if isfield (dataNN, 'dens')
-%         dens = dataNN.dens;
-%         lengthDens = length(dens);
-%         totalLength = lengthRest*lengthSf*lengthRf*lengthDt*lengthDCylDp*lengthCtrlStress*lengthShearperc*lengthDens;
-%         newInput=ones(totalLength,8);
-%     elseif isfield (dataNN, 'shearperc')
-%          totalLength = lengthRest*lengthSf*lengthRf*lengthDt*lengthDCylDp*lengthCtrlStress*lengthShearperc;
-%          newInput=ones(totalLength,7);
-%     elseif isfield (dataNN, 'ctrlStress')
-%          totalLength = lengthRest*lengthSf*lengthRf*lengthDt*lengthDCylDp*lengthCtrlStress;
-%          newInput=ones(totalLength,6);
-%     else
-%         totalLength = lengthRest*lengthSf*lengthRf*lengthDt*lengthDCylDp;
-%         newInput=ones(totalLength,5);
-%     end
-% 
-% 
-% 
-% length1 = totalLength/lengthRest;
-% count1=0;
-% count12=1;
-% count13=1;
-% for i=1:length1
-%     newInput(1+count1:count1+lengthRest,1)=rest;
-%     
-%     
-%     newInput(1+count1:count1+lengthRest,2)=sf(count12);
-%     count12=count12+1;
-%     if count12==(lengthSf+1)
-%         count12=1;
-%     end
-%     
-% 
-%     
-%     count1 = count1 + lengthRest;
-% end
-% count1=0;
-% count12=1;
-% count13=0;
-% count14=1;
-% 
-% for i=1:(length1/lengthSf)
-%     newInput(1+count13:count13+lengthRest*lengthSf,3)=rf(count14);
-%     count14=count14+1;
-%     if count14==(lengthRf+1)
-%         count14=1;
-%     end
-%     
-%     count13 = count13 + lengthRest*lengthSf;
-%     
-% 
-% end
-% 
-% count15=0;
-% count16=1;
-% 
-% for i=1:(length1/lengthSf/lengthRf)
-%     newInput(1+count15:count15+lengthRest*lengthSf*lengthRf,4)=dt(count16);
-%     count16=count16+1;
-%     if count16==(lengthDt+1)
-%         count16=1;
-%     end
-%     
-%     count15 = count15 + lengthRest*lengthSf*lengthRf;
-%     
-% 
-% end
-% 
-% count17=0;
-% count18=1;
-% 
-% for i=1:(length1/lengthSf/lengthRf/lengthDt)
-%     newInput(1+count17:count17+lengthRest*lengthSf*lengthRf*lengthDt,5)=dCylDp(count18);
-%     count18=count18+1;
-%     if count18==(lengthDCylDp+1)
-%         count18=1;
-%     end
-%     
-%     count17 = count17 + lengthRest*lengthSf*lengthRf*lengthDt;
-%     
-% 
-% end
-% 
-% if isfield (dataNN, 'ctrlStress')
-% 
-%     count19=0;
-%     count20=1;
-% 
-%     for i=1:(length1/lengthSf/lengthRf/lengthDt/lengthDCylDp)
-%         newInput(1+count19:count19+lengthRest*lengthSf*lengthRf*lengthDt*lengthDCylDp,6)=ctrlStress(count20);
-%         count20=count20+1;
-%         if count20==(lengthCtrlStress+1)
-%             count20=1;
-%         end
-% 
-%         count19 = count19 + lengthRest*lengthSf*lengthRf*lengthDt*lengthDCylDp;
-% 
-%     end
-% 
-%     if isfield (dataNN, 'shearperc')    
-%         %shearperc
-%         count21=0;
-%         count22=1;
-% 
-%         for i=1:(length1/lengthSf/lengthRf/lengthDt/lengthDCylDp/lengthCtrlStress)
-%             newInput(1+count21:count21+lengthRest*lengthSf*lengthRf*lengthDt*lengthDCylDp*lengthCtrlStress,7)=shearperc(count22);
-%             count22=count22+1;
-%             if count22==(lengthShearperc+1)
-%                 count22=1;
-%             end
-% 
-%             count21 = count21 + lengthRest*lengthSf*lengthRf*lengthDt*lengthDCylDp*lengthCtrlStress;
-% 
-% 
-%         end
-% 
-%         if isfield (dataNN, 'dens')
-%             count23=0;
-%             count24=1;
-% 
-%             for i=1:(length1/lengthSf/lengthRf/lengthDt/lengthDCylDp/lengthCtrlStress/lengthShearperc)
-%                 newInput(1+count23:count23+lengthRest*lengthSf*lengthRf*lengthDt*lengthDCylDp*lengthCtrlStress*lengthShearperc,8)=dens(count24);
-%                 count24=count24+1;
-%                 if count24==(lengthDens+1)
-%                     count24=1;
-%                 end
-% 
-%                 count23 = count23 + lengthRest*lengthSf*lengthRf*lengthDt*lengthDCylDp*lengthCtrlStress*lengthShearperc;
-% 
-% 
-%             end
-%         end
-%     
-%     end
-% 
-% end
-% 
-% newInput=newInput';
-% 
-% [nIrows nIcolumn] = size(newInput);
-% 
-% net1=NNSave{errorEstSumMaxIndex(1),1}.net;
-% net2=NNSave{errorEstSumMaxIndex(2),2}.net;
-% % 
-% newInput(nIrows+1,:)=net1(newInput);
-% newInput(nIrows+2,:)=net2(newInput(1:nIrows,:));
-% % 
-% if isfield (dataNN, 'dens')
-%     net3=NNSave{errorEstSumMaxIndex(3),3}.net;
-%     newInput(nIrows+3,:)=net3(newInput(1:nIrows,:));
-% end
-
-
-
-
-%return
-
-%% 
-% length2 = totalLength/length(sf);
-% count2=0;
-% for i=1:length2
-%     newInput(1+count2:count2+length(sf),2)=sf;
-%     count2 = count2 + length(sf);
-% end
-% 
-% length3 = totalLength/length(rf);
-% count3=0;
-% for i=1:length3
-%     newInput(1+count3:count3+length(rf),3)=rf;
-%     count3 = count3 + length(rf);
-% end
-% 
-% length4 = totalLength/length(dt);
-% count4=0;
-% for i=1:length4
-%     newInput(1+count4:count4+length(dt),4)=dt;
-%     count4 = count4 + length(dt);
-% end
-% 
-% length5 = totalLength/length(dCylDp);
-% count5=0;
-% for i=1:length5
-%     newInput(1+count5:count5+length(dCylDp),5)=dCylDp;
-%     count5 = count5 + length(dCylDp);
-% end
-% 
-% length6 = totalLength/length(ctrlStress);
-% count6=0;
-% for i=1:length6
-%     newInput(1+count6:count6+length(ctrlStress),6)=ctrlStress;
-%     count6 = count6 + length(ctrlStress);
-% end
-% 
-% length7 = totalLength/length(shearperc);
-% count7=0;
-% for i=1:length7
-%     newInput(1+count7:count7+length(shearperc),7)=shearperc;
-%     count7 = count7 + length(shearperc);
-% end

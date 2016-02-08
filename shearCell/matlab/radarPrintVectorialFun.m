@@ -13,6 +13,11 @@ switch aorFlag
         Y=gloriaAugustaSchulzeNN(3,:); %rf
         S=gloriaAugustaSchulzeNN(1,:); %cor
         Z=gloriaAugustaSchulzeNN(4,:); %density
+    case 3 %polidispersity sct
+        X=gloriaAugustaSchulzeNN(3,:); %sf
+        Y=gloriaAugustaSchulzeNN(4,:); %rf
+        S=gloriaAugustaSchulzeNN(2,:); %cor
+        Z=gloriaAugustaSchulzeNN(5,:); %density
     otherwise %sct
         X=gloriaAugustaSchulzeNN(3,:); %sf
         Y=gloriaAugustaSchulzeNN(4,:); %rf
