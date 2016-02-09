@@ -170,7 +170,11 @@ elseif (exist('h2') & ~exist('h3') & exist('h4') & ~exist('h5')) % no green no b
         [num2str(int2, 3),' < ' ,legend1, ' < ', num2str(int3, 3)]},'Location','SouthEast');    
  
 elseif (~exist('h2') & ~exist('h3') & exist('h4') & exist('h5')) %no red and no green
-    legend([h4 h5],{[num2str(int2, 3),' < ' ,legend1, ' < ', num2str(int3, 3)], [num2str(int3, 3),' < ' ,legend1, ' < ', num2str(maxC, 3)]},'Location','SouthEast');    
+    legend([h4 h5],{[num2str(int2, 3),' < ' ,legend1, ' < ', num2str(int3, 3)], [num2str(int3, 3),' < ' ,legend1, ' < ', num2str(maxC, 3)]},'Location','SouthEast');
+    
+elseif (~exist('h2') & exist('h3') & ~exist('h4') & exist('h5')) %no red and no blue
+    legend([h3 h5],{[num2str(int1, 3),' < ' ,legend1, ' < ', ...
+        num2str(int2, 3)], [num2str(int3, 3),' < ' ,legend1, ' < ', num2str(maxC, 3)]},'Location','SouthEast');    
     
 elseif exist('h2') %only red
     legend(h2,[num2str(minC, 3),' < ' ,legend1, ' < ', num2str(int1, 3)],'Location','SouthEast');
