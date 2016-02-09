@@ -137,23 +137,45 @@ end
 formatOut = 'yyyy-mm-dd-HH-MM-SS';
 date1 = datestr(now,formatOut);
 
-if (exist('h2') & exist('h3') & exist('h4') & exist('h5'))
+if (exist('h2') & exist('h3') & exist('h4') & exist('h5')) %all colours
     legend([h2 h3 h4 h5],{[num2str(minC, 3),' < ' ,legend1, ' < ', num2str(int1, 3)],[num2str(int1, 3),' < ' ,legend1, ' < ', ...
         num2str(int2, 3)], [num2str(int2, 3),' < ' ,legend1, ' < ', num2str(int3, 3)], [num2str(int3, 3),' < ' ,legend1, ' < ', num2str(maxC, 3)]},'Location','SouthEast');
-elseif (exist('h2') & exist('h3') & exist('h4'))
+    
+elseif (exist('h2') & exist('h3') & exist('h4') & ~exist('h5')) %no black (h5)
     legend([h2 h3 h4],{[num2str(minC, 3),' < ' ,legend1, ' < ', num2str(int1, 3)],[num2str(int1, 3),' < ' ,legend1, ' < ', ...
         num2str(int2, 3)], [num2str(int2, 3),' < ' ,legend1, ' < ', num2str(int3, 3)]},'Location','SouthEast');    
-elseif (exist('h2') & exist('h4') & exist('h5'))
+    
+elseif (exist('h2') & exist('h4') & exist('h5') & ~exist('h3')) %no green (h3)
     legend([h2 h4 h5],{[num2str(minC, 3),' < ' ,legend1, ' < ', num2str(int1, 3)], ...
         [num2str(int2, 3),' < ' ,legend1, ' < ', num2str(int3, 3)], [num2str(int3, 3),' < ' ,legend1, ' < ', num2str(maxC, 3)]},'Location','SouthEast');    
-elseif (exist('h2') & exist('h5'))
+    
+elseif (exist('h2') & exist('h3') & exist('h5') & ~exist('h4')) %no blue (h4)
+    legend([h2 h3 h5],{[num2str(minC, 3),' < ' ,legend1, ' < ', num2str(int1, 3)],[num2str(int1, 3),' < ' ,legend1, ' < ', ...
+        num2str(int2, 3)], [num2str(int3, 3),' < ' ,legend1, ' < ', num2str(maxC, 3)]},'Location','SouthEast'); 
+    
+elseif (~exist('h2') & exist('h3') & exist('h4') & exist('h5')) %no red (h2)
+    legend([h3 h4 h5],{[num2str(int1, 3),' < ' ,legend1, ' < ', ...
+        num2str(int2, 3)], [num2str(int2, 3),' < ' ,legend1, ' < ', num2str(int3, 3)], [num2str(int3, 3),' < ' ,legend1, ' < ', num2str(maxC, 3)]},'Location','SouthEast');    
+    
+elseif (exist('h2') & exist('h5') & ~exist('h3') & ~exist('h4')) %no green and no blue
     legend([h2 h5],{[num2str(minC, 3),' < ' ,legend1, ' < ', num2str(int1, 3)],...
         [num2str(int3, 3),' < ' ,legend1, ' < ', num2str(maxC, 3)]},'Location','SouthEast');
-elseif exist('h2')
+
+elseif (exist('h2') & exist('h3') & ~exist('h4') & ~exist('h5')) %all colours
+    legend([h2 h3],{[num2str(minC, 3),' < ' ,legend1, ' < ', num2str(int1, 3)],[num2str(int1, 3),' < ' ,legend1, ' < ', ...
+        num2str(int2, 3)]},'Location','SouthEast'); 
+    
+elseif (exist('h2') & ~exist('h3') & exist('h4') & ~exist('h5')) % no green no black
+    legend([h2 h4 ],{[num2str(minC, 3),' < ' ,legend1, ' < ', num2str(int1, 3)], ...
+        [num2str(int2, 3),' < ' ,legend1, ' < ', num2str(int3, 3)]},'Location','SouthEast');    
+ 
+elseif (~exist('h2') & ~exist('h3') & exist('h4') & exist('h5')) %no red and no green
+    legend([h4 h5],{[num2str(int2, 3),' < ' ,legend1, ' < ', num2str(int3, 3)], [num2str(int3, 3),' < ' ,legend1, ' < ', num2str(maxC, 3)]},'Location','SouthEast');    
+    
+elseif exist('h2') %only red
     legend(h2,[num2str(minC, 3),' < ' ,legend1, ' < ', num2str(int1, 3)],'Location','SouthEast');
-elseif (exist('h4') & exist('h5'))
-    legend([h4 h5],{[num2str(int2, 3),' < ' ,legend1, ' < ', num2str(int3, 3)], [num2str(int3, 3),' < ' ,legend1, ' < ', num2str(maxC, 3)]},'Location','SouthEast');
-elseif ~exist('h3')    
+
+elseif ~exist('h3') %only green   
     legend([h2 h4 h5],{[num2str(minC, 3),' < ' ,legend1, ' < ', num2str(int1, 3)], ...
         [num2str(int2, 3),' < ' ,legend1, ' < ', num2str(int3, 3)], [num2str(int3, 3),' < ' ,legend1, ' < ', num2str(maxC, 3)]},'Location','SouthEast');    
 else

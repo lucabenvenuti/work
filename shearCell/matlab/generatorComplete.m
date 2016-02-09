@@ -55,80 +55,89 @@ load(matFile, 'dataNN2');
 dataNN2.rest = dataNN2.rest(1:2:end);
 dataNN2.rf = sort([dataNN2.rf(1:2:end)', 0.025:0.05:0.975]');
 dataNN2.sf = sort([dataNN2.sf(1:2:end)', 0.025:0.05:0.975]');
-dataNN2.ctrlStress = expOut.sigmaAnM; %5000; %1068;% [1068,2069,10070];
 dataNN2.dCylDp = 30;
 dataNN2.dens = dataNN2.dens(1:2:end);
 numFig = 0;
 
+%%  3) create NNSave and 4) extract weight table
+
+[NNSave2, errorNN2, x2, zz2, errorEstSum2, errorEstIndex2, errorEstSumMaxIndex2, yy2, corrMat2, numbersNeuronsWinner, NNSaveNeuronsWinner] =   ...
+    myNeuNetFunPolidispersity(nSimCases, data, trainFcn, hiddenLayerSizeVector, avgMuR2,avgMuR1, densityBulkBoxMax);
+close all
 
 %%  2) import/generate dataNN
 %for i = 14:39
-%for i = 1:26
-% expNumber = i + 13;
-expNumber = 25;
-
-switch expNumber
-    case {27, 28}
-        materialNumber = 1;
-        disp('coke coarse')
-    case {29, 30, 31}
-        materialNumber = 2;
-        disp('coke fine')
-    case {32, 33, 39}
-        materialNumber = 3;
-        disp('ironore coarse')
-    case {34, 35, 36, 37, 38}
-        materialNumber = 4;
-        disp('ironore fine')
-    case {21, 22}
-        materialNumber = 5;
-        disp('limestone coarse')
-    case {23, 24, 25, 26}
-        materialNumber = 6;
-        disp('limestone fine')
-    case {14, 15, 16}
-        materialNumber = 7;
-        disp('sinter coarse')
-    case {17, 18, 19, 20}
-        materialNumber = 8;
-        disp('sinter fine')
-    otherwise
-        warning('Unexpected plot type. No plot created.')
+for i = 3:26
+    expNumber = i + 13;
+    %expNumber = 25;
+    
+    switch expNumber
+        case {27, 28}
+            materialNumber = 1;
+            disp('coke coarse')
+        case {29, 30, 31}
+            materialNumber = 2;
+            disp('coke fine')
+        case {32, 33, 39}
+            materialNumber = 3;
+            disp('ironore coarse')
+        case {34, 35, 36, 37, 38}
+            materialNumber = 4;
+            disp('ironore fine')
+        case {21, 22}
+            materialNumber = 5;
+            disp('limestone coarse')
+        case {23, 24, 25, 26}
+            materialNumber = 6;
+            disp('limestone fine')
+        case {14, 15, 16}
+            materialNumber = 7;
+            disp('sinter coarse')
+        case {17, 18, 19, 20}
+            materialNumber = 8;
+            disp('sinter fine')
+        otherwise
+            warning('Unexpected plot type. No plot created.')
+    end
+    
+    exp_file_name = exp_file_name_list{expNumber, 1};
+    [coeffShear40, coeffShear60, coeffShear80, coeffShear100, expFtd, expInp, expOut] = experimentalImport(exp_file_name);
+    
+    dataNN2.radmu = radmu(materialNumber); %0.001;
+    dataNN2.radsigma = radsigma(materialNumber); %dataNN2.radsigma/10;
+    dataNN2.ctrlStress = expOut.sigmaAnM; %5000; %1068;% [1068,2069,10070];
+    
+    
+    
+    %%  5) create new input
+    newY2 = myNewInputPolidispersity(NNSave2, errorEstSumMaxIndex2, dataNN2);
+    newY3 = newY2([1:3, 8:11],:);
+    clearvars newY2
+    
+    %%  6) get gloria Augusta
+    [ gloriaAugustaSchulzeNNDens{i}, kkk ] = getGLoriaAugustaSCTPoldispersity(coeffShear40, ...
+        coeffShear60, coeffShear80, coeffShear100, expFtd, expOut, coeffPirker, newY3, ...
+        fricTolerance, densTolerance);
+    
+    %%  7) print
+    
+    if kkk > 3
+        %gloriaAugustaSchulzeNN = gen{i}.gloriaAugustaSchulzeNNDens';
+        aorFlag = 3;
+        numFig = numFig + 1;
+        af{numFig} = radarPrintVectorialFun( gloriaAugustaSchulzeNNDens{i}', aorFlag, numFig, dataNN2, exp_file_name, coeffPirker);
+        numFig = numFig + 1;
+        af{numFig} = boxPlotFun( gloriaAugustaSchulzeNNDens{i}', aorFlag, numFig, exp_file_name, coeffPirker);
+        numFig = numFig + 1;
+        legend = 'CoR' ;
+        af{numFig} = tilePlotFun2( gloriaAugustaSchulzeNNDens{i}', aorFlag, numFig, exp_file_name, legend, coeffPirker);
+    else
+        warning(['no valid values for ', exp_file_name]);
+    end
+    
+    clearvars newY3 exp_file_name coeffShear40  coeffShear60  coeffShear80  coeffShear100  expFtd  expInp  expOut ...
+        gloriaAugustaSchulzeNN
+        %NNSave2  errorNN2  x2  zz2  errorEstSum2  errorEstIndex2  errorEstSumMaxIndex2  yy2  corrMat2 gloriaAugustaSchulzeNN
+    
 end
-
-exp_file_name = exp_file_name_list{expNumber, 1};
-[coeffShear40, coeffShear60, coeffShear80, coeffShear100, expFtd, expInp, expOut] = experimentalImport(exp_file_name);
-
-dataNN2.radmu = radmu(materialNumber); %0.001;
-dataNN2.radsigma = radsigma(materialNumber); %dataNN2.radsigma/10;
-
-
-
-%%  3) create NNSave and 4) extract weight table
-
-[NNSave2, errorNN2, x2, zz2, errorEstSum2, errorEstIndex2, errorEstSumMaxIndex2, yy2, corrMat2, gen{i}.numbersNeuronsWinner, gen{i}.NNSaveNeuronsWinner] =   ...
-    myNeuNetFunPolidispersity(nSimCases, data, trainFcn, hiddenLayerSizeVector, avgMuR2,avgMuR1, densityBulkBoxMax);
-
-%%  5) create new input
-newY2 = myNewInputPolidispersity(NNSave2, errorEstSumMaxIndex2, dataNN2);
-newY3 = newY2([1:3, 8:11],:);
-clearvars newY2
-
-%%  6) get gloria Augusta
-[ gen{i}.gloriaAugustaSchulzeNNDens, kkk ] = getGLoriaAugustaSCTPoldispersity(coeffShear40, ...
-    coeffShear60, coeffShear80, coeffShear100, expFtd, expOut, coeffPirker, newY3, ...
-    fricTolerance, densTolerance);
-
-%%  7) print
-
-%gloriaAugustaSchulzeNN = gen{i}.gloriaAugustaSchulzeNNDens';
-aorFlag = 3;
-numFig = numFig + 1;
-af{numFig} = radarPrintVectorialFun( gen{i}.gloriaAugustaSchulzeNNDens', aorFlag, numFig, dataNN2, exp_file_name, coeffPirker);
-numFig = numFig + 1;
-af{numFig} = boxPlotFun( gen{i}.gloriaAugustaSchulzeNNDens', aorFlag, numFig, exp_file_name, coeffPirker);
-numFig = numFig + 1;
-legend = 'CoR' ;
-af{numFig} = tilePlotFun2( gen{i}.gloriaAugustaSchulzeNNDens', aorFlag, numFig, exp_file_name, legend, coeffPirker);
-
-clearvars exp_file_name coeffShear40  coeffShear60  coeffShear80  coeffShear100  expFtd  expInp  expOut NNSave2  errorNN2  x2  zz2  errorEstSum2  errorEstIndex2  errorEstSumMaxIndex2  yy2  corrMat2 gloriaAugustaSchulzeNN
+save -v7.3 testPolidispersity20160208.mat gloriaAugustaSchulzeNNDens
