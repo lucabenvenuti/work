@@ -2,10 +2,18 @@ clear all
 close all
 clc
 
+printFlag = true;
+printOnlyFlag = false;
+
 %%  1) import data fixed values
-matFile = 'R:\simulations\shearCell\20150721shearCellPoliAllDensitiesWithOldShearPerc1ANNsMultiple\20150721shearCellPoliAllDensitiesWithOldShearPerc1ANNsMultipleRes.mat';
+matFile = 'R:\simulations\shearCell\20150721shearCellPoliAllDensitiesWithOldShearPerc1ANNsMultiple\20150721shearCellPoliAllDensitiesWithOldShearPerc1ANNsMultiple.mat';
 load(matFile, 'data', 'avgMuR2', 'avgMuR1', 'densityBulkBoxMax');
 nSimCases = length(data);
+
+if printOnlyFlag
+    matFile = 'R:\simulations\shearCell\testPolidispersity20160208_3.mat';
+    load(matFile);
+end
 
 radius = [6.3, 5.6, 3.55, 2, 1.6, 1.25, 1, 0.8, 0.63, 0.5, 0.315, 0.25, 0.00001]' / 2000;
 particleDistro = [0.085700000,0,0.10100000,0,0.034967000,0,0.060551000,0;...
@@ -61,15 +69,16 @@ numFig = 0;
 
 %%  3) create NNSave and 4) extract weight table
 
-[NNSave2, errorNN2, x2, zz2, errorEstSum2, errorEstIndex2, errorEstSumMaxIndex2, yy2, corrMat2, numbersNeuronsWinner, NNSaveNeuronsWinner] =   ...
-    myNeuNetFunPolidispersity(nSimCases, data, trainFcn, hiddenLayerSizeVector, avgMuR2,avgMuR1, densityBulkBoxMax);
-close all
+if ~printOnlyFlag
+    [NNSave2, errorNN2, x2, zz2, errorEstSum2, errorEstIndex2, errorEstSumMaxIndex2, yy2, corrMat2, numbersNeuronsWinner, NNSaveNeuronsWinner] =   ...
+        myNeuNetFunPolidispersity(nSimCases, data, trainFcn, hiddenLayerSizeVector, avgMuR2,avgMuR1, densityBulkBoxMax);
+    close all
+end
 
 %%  2) import/generate dataNN
-%for i = 14:39
-for i = 3:26
+
+for i = 1:26
     expNumber = i + 13;
-    %expNumber = 25;
     
     switch expNumber
         case {27, 28}
@@ -109,20 +118,23 @@ for i = 3:26
     
     
     
-    %%  5) create new input
-    newY2 = myNewInputPolidispersity(NNSave2, errorEstSumMaxIndex2, dataNN2);
-    newY3 = newY2([1:3, 8:11],:);
-    clearvars newY2
+%%  5) create new input
+    if ~printOnlyFlag
+        newY2 = myNewInputPolidispersity(NNSave2, errorEstSumMaxIndex2, dataNN2);
+        newY3 = newY2([1:3, 8:11],:);
+        clearvars newY2
+        
+%%  6) get gloria Augusta
+        [ gloriaAugustaSchulzeNNDens{i}, kkk ] = getGLoriaAugustaSCTPoldispersity(coeffShear40, ...
+            coeffShear60, coeffShear80, coeffShear100, expFtd, expOut, coeffPirker, newY3, ...
+            fricTolerance, densTolerance);
+    else
+        kkk = 4;
+    end
     
-    %%  6) get gloria Augusta
-    [ gloriaAugustaSchulzeNNDens{i}, kkk ] = getGLoriaAugustaSCTPoldispersity(coeffShear40, ...
-        coeffShear60, coeffShear80, coeffShear100, expFtd, expOut, coeffPirker, newY3, ...
-        fricTolerance, densTolerance);
+%%  7) print
     
-    %%  7) print
-    
-    if kkk > 3
-        %gloriaAugustaSchulzeNN = gen{i}.gloriaAugustaSchulzeNNDens';
+    if kkk > 3 && printFlag
         aorFlag = 3;
         numFig = numFig + 1;
         af{numFig} = radarPrintVectorialFun( gloriaAugustaSchulzeNNDens{i}', aorFlag, numFig, dataNN2, exp_file_name, coeffPirker);
@@ -137,7 +149,6 @@ for i = 3:26
     
     clearvars newY3 exp_file_name coeffShear40  coeffShear60  coeffShear80  coeffShear100  expFtd  expInp  expOut ...
         gloriaAugustaSchulzeNN
-        %NNSave2  errorNN2  x2  zz2  errorEstSum2  errorEstIndex2  errorEstSumMaxIndex2  yy2  corrMat2 gloriaAugustaSchulzeNN
     
 end
-save -v7.3 testPolidispersity20160208.mat gloriaAugustaSchulzeNNDens
+save -v7.3 testPolidispersity20160209SCT.mat gloriaAugustaSchulzeNNDens

@@ -176,14 +176,22 @@ elseif (~exist('h2') & exist('h3') & ~exist('h4') & exist('h5')) %no red and no 
     legend([h3 h5],{[num2str(int1, 3),' < ' ,legend1, ' < ', ...
         num2str(int2, 3)], [num2str(int3, 3),' < ' ,legend1, ' < ', num2str(maxC, 3)]},'Location','SouthEast');    
     
-elseif exist('h2') %only red
+elseif (exist('h2') & ~exist('h3') & ~exist('h4') & ~exist('h5')) %only red
     legend(h2,[num2str(minC, 3),' < ' ,legend1, ' < ', num2str(int1, 3)],'Location','SouthEast');
 
-elseif ~exist('h3') %only green   
-    legend([h2 h4 h5],{[num2str(minC, 3),' < ' ,legend1, ' < ', num2str(int1, 3)], ...
-        [num2str(int2, 3),' < ' ,legend1, ' < ', num2str(int3, 3)], [num2str(int3, 3),' < ' ,legend1, ' < ', num2str(maxC, 3)]},'Location','SouthEast');    
+elseif (~exist('h2') & exist('h3') & ~exist('h4') & ~exist('h5')) %only green
+    legend(h3,{[num2str(int1, 3),' < ' ,legend1, ' < ', ...
+        num2str(int2, 3)]},'Location','SouthEast');
+    
+elseif (~exist('h2') & ~exist('h3') & exist('h4') & ~exist('h5')) %only blue
+    legend(h4,{[num2str(int2, 3),' < ' ,legend1, ' < ', num2str(int3, 3)]},'Location','SouthEast');    
+    
+elseif (~exist('h2') & ~exist('h3') & ~exist('h4') & exist('h5')) %only black
+    legend(h5,{[num2str(int3, 3),' < ' ,legend1, ' < ', num2str(maxC, 3)]},'Location','SouthEast');    
+    
 else
     a2 = 0;
+    warning(['no tile plot for ', exp_file_name]);
     return;
 end    
     xlabel('\mu_s [-]', 'FontSize', 20);
