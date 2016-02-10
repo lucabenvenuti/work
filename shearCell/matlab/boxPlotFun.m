@@ -35,8 +35,8 @@ switch aorFlag
         export_fig([num2str(numFig),'BoxAOR', exp_file_name],'-png', '-nocrop', '-painters', handler);
         %matlab2tikz(['BoxAOR', exp_file_name, date1, '.tikz']);
     case 2 %mix
-        savefig([num2str(numFig),'BoxMix', date1, '.fig']);
-        export_fig([num2str(numFig),'BoxMix'],'-png', '-nocrop', '-painters', handler);
+        savefig([num2str(numFig),'BoxMix', exp_file_name, date1, '.fig']);
+        export_fig([num2str(numFig),'BoxMix', exp_file_name],'-png', '-nocrop', '-painters', handler);
         %matlab2tikz(['BoxMix', date1, '.tikz']);
     otherwise %sct
         savefig([num2str(numFig),'BoxSCT', exp_file_name, 'coeffP', num2str(coeffPirker), '-', date1, '.fig']);

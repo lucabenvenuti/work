@@ -206,8 +206,8 @@ end
             savefig([num2str(numFig), 'TileAOR', exp_file_name, date1, '.fig']);
             export_fig([num2str(numFig), 'TileAOR', exp_file_name],'-png', '-nocrop', '-painters', a2);
         case 2 %mix
-            savefig([num2str(numFig), 'TileMix', date1, '.fig']);
-            export_fig([num2str(numFig), 'TileMix'],'-png', '-nocrop', '-painters', a2);
+            savefig([num2str(numFig), 'TileMix', exp_file_name, date1, '.fig']);
+            export_fig([num2str(numFig), 'TileMix', exp_file_name],'-png', '-nocrop', '-painters', a2);
         otherwise %sct
             savefig([num2str(numFig), 'TileSCT', exp_file_name, 'coeffP', num2str(coeffPirker), '-', date1, '.fig']);
             export_fig([num2str(numFig), 'TileSCT', exp_file_name, 'coeffP', num2str(coeffPirker)],'-png', '-nocrop', '-painters', a2);
