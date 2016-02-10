@@ -2,6 +2,8 @@
 % formatSpec = 'X is %4.2f meters or %8.3f mm\n';
 % fprintf(formatSpec,A1,A2)
 
+formatSpec = cell(19,4) 
+
 
 fileID = fopen('exp.txt','w');
 
@@ -13,25 +15,57 @@ formatSpec{1,3} = '$(-)$ & std. dev. (SD) & %4.3f & %4.3f & %4.3f & %4.3f \\\\ \
 formatSpec{1,4} = ' & range (\\acs{R}) & %4.3f & %4.3f & %4.3f & %4.3f \\\\ \n'; % 4 columns
 formatSpec{1,5} = ' & SD / R & %4.3f & %4.3f & %4.3f & %4.3f \\\\ \n \\hline \n'; % 4 columns
 
-
-
 formatSpec{1,6} = [symbols{2} , ' & mean & %4.3f & %4.3f & %4.3f & %4.3f \\\\ \n']; % 4 columns
-formatSpec{1,7} = formatSpec{1,3};
-formatSpec{1,8} = formatSpec{1,4};
-formatSpec{1,9} = formatSpec{1,5};
-
 formatSpec{1,10} = [symbols{3} , ' & mean & %4.3f & %4.3f & %4.3f & %4.3f \\\\ \n']; % 4 columns
-formatSpec{1,11} = formatSpec{1,3};
-formatSpec{1,12} = formatSpec{1,4};
-formatSpec{1,13} = formatSpec{1,5};
-
 formatSpec{1,14} = [symbols{4} , ' & mean & %4.3f & %4.3f & %4.3f & %4.3f \\\\ \n']; % 4 columns
-formatSpec{1,15} = formatSpec{1,3};
-formatSpec{1,16} = formatSpec{1,4};
-formatSpec{1,17} = formatSpec{1,5};
-
 formatSpec{1,18} = 'valid & number & %4.3f & %4.3f & %4.3f & %4.3f \\\\ \n'; % 4 columns
 formatSpec{1,19} = 'combinations & (\\%%)  & %4.3f & %4.3f & %4.3f & %4.3f \\\\ \n \\hline \n'; % 4 columns
+
+
+formatSpec{2,1} = '\\begin{tabular}{llccccc} \n \\hline \n & type  & SSC & SSC & SSC & AoR   & SSC \\& AoR \\\\ \n \\hline \n'; % 5 columns
+
+formatSpec{2,2} = [symbols{1} , ' & mean & %4.3f & %4.3f & %4.3f & %4.3f & %4.3f \\\\ \n']; % 5 columns
+formatSpec{2,3} = '$(-)$ & std. dev. (SD) & %4.3f & %4.3f & %4.3f & %4.3f & %4.3f \\\\ \n'; % 5 columns
+formatSpec{2,4} = ' & range (\\acs{R}) & %4.3f & %4.3f & %4.3f & %4.3f & %4.3f \\\\ \n'; % 5 columns
+formatSpec{2,5} = ' & SD / R & %4.3f & %4.3f & %4.3f & %4.3f & %4.3f \\\\ \n \\hline \n'; % 5 columns
+
+formatSpec{2,6} = [symbols{2} , ' & mean & %4.3f & %4.3f & %4.3f & %4.3f & %4.3f \\\\ \n']; % 5 columns
+formatSpec{2,10} = [symbols{3} , ' & mean & %4.3f & %4.3f & %4.3f & %4.3f & %4.3f \\\\ \n']; % 5 columns
+formatSpec{2,14} = [symbols{4} , ' & mean & %4.3f & %4.3f & %4.3f & %4.3f & %4.3f \\\\ \n']; % 5 columns
+formatSpec{2,18} = 'valid & number & %4.3f & %4.3f & %4.3f & %4.3f & %4.3f \\\\ \n'; % 5 columns
+formatSpec{2,19} = 'combinations & (\\%%)  & %4.3f & %4.3f & %4.3f & %4.3f & %4.3f \\\\ \n \\hline \n'; % 5 columns
+
+
+formatSpec{3,1} = '\\begin{tabular}{llcccccc} \n \\hline \n & type  & SSC & SSC & SSC & SSC & AoR   & SSC \\& AoR \\\\ \n \\hline \n'; % 6 columns
+
+formatSpec{3,2} = [symbols{1} , ' & mean & %4.3f & %4.3f & %4.3f & %4.3f & %4.3f & %4.3f \\\\ \n']; % 6 columns
+formatSpec{3,3} = '$(-)$ & std. dev. (SD) & %4.3f & %4.3f & %4.3f & %4.3f & %4.3f & %4.3f \\\\ \n'; % 6 columns
+formatSpec{3,4} = ' & range (\\acs{R}) & %4.3f & %4.3f & %4.3f & %4.3f & %4.3f & %4.3f \\\\ \n'; % 6 columns
+formatSpec{3,5} = ' & SD / R & %4.3f & %4.3f & %4.3f & %4.3f & %4.3f & %4.3f \\\\ \n \\hline \n'; % 6 columns
+
+formatSpec{3,6} = [symbols{2} , ' & mean & %4.3f & %4.3f & %4.3f & %4.3f & %4.3f & %4.3f \\\\ \n']; % 6 columns
+formatSpec{3,10} = [symbols{3} , ' & mean & %4.3f & %4.3f & %4.3f & %4.3f & %4.3f & %4.3f \\\\ \n']; % 6 columns
+formatSpec{3,14} = [symbols{4} , ' & mean & %4.3f & %4.3f & %4.3f & %4.3f & %4.3f & %4.3f \\\\ \n']; % 6 columns
+formatSpec{3,18} = 'valid & number & %4.3f & %4.3f & %4.3f & %4.3f & %4.3f & %4.3f \\\\ \n'; % 6 columns
+formatSpec{3,19} = 'combinations & (\\%%)  & %4.3f & %4.3f & %4.3f & %4.3f & %4.3f & %4.3f \\\\ \n \\hline \n'; % 6 columns
+
+
+
+formatSpec{:,7} = formatSpec{:,3};
+formatSpec{:,8} = formatSpec{:,4};
+formatSpec{:,9} = formatSpec{:,5};
+
+
+formatSpec{:,11} = formatSpec{:,3};
+formatSpec{:,12} = formatSpec{:,4};
+formatSpec{:,13} = formatSpec{:,5};
+
+
+formatSpec{:,15} = formatSpec{:,3};
+formatSpec{:,16} = formatSpec{:,4};
+formatSpec{:,17} = formatSpec{:,5};
+
+
 
 
 fprintf(fileID, formatSpec{1,1});
@@ -50,7 +84,7 @@ end
 fclose(fileID);
 
 
-formatSpec{2,1} = '\\begin{tabular}{llcccc} \n \\hline \n & type  & SSC & SSC & SSC & AoR   & SSC \\& AoR \\\\ \n \\hline \n'; % 5 columns
+
 
 
 
