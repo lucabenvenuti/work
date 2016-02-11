@@ -2,7 +2,7 @@ clear all
 close all
 clc
 
-printFlag = true;
+printFlag = false;
 printOnlyFlag = false;
 
 %%  1) import data fixed values
