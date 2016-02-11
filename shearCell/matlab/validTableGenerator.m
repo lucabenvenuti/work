@@ -113,6 +113,8 @@ for i = 1:7
     
 end
 
-save -v7.3 testMerge20160210Tables.mat
+a = printTablesFun( finTable, finList, totComb );
+
+save -v7.3 testMerge20160210Tables2.mat
 
 
