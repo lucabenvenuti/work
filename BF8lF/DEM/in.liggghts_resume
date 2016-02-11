@@ -15,7 +15,7 @@ variable roll equal 0.4         # for particles and walls with friction
 variable noRoll equal 0         # for frictionless walls
 variable cV equal 0.1           # chracteristic velocity
 
-variable dt equal 0.00001
+variable dt equal 0.000005
 variable skin equal 0.25*0.005
 
 # variables for the servo wall
