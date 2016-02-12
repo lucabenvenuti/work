@@ -3,7 +3,7 @@ close all
 clc
 
 printFlag = true;
-printOnlyFlag = false;
+printOnlyFlag = true;
 
 %%  1) import data fixed values
 if (isunix)
@@ -25,9 +25,13 @@ trainFcn = 'trainscg';
 hiddenLayerSizeVector = [5:40];
 
 if ~printOnlyFlag
+    
     [NNSave2, errorNN2, x2, zz2, errorEstSum2, errorEstIndex2, errorEstSumMaxIndex2, yy2, corrMat2, numbersNeuronsWinner, NNSaveNeuronsWinner]...
         =   myNeuNetFunPolidispersity(nSimCases, dataAOR, trainFcn, hiddenLayerSizeVector, angleLi, angleMa);
     close all
+else
+    matFile3 =  'R:\simulations\aor\20160210AoRpolidispersity.mat';
+    load(matFile3);
 end
 
 load(matFile2, 'dataNN2');
@@ -83,13 +87,13 @@ for i = 1:8
         kkk = 4;
     end
     
-%%  7) print    
+    %%  7) print
     %[ resAoR{i}.gloriaAugustaAorNN01, resAoR{i}.a01 ] = radarPrintAorVectorialPolidispersityFun(NNSave2, errorEstSumMaxIndex2, dataNN2, resAoR{i}.angleExp, i, resAoR{i}.material);
     
     if kkk > 3 && printFlag
-        aorFlag = 3;
-        numFig = numFig + 1;
-        af{numFig} = radarPrintVectorialFun( gloriaAugustaAor{i}', aorFlag, numFig, dataNN2, resAoR{i}.material, coeffPirker);
+        aorFlag = 1;
+        %         numFig = numFig + 1;
+        %         af{numFig} = radarPrintVectorialFun( gloriaAugustaAor{i}', aorFlag, numFig, dataNN2, resAoR{i}.material, coeffPirker);
         numFig = numFig + 1;
         af{numFig} = boxPlotFun( gloriaAugustaAor{i}', aorFlag, numFig, resAoR{i}.material, coeffPirker);
         numFig = numFig + 1;
@@ -101,4 +105,6 @@ for i = 1:8
     
 end
 
-save -v7.3 20160210AoRpolidispersity.mat
+if ~printOnlyFlag
+    save -v7.3 20160210AoRpolidispersity.mat
+end
