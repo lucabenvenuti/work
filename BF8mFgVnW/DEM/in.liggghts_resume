@@ -9,7 +9,7 @@ variable yM equal 5.e6          # Young's modulus
 variable pR equal 0.45          # Poisson ratio
 variable rest equal 0.5         # coefficient of restitution
 variable noRest equal 0.051     # coefficient of restitution for frictionless
-variable fric equal 0.1         # coefficient of friction
+variable fric equal 0.5         # coefficient of friction
 variable noFric equal 0         # dummy value for frictionless walls
 variable roll equal 0.4         # for particles and walls with friction
 variable noRoll equal 0         # for frictionless walls
