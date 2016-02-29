@@ -37,7 +37,7 @@ PROCS=$(($XPROCS*$YPROCS*$ZPROCS))
 MPI_OPTIONS="-np $PROCS"
 TOOLKIT_DIR=$HOME/workspace/src/ParticulateFlow/toolkit
 
-CASE_DIR=$PBS_O_WORKDIR/../BF1hFgV
+CASE_DIR=$PBS_O_WORKDIR/../BF8hFgV
 
 mkdir -p $CASE_DIR/DEM/post
 
@@ -63,5 +63,7 @@ source bashrc
 cd $CASE_DIR/CFD
 
 date
-cfdemSolverPiso
+decomposePar
+date
+mpirun $MPI_OPTIONS cfdemSolverPiso -parallel
 date
