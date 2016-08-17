@@ -89,8 +89,8 @@ compute_modify	thermo_temp dynamic yes
 
 #insert the first particles so that dump is not empty
 run			1
-dump dumpstl all stl 1000 post/stldump_*.stl
-dump		dmp all custom 1000 post/dump*.particles id type type x y z ix iy iz vx vy vz fx fy fz omegax omegay omegaz radius 
+dump dumpstl all stl 10000 post/stldump_*.stl
+dump		dmp all custom 10000 post/dump*.particles id type type x y z ix iy iz vx vy vz fx fy fz omegax omegay omegaz radius 
 
 #insert particles
 
