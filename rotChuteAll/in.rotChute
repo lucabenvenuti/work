@@ -73,7 +73,7 @@ region		bc block 0.3 0.5 -0.2 0.2 5.0 6.0 units box
 
 #particle insertion
 fix			ins nve_group insert/stream seed 5330 distributiontemplate pdd1 &
-				maxattempt 100 mass 9000.0 massrate 25.0 overlapcheck yes vel constant 0. 0. -1.0&
+				maxattempt 100 mass ${maSs} massrate ${massRate} overlapcheck yes vel constant 0. 0. -1.0&
 				insertion_face inface extrude_length 0.8
 
 #apply nve integration to all particles that are inserted as single particles
