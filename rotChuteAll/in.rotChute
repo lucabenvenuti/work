@@ -97,7 +97,7 @@ dump		dmp all custom 1000 post/dump*.particles id type type x y z ix iy iz vx vy
 
 label loop1
 	print "-----> loop1..."
-	if "${tim}==${tTot}" then "jump SELF endloop1"
+	if "${tim} > ${tTot}" then "jump SELF endloop1"
 	print "tim = ${tim}, continuing loop1 run" 
 
 	label loop2
