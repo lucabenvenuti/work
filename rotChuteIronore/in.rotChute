@@ -100,7 +100,7 @@ label loop1
 
 	label loop2
 	  print "-----> loop2..."
-	  if "{tim} > ${tTot} || ${p2}==${pTot}" then "jump SELF endloop2"
+	  if "${tim} > ${tTot} || ${p2}==${pTot}" then "jump SELF endloop2"
 	  print "p2 = ${p2}, tim = ${tim}, continuing loop2 run"  
 	  fix moveChuteZ all move/mesh mesh chute rotate origin 0.0 0.0 4.0 axis 0.0 0.0 1.0 period 16.0
 	  run			160000
@@ -117,7 +117,7 @@ label loop1
 
 	label loop3
 	  print "-----> loop3..."
-	  if "{tim} > ${tTot} || ${p3}==${pTot}" then "jump SELF endloop3"
+	  if "${tim} > ${tTot} || ${p3}==${pTot}" then "jump SELF endloop3"
 	  print "p3 = ${p3}, tim = ${tim}, continuing loop3 run"  
 	  fix moveChuteZ all move/mesh mesh chute rotate origin 0.0 0.0 4.0 axis 0.0 0.0 1.0 period 16.0
 	  run			160000
